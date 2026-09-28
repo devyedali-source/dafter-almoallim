@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_number": "16610884498",
+    "project_id": "enseignatprincipal",
+    "storage_bucket": "enseignatprincipal.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16610884498:android:c23c4cd312c6b1c5891f4b",
+        "android_client_info": {
+          "package_name": "com.elyedali.schoolmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16610884498-3vst2f282urjcgksc6vladmthdv4ipmu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elyedali.schoolmanager",
+            "certificate_hash": "5002ba45bb43778765861df77d33dd96e58d4bea"
+          }
+        },
+        {
+          "client_id": "16610884498-d7hdvgma58r0nmiudqq7947pilsh539b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elyedali.schoolmanager",
+            "certificate_hash": "bb96eb522134d035a1019cd4c643d0288b111bb2"
+          }
+        },
+        {
+          "client_id": "16610884498-k36i6imns68ivf7877l16c34l1m6ek05.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elyedali.schoolmanager",
+            "certificate_hash": "69c201eabff50c957921ca00bc3f1ba17e4cfa81"
+          }
+        },
+        {
+          "client_id": "16610884498-n92jtjba71se769du8f78nmr52eu0eg6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elyedali.schoolmanager",
+            "certificate_hash": "0529ef568135f0db68ec3ca9ce6ff6f926b5792a"
+          }
+        },
+        {
+          "client_id": "16610884498-ndg002fr6kr4jaro8k1f1convpdglm2d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elyedali.schoolmanager",
+            "certificate_hash": "6ff94d5621277c47f74816c868383a2dcc80956a"
+          }
+        },
+        {
+          "client_id": "16610884498-sp1kq31cdo06oicp67tavlr2a6b1pasl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elyedali.schoolmanager",
+            "certificate_hash": "5a193b6d959e629434db84da3366a6a52c64b873"
+          }
+        },
+        {
+          "client_id": "16610884498-n6670r0i5scer207l4jkuod0kamruapn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcRECbnaJMUyUqTPj9xmmA1lX-pISKInA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16610884498-n6670r0i5scer207l4jkuod0kamruapn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
