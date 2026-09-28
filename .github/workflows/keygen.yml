@@ -1,0 +1,51 @@
+name: Generate upload key
+
+on:
+  workflow_dispatch:
+
+jobs:
+  keygen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Create keystore
+        run: |
+          keytool -genkeypair -v \
+            -keystore my-upload-key.jks \
+            -alias upload \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+            -keypass "${{ secrets.KEY_PASSWORD }}" \
+            -dname "CN=Dafter Almoallim, OU=Dev, O=Elyedali, L=Nouakchott, C=MR"
+
+      - name: Export certificate (PEM)
+        run: |
+          keytool -export -rfc \
+            -keystore my-upload-key.jks \
+            -alias upload \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+            -file upload_certificate.pem
+
+      - name: Print fingerprints
+        run: |
+          keytool -list -v \
+            -keystore my-upload-key.jks \
+            -alias upload \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" | grep -E "SHA1|SHA256"
+
+      - name: Make base64 copy
+        run: base64 -w 0 my-upload-key.jks > keystore_base64.txt
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: upload-key
+          path: |
+            my-upload-key.jks
+            upload_certificate.pem
+            keystore_base64.txt
