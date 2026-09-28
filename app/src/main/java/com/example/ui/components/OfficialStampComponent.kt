@@ -38,6 +38,13 @@ import com.example.data.models.ClassSection
 import com.example.ui.TeacherViewModel
 import com.example.ui.theme.*
 
+/** Shrinks a font size just enough for the text to fit the given width (no clipping, no overflow). */
+private fun fitSp(text: String, maxWidthDp: Float, baseSp: Float, minSp: Float = 6f): Float {
+    val estimated = text.length * baseSp * 0.40f
+    if (estimated <= maxWidthDp || estimated <= 0f) return baseSp
+    return (baseSp * maxWidthDp / estimated).coerceAtLeast(minSp)
+}
+
 val StampInkBlue = Color(0xFF153E90)
 val StampInkBlueLight = Color(0xFFEBF2FF)
 
@@ -214,22 +221,35 @@ fun OfficialStampVisual(
                             // Draw circular curved text strictly within the ring
                             drawIntoCanvas { canvas ->
                                 val nativeCanvas = canvas.nativeCanvas
+                                val topText = "الجمهورية الإسلامية الموريتانية"
+                                val bottomLabel = if (cleanRole in listOf("مدير", "المدير")) "- المدير -" else "- $cleanRole -"
+                                val arcLen = (Math.PI * rTextMid * (160.0 / 180.0)).toFloat()
+
                                 val textPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
                                     color = StampInkBlue.toArgb()
                                     textSize = 10f * density
                                     typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
-                                    textAlign = android.graphics.Paint.Align.CENTER
+                                    textAlign = android.graphics.Paint.Align.LEFT
+                                }
+                                // shrink the ring text until it fits inside its arc
+                                var fitSize = 10f * density
+                                val minSize = 5f * density
+                                while (fitSize > minSize &&
+                                    (textPaint.measureText(topText) > arcLen * 0.96f ||
+                                     textPaint.measureText(bottomLabel) > arcLen * 0.96f)) {
+                                    fitSize -= 0.25f * density
+                                    textPaint.textSize = fitSize
                                 }
 
                                 // Top arc: الجمهورية الإسلامية الموريتانية
                                 val topPath = android.graphics.Path()
                                 val topRect = android.graphics.RectF(cx - rTextMid, cy - rTextMid, cx + rTextMid, cy + rTextMid)
                                 topPath.addArc(topRect, 190f, 160f)
-                                val topArcLen = (Math.PI * rTextMid * (160.0 / 180.0)).toFloat()
+                                val topOffset = ((arcLen - textPaint.measureText(topText)) / 2f).coerceAtLeast(0f)
                                 nativeCanvas.drawTextOnPath(
-                                    "الجمهورية الإسلامية الموريتانية",
+                                    topText,
                                     topPath,
-                                    topArcLen / 2f,
+                                    topOffset,
                                     textPaint.textSize * 0.35f,
                                     textPaint
                                 )
@@ -238,12 +258,11 @@ fun OfficialStampVisual(
                                 val botPath = android.graphics.Path()
                                 val botRect = android.graphics.RectF(cx - rTextMid, cy - rTextMid, cx + rTextMid, cy + rTextMid)
                                 botPath.addArc(botRect, 170f, -160f)
-                                val botArcLen = (Math.PI * rTextMid * (160.0 / 180.0)).toFloat()
-                                val bottomLabel = if (cleanRole in listOf("مدير", "المدير")) "- المدير -" else "- $cleanRole -"
+                                val botOffset = ((arcLen - textPaint.measureText(bottomLabel)) / 2f).coerceAtLeast(0f)
                                 nativeCanvas.drawTextOnPath(
                                     bottomLabel,
                                     botPath,
-                                    botArcLen / 2f,
+                                    botOffset,
                                     textPaint.textSize * 0.35f,
                                     textPaint
                                 )
@@ -271,7 +290,7 @@ fun OfficialStampVisual(
                         ) {
                             Text(
                                 text = formattedSchool,
-                                fontSize = 11.5.sp,
+                                fontSize = fitSp(formattedSchool, 98f, 11.5f).sp,
                                 fontWeight = FontWeight.Black,
                                 color = StampInkBlue,
                                 textAlign = TextAlign.Center,
@@ -291,7 +310,7 @@ fun OfficialStampVisual(
                             val directorDisplayName = if (cleanName.isNotBlank()) cleanName else "المدير"
                             Text(
                                 text = directorDisplayName,
-                                fontSize = 11.sp,
+                                fontSize = fitSp(directorDisplayName, 98f, 11f).sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = StampInkBlue,
                                 textAlign = TextAlign.Center,
@@ -388,7 +407,7 @@ fun OfficialStampVisual(
                                 )
                                 Text(
                                     text = formattedSchool,
-                                    fontSize = 12.5.sp,
+                                    fontSize = fitSp(formattedSchool, 150f, 12.5f).sp,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = StampInkBlue,
                                     textAlign = TextAlign.Center,
@@ -405,7 +424,7 @@ fun OfficialStampVisual(
                             }
                             Text(
                                 text = roleLine,
-                                fontSize = 13.sp,
+                                fontSize = fitSp(roleLine, 190f, 13f).sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = StampInkBlue,
                                 textAlign = TextAlign.Center,
@@ -444,11 +463,7 @@ fun OfficialStampSettingsSection(
     var inputTeacherName by remember(teacherName) { mutableStateOf(teacherName) }
     var inputTeacherRole by remember(teacherRole) {
         mutableStateOf(
-            when (teacherRole.trim()) {
-                "معلم", "المعلم" -> "المعلم"
-                "مدير", "المدير" -> "المدير"
-                else -> if (teacherRole.isBlank()) "المعلم" else teacherRole
-            }
+            "المعلم"
         )
     }
     var inputTeacherShowInReports by remember(teacherShowInReports) { mutableStateOf(teacherShowInReports) }
@@ -465,11 +480,7 @@ fun OfficialStampSettingsSection(
     var inputPrincipalName by remember(principalName) { mutableStateOf(principalName) }
     var inputPrincipalRole by remember(principalRole) {
         mutableStateOf(
-            when (principalRole.trim()) {
-                "معلم", "المعلم" -> "المعلم"
-                "مدير", "المدير" -> "المدير"
-                else -> if (principalRole.isBlank()) "المدير" else principalRole
-            }
+            "المدير"
         )
     }
     var inputPrincipalShowInReports by remember(principalShowInReports) { mutableStateOf(principalShowInReports) }
@@ -615,7 +626,7 @@ fun OfficialStampSettingsSection(
                                     fontSize = 13.sp,
                                     color = Color(0xFF1B5E20)
                                 )
-                                val displayRole = if (teacherRole in listOf("معلم", "المعلم")) "المعلم" else "المدير"
+                                val displayRole = "المعلم"
                                 Text(
                                     text = "صاحب الطابع: $teacherName ($displayRole) - شكل مستطيل",
                                     fontSize = 11.5.sp,
@@ -642,7 +653,7 @@ fun OfficialStampSettingsSection(
                                 modifier = Modifier.padding(bottom = 10.dp)
                             )
                             OfficialStampVisual(
-                                roleTitle = teacherRole,
+                                roleTitle = "المعلم",
                                 personName = teacherName,
                                 schoolName = activeClass.schoolName,
                                 shape = "rectangle"
@@ -689,7 +700,7 @@ fun OfficialStampSettingsSection(
                             Button(
                                 onClick = {
                                     inputTeacherName = teacherName
-                                    inputTeacherRole = if (teacherRole in listOf("معلم", "المعلم")) "المعلم" else "المدير"
+                                    inputTeacherRole = "المعلم"
                                     inputTeacherShowInReports = teacherShowInReports
                                     isEditingTeacher = true
                                 },
@@ -728,34 +739,6 @@ fun OfficialStampSettingsSection(
                 } else {
                     // --- EDIT / INPUT FORM (Visible when editing or empty) ---
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        // Role selection: المعلم / المدير
-                        Text("الصفة في الطابع:", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoText)
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            listOf("المعلم" to "المعلم 👨‍🏫", "المدير" to "المدير 👔").forEach { (roleKey, label) ->
-                                val isSel = inputTeacherRole == roleKey
-                                Box(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .background(if (isSel) StampInkBlue.copy(alpha = 0.15f) else Color(0xFFF8FAFC))
-                                        .border(1.5.dp, if (isSel) StampInkBlue else Color(0xFFCBD5E1), RoundedCornerShape(10.dp))
-                                        .clickable { inputTeacherRole = roleKey }
-                                        .padding(vertical = 8.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        text = label,
-                                        fontWeight = if (isSel) FontWeight.Bold else FontWeight.Normal,
-                                        fontSize = 12.5.sp,
-                                        color = if (isSel) StampInkBlue else Color.DarkGray
-                                    )
-                                }
-                            }
-                        }
-
                         // Name Field
                         OutlinedTextField(
                             value = inputTeacherName,
@@ -858,7 +841,7 @@ fun OfficialStampSettingsSection(
                                 OutlinedButton(
                                     onClick = {
                                         inputTeacherName = teacherName
-                                        inputTeacherRole = if (teacherRole in listOf("معلم", "المعلم")) "المعلم" else "المدير"
+                                        inputTeacherRole = "المعلم"
                                         inputTeacherShowInReports = teacherShowInReports
                                         isEditingTeacher = false
                                     },
@@ -899,7 +882,7 @@ fun OfficialStampSettingsSection(
                                     fontSize = 13.sp,
                                     color = Color(0xFF1B5E20)
                                 )
-                                val displayRole = if (principalRole in listOf("مدير", "المدير")) "المدير" else "المعلم"
+                                val displayRole = "المدير"
                                 Text(
                                     text = "صاحب الطابع: $principalName ($displayRole) - شكل دائرى",
                                     fontSize = 11.5.sp,
@@ -926,7 +909,7 @@ fun OfficialStampSettingsSection(
                                 modifier = Modifier.padding(bottom = 10.dp)
                             )
                             OfficialStampVisual(
-                                roleTitle = principalRole,
+                                roleTitle = "المدير",
                                 personName = principalName,
                                 schoolName = activeClass.schoolName,
                                 shape = "circle",
@@ -974,7 +957,7 @@ fun OfficialStampSettingsSection(
                             Button(
                                 onClick = {
                                     inputPrincipalName = principalName
-                                    inputPrincipalRole = if (principalRole in listOf("مدير", "المدير")) "المدير" else "المعلم"
+                                    inputPrincipalRole = "المدير"
                                     inputPrincipalShowInReports = principalShowInReports
                                     isEditingPrincipal = true
                                 },
@@ -1013,34 +996,6 @@ fun OfficialStampSettingsSection(
                 } else {
                     // --- EDIT / INPUT FORM FOR PRINCIPAL ---
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        // Role selection: المدير / المعلم
-                        Text("الصفة في الطابع:", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoText)
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            listOf("المدير" to "المدير 👔", "المعلم" to "المعلم 👨‍🏫").forEach { (roleKey, label) ->
-                                val isSel = inputPrincipalRole == roleKey
-                                Box(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .background(if (isSel) StampInkBlue.copy(alpha = 0.15f) else Color(0xFFF8FAFC))
-                                        .border(1.5.dp, if (isSel) StampInkBlue else Color(0xFFCBD5E1), RoundedCornerShape(10.dp))
-                                        .clickable { inputPrincipalRole = roleKey }
-                                        .padding(vertical = 8.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        text = label,
-                                        fontWeight = if (isSel) FontWeight.Bold else FontWeight.Normal,
-                                        fontSize = 12.5.sp,
-                                        color = if (isSel) StampInkBlue else Color.DarkGray
-                                    )
-                                }
-                            }
-                        }
-
                         // Name Field
                         OutlinedTextField(
                             value = inputPrincipalName,
@@ -1145,7 +1100,7 @@ fun OfficialStampSettingsSection(
                                 OutlinedButton(
                                     onClick = {
                                         inputPrincipalName = principalName
-                                        inputPrincipalRole = if (principalRole in listOf("مدير", "المدير")) "المدير" else "المعلم"
+                                        inputPrincipalRole = "المدير"
                                         inputPrincipalShowInReports = principalShowInReports
                                         isEditingPrincipal = false
                                     },
