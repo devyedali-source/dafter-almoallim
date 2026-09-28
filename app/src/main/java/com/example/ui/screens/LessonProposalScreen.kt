@@ -601,7 +601,7 @@ fun LessonProposalScreen(
                                                         roleTitle = stampPrincipalSettings.role,
                                                         personName = stampPrincipalSettings.name,
                                                         schoolName = classSchoolNameState.value,
-                                                        shape = stampPrincipalSettings.shape,
+                                                        shape = "circle",
                                                         scaleSize = 105.dp,
                                                         financialId = stampPrincipalSettings.financialId
                                                     )
