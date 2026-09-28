@@ -601,8 +601,8 @@ object HtmlReportHelper {
         return """
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200" width="${sizePx}px" height="${sizePx}px" style="font-family: 'Cairo', 'Amiri', Tahoma, sans-serif; display: inline-block; vertical-align: middle;">
             <defs>
-                <!-- Top Arc: counter-clockwise from right (173,80.5) to left (27,80.5) with radius 75.5 -->
-                <path id="$topPathId" d="M 173,80.5 A 75.5,75.5 0 0,0 27,80.5" fill="none" />
+                <!-- Top Arc: left (27,80.5) to right (173,80.5) over the top, radius 75.5 -->
+                <path id="$topPathId" d="M 27,80.5 A 75.5,75.5 0 0,1 173,80.5" fill="none" />
                 <!-- Bottom Arc: counter-clockwise from left (27,119.5) to right (173,119.5) with radius 75.5 -->
                 <path id="$botPathId" d="M 27,119.5 A 75.5,75.5 0 0,0 173,119.5" fill="none" />
             </defs>
