@@ -1,0 +1,6 @@
+{
+  "name": "دفتر المعلم",
+  "description": "تطبيق يساعد الأستاذ على تسجيل الأقسام، الطلاب، والدرجات في جميع المواد مع احتساب المعدل والرتبة وميزتي كشف الدرجات والتقرير التفصيلي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

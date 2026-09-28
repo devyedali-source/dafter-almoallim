@@ -1,0 +1,18 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.elyedali.schoolmanager",
+      "sha256_cert_fingerprints": [
+        "BF:68:86:96:75:F3:36:C2:CC:C8:2F:2A:FE:83:4E:23:A9:EE:32:08:C0:B8:A9:C0:A2:FA:4A:FD:1D:F4:FE:B8",
+        "8B:AB:31:08:BB:8E:1F:91:56:0B:25:0D:2D:30:75:79:16:59:AD:AE:0A:D2:AF:A0:C0:EA:24:06:BB:92:1B:8B",
+        "FE:63:CF:B5:26:E4:81:C5:1F:67:72:E4:71:A6:CB:65:CA:B2:6C:DA:88:11:98:31:A2:C4:BB:FD:68:90:7B:C2",
+        "C5:D4:A1:7B:D2:A2:A1:BB:DD:13:22:C2:27:89:72:14:9A:76:35:6A:9E:F2:A1:76:FC:52:D6:04:A1:EF:30:0C",
+        "94:04:AE:3E:8E:DE:DC:88:51:6C:FB:14:90:5E:C1:DC:58:84:43:EA:25:D6:0E:9C:81:C8:9B:74:9B:15:B1:F3"
+      ]
+    }
+  }
+]

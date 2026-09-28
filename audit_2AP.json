@@ -1,0 +1,4796 @@
+{
+  "level": "2AP",
+  "summary": {
+    "terms": {
+      "term_1": {
+        "regular_lessons": 62,
+        "pedagogical_stations": 2,
+        "holiday_or_exam": 1,
+        "total_teaching_instances": 64
+      },
+      "term_2": {
+        "regular_lessons": 68,
+        "pedagogical_stations": 1,
+        "holiday_or_exam": 1,
+        "total_teaching_instances": 69
+      },
+      "term_3": {
+        "regular_lessons": 54,
+        "pedagogical_stations": 1,
+        "holiday_or_exam": 2,
+        "total_teaching_instances": 55
+      }
+    },
+    "total_regular_lessons": 184,
+    "total_pedagogical_stations": 4,
+    "total_holiday_or_exam": 4,
+    "total_teaching_instances": 188,
+    "total_all_instances": 192
+  },
+  "subjects": {
+    "اختبارات وعطلة الفصل الأول": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 1,
+      "total_teaching_instances": 0,
+      "domains": {
+        "التقويم الختامي والعطلة المدرسية": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 0,
+          "weeks": [
+            13
+          ],
+          "competencies": [
+            {
+              "competency_text": "إجراء امتحانات الفصل الأول وحساب المعدلات وتوزيع كشوف الدرجات والاستفادة من العطلة المدرسية.",
+              "teaching_instances_count": 0,
+              "weeks": [
+                13
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "اختبارات وعطلة الفصل الثاني": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 1,
+      "total_teaching_instances": 0,
+      "domains": {
+        "التقويم الختامي والعطلة المدرسية": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 0,
+          "weeks": [
+            25
+          ],
+          "competencies": [
+            {
+              "competency_text": "إجراء اختبارات الفصل الثاني ورصد الحصيلة الدورية وإعداد كشوف الدرجات.",
+              "teaching_instances_count": 0,
+              "weeks": [
+                25
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "الامتحانات النهائية والتجاوز": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 1,
+      "total_teaching_instances": 0,
+      "domains": {
+        "التقويم الإشهادي والنهائي": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 0,
+          "weeks": [
+            37
+          ],
+          "competencies": [
+            {
+              "competency_text": "إجراء الامتحانات الختامية وحساب المعدلات السنوية العامة وتحديد التجاوز والنجاح.",
+              "teaching_instances_count": 0,
+              "weeks": [
+                37
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "التربية الإسلامية": {
+      "regular_lessons": 30,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 30,
+      "domains": {
+        "المراجعة والتثبيت الشامل": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            34,
+            35
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                34,
+                35
+              ]
+            }
+          ]
+        },
+        "الوحدة 1: العائلة والأقارب": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        "الوحدة 2: مدرستي وأصدقائي": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        "الوحدة 3: حيي وقريتي": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            10,
+            11
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        "الوحدة 4: الصحة والتغذية والرياضة": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                14,
+                15,
+                16,
+                17
+              ]
+            }
+          ]
+        },
+        "الوحدة 5: البيئة والطبيعة والمياه": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                18,
+                19,
+                20,
+                21
+              ]
+            }
+          ]
+        },
+        "الوحدة 6: الحرف والمهن والإنتاج": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            22,
+            23
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                22,
+                23
+              ]
+            }
+          ]
+        },
+        "الوحدة 7: الأسفار والرحلات والاستكشاف": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            26,
+            27,
+            28,
+            29
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                26,
+                27,
+                28,
+                29
+              ]
+            }
+          ]
+        },
+        "الوحدة 8: الألعاب والأعياد والتضامن الوطني": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            30,
+            31,
+            32,
+            33
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                30,
+                31,
+                32,
+                33
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "التربية العلمية والتكنولوجية": {
+      "regular_lessons": 30,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 30,
+      "domains": {
+        "المراجعة والتثبيت الشامل": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            34,
+            35
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                34,
+                35
+              ]
+            }
+          ]
+        },
+        "الوحدة 1: العائلة والأقارب": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        "الوحدة 2: مدرستي وأصدقائي": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        "الوحدة 3: حيي وقريتي": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            10,
+            11
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        "الوحدة 4: الصحة والتغذية والرياضة": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                14,
+                15,
+                16,
+                17
+              ]
+            }
+          ]
+        },
+        "الوحدة 5: البيئة والطبيعة والمياه": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                18,
+                19,
+                20,
+                21
+              ]
+            }
+          ]
+        },
+        "الوحدة 6: الحرف والمهن والإنتاج": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            22,
+            23
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                22,
+                23
+              ]
+            }
+          ]
+        },
+        "الوحدة 7: الأسفار والرحلات والاستكشاف": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            26,
+            27,
+            28,
+            29
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                26,
+                27,
+                28,
+                29
+              ]
+            }
+          ]
+        },
+        "الوحدة 8: الألعاب والأعياد والتضامن الوطني": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            30,
+            31,
+            32,
+            33
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                30,
+                31,
+                32,
+                33
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "التربية الفنية والبدنية": {
+      "regular_lessons": 34,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 34,
+      "domains": {
+        "التربية الفنية والرياضية": {
+          "regular_lessons": 34,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 34,
+          "weeks": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "competencies": [
+            {
+              "competency_text": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+              "teaching_instances_count": 34,
+              "weeks": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "التربية المدنية": {
+      "regular_lessons": 30,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 30,
+      "domains": {
+        "المراجعة والتثبيت الشامل": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            34,
+            35
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                34,
+                35
+              ]
+            }
+          ]
+        },
+        "الوحدة 1: العائلة والأقارب": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        "الوحدة 2: مدرستي وأصدقائي": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        "الوحدة 3: حيي وقريتي": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            10,
+            11
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        "الوحدة 4: الصحة والتغذية والرياضة": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                14,
+                15,
+                16,
+                17
+              ]
+            }
+          ]
+        },
+        "الوحدة 5: البيئة والطبيعة والمياه": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                18,
+                19,
+                20,
+                21
+              ]
+            }
+          ]
+        },
+        "الوحدة 6: الحرف والمهن والإنتاج": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            22,
+            23
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                22,
+                23
+              ]
+            }
+          ]
+        },
+        "الوحدة 7: الأسفار والرحلات والاستكشاف": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            26,
+            27,
+            28,
+            29
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                26,
+                27,
+                28,
+                29
+              ]
+            }
+          ]
+        },
+        "الوحدة 8: الألعاب والأعياد والتضامن الوطني": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            30,
+            31,
+            32,
+            33
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                30,
+                31,
+                32,
+                33
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "التهيئة والتقويم التشخيصي": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 1,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 1,
+      "domains": {
+        "تشخيص المكتسبات والتهيئة": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 1,
+          "total_teaching_instances": 1,
+          "weeks": [
+            1
+          ],
+          "competencies": [
+            {
+              "competency_text": "تشخيص مدى تحكم المتعلمين في مهارات القراءة والكتابة والجمع والطرح البسيط.",
+              "teaching_instances_count": 1,
+              "weeks": [
+                1
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "الرياضيات": {
+      "regular_lessons": 30,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 30,
+      "domains": {
+        "المراجعة والتثبيت الشامل": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            34,
+            35
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                34,
+                35
+              ]
+            }
+          ]
+        },
+        "الوحدة 1: العائلة والأقارب": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        "الوحدة 2: مدرستي وأصدقائي": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        "الوحدة 3: حيي وقريتي": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            10,
+            11
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        "الوحدة 4: الصحة والتغذية والرياضة": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                14,
+                15,
+                16,
+                17
+              ]
+            }
+          ]
+        },
+        "الوحدة 5: البيئة والطبيعة والمياه": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                18,
+                19,
+                20,
+                21
+              ]
+            }
+          ]
+        },
+        "الوحدة 6: الحرف والمهن والإنتاج": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            22,
+            23
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                22,
+                23
+              ]
+            }
+          ]
+        },
+        "الوحدة 7: الأسفار والرحلات والاستكشاف": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            26,
+            27,
+            28,
+            29
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                26,
+                27,
+                28,
+                29
+              ]
+            }
+          ]
+        },
+        "الوحدة 8: الألعاب والأعياد والتضامن الوطني": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            30,
+            31,
+            32,
+            33
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                30,
+                31,
+                32,
+                33
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "الفرز والمداولات واختتام السنة": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 1,
+      "total_teaching_instances": 0,
+      "domains": {
+        "اختتام السنة الدراسية والنتائج": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 0,
+          "weeks": [
+            38
+          ],
+          "competencies": [
+            {
+              "competency_text": "إعلان النتائج النهائية وتكريم المتفوقين وتسليم الكشوف والشهادات للأولياء والتلاميذ.",
+              "teaching_instances_count": 0,
+              "weeks": [
+                38
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "اللغة العربية": {
+      "regular_lessons": 30,
+      "pedagogical_stations": 0,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 30,
+      "domains": {
+        "المراجعة والتثبيت الشامل": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            34,
+            35
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                34,
+                35
+              ]
+            }
+          ]
+        },
+        "الوحدة 1: العائلة والأقارب": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        "الوحدة 2: مدرستي وأصدقائي": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        "الوحدة 3: حيي وقريتي": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            10,
+            11
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        "الوحدة 4: الصحة والتغذية والرياضة": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                14,
+                15,
+                16,
+                17
+              ]
+            }
+          ]
+        },
+        "الوحدة 5: البيئة والطبيعة والمياه": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                18,
+                19,
+                20,
+                21
+              ]
+            }
+          ]
+        },
+        "الوحدة 6: الحرف والمهن والإنتاج": {
+          "regular_lessons": 2,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 2,
+          "weeks": [
+            22,
+            23
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 2,
+              "weeks": [
+                22,
+                23
+              ]
+            }
+          ]
+        },
+        "الوحدة 7: الأسفار والرحلات والاستكشاف": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            26,
+            27,
+            28,
+            29
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                26,
+                27,
+                28,
+                29
+              ]
+            }
+          ]
+        },
+        "الوحدة 8: الألعاب والأعياد والتضامن الوطني": {
+          "regular_lessons": 4,
+          "pedagogical_stations": 0,
+          "total_teaching_instances": 4,
+          "weeks": [
+            30,
+            31,
+            32,
+            33
+          ],
+          "competencies": [
+            {
+              "competency_text": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+              "teaching_instances_count": 4,
+              "weeks": [
+                30,
+                31,
+                32,
+                33
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "تقويم شامل وإدماج نهاية السنة": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 1,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 1,
+      "domains": {
+        "الحصيلة السنوية الشاملة والإدماج النهائي": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 1,
+          "total_teaching_instances": 1,
+          "weeks": [
+            36
+          ],
+          "competencies": [
+            {
+              "competency_text": "إدماج الكفايات الختامية السنوية ومعالجة التعثرات المتبقية وتهيئة التلاميذ للامتحانات النهائية.",
+              "teaching_instances_count": 1,
+              "weeks": [
+                36
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "تقويم وإدماج الفصل الأول": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 1,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 1,
+      "domains": {
+        "حصيلة التعلمات والتقويم المرحلي": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 1,
+          "total_teaching_instances": 1,
+          "weeks": [
+            12
+          ],
+          "competencies": [
+            {
+              "competency_text": "تشخيص مكتسبات الفصل الأول ومعالجة الثغرات والتعثرات لدى المتعلمين قبل امتحانات الفصل الأول.",
+              "teaching_instances_count": 1,
+              "weeks": [
+                12
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "تقويم وإدماج الفصل الثاني": {
+      "regular_lessons": 0,
+      "pedagogical_stations": 1,
+      "holiday_or_exam": 0,
+      "total_teaching_instances": 1,
+      "domains": {
+        "حصيلة التعلمات والتقويم المرحلي": {
+          "regular_lessons": 0,
+          "pedagogical_stations": 1,
+          "total_teaching_instances": 1,
+          "weeks": [
+            24
+          ],
+          "competencies": [
+            {
+              "competency_text": "تشخيص مكتسبات الفصل الثاني ومعالجة الثغرات والتعثرات وتثبيت الكفايات الأساسية.",
+              "teaching_instances_count": 1,
+              "weeks": [
+                24
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "instances": [
+    {
+      "level": 2,
+      "term": 1,
+      "week": 1,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "l2_w1_diag_w1",
+      "originalId": "l2_w1_diag",
+      "subject": "التهيئة والتقويم التشخيصي",
+      "domain": "تشخيص المكتسبات والتهيئة",
+      "title": "تقويم مكتسبات السنة الأولى في القراءة والحروف والعمليات الحسابية البسيطة والتربية الإسلامية",
+      "competency": "تشخيص مدى تحكم المتعلمين في مهارات القراءة والكتابة والجمع والطرح البسيط.",
+      "skills": "التقييم الذاتي والتشخيصي وتحديد مكامن الدعم الأولي.",
+      "activities": "شبكات تقويم تشخيصي، بطاقات تعارف، تمارين على الألواح وقراءات استطلاعية.",
+      "category": "PEDAGOGICAL_STATION",
+      "specificType": "PEDAGOGICAL_STATION",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 12,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "spec_w12_l2_w12",
+      "originalId": "spec_w12_l2",
+      "subject": "تقويم وإدماج الفصل الأول",
+      "domain": "حصيلة التعلمات والتقويم المرحلي",
+      "title": "أسبوع التقويم والإدماج والمعالجة البيداغوجية لحصيلة تعلمات الفصل الأول (السنة 2)",
+      "competency": "تشخيص مكتسبات الفصل الأول ومعالجة الثغرات والتعثرات لدى المتعلمين قبل امتحانات الفصل الأول.",
+      "skills": "إدماج المكتسبات المعرفية والمهارية، والتقييم الذاتي ومعالجة الصعوبات.",
+      "activities": "وضعيات إدماجية تقويمية، تمارين علاجية مستهدفة، وشبكات رصد التعثرات.",
+      "category": "PEDAGOGICAL_STATION",
+      "specificType": "PEDAGOGICAL_STATION",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 13,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "spec_w13_l2_w13",
+      "originalId": "spec_w13_l2",
+      "subject": "اختبارات وعطلة الفصل الأول",
+      "domain": "التقويم الختامي والعطلة المدرسية",
+      "title": "امتحانات وتقويم الفصل الأول وعطلة منتصف السنة الدراسية",
+      "competency": "إجراء امتحانات الفصل الأول وحساب المعدلات وتوزيع كشوف الدرجات والاستفادة من العطلة المدرسية.",
+      "skills": "إجراء الاختبارات الرسمية في ظروف تربوية محكمة وتحرير النتائج.",
+      "activities": "أوراق امتحانات الفصل الأول، التصحيح الجماعي، حساب المعدلات وكشوف النقاط.",
+      "category": "HOLIDAY_OR_EXAM",
+      "specificType": "HOLIDAY",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 24,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "spec_w24_l2_w24",
+      "originalId": "spec_w24_l2",
+      "subject": "تقويم وإدماج الفصل الثاني",
+      "domain": "حصيلة التعلمات والتقويم المرحلي",
+      "title": "أسبوع التقويم والإدماج والمعالجة البيداغوجية لحصيلة تعلمات الفصل الثاني (السنة 2)",
+      "competency": "تشخيص مكتسبات الفصل الثاني ومعالجة الثغرات والتعثرات وتثبيت الكفايات الأساسية.",
+      "skills": "الربط بين تعلمات الفصلين الأول والثاني ومعالجة الفروق الفردية بين المتعلمين.",
+      "activities": "أنشطة إدماج مركبة، حصص دعم وتثبيت بيداغوجي، وشبكات الملاحظة المستمرة.",
+      "category": "PEDAGOGICAL_STATION",
+      "specificType": "PEDAGOGICAL_STATION",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 25,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "spec_w25_l2_w25",
+      "originalId": "spec_w25_l2",
+      "subject": "اختبارات وعطلة الفصل الثاني",
+      "domain": "التقويم الختامي والعطلة المدرسية",
+      "title": "امتحانات وتقويم الفصل الثاني وعطلة الفصل الثاني المدرسية",
+      "competency": "إجراء اختبارات الفصل الثاني ورصد الحصيلة الدورية وإعداد كشوف الدرجات.",
+      "skills": "التقويم الموضوعي للتحصيل الدراسي وضبط سجلات التقويم.",
+      "activities": "أوراق الاختبارات الموحدة، التصحيح والتدقيق، ورصد النتائج على كشوف الدرجات.",
+      "category": "HOLIDAY_OR_EXAM",
+      "specificType": "HOLIDAY",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 36,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "spec_w36_l2_w36",
+      "originalId": "spec_w36_l2",
+      "subject": "تقويم شامل وإدماج نهاية السنة",
+      "domain": "الحصيلة السنوية الشاملة والإدماج النهائي",
+      "title": "أسبوع التقويم الشامل والإدماج والمعالجة البيداغوجية الختامية لتعلمات السنة الدراسية (السنة 2)",
+      "competency": "إدماج الكفايات الختامية السنوية ومعالجة التعثرات المتبقية وتهيئة التلاميذ للامتحانات النهائية.",
+      "skills": "استحضار كافة الكفايات الممتدة والقدرة على حل الوضعيات الإدماجية الشاملة.",
+      "activities": "وضعيات تقويمية شاملة، حصص مراجعة مكثفة، وتدريبات على نماذج الاختبارات النهائية.",
+      "category": "PEDAGOGICAL_STATION",
+      "specificType": "PEDAGOGICAL_STATION",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 37,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "spec_w37_l2_w37",
+      "originalId": "spec_w37_l2",
+      "subject": "الامتحانات النهائية والتجاوز",
+      "domain": "التقويم الإشهادي والنهائي",
+      "title": "الامتحانات النهائية الموحدة وامتحان التجاوز إلى المستوى الموالي",
+      "competency": "إجراء الامتحانات الختامية وحساب المعدلات السنوية العامة وتحديد التجاوز والنجاح.",
+      "skills": "اجتياز الاختبارات الرسمية بدقة وثقة وفق المعايير البيداغوجية المعتمدة.",
+      "activities": "مواضيع الامتحانات النهائية، لجان التصحيح، ومحاضر المراقبة.",
+      "category": "HOLIDAY_OR_EXAM",
+      "specificType": "EXAM",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 38,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 1,
+      "instanceId": "spec_w38_l2_w38",
+      "originalId": "spec_w38_l2",
+      "subject": "الفرز والمداولات واختتام السنة",
+      "domain": "اختتام السنة الدراسية والنتائج",
+      "title": "فرز النتائج والمداولات الرسمية وتوزيع الجوائز وكشوف الدرجات واختتام السنة",
+      "competency": "إعلان النتائج النهائية وتكريم المتفوقين وتسليم الكشوف والشهادات للأولياء والتلاميذ.",
+      "skills": "المداولات البيداغوجية، حصر نسب النجاح والتجاوز، وتوثيق السجلات المدرسية.",
+      "activities": "حفل الاختتام المدرسي، توزيع الجوائز والشهادات، وأرشفة السجلات الرسمية.",
+      "category": "HOLIDAY_OR_EXAM",
+      "specificType": "EXAM",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 2,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u1_w2",
+      "originalId": "l2_ar_u1",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، التاء المربوطة والمفتوحة، أسماء الإشارة (هذا، هذه)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 3,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u1_w3",
+      "originalId": "l2_ar_u1",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، التاء المربوطة والمفتوحة، أسماء الإشارة (هذا، هذه)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 4,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u1_w4",
+      "originalId": "l2_ar_u1",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، التاء المربوطة والمفتوحة، أسماء الإشارة (هذا، هذه)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 5,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u1_w5",
+      "originalId": "l2_ar_u1",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، التاء المربوطة والمفتوحة، أسماء الإشارة (هذا، هذه)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 2,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u1_w2",
+      "originalId": "l2_isl_u1",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "سورة المسد + التوحيد والإيمان بالرسل + بر الوالدين وصلة الرحم",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 3,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u1_w3",
+      "originalId": "l2_isl_u1",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "سورة المسد + التوحيد والإيمان بالرسل + بر الوالدين وصلة الرحم",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 4,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u1_w4",
+      "originalId": "l2_isl_u1",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "سورة المسد + التوحيد والإيمان بالرسل + بر الوالدين وصلة الرحم",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 5,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u1_w5",
+      "originalId": "l2_isl_u1",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "سورة المسد + التوحيد والإيمان بالرسل + بر الوالدين وصلة الرحم",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 2,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u1_w2",
+      "originalId": "l2_math_u1",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الأعداد حتى 199، الجمع بالاحتفاظ، والمستطيل والمربع",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 3,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u1_w3",
+      "originalId": "l2_math_u1",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الأعداد حتى 199، الجمع بالاحتفاظ، والمستطيل والمربع",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 4,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u1_w4",
+      "originalId": "l2_math_u1",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الأعداد حتى 199، الجمع بالاحتفاظ، والمستطيل والمربع",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 5,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u1_w5",
+      "originalId": "l2_math_u1",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الأعداد حتى 199، الجمع بالاحتفاظ، والمستطيل والمربع",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 2,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u1_w2",
+      "originalId": "l2_sci_u1",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "مظاهر النمو عند الإنسان، نبض القلب والتنفس في الراحة والجهد",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 3,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u1_w3",
+      "originalId": "l2_sci_u1",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "مظاهر النمو عند الإنسان، نبض القلب والتنفس في الراحة والجهد",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 4,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u1_w4",
+      "originalId": "l2_sci_u1",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "مظاهر النمو عند الإنسان، نبض القلب والتنفس في الراحة والجهد",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 5,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u1_w5",
+      "originalId": "l2_sci_u1",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "مظاهر النمو عند الإنسان، نبض القلب والتنفس في الراحة والجهد",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 2,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u1_w2",
+      "originalId": "l2_civ_u1",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الحق في التعليم والصحة والاسم العائلي",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 3,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u1_w3",
+      "originalId": "l2_civ_u1",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الحق في التعليم والصحة والاسم العائلي",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 4,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u1_w4",
+      "originalId": "l2_civ_u1",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الحق في التعليم والصحة والاسم العائلي",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 5,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u1_w5",
+      "originalId": "l2_civ_u1",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 1: العائلة والأقارب",
+      "title": "الحق في التعليم والصحة والاسم العائلي",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 6,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u2_w6",
+      "originalId": "l2_ar_u2",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، اللام الشمسية واللام القمرية، ضمائر المتكلم والمخاطب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 7,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u2_w7",
+      "originalId": "l2_ar_u2",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، اللام الشمسية واللام القمرية، ضمائر المتكلم والمخاطب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 8,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u2_w8",
+      "originalId": "l2_ar_u2",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، اللام الشمسية واللام القمرية، ضمائر المتكلم والمخاطب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 9,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u2_w9",
+      "originalId": "l2_ar_u2",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، اللام الشمسية واللام القمرية، ضمائر المتكلم والمخاطب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 6,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u2_w6",
+      "originalId": "l2_isl_u2",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "سورة النصر وسورة القارعة + الوضوء شروطه وكيفيته + الصدق",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 7,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u2_w7",
+      "originalId": "l2_isl_u2",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "سورة النصر وسورة القارعة + الوضوء شروطه وكيفيته + الصدق",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 8,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u2_w8",
+      "originalId": "l2_isl_u2",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "سورة النصر وسورة القارعة + الوضوء شروطه وكيفيته + الصدق",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 9,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u2_w9",
+      "originalId": "l2_isl_u2",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "سورة النصر وسورة القارعة + الوضوء شروطه وكيفيته + الصدق",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 6,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u2_w6",
+      "originalId": "l2_math_u2",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "الأعداد حتى 299، الطرح بالاستعارة، والمثلث القائم والرسم بالمسطرة",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 7,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u2_w7",
+      "originalId": "l2_math_u2",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "الأعداد حتى 299، الطرح بالاستعارة، والمثلث القائم والرسم بالمسطرة",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 8,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u2_w8",
+      "originalId": "l2_math_u2",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "الأعداد حتى 299، الطرح بالاستعارة، والمثلث القائم والرسم بالمسطرة",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 9,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u2_w9",
+      "originalId": "l2_math_u2",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "الأعداد حتى 299، الطرح بالاستعارة، والمثلث القائم والرسم بالمسطرة",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 6,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u2_w6",
+      "originalId": "l2_sci_u2",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "حركة الجسم والمفاصل ووقاية الهيكل العظمي والأسنان",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 7,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u2_w7",
+      "originalId": "l2_sci_u2",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "حركة الجسم والمفاصل ووقاية الهيكل العظمي والأسنان",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 8,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u2_w8",
+      "originalId": "l2_sci_u2",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "حركة الجسم والمفاصل ووقاية الهيكل العظمي والأسنان",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 9,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u2_w9",
+      "originalId": "l2_sci_u2",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "حركة الجسم والمفاصل ووقاية الهيكل العظمي والأسنان",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 6,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u2_w6",
+      "originalId": "l2_civ_u2",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "احترام النظام الداخلي للمدرسة ونظافة القسم والساحة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 7,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u2_w7",
+      "originalId": "l2_civ_u2",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "احترام النظام الداخلي للمدرسة ونظافة القسم والساحة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 8,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u2_w8",
+      "originalId": "l2_civ_u2",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "احترام النظام الداخلي للمدرسة ونظافة القسم والساحة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 9,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u2_w9",
+      "originalId": "l2_civ_u2",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 2: مدرستي وأصدقائي",
+      "title": "احترام النظام الداخلي للمدرسة ونظافة القسم والساحة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 10,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_ar_u3_w10",
+      "originalId": "l2_ar_u3",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، حروف الجر (من، إلى، في، على)، الجملة الاسمية البسيطة) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 11,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_ar_u3_w11",
+      "originalId": "l2_ar_u3",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، حروف الجر (من، إلى، في، على)، الجملة الاسمية البسيطة) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 10,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_isl_u3_w10",
+      "originalId": "l2_isl_u3",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "سورة العاديات + الصلوات الخمس المفروضة وعدد ركعاتها + الأمانة",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 11,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_isl_u3_w11",
+      "originalId": "l2_isl_u3",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "سورة العاديات + الصلوات الخمس المفروضة وعدد ركعاتها + الأمانة",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 10,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_math_u3_w10",
+      "originalId": "l2_math_u3",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "الأعداد حتى 499، مقارنة وترتيب الأعداد وجدول المنازل (و، ع، م)",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 11,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_math_u3_w11",
+      "originalId": "l2_math_u3",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "الأعداد حتى 499، مقارنة وترتيب الأعداد وجدول المنازل (و، ع، م)",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 10,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_sci_u3_w10",
+      "originalId": "l2_sci_u3",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "النبات الأخضر وحاجته للماء والضوء للنمو والإزهار",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 11,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_sci_u3_w11",
+      "originalId": "l2_sci_u3",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "النبات الأخضر وحاجته للماء والضوء للنمو والإزهار",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 10,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_civ_u3_w10",
+      "originalId": "l2_civ_u3",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "المحافظة على المرافق العامة والحدائق والشارع",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 11,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_civ_u3_w11",
+      "originalId": "l2_civ_u3",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 3: حيي وقريتي",
+      "title": "المحافظة على المرافق العامة والحدائق والشارع",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 14,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u4_w14",
+      "originalId": "l2_ar_u4",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل الماضي وتصريفه مع الضمائر، علامات الترقيم) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 15,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u4_w15",
+      "originalId": "l2_ar_u4",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل الماضي وتصريفه مع الضمائر، علامات الترقيم) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 16,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u4_w16",
+      "originalId": "l2_ar_u4",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل الماضي وتصريفه مع الضمائر، علامات الترقيم) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 17,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u4_w17",
+      "originalId": "l2_ar_u4",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل الماضي وتصريفه مع الضمائر، علامات الترقيم) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 14,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u4_w14",
+      "originalId": "l2_isl_u4",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "سورة الزلزلة + صلاة الجمعة وآداب المسجد + النظافة والطهارة",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 15,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u4_w15",
+      "originalId": "l2_isl_u4",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "سورة الزلزلة + صلاة الجمعة وآداب المسجد + النظافة والطهارة",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 16,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u4_w16",
+      "originalId": "l2_isl_u4",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "سورة الزلزلة + صلاة الجمعة وآداب المسجد + النظافة والطهارة",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 17,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u4_w17",
+      "originalId": "l2_isl_u4",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "سورة الزلزلة + صلاة الجمعة وآداب المسجد + النظافة والطهارة",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 14,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u4_w14",
+      "originalId": "l2_math_u4",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "الأعداد حتى 699، مفهوم الضرب وبناء جداول الضرب لـ 2 و 3 و 4",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 15,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u4_w15",
+      "originalId": "l2_math_u4",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "الأعداد حتى 699، مفهوم الضرب وبناء جداول الضرب لـ 2 و 3 و 4",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 16,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u4_w16",
+      "originalId": "l2_math_u4",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "الأعداد حتى 699، مفهوم الضرب وبناء جداول الضرب لـ 2 و 3 و 4",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 17,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u4_w17",
+      "originalId": "l2_math_u4",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "الأعداد حتى 699، مفهوم الضرب وبناء جداول الضرب لـ 2 و 3 و 4",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 14,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u4_w14",
+      "originalId": "l2_sci_u4",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "حالات المادة (الصلبة والسائلة) وتحولات الماء بفعل الحرارة",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 15,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u4_w15",
+      "originalId": "l2_sci_u4",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "حالات المادة (الصلبة والسائلة) وتحولات الماء بفعل الحرارة",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 16,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u4_w16",
+      "originalId": "l2_sci_u4",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "حالات المادة (الصلبة والسائلة) وتحولات الماء بفعل الحرارة",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 17,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u4_w17",
+      "originalId": "l2_sci_u4",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "حالات المادة (الصلبة والسائلة) وتحولات الماء بفعل الحرارة",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 14,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u4_w14",
+      "originalId": "l2_civ_u4",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "آداب الحوار والتحدث بلباقة مع المعلم والزملاء",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 15,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u4_w15",
+      "originalId": "l2_civ_u4",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "آداب الحوار والتحدث بلباقة مع المعلم والزملاء",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 16,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u4_w16",
+      "originalId": "l2_civ_u4",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "آداب الحوار والتحدث بلباقة مع المعلم والزملاء",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 17,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u4_w17",
+      "originalId": "l2_civ_u4",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 4: الصحة والتغذية والرياضة",
+      "title": "آداب الحوار والتحدث بلباقة مع المعلم والزملاء",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 18,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u5_w18",
+      "originalId": "l2_ar_u5",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل المضارع وتصريفه، حروف العطف (و، ف، ثم)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 19,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u5_w19",
+      "originalId": "l2_ar_u5",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل المضارع وتصريفه، حروف العطف (و، ف، ثم)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 20,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u5_w20",
+      "originalId": "l2_ar_u5",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل المضارع وتصريفه، حروف العطف (و، ف، ثم)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 21,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u5_w21",
+      "originalId": "l2_ar_u5",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الفعل المضارع وتصريفه، حروف العطف (و، ف، ثم)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 18,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u5_w18",
+      "originalId": "l2_isl_u5",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "سورة البينة + نشأة النبي ﷺ ورعايته للغنم + الرفق بالمخلوقات",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 19,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u5_w19",
+      "originalId": "l2_isl_u5",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "سورة البينة + نشأة النبي ﷺ ورعايته للغنم + الرفق بالمخلوقات",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 20,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u5_w20",
+      "originalId": "l2_isl_u5",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "سورة البينة + نشأة النبي ﷺ ورعايته للغنم + الرفق بالمخلوقات",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 21,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u5_w21",
+      "originalId": "l2_isl_u5",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "سورة البينة + نشأة النبي ﷺ ورعايته للغنم + الرفق بالمخلوقات",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 18,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u5_w18",
+      "originalId": "l2_math_u5",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الأعداد حتى 899، جداول الضرب لـ 5 و 10، وقياس الأطوال (المتر والسنتيمتر)",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 19,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u5_w19",
+      "originalId": "l2_math_u5",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الأعداد حتى 899، جداول الضرب لـ 5 و 10، وقياس الأطوال (المتر والسنتيمتر)",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 20,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u5_w20",
+      "originalId": "l2_math_u5",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الأعداد حتى 899، جداول الضرب لـ 5 و 10، وقياس الأطوال (المتر والسنتيمتر)",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 21,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u5_w21",
+      "originalId": "l2_math_u5",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الأعداد حتى 899، جداول الضرب لـ 5 و 10، وقياس الأطوال (المتر والسنتيمتر)",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 18,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u5_w18",
+      "originalId": "l2_sci_u5",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الهواء غاز موجود في محيطنا وخصائصه وكيفية إثبات وجوده",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 19,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u5_w19",
+      "originalId": "l2_sci_u5",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الهواء غاز موجود في محيطنا وخصائصه وكيفية إثبات وجوده",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 20,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u5_w20",
+      "originalId": "l2_sci_u5",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الهواء غاز موجود في محيطنا وخصائصه وكيفية إثبات وجوده",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 21,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u5_w21",
+      "originalId": "l2_sci_u5",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "الهواء غاز موجود في محيطنا وخصائصه وكيفية إثبات وجوده",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 18,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u5_w18",
+      "originalId": "l2_civ_u5",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "المحافظة على الماء الصالح للشرب وحماية الشجرة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 19,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u5_w19",
+      "originalId": "l2_civ_u5",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "المحافظة على الماء الصالح للشرب وحماية الشجرة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 20,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u5_w20",
+      "originalId": "l2_civ_u5",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "المحافظة على الماء الصالح للشرب وحماية الشجرة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 21,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u5_w21",
+      "originalId": "l2_civ_u5",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 5: البيئة والطبيعة والمياه",
+      "title": "المحافظة على الماء الصالح للشرب وحماية الشجرة",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 22,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_ar_u6_w22",
+      "originalId": "l2_ar_u6",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الجملة الفعلية الفاعل، التنوين بأنواعه (ضم، فتح، كسر)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 23,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_ar_u6_w23",
+      "originalId": "l2_ar_u6",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الجملة الفعلية الفاعل، التنوين بأنواعه (ضم، فتح، كسر)) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 22,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_isl_u6_w22",
+      "originalId": "l2_isl_u6",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "سورة القدر + الصلاة على النبي ﷺ وفضلها + إتقان العمل والكسب الحلال",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 23,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_isl_u6_w23",
+      "originalId": "l2_isl_u6",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "سورة القدر + الصلاة على النبي ﷺ وفضلها + إتقان العمل والكسب الحلال",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 22,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_math_u6_w22",
+      "originalId": "l2_math_u6",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "الأعداد حتى 999، الضرب في عدد برقم واحد بالاحتفاظ، والمكعب ومتوازي المستطيلات",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 23,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_math_u6_w23",
+      "originalId": "l2_math_u6",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "الأعداد حتى 999، الضرب في عدد برقم واحد بالاحتفاظ، والمكعب ومتوازي المستطيلات",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 22,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_sci_u6_w22",
+      "originalId": "l2_sci_u6",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "الدارة الكهربائية البسيطة (المصباح، البطارية، الأسلاك، القاطعة)",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 23,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_sci_u6_w23",
+      "originalId": "l2_sci_u6",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "الدارة الكهربائية البسيطة (المصباح، البطارية، الأسلاك، القاطعة)",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 22,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_civ_u6_w22",
+      "originalId": "l2_civ_u6",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "واجب احترام المهن والعمال وحب العمل اليدوي",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 23,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_civ_u6_w23",
+      "originalId": "l2_civ_u6",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 6: الحرف والمهن والإنتاج",
+      "title": "واجب احترام المهن والعمال وحب العمل اليدوي",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 26,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u7_w26",
+      "originalId": "l2_ar_u7",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الأسماء الموصولة (الذي، التي)، أسلوب الاستفهام والتعجب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 27,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u7_w27",
+      "originalId": "l2_ar_u7",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الأسماء الموصولة (الذي، التي)، أسلوب الاستفهام والتعجب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 28,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u7_w28",
+      "originalId": "l2_ar_u7",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الأسماء الموصولة (الذي، التي)، أسلوب الاستفهام والتعجب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 29,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u7_w29",
+      "originalId": "l2_ar_u7",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية، الأسماء الموصولة (الذي، التي)، أسلوب الاستفهام والتعجب) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 26,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u7_w26",
+      "originalId": "l2_isl_u7",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "سورة العلق (الآيات 1-8) + هجرة النبي ﷺ + التسامح والعفو",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 27,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u7_w27",
+      "originalId": "l2_isl_u7",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "سورة العلق (الآيات 1-8) + هجرة النبي ﷺ + التسامح والعفو",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 28,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u7_w28",
+      "originalId": "l2_isl_u7",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "سورة العلق (الآيات 1-8) + هجرة النبي ﷺ + التسامح والعفو",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 29,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u7_w29",
+      "originalId": "l2_isl_u7",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "سورة العلق (الآيات 1-8) + هجرة النبي ﷺ + التسامح والعفو",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 26,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u7_w26",
+      "originalId": "l2_math_u7",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "قياس الكتل (الكيلوغرام والغرام)، وقراءة الساعة ذات العقارب والرقمية",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 27,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u7_w27",
+      "originalId": "l2_math_u7",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "قياس الكتل (الكيلوغرام والغرام)، وقراءة الساعة ذات العقارب والرقمية",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 28,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u7_w28",
+      "originalId": "l2_math_u7",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "قياس الكتل (الكيلوغرام والغرام)، وقراءة الساعة ذات العقارب والرقمية",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 29,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u7_w29",
+      "originalId": "l2_math_u7",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "قياس الكتل (الكيلوغرام والغرام)، وقراءة الساعة ذات العقارب والرقمية",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 26,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u7_w26",
+      "originalId": "l2_sci_u7",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "حركة الشمس والظلال وتحديد أوقات النهار وتعاقب الفصول",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 27,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u7_w27",
+      "originalId": "l2_sci_u7",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "حركة الشمس والظلال وتحديد أوقات النهار وتعاقب الفصول",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 28,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u7_w28",
+      "originalId": "l2_sci_u7",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "حركة الشمس والظلال وتحديد أوقات النهار وتعاقب الفصول",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 29,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u7_w29",
+      "originalId": "l2_sci_u7",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "حركة الشمس والظلال وتحديد أوقات النهار وتعاقب الفصول",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 26,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u7_w26",
+      "originalId": "l2_civ_u7",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "رموز الجمهورية الإسلامية الموريتانية (العلم، الشعار، النشيد)",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 27,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u7_w27",
+      "originalId": "l2_civ_u7",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "رموز الجمهورية الإسلامية الموريتانية (العلم، الشعار، النشيد)",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 28,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u7_w28",
+      "originalId": "l2_civ_u7",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "رموز الجمهورية الإسلامية الموريتانية (العلم، الشعار، النشيد)",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 29,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u7_w29",
+      "originalId": "l2_civ_u7",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 7: الأسفار والرحلات والاستكشاف",
+      "title": "رموز الجمهورية الإسلامية الموريتانية (العلم، الشعار، النشيد)",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 30,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u8_w30",
+      "originalId": "l2_ar_u8",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية إثرائية، التعبير الكتابي والإنتاج، الإملاء غير المنظور) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 31,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u8_w31",
+      "originalId": "l2_ar_u8",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية إثرائية، التعبير الكتابي والإنتاج، الإملاء غير المنظور) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 32,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u8_w32",
+      "originalId": "l2_ar_u8",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية إثرائية، التعبير الكتابي والإنتاج، الإملاء غير المنظور) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 33,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_ar_u8_w33",
+      "originalId": "l2_ar_u8",
+      "subject": "اللغة العربية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "القراءة والفهم، الظواهر اللغوية (نصوص قرائية إثرائية، التعبير الكتابي والإنتاج، الإملاء غير المنظور) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 30,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u8_w30",
+      "originalId": "l2_isl_u8",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "سورة التين وسورة الضحى + حقوق الجار والمحتاجين والتضامن",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 31,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u8_w31",
+      "originalId": "l2_isl_u8",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "سورة التين وسورة الضحى + حقوق الجار والمحتاجين والتضامن",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 32,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u8_w32",
+      "originalId": "l2_isl_u8",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "سورة التين وسورة الضحى + حقوق الجار والمحتاجين والتضامن",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 33,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_isl_u8_w33",
+      "originalId": "l2_isl_u8",
+      "subject": "التربية الإسلامية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "سورة التين وسورة الضحى + حقوق الجار والمحتاجين والتضامن",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 30,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u8_w30",
+      "originalId": "l2_math_u8",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "حل وضعيات مشكلة ومسائل حسابية مركبة من خطوتين",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 31,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u8_w31",
+      "originalId": "l2_math_u8",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "حل وضعيات مشكلة ومسائل حسابية مركبة من خطوتين",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 32,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u8_w32",
+      "originalId": "l2_math_u8",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "حل وضعيات مشكلة ومسائل حسابية مركبة من خطوتين",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 33,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_math_u8_w33",
+      "originalId": "l2_math_u8",
+      "subject": "الرياضيات",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "حل وضعيات مشكلة ومسائل حسابية مركبة من خطوتين",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 30,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u8_w30",
+      "originalId": "l2_sci_u8",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "الأجهزة والآلات البسيطة وقواعد الأمان المنزلية والمدرسية",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 31,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u8_w31",
+      "originalId": "l2_sci_u8",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "الأجهزة والآلات البسيطة وقواعد الأمان المنزلية والمدرسية",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 32,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u8_w32",
+      "originalId": "l2_sci_u8",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "الأجهزة والآلات البسيطة وقواعد الأمان المنزلية والمدرسية",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 33,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_sci_u8_w33",
+      "originalId": "l2_sci_u8",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "الأجهزة والآلات البسيطة وقواعد الأمان المنزلية والمدرسية",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 30,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u8_w30",
+      "originalId": "l2_civ_u8",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "التضامن الاجتماعي ومساعدة الأيتام والمسنين في الحي والوطن",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 31,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u8_w31",
+      "originalId": "l2_civ_u8",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "التضامن الاجتماعي ومساعدة الأيتام والمسنين في الحي والوطن",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 32,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u8_w32",
+      "originalId": "l2_civ_u8",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "التضامن الاجتماعي ومساعدة الأيتام والمسنين في الحي والوطن",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 33,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 4,
+      "instanceId": "l2_civ_u8_w33",
+      "originalId": "l2_civ_u8",
+      "subject": "التربية المدنية",
+      "domain": "الوحدة 8: الألعاب والأعياد والتضامن الوطني",
+      "title": "التضامن الاجتماعي ومساعدة الأيتام والمسنين في الحي والوطن",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 34,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_ar_u9_w34",
+      "originalId": "l2_ar_u9",
+      "subject": "اللغة العربية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "القراءة والفهم، الظواهر اللغوية (مراجعة شاملة لجميع نصوص وقواعد وإملاء السنة الثانية) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 35,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_ar_u9_w35",
+      "originalId": "l2_ar_u9",
+      "subject": "اللغة العربية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "القراءة والفهم، الظواهر اللغوية (مراجعة شاملة لجميع نصوص وقواعد وإملاء السنة الثانية) والإنتاج الكتابي",
+      "competency": "أن يقرأ نصوصاً مسترسلة بطلاقة ويستوعب معانيها ويوظف القواعد النحوية والإملائية بدقة.",
+      "skills": "الطلاقة القرائية، تصريف الأفعال، التحليل والتركيب الكتابي السليم.",
+      "activities": "نصوص كتاب القراءة، بطاقات إملائية، تمارين لغوية، وكراس التعبير.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 34,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_isl_u9_w34",
+      "originalId": "l2_isl_u9",
+      "subject": "التربية الإسلامية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة لجميع السور الكريمة والأحكام الفقهية والسيرة النبوية",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 35,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_isl_u9_w35",
+      "originalId": "l2_isl_u9",
+      "subject": "التربية الإسلامية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة لجميع السور الكريمة والأحكام الفقهية والسيرة النبوية",
+      "competency": "أن يستظهر السور الكريمة ويتقن كيفية الصلاة والوضوء ويتمثل السيرة النبوية العطرة.",
+      "skills": "الحفظ والترتيل المتقن، أداء الصلوات المفروضة، والتمسك بالخلق الفاضل.",
+      "activities": "المصحف الشريف، التطبيق العملي للصلاة والوضوء، وسرد السيرة النبوية.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 34,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_math_u9_w34",
+      "originalId": "l2_math_u9",
+      "subject": "الرياضيات",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة للأعداد حتى 999 وجداول الضرب والهندسة والمسائل",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 35,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_math_u9_w35",
+      "originalId": "l2_math_u9",
+      "subject": "الرياضيات",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة للأعداد حتى 999 وجداول الضرب والهندسة والمسائل",
+      "competency": "أن يتقن الحساب حتى 999 وجداول الضرب وحساب الأطوال والكتل والمجسمات والمسائل.",
+      "skills": "الوضع العمودي للعمليات، حفظ جداول الضرب، استخدام أدوات القياس وحل المسائل.",
+      "activities": "صفائح المئات، أشرطة القياس، موازين، بطاقات الجداءات وكراس المسائل.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 34,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_sci_u9_w34",
+      "originalId": "l2_sci_u9",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة للمفاهيم العلمية والتكنولوجية المقررة",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 35,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_sci_u9_w35",
+      "originalId": "l2_sci_u9",
+      "subject": "التربية العلمية والتكنولوجية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة للمفاهيم العلمية والتكنولوجية المقررة",
+      "competency": "أن يستكشف جسم الإنسان وعالم النبات والمادة والكهرباء وتفسير الظواهر الطبيعية.",
+      "skills": "إجراء التجارب، تدوين الملاحظات، وتركيب الدارات الكهربائية البسيطة بأمان.",
+      "activities": "تجارب علمية، مجسمات ونباتات تجريبية، بطاريات ومصابيح.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 34,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_civ_u9_w34",
+      "originalId": "l2_civ_u9",
+      "subject": "التربية المدنية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة للقيم المدنية والحقوق والواجبات الوطنية",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 35,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 2,
+      "instanceId": "l2_civ_u9_w35",
+      "originalId": "l2_civ_u9",
+      "subject": "التربية المدنية",
+      "domain": "المراجعة والتثبيت الشامل",
+      "title": "مراجعة شاملة للقيم المدنية والحقوق والواجبات الوطنية",
+      "competency": "أن يرسخ السلوك المدني القويم ويدرك حقوقه وواجباته ويحترم رموز ومؤسسات الوطن.",
+      "skills": "ممارسة السلوك الديمقراطي والتعاون والتعبير بأدب عن الرأي.",
+      "activities": "مشاهد توعوية، لوحات حقوق الطفل، بطاقات المواطنة والتضامن.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 2,
+      "subWeekIndex": 0,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w2",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 3,
+      "subWeekIndex": 1,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w3",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 4,
+      "subWeekIndex": 2,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w4",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 5,
+      "subWeekIndex": 3,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w5",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 6,
+      "subWeekIndex": 4,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w6",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 7,
+      "subWeekIndex": 5,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w7",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 8,
+      "subWeekIndex": 6,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w8",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 9,
+      "subWeekIndex": 7,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w9",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 10,
+      "subWeekIndex": 8,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w10",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 11,
+      "subWeekIndex": 9,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w11",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 12,
+      "subWeekIndex": 10,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w12",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 1,
+      "week": 13,
+      "subWeekIndex": 11,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w13",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 14,
+      "subWeekIndex": 12,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w14",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 15,
+      "subWeekIndex": 13,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w15",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 16,
+      "subWeekIndex": 14,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w16",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 17,
+      "subWeekIndex": 15,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w17",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 18,
+      "subWeekIndex": 16,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w18",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 19,
+      "subWeekIndex": 17,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w19",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 20,
+      "subWeekIndex": 18,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w20",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 21,
+      "subWeekIndex": 19,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w21",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 22,
+      "subWeekIndex": 20,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w22",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 23,
+      "subWeekIndex": 21,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w23",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 24,
+      "subWeekIndex": 22,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w24",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 25,
+      "subWeekIndex": 23,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w25",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 2,
+      "week": 26,
+      "subWeekIndex": 24,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w26",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 27,
+      "subWeekIndex": 25,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w27",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 28,
+      "subWeekIndex": 26,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w28",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 29,
+      "subWeekIndex": 27,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w29",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 30,
+      "subWeekIndex": 28,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w30",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 31,
+      "subWeekIndex": 29,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w31",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 32,
+      "subWeekIndex": 30,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w32",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 33,
+      "subWeekIndex": 31,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w33",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 34,
+      "subWeekIndex": 32,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w34",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    },
+    {
+      "level": 2,
+      "term": 3,
+      "week": 35,
+      "subWeekIndex": 33,
+      "totalWeeksSpan": 34,
+      "instanceId": "l2_art_pe_w35",
+      "originalId": "l2_art_pe",
+      "subject": "التربية الفنية والبدنية",
+      "domain": "التربية الفنية والرياضية",
+      "title": "الأشكال الهندسية في الفن التشكيلي، الإيقاع والأناشيد المدرسية، وألعاب التتابع والجري",
+      "competency": "تنمية القدرات الحسية والإنشادية والتناسق الحركي والبدني السليم لدى التلميذ.",
+      "skills": "الرسم بالخامات، الأداء الإيقاعي للأناشيد، والجري والرمي والتوازن.",
+      "activities": "أقلام ألوان، كراس الرسم، أناشيد مدرسية، وأقماع وملاعب المدرسة.",
+      "category": "REGULAR_LESSON",
+      "specificType": "REGULAR_LESSON",
+      "isFrench": false
+    }
+  ]
+}
