@@ -143,7 +143,7 @@ fun OfficialStampVisual(
     val cleanName = personName.trim()
     val cleanFinancialId = financialId.trim()
 
-    val isCircle = shape.equals("circle", ignoreCase = true) || cleanRole == "المدير"
+    val isCircle = shape.equals("circle", ignoreCase = true) || (cleanRole == "المدير" && !shape.equals("rectangle", ignoreCase = false))
 
     if (isCircle) {
         val baseDiameter = 190.dp
