@@ -133,290 +133,74 @@ fun OfficialStampVisual(
     scaleSize: Dp = 220.dp,
     financialId: String = ""
 ) {
-    val cleanSchool = schoolName.trim().ifBlank { "الطلحايه 1" }
-    val formattedSchool = if (cleanSchool.startsWith("مدرسة")) cleanSchool else "مدرسة $cleanSchool"
-    val cleanRole = when (roleTitle.trim()) {
-        "معلم", "المعلم" -> "المعلم"
-        "مدير", "المدير" -> "المدير"
-        else -> roleTitle.trim().ifBlank { "المعلم" }
+    // The on-screen stamp is rendered from the exact same drawing used on paper
+    // and in PDF reports (HtmlReportHelper.generateStampSvg), so the preview and
+    // the printed stamp can never differ.
+    val isCircle = shape.equals("circle", ignoreCase = true) ||
+        roleTitle.trim() in listOf("مدير", "المدير")
+
+    val targetWidth = if (scaleSize.isSpecified && scaleSize > 0.dp) scaleSize else 220.dp
+    val targetHeight = if (isCircle) targetWidth else targetWidth / 1.55f
+
+    val html = remember(roleTitle, personName, schoolName, shape, financialId) {
+        val svg = com.example.ui.HtmlReportHelper.generateStampSvg(
+            roleTitle = roleTitle,
+            personName = personName,
+            schoolName = schoolName,
+            shape = shape,
+            sizePx = 200,
+            financialId = financialId
+        )
+        """
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <style>
+          html, body { margin:0; padding:0; background:transparent; overflow:hidden; width:100%; height:100%; }
+          body { display:flex; align-items:center; justify-content:center; }
+          svg { width:100% !important; height:100% !important; display:block; }
+        </style>
+        </head>
+        <body>$svg</body>
+        </html>
+        """.trimIndent()
     }
-    val cleanName = personName.trim()
-    val cleanFinancialId = financialId.trim()
 
-    val isCircle = shape.equals("circle", ignoreCase = true) || (cleanRole == "المدير" && !shape.equals("rectangle", ignoreCase = false))
-
-    if (isCircle) {
-        val baseDiameter = 190.dp
-        val targetDiameter = if (scaleSize.isSpecified && scaleSize > 0.dp) scaleSize else baseDiameter
-        val scaleFactor = (targetDiameter.value / baseDiameter.value).coerceAtLeast(0.1f)
-
-        Box(
-            modifier = modifier
-                .size(targetDiameter)
-                .rotate(-1.5f),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredSize(baseDiameter)
-                    .graphicsLayer {
-                        scaleX = scaleFactor
-                        scaleY = scaleFactor
-                        transformOrigin = TransformOrigin(0.5f, 0.5f)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    shape = CircleShape,
-                    color = Color.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        // 1. Concentric circles & curved circular text
-                        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
-                            val sizePx = size.minDimension
-                            val cx = sizePx / 2f
-                            val cy = sizePx / 2f
-
-                            val rOuter = (sizePx / 2f) - 3.dp.toPx()
-                            val rSecond = rOuter - 4.5.dp.toPx()
-                            val rInner = sizePx * 0.31f
-                            val rTextMid = (rSecond + rInner) / 2f
-
-                            // Outer thick border
-                            drawCircle(
-                                color = StampInkBlue,
-                                radius = rOuter,
-                                center = center,
-                                style = Stroke(width = 3.2.dp.toPx())
-                            )
-
-                            // Second thin border
-                            drawCircle(
-                                color = StampInkBlue,
-                                radius = rSecond,
-                                center = center,
-                                style = Stroke(width = 1.2.dp.toPx())
-                            )
-
-                            // Inner circle border
-                            drawCircle(
-                                color = StampInkBlue,
-                                radius = rInner,
-                                center = center,
-                                style = Stroke(width = 1.4.dp.toPx())
-                            )
-
-                            // Draw circular curved text strictly within the ring
-                            drawIntoCanvas { canvas ->
-                                val nativeCanvas = canvas.nativeCanvas
-                                val textPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
-                                    color = StampInkBlue.toArgb()
-                                    textSize = 10f * density
-                                    typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
-                                    textAlign = android.graphics.Paint.Align.CENTER
-                                }
-
-                                // Top arc: الجمهورية الإسلامية الموريتانية
-                                val topPath = android.graphics.Path()
-                                val topRect = android.graphics.RectF(cx - rTextMid, cy - rTextMid, cx + rTextMid, cy + rTextMid)
-                                topPath.addArc(topRect, 350f, -160f)
-                                val topArcLen = (Math.PI * rTextMid * (160.0 / 180.0)).toFloat()
-                                nativeCanvas.drawTextOnPath(
-                                    "الجمهورية الإسلامية الموريتانية",
-                                    topPath,
-                                    topArcLen / 2f,
-                                    textPaint.textSize * 0.35f,
-                                    textPaint
-                                )
-
-                                // Bottom arc: - المدير -
-                                val botPath = android.graphics.Path()
-                                val botRect = android.graphics.RectF(cx - rTextMid, cy - rTextMid, cx + rTextMid, cy + rTextMid)
-                                botPath.addArc(botRect, 170f, -160f)
-                                val botArcLen = (Math.PI * rTextMid * (160.0 / 180.0)).toFloat()
-                                val bottomLabel = if (cleanRole in listOf("مدير", "المدير")) "- المدير -" else "- $cleanRole -"
-                                nativeCanvas.drawTextOnPath(
-                                    bottomLabel,
-                                    botPath,
-                                    botArcLen / 2f,
-                                    textPaint.textSize * 0.35f,
-                                    textPaint
-                                )
-
-                                // Separator dashes on left & right
-                                val sepPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
-                                    color = StampInkBlue.toArgb()
-                                    textSize = 13f * density
-                                    typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
-                                    textAlign = android.graphics.Paint.Align.CENTER
-                                }
-                                nativeCanvas.drawText("-", cx - rTextMid, cy + (sepPaint.textSize * 0.32f), sepPaint)
-                                nativeCanvas.drawText("-", cx + rTextMid, cy + (sepPaint.textSize * 0.32f), sepPaint)
-                            }
-                        }
-
-                        // 2. Inside the circle: School Name & Director Name
-                        val innerSizeDp = (baseDiameter.value * 0.58f).dp
-                        Column(
-                            modifier = Modifier
-                                .size(innerSizeDp)
-                                .padding(horizontal = 6.dp, vertical = 4.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = formattedSchool,
-                                fontSize = 11.5.sp,
-                                fontWeight = FontWeight.Black,
-                                color = StampInkBlue,
-                                textAlign = TextAlign.Center,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                lineHeight = 14.sp
-                            )
-
-                            Spacer(modifier = Modifier.height(3.dp))
-                            HorizontalDivider(
-                                modifier = Modifier.width(48.dp),
-                                thickness = 1.dp,
-                                color = StampInkBlue
-                            )
-                            Spacer(modifier = Modifier.height(3.dp))
-
-                            val directorDisplayName = if (cleanName.isNotBlank()) cleanName else "المدير"
-                            Text(
-                                text = directorDisplayName,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = StampInkBlue,
-                                textAlign = TextAlign.Center,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                lineHeight = 13.sp
-                            )
-
-                            if (cleanFinancialId.isNotBlank()) {
-                                Text(
-                                    text = "($cleanFinancialId)",
-                                    fontSize = 8.5.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = StampInkBlue,
-                                    textAlign = TextAlign.Center,
-                                    maxLines = 1
-                                )
-                            }
-                        }
-                    }
+    Box(
+        modifier = modifier
+            .width(targetWidth)
+            .height(targetHeight)
+            .rotate(if (isCircle) 1.5f else -2f),
+        contentAlignment = Alignment.Center
+    ) {
+        androidx.compose.ui.viewinterop.AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = { ctx ->
+                object : android.webkit.WebView(ctx) {
+                    override fun onTouchEvent(event: android.view.MotionEvent): Boolean = false
+                    override fun performClick(): Boolean = false
+                }.apply {
+                    settings.javaScriptEnabled = false
+                    settings.useWideViewPort = false
+                    settings.loadWithOverviewMode = false
+                    isVerticalScrollBarEnabled = false
+                    isHorizontalScrollBarEnabled = false
+                    isFocusable = false
+                    isFocusableInTouchMode = false
+                    overScrollMode = android.view.View.OVER_SCROLL_NEVER
+                    setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                    webViewClient = android.webkit.WebViewClient()
+                }
+            },
+            update = { webView ->
+                if (webView.tag != html) {
+                    webView.tag = html
+                    webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
                 }
             }
-        }
-    } else {
-        val roleLine = when {
-            cleanName.isNotBlank() && cleanFinancialId.isNotBlank() -> "$cleanRole: $cleanName ($cleanFinancialId)"
-            cleanName.isNotBlank() -> "$cleanRole: $cleanName"
-            else -> cleanRole
-        }
-
-        val baseWidth = 220.dp
-        val baseHeight = 110.dp
-        val targetWidth = if (scaleSize.isSpecified && scaleSize > 0.dp) scaleSize else baseWidth
-        val scaleFactor = (targetWidth.value / baseWidth.value).coerceAtLeast(0.1f)
-        val targetHeight = (baseHeight.value * scaleFactor).dp
-
-        Box(
-            modifier = modifier
-                .size(width = targetWidth, height = targetHeight)
-                .rotate(-1.5f),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredSize(width = baseWidth, height = baseHeight)
-                    .graphicsLayer {
-                        scaleX = scaleFactor
-                        scaleY = scaleFactor
-                        transformOrigin = TransformOrigin(0.5f, 0.5f)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Card(
-                    modifier = Modifier.fillMaxSize(),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    shape = RoundedCornerShape(8.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(3.dp)
-                            .border(BorderStroke(3.2.dp, StampInkBlue), RoundedCornerShape(6.dp))
-                            .padding(3.dp)
-                            .border(BorderStroke(1.4.dp, StampInkBlue), RoundedCornerShape(4.dp))
-                            .padding(horizontal = 8.dp, vertical = 6.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = "الجمهورية الإسلامية الموريتانية",
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Black,
-                                color = StampInkBlue,
-                                textAlign = TextAlign.Center,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "★",
-                                    fontSize = 14.sp,
-                                    color = StampInkBlue,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(end = 6.dp)
-                                )
-                                Text(
-                                    text = formattedSchool,
-                                    fontSize = 12.5.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = StampInkBlue,
-                                    textAlign = TextAlign.Center,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Text(
-                                    text = "★",
-                                    fontSize = 14.sp,
-                                    color = StampInkBlue,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(start = 6.dp)
-                                )
-                            }
-                            Text(
-                                text = roleLine,
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = StampInkBlue,
-                                textAlign = TextAlign.Center,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        )
     }
 }
 
