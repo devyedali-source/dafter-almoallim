@@ -574,6 +574,13 @@ object HtmlReportHelper {
 
     // --- Official Stamps SVG Generation (ختم المعلم وختم المدير) ---
 
+    /** Shrinks a font size just enough for the text to fit the given width (no clipping, no overflow). */
+    private fun fitFont(text: String, maxWidth: Float, baseSize: Float, minSize: Float = 6f): Float {
+        val estimated = text.length * baseSize * 0.40f
+        if (estimated <= maxWidth || estimated <= 0f) return baseSize
+        return (baseSize * maxWidth / estimated).coerceAtLeast(minSize)
+    }
+
     fun generateCircularStampSvg(
         roleTitle: String,
         personName: String,
@@ -625,10 +632,10 @@ object HtmlReportHelper {
             <text x="179" y="104" fill="$blueColor" font-size="14" font-weight="900" text-anchor="middle">-</text>
 
             <!-- Inside Circle: School Name & Director Name -->
-            <text x="100" y="86" fill="$blueColor" font-size="12" font-weight="900" text-anchor="middle" font-family="'Cairo', 'Amiri', Tahoma, sans-serif">$formattedSchool</text>
+            <text x="100" y="86" fill="$blueColor" font-size="${fitFont(formattedSchool, 112f, 12f)}" font-weight="900" text-anchor="middle" font-family="'Cairo', 'Amiri', Tahoma, sans-serif">$formattedSchool</text>
             <line x1="68" y1="98" x2="132" y2="98" stroke="$blueColor" stroke-width="1.2" />
-            <text x="100" y="117" fill="$blueColor" font-size="11.5" font-weight="bold" text-anchor="middle" font-family="'Cairo', 'Amiri', Tahoma, sans-serif">$directorDisplayName</text>
-            ${if (cleanFinancialId.isNotBlank()) """<text x="100" y="131" fill="$blueColor" font-size="8.5" font-weight="normal" text-anchor="middle" font-family="'Cairo', 'Amiri', Tahoma, sans-serif">($cleanFinancialId)</text>""" else ""}
+            <text x="100" y="117" fill="$blueColor" font-size="${fitFont(directorDisplayName, 112f, 11.5f)}" font-weight="bold" text-anchor="middle" font-family="'Cairo', 'Amiri', Tahoma, sans-serif">$directorDisplayName</text>
+            ${if (cleanFinancialId.isNotBlank()) """<text x="100" y="131" fill="$blueColor" font-size="${fitFont(cleanFinancialId, 100f, 8.5f)}" font-weight="normal" text-anchor="middle" font-family="'Cairo', 'Amiri', Tahoma, sans-serif">($cleanFinancialId)</text>""" else ""}
         </svg>
         """.trimIndent()
     }
@@ -675,9 +682,9 @@ object HtmlReportHelper {
             <rect x="8" y="8" width="224" height="104" rx="4" stroke="$blueColor" stroke-width="1.5" fill="none" />
             <text x="120" y="32" fill="$blueColor" font-size="14" font-weight="900" text-anchor="middle" font-family="'Cairo', sans-serif">الجمهورية الإسلامية الموريتانية</text>
             <text x="20" y="62" fill="$blueColor" font-size="15" text-anchor="middle">★</text>
-            <text x="120" y="62" fill="$blueColor" font-size="13" font-weight="800" text-anchor="middle" font-family="'Cairo', sans-serif">$formattedSchool</text>
+            <text x="120" y="62" fill="$blueColor" font-size="${fitFont(formattedSchool, 170f, 13f)}" font-weight="800" text-anchor="middle" font-family="'Cairo', sans-serif">$formattedSchool</text>
             <text x="220" y="62" fill="$blueColor" font-size="15" text-anchor="middle">★</text>
-            <text x="120" y="94" fill="$blueColor" font-size="14" font-weight="bold" text-anchor="middle" font-family="'Cairo', sans-serif">$roleLine</text>
+            <text x="120" y="94" fill="$blueColor" font-size="${fitFont(roleLine, 210f, 14f)}" font-weight="bold" text-anchor="middle" font-family="'Cairo', sans-serif">$roleLine</text>
         </svg>
         """.trimIndent()
     }
@@ -685,7 +692,7 @@ object HtmlReportHelper {
     fun getTeacherStampHtml(viewModel: TeacherViewModel, schoolName: String, sizePx: Int = 54): String {
         if (!viewModel.showTeacherStampInReports.value) return ""
         val name = viewModel.teacherStampName.value.trim()
-        val role = viewModel.teacherStampRole.value.ifBlank { "المعلم" }
+        val role = "المعلم"
         val shape = "rectangle"
         return """
             <div style="display: flex; justify-content: center; align-items: center; transform: rotate(-2deg); opacity: 0.95;">
@@ -703,7 +710,7 @@ object HtmlReportHelper {
     fun getPrincipalStampHtml(viewModel: TeacherViewModel, schoolName: String, sizePx: Int = 54): String {
         if (!viewModel.showPrincipalStampInReports.value) return ""
         val name = viewModel.principalStampName.value.trim()
-        val role = viewModel.principalStampRole.value.ifBlank { "المدير" }
+        val role = "المدير"
         val shape = "circle"
         val financialId = viewModel.principalStampFinancialId.value
         return """
