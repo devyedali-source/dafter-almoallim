@@ -573,7 +573,7 @@ fun LessonProposalScreen(
                                                     contentAlignment = Alignment.Center
                                                 ) {
                                                     OfficialStampVisual(
-                                                        roleTitle = stampTeacherSettings.role,
+                                                        roleTitle = "المعلم",
                                                         personName = stampTeacherSettings.name,
                                                         schoolName = classSchoolNameState.value,
                                                         shape = stampTeacherSettings.shape,
@@ -598,7 +598,7 @@ fun LessonProposalScreen(
                                                     contentAlignment = Alignment.Center
                                                 ) {
                                                     OfficialStampVisual(
-                                                        roleTitle = stampPrincipalSettings.role,
+                                                        roleTitle = "المدير",
                                                         personName = stampPrincipalSettings.name,
                                                         schoolName = classSchoolNameState.value,
                                                         shape = "circle",
