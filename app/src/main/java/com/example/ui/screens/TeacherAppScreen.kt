@@ -1348,6 +1348,34 @@ fun InnerTeacherAppScreenContent(
             var selectedYear by remember { mutableStateOf<String?>(null) }
             var showCreateClassDialogOuter by remember { mutableStateOf(false) }
 
+            // زر الرجوع في الهاتف: يتراجع خطوة واحدة بدل الخروج من التطبيق.
+            // الترتيب من الأعمق إلى الأعم؛ والشاشات الداخلية تسجّل معالجها بعد هذا فتأخذ الأولوية عليه.
+            androidx.activity.compose.BackHandler(
+                enabled = drawerState.currentValue == DrawerValue.Open ||
+                    activeCourseActivationRequestId != null ||
+                    activeActivationRequestId != null ||
+                    activeExchangeApprovalRequestId != null ||
+                    isNotificationsOpen ||
+                    showClassManagerInside ||
+                    selectedClassId != null ||
+                    currentOuterTab != 0 ||
+                    selectedYear != null
+            ) {
+                when {
+                    drawerState.currentValue == DrawerValue.Open -> scope.launch { drawerState.close() }
+                    activeCourseActivationRequestId != null -> activeCourseActivationRequestId = null
+                    activeActivationRequestId != null || activeExchangeApprovalRequestId != null -> {
+                        activeActivationRequestId = null
+                        activeExchangeApprovalRequestId = null
+                    }
+                    isNotificationsOpen -> isNotificationsOpen = false
+                    showClassManagerInside -> showClassManagerInside = false
+                    selectedClassId != null -> viewModel.selectClass(null)
+                    currentOuterTab != 0 -> currentOuterTab = 0
+                    selectedYear != null -> selectedYear = null
+                }
+            }
+
             if (selectedClassId == null) {
                 // Outer Layout: Year & Section Selection stage
                 val registeredYears = remember(classSections) {
@@ -2134,6 +2162,7 @@ fun ClassStudentsSubview(
 
     // Dialog state for Viewing a Student's details
     var viewingStudent by remember { mutableStateOf<Student?>(null) }
+    androidx.activity.compose.BackHandler(enabled = viewingStudent != null) { viewingStudent = null }
 
     // Dialog state for confirming student deletion
     var studentToDelete by remember { mutableStateOf<Student?>(null) }
@@ -4403,6 +4432,7 @@ fun GradesEntryTab(
         mutableStateOf(com.example.data.state.LastPlaceStore.getBoolean(context, gradingPlaceKey + "active"))
     }
     var gradingPlaceRestored by remember { mutableStateOf(false) }
+    androidx.activity.compose.BackHandler(enabled = isGradingActive) { isGradingActive = false }
     LaunchedEffect(availableSubjects, classStudents) {
         if (gradingPlaceRestored) return@LaunchedEffect
         if (availableSubjects.isEmpty() && classStudents.isEmpty()) return@LaunchedEffect

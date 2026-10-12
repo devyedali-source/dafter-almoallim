@@ -195,6 +195,7 @@ fun TeacherExchangeScreen(
     isInterMoughataaMode: Boolean = false
 ) {
     var selectedTab by remember { mutableStateOf(0) } // 0: All Offers, 1: Target View, 2: Create Post Form, 3: My Posts
+    androidx.activity.compose.BackHandler(enabled = selectedTab != 0) { selectedTab = 0 }
     var pendingActivationPostId by remember { mutableStateOf<String?>(null) }
     val posts by viewModel.exchangePosts.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
