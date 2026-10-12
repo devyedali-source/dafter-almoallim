@@ -3988,6 +3988,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // Toggle term activation of a class for a specific teacher
+    private val activationAttemptGen = java.util.concurrent.ConcurrentHashMap<Long, Int>()
+
     fun toggleClassTermActivation(
         teacherId: String,
         classId: Long,
@@ -4044,6 +4046,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             
 
             val previousStatsList = _allClassesForStats.value
+            val activationGen = activationAttemptGen.merge(classId, 1) { old, inc -> old + inc } ?: 1
             _allClassesForStats.value = previousStatsList.map { cls ->
                 if (cls.id == classId) {
                     cls.copy(
@@ -4073,7 +4076,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     onSuccess()
                 }
                 .addOnFailureListener {
-                    _allClassesForStats.value = previousStatsList
+                    // لا نتراجع إذا نجحت محاولة أحدث لنفس القسم (يحدث عند إعادة المحاولة في شبكة ضعيفة)
+                    if (activationAttemptGen[classId] == activationGen) _allClassesForStats.value = previousStatsList
                     onFailure("تعذّر تأكيد التفعيل على الخادم. لم يتم التفعيل، حاول مرة أخرى.")
                 }
             }
@@ -4102,6 +4106,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             val newIsActivated = curT1 && curT4
 
             val previousStatsList = _allClassesForStats.value
+            val activationGen = activationAttemptGen.merge(classId, 1) { old, inc -> old + inc } ?: 1
             _allClassesForStats.value = previousStatsList.map { cls ->
                 if (cls.id == classId) {
                     cls.copy(
@@ -4130,7 +4135,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     onSuccess()
                 }
                 .addOnFailureListener { e ->
-                    _allClassesForStats.value = previousStatsList
+                    // لا نتراجع إذا نجحت محاولة أحدث لنفس القسم (يحدث عند إعادة المحاولة في شبكة ضعيفة)
+                    if (activationAttemptGen[classId] == activationGen) _allClassesForStats.value = previousStatsList
                     onFailure(e.message ?: "فشل تفعيل فصول السنة")
                 }
             }
@@ -4713,10 +4719,24 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
 
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             try {
-                if (isNetworkAvailable()) {
-                    FirebaseFirestore.getInstance().collection("teacher_exchanges")
-                        .document(postId)
-                        .update("isApproved", isApproved)
+                // لا نُعلن النجاح إلا بعد تأكيد الخادم؛ وإلا بقي الإعلان غير منشور سحابيًا رغم ظهور "تمت الموافقة"
+                if (!isNetworkAvailable()) {
+                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        onFailure("لا يوجد اتصال بالإنترنت حاليًا")
+                    }
+                    return@launch
+                }
+                val cloudOk = com.example.data.net.FirestoreRetry.updateDoc(
+                    FirebaseFirestore.getInstance().collection("teacher_exchanges").document(postId),
+                    mapOf("isApproved" to isApproved),
+                    attempts = 1,
+                    perTryMs = 20_000L
+                )
+                if (!cloudOk) {
+                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        onFailure("تعذّر تأكيد الحالة على الخادم بسبب ضعف الشبكة")
+                    }
+                    return@launch
                 }
 
                 val currentPosts = activeDatabase.teacherDao().getAllExchangePosts()

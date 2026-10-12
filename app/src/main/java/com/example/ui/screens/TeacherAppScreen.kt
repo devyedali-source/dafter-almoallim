@@ -12365,34 +12365,15 @@ fun SingleRequestActivationView(
                     isLoading = true
                     errorMessage = null
                     val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                    var attempt = 0
-                    var finished = false
-                    while (!finished && attempt < 4) {
-                        attempt++
-                        val result: Pair<Boolean, Map<String, Any>?>? = kotlinx.coroutines.withTimeoutOrNull(15000L) {
-                            kotlinx.coroutines.suspendCancellableCoroutine<Pair<Boolean, Map<String, Any>?>?> { cont ->
-                                db.collection("activation_requests").document(requestId).get()
-                                    .addOnSuccessListener { document ->
-                                        if (cont.isActive) cont.resumeWith(Result.success(Pair(document.exists(), document.data)))
-                                    }
-                                    .addOnFailureListener {
-                                        if (cont.isActive) cont.resumeWith(Result.success(null))
-                                    }
-                            }
-                        }
-                        if (result != null) {
-                            if (result.first) {
-                                requestData = result.second
-                            } else {
-                                errorMessage = "طلب التفعيل هذا غير موجود أو منتهي الصلاحية!"
-                            }
-                            finished = true
-                        } else if (attempt < 4) {
-                            delay(1500L * attempt)
-                        }
-                    }
-                    if (!finished) {
+                    val doc = com.example.data.net.FirestoreRetry.getDoc(
+                        db.collection("activation_requests").document(requestId)
+                    )
+                    if (doc == null) {
                         errorMessage = "📶 الاتصال ضعيف: تعذّر تحميل تفاصيل الطلب بعد عدة محاولات. تأكد من الشبكة ثم اضغط «إعادة المحاولة»."
+                    } else if (doc.exists()) {
+                        requestData = doc.data
+                    } else {
+                        errorMessage = "📶 لم يُعثر على هذا الطلب. قد يكون المرسل في منطقة ضعيفة الشبكة ولم يصل طلبه بعد، أو أنه منتهي. اضغط «إعادة المحاولة» بعد قليل."
                     }
                     isLoading = false
                 }
@@ -12583,20 +12564,11 @@ fun SingleRequestActivationView(
                                                 isActivating = false
                                                 actionMessage = "📶 لم يتأكد التفعيل بسبب ضعف الاتصال. قد يكون التفعيل تمّ فعلًا، فاضغط «تفعيل» مرة أخرى للتأكد (آمن ولا يتكرر)."
                                             } else {
-                                                val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                                                var marked = false
-                                                var tries = 0
-                                                while (!marked && tries < 3) {
-                                                    tries++
-                                                    marked = kotlinx.coroutines.withTimeoutOrNull(15000L) {
-                                                        kotlinx.coroutines.suspendCancellableCoroutine<Boolean> { cont ->
-                                                            db.collection("activation_requests").document(requestId).update("status", "completed")
-                                                                .addOnSuccessListener { if (cont.isActive) cont.resumeWith(Result.success(true)) }
-                                                                .addOnFailureListener { if (cont.isActive) cont.resumeWith(Result.success(false)) }
-                                                        }
-                                                    } ?: false
-                                                    if (!marked && tries < 3) delay(1500L * tries)
-                                                }
+                                                val marked = com.example.data.net.FirestoreRetry.updateDoc(
+                                                    com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                                                        .collection("activation_requests").document(requestId),
+                                                    mapOf("status" to "completed")
+                                                )
                                                 isActivating = false
                                                 val updatedMap = requestData?.toMutableMap() ?: mutableMapOf()
                                                 updatedMap["status"] = "completed"
@@ -12937,44 +12909,41 @@ fun ExchangeRequestApprovalView(
                 var isLoading by remember { mutableStateOf(true) }
                 var errorMessage by remember { mutableStateOf<String?>(null) }
                 var isApproving by remember { mutableStateOf(false) }
+                var actionMessage by remember { mutableStateOf<String?>(null) }
+                var reloadKey by remember { mutableStateOf(0) }
+                val approveScope = rememberCoroutineScope()
 
-                LaunchedEffect(requestId) {
+                LaunchedEffect(requestId, reloadKey) {
                     isLoading = true
                     errorMessage = null
                     val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                    db.collection("exchange_activation_requests").document(requestId).get()
-                        .addOnSuccessListener { document ->
-                            if (document.exists()) {
-                                val reqData = document.data
-                                requestData = reqData
-                                val postId = reqData?.get("exchangePostId") as? String ?: ""
-                                if (postId.isNotBlank()) {
-                                    db.collection("teacher_exchanges").document(postId).get()
-                                        .addOnSuccessListener { postDoc ->
-                                            if (postDoc.exists()) {
-                                                postData = postDoc.data
-                                            } else {
-                                                errorMessage = "منشور التبادل المرتبط بهذا الطلب غير موجود!"
-                                            }
-                                            isLoading = false
-                                        }
-                                        .addOnFailureListener { e ->
-                                            errorMessage = "فشل تحميل تفاصيل الإعلان: ${e.localizedMessage}"
-                                            isLoading = false
-                                        }
-                                } else {
-                                    errorMessage = "معرف الإعلان المرتبط بالطلب غير صالح!"
-                                    isLoading = false
-                                }
+                    val reqDoc = com.example.data.net.FirestoreRetry.getDoc(
+                        db.collection("exchange_activation_requests").document(requestId)
+                    )
+                    if (reqDoc == null) {
+                        errorMessage = "📶 الاتصال ضعيف: تعذّر تحميل تفاصيل الطلب بعد عدة محاولات. تأكد من الشبكة ثم اضغط «إعادة المحاولة»."
+                    } else if (!reqDoc.exists()) {
+                        errorMessage = "📶 لم يُعثر على طلب الموافقة. قد يكون المرسل في منطقة ضعيفة الشبكة ولم يصل طلبه بعد. اضغط «إعادة المحاولة» بعد قليل."
+                    } else {
+                        val reqData = reqDoc.data
+                        val postId = reqData?.get("exchangePostId") as? String ?: ""
+                        if (postId.isBlank()) {
+                            errorMessage = "معرف الإعلان المرتبط بالطلب غير صالح!"
+                        } else {
+                            val postDoc = com.example.data.net.FirestoreRetry.getDoc(
+                                db.collection("teacher_exchanges").document(postId)
+                            )
+                            if (postDoc == null) {
+                                errorMessage = "📶 الاتصال ضعيف: تعذّر تحميل تفاصيل الإعلان. اضغط «إعادة المحاولة»."
+                            } else if (!postDoc.exists()) {
+                                errorMessage = "منشور التبادل المرتبط بهذا الطلب غير موجود!"
                             } else {
-                                errorMessage = "طلب موافقة التبادل هذا غير موجود!"
-                                isLoading = false
+                                requestData = reqData
+                                postData = postDoc.data
                             }
                         }
-                        .addOnFailureListener { e ->
-                            errorMessage = "فشل تحميل تفاصيل الطلب: ${e.localizedMessage}"
-                            isLoading = false
-                        }
+                    }
+                    isLoading = false
                 }
 
                 if (isLoading) {
@@ -12985,7 +12954,7 @@ fun ExchangeRequestApprovalView(
                         CircularProgressIndicator(color = BentoSecondary)
                         Text("جاري تحميل تفاصيل طلب الموافقة...", color = BentoPrimaryDesc, fontSize = 14.sp)
                     }
-                } else if (errorMessage != null) {
+                } else if (errorMessage != null && postData == null) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -13017,6 +12986,16 @@ fun ExchangeRequestApprovalView(
                                 textAlign = TextAlign.Center,
                                 color = BentoPrimaryDesc
                             )
+                            if (errorMessage?.startsWith("📶") == true) {
+                                Button(
+                                    onClick = { reloadKey++ },
+                                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
+                                    shape = RoundedCornerShape(12.dp)
+                                ) {
+                                    Text("إعادة المحاولة 🔄", fontWeight = FontWeight.Bold)
+                                }
+                            }
                             Button(
                                 onClick = onClose,
                                 modifier = Modifier.fillMaxWidth().height(48.dp),
@@ -13121,32 +13100,59 @@ fun ExchangeRequestApprovalView(
 
                             item {
                                 if (status == "pending") {
+                                    if (actionMessage != null) {
+                                        Text(
+                                            text = actionMessage ?: "",
+                                            color = Color(0xFFB71C1C),
+                                            fontSize = 13.sp,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
+                                        )
+                                    }
                                     Button(
                                         onClick = {
                                             isApproving = true
-                                            viewModel.approveExchangePost(
-                                                postId = postId,
-                                                isApproved = true,
-                                                onSuccess = {
-                                                    val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                                                    db.collection("exchange_activation_requests").document(requestId).update("status", "completed")
-                                                        .addOnSuccessListener {
-                                                            isApproving = false
-                                                            val updatedMap = requestData?.toMutableMap() ?: mutableMapOf()
-                                                            updatedMap["status"] = "completed"
-                                                            requestData = updatedMap
-                                                            android.widget.Toast.makeText(context, "تمت الموافقة على إعلان التبادل ونشره بنجاح! 🎉", android.widget.Toast.LENGTH_LONG).show()
+                                            actionMessage = null
+                                            approveScope.launch {
+                                                // الموافقة آمنة للتكرار (تضبط isApproved=true)، لذا نعيد المحاولة عند ضعف الشبكة
+                                                var err: String? = "?"
+                                                var attempt = 0
+                                                while (err != null && attempt < 3) {
+                                                    attempt++
+                                                    val outcome: String = kotlinx.coroutines.withTimeoutOrNull(30000L) {
+                                                        kotlinx.coroutines.suspendCancellableCoroutine<String> { cont ->
+                                                            viewModel.approveExchangePost(
+                                                                postId = postId,
+                                                                isApproved = true,
+                                                                onSuccess = { if (cont.isActive) cont.resumeWith(Result.success("")) },
+                                                                onFailure = { m -> if (cont.isActive) cont.resumeWith(Result.success(m.ifBlank { "فشل" })) }
+                                                            )
                                                         }
-                                                        .addOnFailureListener { e ->
-                                                            isApproving = false
-                                                            errorMessage = "تم النشر بنجاح، لكن فشل تحديث حالة الرابط سحابياً: ${e.localizedMessage}"
-                                                        }
-                                                },
-                                                onFailure = { err ->
-                                                    isApproving = false
-                                                    errorMessage = "فشل النشر والموافقة: $err"
+                                                    } ?: "انتهت مهلة الاتصال"
+                                                    err = if (outcome.isEmpty()) null else outcome
+                                                    if (err != null && attempt < 3) delay(2000L * attempt)
                                                 }
-                                            )
+
+                                                if (err != null) {
+                                                    isApproving = false
+                                                    actionMessage = "📶 لم يتأكد النشر بسبب ضعف الاتصال، ولم يُعلَن للعامة بعد. اضغط «الموافقة» مرة أخرى عند تحسّن الشبكة (آمن ولا يتكرر)."
+                                                } else {
+                                                    val marked = com.example.data.net.FirestoreRetry.updateDoc(
+                                                        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                                                            .collection("exchange_activation_requests").document(requestId),
+                                                        mapOf("status" to "completed")
+                                                    )
+                                                    isApproving = false
+                                                    val updatedMap = requestData?.toMutableMap() ?: mutableMapOf()
+                                                    updatedMap["status"] = "completed"
+                                                    requestData = updatedMap
+                                                    if (marked) {
+                                                        android.widget.Toast.makeText(context, "تمت الموافقة على إعلان التبادل ونشره بنجاح! 🎉", android.widget.Toast.LENGTH_LONG).show()
+                                                    } else {
+                                                        android.widget.Toast.makeText(context, "✅ تم نشر الإعلان. تعذّر فقط تحديث حالة الرابط بسبب ضعف الشبكة، ولا يؤثر ذلك على النشر.", android.widget.Toast.LENGTH_LONG).show()
+                                                    }
+                                                }
+                                            }
                                         },
                                         modifier = Modifier.fillMaxWidth().height(50.dp),
                                         colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
