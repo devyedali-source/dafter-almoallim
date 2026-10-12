@@ -3267,8 +3267,36 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         return cust?.maxPoints ?: subject.maxPoints
     }
 
+    /**
+     * حماية قفل الفصول: يمنع كتابة أو حذف الدرجات في فصل مقفول مهما كانت الصفحة التي جاء منها الاختيار.
+     * - الفصل المختار حاليًا (بما فيه الفصل الرابع للوافدين) يجب أن يكون مفعّلًا لقسم التلميذ.
+     * - وما عدا الفصل الرابع، يجب أن يكون فصل الدرجة نفسه مفعّلًا.
+     * - إن لم يوجد التلميذ أو قسمه (بيانات لم تُحمَّل بعد) يُسمح بالعملية حتى لا يتعطل العمل.
+     */
+    private fun isGradeWriteAllowed(studentId: Long, termId: Int): Boolean {
+        val classId = _students.value.find { it.id == studentId }?.classId ?: return true
+        val cls = _classSections.value.find { it.id == classId } ?: return true
+        val selected = _selectedTermId.value
+        if (!cls.isTermUnlocked(selected)) return false
+        if (selected != 4 && !cls.isTermUnlocked(termId)) return false
+        return true
+    }
+
+    private fun notifyTermLocked() {
+        android.os.Handler(android.os.Looper.getMainLooper()).post {
+            android.widget.Toast.makeText(
+                getApplication(),
+                "🔒 هذا الفصل مقفول لهذا القسم، فعّله أولًا لإدراج النتائج",
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     // Save grades list (bulk entry for subject or student)
-    fun saveGrades(gradesList: List<Grade>) {
+    fun saveGrades(allGrades: List<Grade>) {
+        if (allGrades.isEmpty()) return
+        val gradesList = allGrades.filter { isGradeWriteAllowed(it.studentId, it.termId) }
+        if (gradesList.size != allGrades.size) notifyTermLocked()
         if (gradesList.isEmpty()) return
 
         // Coerce grades to be within [0, maxPoints] of their subject in this student's class
@@ -3292,6 +3320,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
 
     // Single grade saving
     fun saveSingleGrade(studentId: Long, subjectId: Long, score: Double, termId: Int) {
+        if (!isGradeWriteAllowed(studentId, termId)) {
+            notifyTermLocked()
+            return
+        }
         val limit = resolvedMaxPointsFor(studentId, subjectId)
         val finalScore = if (limit != null) {
             score.coerceIn(0.0, limit.toDouble())
@@ -3311,6 +3343,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun deleteGrade(studentId: Long, subjectId: Long, termId: Int) {
+        if (!isGradeWriteAllowed(studentId, termId)) {
+            notifyTermLocked()
+            return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO + kotlinx.coroutines.NonCancellable) {
             try {
                 repository.deleteGrade(studentId, subjectId, termId)

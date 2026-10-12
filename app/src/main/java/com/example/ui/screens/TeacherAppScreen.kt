@@ -12354,23 +12354,45 @@ fun SingleRequestActivationView(
                 var errorMessage by remember { mutableStateOf<String?>(null) }
                 var isActivating by remember { mutableStateOf(false) }
 
-                LaunchedEffect(requestId) {
+                var actionMessage by remember { mutableStateOf<String?>(null) }
+                var reloadKey by remember { mutableStateOf(0) }
+                val activationScope = rememberCoroutineScope()
+
+                // تحميل الطلب مع إعادة محاولة تلقائية (مناسب للشبكات الضعيفة)
+                LaunchedEffect(requestId, reloadKey) {
                     isLoading = true
                     errorMessage = null
                     val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                    db.collection("activation_requests").document(requestId).get()
-                        .addOnSuccessListener { document ->
-                            if (document.exists()) {
-                                requestData = document.data
+                    var attempt = 0
+                    var finished = false
+                    while (!finished && attempt < 4) {
+                        attempt++
+                        val result: Pair<Boolean, Map<String, Any>?>? = kotlinx.coroutines.withTimeoutOrNull(15000L) {
+                            kotlinx.coroutines.suspendCancellableCoroutine<Pair<Boolean, Map<String, Any>?>?> { cont ->
+                                db.collection("activation_requests").document(requestId).get()
+                                    .addOnSuccessListener { document ->
+                                        if (cont.isActive) cont.resumeWith(Result.success(Pair(document.exists(), document.data)))
+                                    }
+                                    .addOnFailureListener {
+                                        if (cont.isActive) cont.resumeWith(Result.success(null))
+                                    }
+                            }
+                        }
+                        if (result != null) {
+                            if (result.first) {
+                                requestData = result.second
                             } else {
                                 errorMessage = "طلب التفعيل هذا غير موجود أو منتهي الصلاحية!"
                             }
-                            isLoading = false
+                            finished = true
+                        } else if (attempt < 4) {
+                            delay(1500L * attempt)
                         }
-                        .addOnFailureListener { e ->
-                            errorMessage = "فشل تحميل تفاصيل الطلب: ${e.localizedMessage}"
-                            isLoading = false
-                        }
+                    }
+                    if (!finished) {
+                        errorMessage = "📶 الاتصال ضعيف: تعذّر تحميل تفاصيل الطلب بعد عدة محاولات. تأكد من الشبكة ثم اضغط «إعادة المحاولة»."
+                    }
+                    isLoading = false
                 }
 
                 if (isLoading) {
@@ -12381,7 +12403,7 @@ fun SingleRequestActivationView(
                         CircularProgressIndicator(color = BentoSecondary)
                         Text("جاري تحميل تفاصيل طلب التفعيل...", color = BentoPrimaryDesc, fontSize = 14.sp)
                     }
-                } else if (errorMessage != null) {
+                } else if (errorMessage != null && requestData == null) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -12413,6 +12435,16 @@ fun SingleRequestActivationView(
                                 textAlign = TextAlign.Center,
                                 color = BentoPrimaryDesc
                             )
+                            if (errorMessage?.startsWith("📶") == true) {
+                                Button(
+                                    onClick = { reloadKey++ },
+                                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
+                                    shape = RoundedCornerShape(12.dp)
+                                ) {
+                                    Text("إعادة المحاولة 🔄", fontWeight = FontWeight.Bold)
+                                }
+                            }
                             Button(
                                 onClick = onClose,
                                 modifier = Modifier.fillMaxWidth().height(48.dp),
@@ -12501,9 +12533,19 @@ fun SingleRequestActivationView(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             if (status == "pending") {
+                                if (actionMessage != null) {
+                                    Text(
+                                        text = actionMessage ?: "",
+                                        color = Color(0xFFB71C1C),
+                                        fontSize = 13.sp,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
+                                    )
+                                }
                                 Button(
                                     onClick = {
                                         isActivating = true
+                                        actionMessage = null
                                         val tId = requestData?.get("userId") as? String ?: ""
                                         val cId = requestData?.get("classId") as? Long ?: 0L
                                         val termId = when (val t = requestData?.get("termId")) {
@@ -12513,43 +12555,56 @@ fun SingleRequestActivationView(
                                             else -> 2
                                         }
 
-                                        val onActivationSuccess: () -> Unit = {
-                                            val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                                            db.collection("activation_requests").document(requestId).update("status", "completed")
-                                                .addOnSuccessListener {
-                                                    isActivating = false
-                                                    val updatedMap = requestData?.toMutableMap() ?: mutableMapOf()
-                                                    updatedMap["status"] = "completed"
-                                                    requestData = updatedMap
+                                        // التفعيل آمن للتكرار (يضبط الفصل على "مفعّل" ولا يبدّله)، لذا نعيد المحاولة عند ضعف الشبكة
+                                        activationScope.launch {
+                                            var err: String? = "?"
+                                            var attempt = 0
+                                            while (err != null && attempt < 3) {
+                                                attempt++
+                                                // النتيجة: "" = نجاح، وأي نص آخر = سبب الفشل
+                                                val outcome: String = kotlinx.coroutines.withTimeoutOrNull(25000L) {
+                                                    kotlinx.coroutines.suspendCancellableCoroutine<String> { cont ->
+                                                        val ok: () -> Unit = { if (cont.isActive) cont.resumeWith(Result.success("")) }
+                                                        val ko: (String) -> Unit = { m -> if (cont.isActive) cont.resumeWith(Result.success(m.ifBlank { "فشل" })) }
+                                                        if (isFullYearRequest) {
+                                                            viewModel.activateAllYearTerms(teacherId = tId, classId = cId, onSuccess = ok, onFailure = ko)
+                                                        } else {
+                                                            viewModel.toggleClassTermActivation(teacherId = tId, classId = cId, termId = termId, currentTermStatus = false, onSuccess = ok, onFailure = ko)
+                                                        }
+                                                    }
+                                                } ?: "انتهت مهلة الاتصال"
+                                                err = if (outcome.isEmpty()) null else outcome
+                                                if (err != null && attempt < 3) delay(2000L * attempt)
+                                            }
+
+                                            if (err != null) {
+                                                isActivating = false
+                                                actionMessage = "📶 لم يتأكد التفعيل بسبب ضعف الاتصال. قد يكون التفعيل تمّ فعلًا، فاضغط «تفعيل» مرة أخرى للتأكد (آمن ولا يتكرر)."
+                                            } else {
+                                                val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                                                var marked = false
+                                                var tries = 0
+                                                while (!marked && tries < 3) {
+                                                    tries++
+                                                    marked = kotlinx.coroutines.withTimeoutOrNull(15000L) {
+                                                        kotlinx.coroutines.suspendCancellableCoroutine<Boolean> { cont ->
+                                                            db.collection("activation_requests").document(requestId).update("status", "completed")
+                                                                .addOnSuccessListener { if (cont.isActive) cont.resumeWith(Result.success(true)) }
+                                                                .addOnFailureListener { if (cont.isActive) cont.resumeWith(Result.success(false)) }
+                                                        }
+                                                    } ?: false
+                                                    if (!marked && tries < 3) delay(1500L * tries)
+                                                }
+                                                isActivating = false
+                                                val updatedMap = requestData?.toMutableMap() ?: mutableMapOf()
+                                                updatedMap["status"] = "completed"
+                                                requestData = updatedMap
+                                                if (marked) {
                                                     android.widget.Toast.makeText(context, "تم تفعيل الاشتراك وتحديث الطلب بنجاح! 🎉", android.widget.Toast.LENGTH_LONG).show()
+                                                } else {
+                                                    android.widget.Toast.makeText(context, "✅ تم التفعيل. تعذّر فقط تحديث حالة الرابط بسبب ضعف الشبكة، ولا يؤثر ذلك على المشترك.", android.widget.Toast.LENGTH_LONG).show()
                                                 }
-                                                .addOnFailureListener { e ->
-                                                    isActivating = false
-                                                    errorMessage = "تم التفعيل بنجاح، لكن فشل تحديث حالة الرابط سحابياً: ${e.localizedMessage}"
-                                                }
-                                        }
-
-                                        val onActivationFailure: (String) -> Unit = { err ->
-                                            isActivating = false
-                                            errorMessage = "فشل التفعيل: $err"
-                                        }
-
-                                        if (isFullYearRequest) {
-                                            viewModel.activateAllYearTerms(
-                                                teacherId = tId,
-                                                classId = cId,
-                                                onSuccess = onActivationSuccess,
-                                                onFailure = onActivationFailure
-                                            )
-                                        } else {
-                                            viewModel.toggleClassTermActivation(
-                                                teacherId = tId,
-                                                classId = cId,
-                                                termId = termId,
-                                                currentTermStatus = false,
-                                                onSuccess = onActivationSuccess,
-                                                onFailure = onActivationFailure
-                                            )
+                                            }
                                         }
                                     },
                                     modifier = Modifier.fillMaxWidth().height(50.dp),
