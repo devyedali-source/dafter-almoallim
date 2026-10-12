@@ -328,6 +328,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         try {
             val uid = _currentUser.value?.uid ?: return
             if (!isNetworkAvailable()) return
+            // نحدّث الساعة الموثوقة بوقت الخادم قبل مقارنة تواريخ الانتهاء
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                com.example.data.security.TrustedClock.syncWithServer()
+            }
 
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
                 val db = FirebaseFirestore.getInstance()
@@ -509,7 +513,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
 
     private fun isFinalTermOnlySeasonOpen(): Boolean {
         return try {
-            val calendar = java.util.Calendar.getInstance()
+            val calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC")).apply { timeInMillis = com.example.data.security.TrustedClock.now() }
             val year = calendar.get(java.util.Calendar.YEAR)
             val month = calendar.get(java.util.Calendar.MONTH) + 1
             val day = calendar.get(java.util.Calendar.DAY_OF_MONTH)
@@ -1116,7 +1120,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     private fun isTermActivationExpired(academicYear: String): Boolean {
         return try {
             val endYear = academicYear.split("-").getOrNull(1)?.trim()?.toIntOrNull() ?: return false
-            val calendar = java.util.Calendar.getInstance()
+            val calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC")).apply { timeInMillis = com.example.data.security.TrustedClock.now() }
             val currentYear = calendar.get(java.util.Calendar.YEAR)
             val currentMonth = calendar.get(java.util.Calendar.MONTH) + 1
             currentYear > endYear || (currentYear == endYear && currentMonth >= 8)

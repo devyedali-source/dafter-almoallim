@@ -1,5 +1,6 @@
 package com.example
 
+import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -40,6 +41,14 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         com.google.firebase.FirebaseApp.initializeApp(this)
+        // ساعة موثوقة تقاوم رجوع تاريخ الهاتف إلى الوراء؛ تُحدَّث بوقت الخادم كلما توفّر إنترنت
+        com.example.data.security.TrustedClock.init(this)
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+            try {
+                com.example.data.security.TrustedClock.syncWithServer()
+            } catch (e: Exception) {
+            }
+        }
         val appCheck = com.google.firebase.appcheck.FirebaseAppCheck.getInstance()
         if (BuildConfig.DEBUG) {
             appCheck.installAppCheckProviderFactory(

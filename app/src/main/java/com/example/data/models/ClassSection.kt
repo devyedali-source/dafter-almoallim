@@ -23,7 +23,7 @@ data class ClassSection(
     fun isActivationExpired(): Boolean {
         return try {
             val endYear = academicYear.split("-").getOrNull(1)?.trim()?.toIntOrNull() ?: return false
-            val calendar = java.util.Calendar.getInstance()
+            val calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC")).apply { timeInMillis = com.example.data.security.TrustedClock.now() }
             val currentYear = calendar.get(java.util.Calendar.YEAR)
             val currentMonth = calendar.get(java.util.Calendar.MONTH) + 1
             currentYear > endYear || (currentYear == endYear && currentMonth >= 8)
