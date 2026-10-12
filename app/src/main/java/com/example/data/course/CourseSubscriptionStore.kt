@@ -53,13 +53,13 @@ object CourseSubscriptionStore {
         if (expiry <= 0L) return false
         val owner = getOwnerUid(context, specId)
         if (owner.isNotBlank() && currentUid.isNotBlank() && owner != currentUid) return false
-        return System.currentTimeMillis() < expiry
+        return com.example.data.security.TrustedClock.now() < expiry
     }
 
     fun remainingDays(context: Context, specId: String): Int {
         val expiry = getExpiryMillis(context, specId)
         if (expiry <= 0L) return 0
-        val diff = expiry - System.currentTimeMillis()
+        val diff = expiry - com.example.data.security.TrustedClock.now()
         if (diff <= 0L) return 0
         val days = diff / (24L * 60L * 60L * 1000L)
         return (days + 1).toInt()
@@ -138,7 +138,7 @@ object CourseSubscriptionStore {
                     }
                 }
             if (docs != null) {
-                val now = System.currentTimeMillis()
+                val now = com.example.data.security.TrustedClock.now()
                 // أبعد تاريخ انتهاء لكل تخصّص من بين الطلبات المكتملة
                 val best = HashMap<String, Long>()
                 for (d in docs) {

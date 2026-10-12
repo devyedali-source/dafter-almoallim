@@ -99,7 +99,7 @@ fun CourseScreen() {
     // Screen Security Enforcer (FLAG_SECURE) to prevent screenshotting, recording, and recent app previews (Bypassed temporarily until Sep 30, 2026)
     androidx.compose.runtime.DisposableEffect(Unit) {
         val activity = context as? android.app.Activity
-        val calendar = java.util.Calendar.getInstance()
+        val calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC")).apply { timeInMillis = com.example.data.security.TrustedClock.now() }
         val isBeforeOct2026 = calendar.get(java.util.Calendar.YEAR) < 2026 ||
             (calendar.get(java.util.Calendar.YEAR) == 2026 && calendar.get(java.util.Calendar.MONTH) < java.util.Calendar.OCTOBER)
 
@@ -1332,7 +1332,7 @@ private fun CourseSubscriptionDialog(
                     if (snapshot == null || !snapshot.exists()) return@addSnapshotListener
                     val status = snapshot.getString("status") ?: ""
                     val expiresAt = snapshot.getLong("expiresAt") ?: 0L
-                    if (status == "completed" && expiresAt > System.currentTimeMillis()) {
+                    if (status == "completed" && expiresAt > com.example.data.security.TrustedClock.now()) {
                         val alreadyUnlocked = CourseSubscriptionStore.isUnlocked(
                             context,
                             spec.id,

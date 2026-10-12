@@ -67,7 +67,7 @@ fun LessonProposalScreen(
     // Screen Security Enforcer (FLAG_SECURE) to prevent screenshotting, recording, and recent app previews (Bypassed temporarily until Sep 30, 2026)
     DisposableEffect(Unit) {
         val activity = context as? android.app.Activity
-        val calendar = java.util.Calendar.getInstance()
+        val calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC")).apply { timeInMillis = com.example.data.security.TrustedClock.now() }
         val isBeforeOct2026 = calendar.get(java.util.Calendar.YEAR) < 2026 || 
             (calendar.get(java.util.Calendar.YEAR) == 2026 && calendar.get(java.util.Calendar.MONTH) < java.util.Calendar.OCTOBER)
         
