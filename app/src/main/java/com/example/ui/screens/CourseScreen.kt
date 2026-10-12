@@ -103,11 +103,13 @@ fun CourseScreen() {
         val isBeforeOct2026 = calendar.get(java.util.Calendar.YEAR) < 2026 ||
             (calendar.get(java.util.Calendar.YEAR) == 2026 && calendar.get(java.util.Calendar.MONTH) < java.util.Calendar.OCTOBER)
 
-        if (!isBeforeOct2026) {
+        // مدير الأقسام وحده مسموح له بلقطات الشاشة وتسجيلها؛ باقي المستخدمين يبقون محميين
+        val secureEnabled = !isBeforeOct2026 && !com.example.data.security.ScreenSecurity.isCaptureAllowedForCurrentUser()
+        if (secureEnabled) {
             activity?.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
         }
         onDispose {
-            if (!isBeforeOct2026) {
+            if (secureEnabled) {
                 activity?.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
             }
         }
