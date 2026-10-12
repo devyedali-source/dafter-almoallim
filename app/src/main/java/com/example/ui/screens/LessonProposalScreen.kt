@@ -114,6 +114,8 @@ fun LessonProposalScreen(
         getDomainArabicLabel(context, lvlCode, rawDomain)
     }
 
+    val fr = lesson.isFrench
+
     val unitNum = remember(lesson.id) {
         getUnitInfo(lesson)
     }
@@ -307,7 +309,7 @@ fun LessonProposalScreen(
                     }
                 }
             } else {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                CompositionLocalProvider(LocalLayoutDirection provides (if (fr) LayoutDirection.Ltr else LayoutDirection.Rtl)) {
                     // Scrollable White Preparation Sheet
                     LazyColumn(
                         modifier = Modifier
@@ -346,25 +348,25 @@ fun LessonProposalScreen(
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 HeaderCell(
-                                                    title = "التاريخ الهجري:",
+                                                    title = (if (fr) "Date (hégire) :" else "التاريخ الهجري:"),
                                                     value = "................",
                                                     modifier = Modifier.weight(1f)
                                                 )
                                                 PaperVerticalLine()
                                                 HeaderCell(
-                                                    title = "الموافق الميلادي:",
+                                                    title = (if (fr) "Date :" else "الموافق الميلادي:"),
                                                     value = "................",
                                                     modifier = Modifier.weight(1f)
                                                 )
                                                 PaperVerticalLine()
                                                 HeaderCell(
-                                                    title = "المستوى:",
-                                                    value = proposalData.levelTitle.ifBlank { "${getLevelArabicName(lesson.level)} ابتدائي" },
+                                                    title = (if (fr) "Niveau :" else "المستوى:"),
+                                                    value = if (fr) "${getLevelFrenchName(lesson.level)} année" else proposalData.levelTitle.ifBlank { "${getLevelArabicName(lesson.level)} ابتدائي" },
                                                     modifier = Modifier.weight(1f)
                                                 )
                                                 PaperVerticalLine()
                                                 HeaderCell(
-                                                    title = if (proposalData.sessionInfo.isNotBlank()) "رمز الحصة:" else "",
+                                                    title = if (proposalData.sessionInfo.isNotBlank()) (if (fr) "Séance :" else "رمز الحصة:") else "",
                                                     value = proposalData.sessionInfo,
                                                     modifier = Modifier.weight(1f)
                                                 )
@@ -380,25 +382,25 @@ fun LessonProposalScreen(
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 HeaderCell(
-                                                    title = "المادة:",
+                                                    title = (if (fr) "Matière :" else "المادة:"),
                                                     value = proposalData.subject.ifBlank { lesson.subject },
                                                     modifier = Modifier.weight(1f)
                                                 )
                                                 PaperVerticalLine()
                                                 HeaderCell(
-                                                    title = "المجال:",
+                                                    title = (if (fr) "Domaine :" else "المجال:"),
                                                     value = proposalData.domain.ifBlank { domainText },
                                                     modifier = Modifier.weight(1f)
                                                 )
                                                 PaperVerticalLine()
                                                 HeaderCell(
-                                                    title = "الموضوع:",
+                                                    title = (if (fr) "Thème :" else "الموضوع:"),
                                                     value = proposalData.topic.ifBlank { lesson.title },
                                                     modifier = Modifier.weight(1f)
                                                 )
                                                 PaperVerticalLine()
                                                 HeaderCell(
-                                                    title = if (proposalData.durationText.isNotBlank()) "المدة:" else "",
+                                                    title = if (proposalData.durationText.isNotBlank()) (if (fr) "Durée :" else "المدة:") else "",
                                                     value = proposalData.durationText,
                                                     modifier = Modifier.weight(1f)
                                                 )
@@ -413,13 +415,13 @@ fun LessonProposalScreen(
                                             verticalArrangement = Arrangement.spacedBy(2.dp)
                                         ) {
                                             Text(
-                                                text = "الوسائل:",
+                                                text = (if (fr) "Moyens :" else "الوسائل:"),
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = InkDarkBlue
                                             )
                                             Text(
-                                                text = proposalData.teachingAids,
+                                                text = if (fr) proposalData.teachingAids.replace("المفردات الأساسية: ", "Vocabulaire : ").replace("،", ",") else proposalData.teachingAids,
                                                 fontSize = 12.sp,
                                                 color = InkMediumBlue,
                                                 lineHeight = 18.sp,
@@ -435,7 +437,7 @@ fun LessonProposalScreen(
                                             verticalArrangement = Arrangement.spacedBy(2.dp)
                                         ) {
                                             Text(
-                                                text = "المرجع:",
+                                                text = (if (fr) "Référence :" else "المرجع:"),
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = InkDarkBlue
@@ -463,7 +465,7 @@ fun LessonProposalScreen(
                                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                                 ) {
                                                     Text(
-                                                        text = "الكفاية:",
+                                                        text = (if (fr) "Compétence :" else "الكفاية:"),
                                                         fontSize = 12.sp,
                                                         fontWeight = FontWeight.Bold,
                                                         color = InkDarkBlue
@@ -485,7 +487,7 @@ fun LessonProposalScreen(
                                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                                 ) {
                                                     Text(
-                                                        text = "الوحدة:",
+                                                        text = (if (fr) "Unité :" else "الوحدة:"),
                                                         fontSize = 12.sp,
                                                         fontWeight = FontWeight.Bold,
                                                         color = InkDarkBlue
@@ -518,7 +520,7 @@ fun LessonProposalScreen(
                                                 verticalArrangement = Arrangement.spacedBy(4.dp)
                                             ) {
                                                 Text(
-                                                    text = "الهدف المميز:",
+                                                    text = (if (fr) "Objectif spécifique :" else "الهدف المميز:"),
                                                     fontSize = 12.sp,
                                                     fontWeight = FontWeight.Bold,
                                                     color = InkDarkBlue
@@ -538,7 +540,7 @@ fun LessonProposalScreen(
 
                                     // 5. عنوان في وسط الشاشة: "سير الدرس"
                                     Text(
-                                        text = "سير الدرس",
+                                        text = if (fr) "Déroulement de la leçon" else "سير الدرس",
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Black,
                                         color = InkDarkBlue,
@@ -564,7 +566,7 @@ fun LessonProposalScreen(
                                             modifier = Modifier.weight(1f),
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            SignatureBox(title = "توقيع المعلم", modifier = Modifier.fillMaxWidth())
+                                            SignatureBox(title = if (fr) "Signature de l'enseignant" else "توقيع المعلم", modifier = Modifier.fillMaxWidth())
                                             if (stampTeacherSettings.show) {
                                                 Box(
                                                     modifier = Modifier
@@ -573,7 +575,7 @@ fun LessonProposalScreen(
                                                     contentAlignment = Alignment.Center
                                                 ) {
                                                     OfficialStampVisual(
-                                                        roleTitle = "المعلم",
+                                                        roleTitle = if (fr) "Enseignant" else "المعلم",
                                                         personName = stampTeacherSettings.name,
                                                         schoolName = classSchoolNameState.value,
                                                         shape = stampTeacherSettings.shape,
@@ -589,7 +591,7 @@ fun LessonProposalScreen(
                                             modifier = Modifier.weight(1f),
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            SignatureBox(title = "توقيع المدير", modifier = Modifier.fillMaxWidth())
+                                            SignatureBox(title = if (fr) "Signature du directeur" else "توقيع المدير", modifier = Modifier.fillMaxWidth())
                                             if (stampPrincipalSettings.show) {
                                                 Box(
                                                     modifier = Modifier
@@ -598,7 +600,7 @@ fun LessonProposalScreen(
                                                     contentAlignment = Alignment.Center
                                                 ) {
                                                     OfficialStampVisual(
-                                                        roleTitle = "المدير",
+                                                        roleTitle = if (fr) "Directeur" else "المدير",
                                                         personName = stampPrincipalSettings.name,
                                                         schoolName = classSchoolNameState.value,
                                                         shape = "circle",
@@ -614,13 +616,13 @@ fun LessonProposalScreen(
                                             modifier = Modifier.weight(1f),
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            SignatureBox(title = "توقيع المفتش", modifier = Modifier.fillMaxWidth())
+                                            SignatureBox(title = if (fr) "Signature de l'inspecteur" else "توقيع المفتش", modifier = Modifier.fillMaxWidth())
                                         }
                                     }
 
                                     // تنبيه تربوي أسفل خانات التوقيعات الثلاث
                                     Text(
-                                        text = "هذا التحضير لا يغني عن كتابة المعلم لتحضيره الخاص! هذا مثال تحضير مساعد يربط بين التحضير والتخطيط السنوي وأرقام صفحات الدرس من الكتاب",
+                                        text = if (fr) "Cette fiche ne remplace pas la préparation personnelle de l'enseignant. C'est un modèle d'aide qui relie la préparation à la planification annuelle et aux pages du manuel." else "هذا التحضير لا يغني عن كتابة المعلم لتحضيره الخاص! هذا مثال تحضير مساعد يربط بين التحضير والتخطيط السنوي وأرقام صفحات الدرس من الكتاب",
                                         fontSize = 11.sp,
                                         color = Color(0xFFD32F2F),
                                         textAlign = TextAlign.Center,
@@ -733,7 +735,7 @@ private fun LessonProcedureTable(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "لا توجد خطوات سير مفصلة لهذا الدرس حاليًا.",
+                text = if (isFrench) "Aucune étape détaillée pour cette leçon." else "لا توجد خطوات سير مفصلة لهذا الدرس حاليًا.",
                 fontSize = 12.sp,
                 color = InkSoftBlue
             )
@@ -757,22 +759,22 @@ private fun LessonProcedureTable(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TableHeadText(
-                    text = "مراحل الدرس",
+                    text = if (isFrench) "Étapes" else "مراحل الدرس",
                     modifier = Modifier.weight(0.22f)
                 )
                 PaperVerticalLine()
                 TableHeadText(
-                    text = "نشاط المعلم",
+                    text = if (isFrench) "Activité du maître" else "نشاط المعلم",
                     modifier = Modifier.weight(0.35f)
                 )
                 PaperVerticalLine()
                 TableHeadText(
-                    text = "نشاط التلميذ",
+                    text = if (isFrench) "Activité de l'élève" else "نشاط التلميذ",
                     modifier = Modifier.weight(0.33f)
                 )
                 PaperVerticalLine()
                 TableHeadText(
-                    text = "المدة",
+                    text = if (isFrench) "Durée" else "المدة",
                     modifier = Modifier.weight(0.10f)
                 )
             }
