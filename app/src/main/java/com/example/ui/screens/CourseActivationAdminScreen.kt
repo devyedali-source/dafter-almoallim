@@ -20,6 +20,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,39 +69,35 @@ fun CourseActivationAdminView(
     var status by remember(requestId) { mutableStateOf("") }
     var createdAt by remember(requestId) { mutableStateOf(0L) }
     var expiresAt by remember(requestId) { mutableStateOf(0L) }
+    var loadFailed by remember(requestId) { mutableStateOf(false) }
+    var reloadKey by remember(requestId) { mutableStateOf(0) }
+    val scope = rememberCoroutineScope()
 
-    LaunchedEffect(requestId) {
+    LaunchedEffect(requestId, reloadKey) {
         loading = true
         notFound = false
+        loadFailed = false
         errorText = ""
-        try {
-            val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-            db.collection("course_activation_requests")
-                .document(requestId)
-                .get()
-                .addOnSuccessListener { snap ->
-                    if (!snap.exists()) {
-                        notFound = true
-                    } else {
-                        email = snap.getString("email") ?: ""
-                        specTitle = snap.getString("specTitle") ?: ""
-                        specId = snap.getString("specId") ?: ""
-                        userId = snap.getString("userId") ?: ""
-                        days = (snap.getLong("days") ?: 45L).toInt()
-                        status = snap.getString("status") ?: ""
-                        createdAt = snap.getLong("createdAt") ?: 0L
-                        expiresAt = snap.getLong("expiresAt") ?: 0L
-                    }
-                    loading = false
-                }
-                .addOnFailureListener { e ->
-                    errorText = e.message ?: "تعذّر جلب الطلب"
-                    loading = false
-                }
-        } catch (e: Exception) {
-            errorText = e.message ?: "تعذّر جلب الطلب"
-            loading = false
+        val snap = com.example.data.net.FirestoreRetry.getDoc(
+            com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                .collection("course_activation_requests").document(requestId)
+        )
+        if (snap == null) {
+            loadFailed = true
+            errorText = "📶 الاتصال ضعيف: تعذّر جلب الطلب بعد عدة محاولات."
+        } else if (!snap.exists()) {
+            notFound = true
+        } else {
+            email = snap.getString("email") ?: ""
+            specTitle = snap.getString("specTitle") ?: ""
+            specId = snap.getString("specId") ?: ""
+            userId = snap.getString("userId") ?: ""
+            days = (snap.getLong("days") ?: 45L).toInt()
+            status = snap.getString("status") ?: ""
+            createdAt = snap.getLong("createdAt") ?: 0L
+            expiresAt = snap.getLong("expiresAt") ?: 0L
         }
+        loading = false
     }
 
     if (loading) {
@@ -132,12 +130,36 @@ fun CourseActivationAdminView(
 
         if (notFound) {
             Text(
-                text = "لم يُعثر على هذا الطلب في قاعدة البيانات.",
+                text = "لم يُعثر على هذا الطلب. قد يكون المرسل في منطقة ضعيفة الشبكة ولم يصل طلبه بعد، فأعد المحاولة بعد قليل.",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = AdmBadColor
             )
             Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { reloadKey++ }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "إعادة المحاولة 🔄", fontSize = 15.sp)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedButton(onClick = { onClose() }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "إغلاق والعودة", fontSize = 15.sp)
+            }
+            return
+        }
+
+        if (loadFailed) {
+            Card(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)) {
+                Text(
+                    text = errorText,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AdmBadColor,
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+            Button(onClick = { reloadKey++ }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "إعادة المحاولة 🔄", fontSize = 15.sp)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
             OutlinedButton(onClick = { onClose() }, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "إغلاق والعودة", fontSize = 15.sp)
             }
@@ -237,30 +259,27 @@ fun CourseActivationAdminView(
                     if (working) return@Button
                     working = true
                     errorText = ""
-                    try {
-                        val calendar = Calendar.getInstance()
-                        calendar.add(Calendar.DAY_OF_YEAR, days)
-                        val newExpiry = calendar.timeInMillis
-                        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                        val updates = mapOf(
-                            "status" to "completed",
-                            "activatedAt" to System.currentTimeMillis(),
-                            "expiresAt" to newExpiry
+                    // تاريخ الانتهاء يُحسب مرة واحدة لكل ضغطة حتى لا يتغير مع إعادة المحاولة
+                    val calendar = Calendar.getInstance()
+                    calendar.add(Calendar.DAY_OF_YEAR, days)
+                    val newExpiry = calendar.timeInMillis
+                    val activatedAtNow = System.currentTimeMillis()
+                    scope.launch {
+                        val ok = com.example.data.net.FirestoreRetry.updateDoc(
+                            com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                                .collection("course_activation_requests").document(requestId),
+                            mapOf(
+                                "status" to "completed",
+                                "activatedAt" to activatedAtNow,
+                                "expiresAt" to newExpiry
+                            )
                         )
-                        db.collection("course_activation_requests")
-                            .document(requestId)
-                            .update(updates)
-                            .addOnSuccessListener {
-                                status = "completed"
-                                expiresAt = newExpiry
-                                working = false
-                            }
-                            .addOnFailureListener { e ->
-                                errorText = e.message ?: "تعذّر التفعيل"
-                                working = false
-                            }
-                    } catch (e: Exception) {
-                        errorText = e.message ?: "تعذّر التفعيل"
+                        if (ok) {
+                            status = "completed"
+                            expiresAt = newExpiry
+                        } else {
+                            errorText = "📶 لم يتأكد التفعيل بسبب ضعف الاتصال. قد يكون تمّ فعلًا؛ اضغط «تفعيل» مرة أخرى للتأكد (آمن ولا يتكرر)."
+                        }
                         working = false
                     }
                 },

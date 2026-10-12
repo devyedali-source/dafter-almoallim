@@ -3267,9 +3267,51 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         return cust?.maxPoints ?: subject.maxPoints
     }
 
+    /**
+     * حماية قفل الفصول: يمنع كتابة أو حذف الدرجات في فصل مقفول مهما كانت الصفحة التي جاء منها الاختيار.
+     * - الفصل المختار حاليًا (بما فيه الفصل الرابع للوافدين) يجب أن يكون مفعّلًا لقسم التلميذ.
+     * - وما عدا الفصل الرابع، يجب أن يكون فصل الدرجة نفسه مفعّلًا.
+     * - إن لم يوجد التلميذ أو قسمه (بيانات لم تُحمَّل بعد) يُسمح بالعملية حتى لا يتعطل العمل.
+     */
+    private fun isGradeWriteAllowed(studentId: Long, termId: Int): Boolean {
+        val classId = _students.value.find { it.id == studentId }?.classId ?: return true
+        val cls = _classSections.value.find { it.id == classId } ?: return true
+        val selected = _selectedTermId.value
+        if (!cls.isTermUnlocked(selected)) return false
+        if (selected != 4 && !cls.isTermUnlocked(termId)) return false
+        return true
+    }
+
+    /** للمعدلات اليدوية (وضع الفصل الرابع): الفصل المختار حاليًا يجب أن يكون مفعّلًا لقسم التلميذ. */
+    private fun isSelectedTermOpenForStudent(studentId: Long): Boolean {
+        val classId = _students.value.find { it.id == studentId }?.classId ?: return true
+        val cls = _classSections.value.find { it.id == classId } ?: return true
+        return cls.isTermUnlocked(_selectedTermId.value)
+    }
+
+    @Volatile private var lastTermLockedToastAt = 0L
+
+    private fun notifyTermLocked() {
+        val nowMs = System.currentTimeMillis()
+        if (nowMs - lastTermLockedToastAt < 2500L) return
+        lastTermLockedToastAt = nowMs
+        android.os.Handler(android.os.Looper.getMainLooper()).post {
+            android.widget.Toast.makeText(
+                getApplication(),
+                "🔒 هذا الفصل مقفول لهذا القسم، فعّله أولًا لإدراج النتائج",
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     // Save grades list (bulk entry for subject or student)
-    fun saveGrades(gradesList: List<Grade>) {
-        if (gradesList.isEmpty()) return
+    // يعيد true إذا حُفظت كل الدرجات، وfalse إذا رُفض بعضها أو كلها بسبب قفل الفصل
+    fun saveGrades(allGrades: List<Grade>): Boolean {
+        if (allGrades.isEmpty()) return true
+        val gradesList = allGrades.filter { isGradeWriteAllowed(it.studentId, it.termId) }
+        val allAllowed = gradesList.size == allGrades.size
+        if (!allAllowed) notifyTermLocked()
+        if (gradesList.isEmpty()) return false
 
         // Coerce grades to be within [0, maxPoints] of their subject in this student's class
         val validatedGradesList = gradesList.map { grade ->
@@ -3288,10 +3330,15 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                 e.printStackTrace()
             }
         }
+        return allAllowed
     }
 
     // Single grade saving
     fun saveSingleGrade(studentId: Long, subjectId: Long, score: Double, termId: Int) {
+        if (!isGradeWriteAllowed(studentId, termId)) {
+            notifyTermLocked()
+            return
+        }
         val limit = resolvedMaxPointsFor(studentId, subjectId)
         val finalScore = if (limit != null) {
             score.coerceIn(0.0, limit.toDouble())
@@ -3311,6 +3358,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun deleteGrade(studentId: Long, subjectId: Long, termId: Int) {
+        if (!isGradeWriteAllowed(studentId, termId)) {
+            notifyTermLocked()
+            return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO + kotlinx.coroutines.NonCancellable) {
             try {
                 repository.deleteGrade(studentId, subjectId, termId)
@@ -3494,6 +3545,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun saveStudentManualTermAverage(studentId: Long, termId: Int, score: Double) {
+        if (!isSelectedTermOpenForStudent(studentId)) {
+            notifyTermLocked()
+            return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             val manualAvg = com.example.data.models.StudentManualTermAverage(studentId, termId, score.coerceIn(0.0, 20.0))
             repository.insertManualTermAverage(manualAvg)
@@ -3505,6 +3560,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun deleteStudentManualTermAverage(studentId: Long, termId: Int) {
+        if (!isSelectedTermOpenForStudent(studentId)) {
+            notifyTermLocked()
+            return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             repository.deleteManualTermAverage(studentId, termId)
             val current = _manualTermAverages.value.toMutableList()
@@ -3548,8 +3607,13 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         averagesMap: Map<Long, Double>,
         onSuccess: (() -> Unit)? = null
     ) {
+        val allowedMap = averagesMap.filter { (studentId, _) -> isSelectedTermOpenForStudent(studentId) }
+        if (allowedMap.size != averagesMap.size) {
+            notifyTermLocked()
+            if (allowedMap.isEmpty()) return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            val list = averagesMap.map { (studentId, score) ->
+            val list = allowedMap.map { (studentId, score) ->
                 com.example.data.models.StudentManualTermAverage(studentId, termId, score.coerceIn(0.0, 20.0))
             }
             list.forEach { repository.insertManualTermAverage(it) }
@@ -3924,6 +3988,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // Toggle term activation of a class for a specific teacher
+    private val activationAttemptGen = java.util.concurrent.ConcurrentHashMap<Long, Int>()
+
     fun toggleClassTermActivation(
         teacherId: String,
         classId: Long,
@@ -3980,6 +4046,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             
 
             val previousStatsList = _allClassesForStats.value
+            val activationGen = activationAttemptGen.merge(classId, 1) { old, inc -> old + inc } ?: 1
             _allClassesForStats.value = previousStatsList.map { cls ->
                 if (cls.id == classId) {
                     cls.copy(
@@ -4009,7 +4076,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     onSuccess()
                 }
                 .addOnFailureListener {
-                    _allClassesForStats.value = previousStatsList
+                    // لا نتراجع إذا نجحت محاولة أحدث لنفس القسم (يحدث عند إعادة المحاولة في شبكة ضعيفة)
+                    if (activationAttemptGen[classId] == activationGen) _allClassesForStats.value = previousStatsList
                     onFailure("تعذّر تأكيد التفعيل على الخادم. لم يتم التفعيل، حاول مرة أخرى.")
                 }
             }
@@ -4038,6 +4106,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             val newIsActivated = curT1 && curT4
 
             val previousStatsList = _allClassesForStats.value
+            val activationGen = activationAttemptGen.merge(classId, 1) { old, inc -> old + inc } ?: 1
             _allClassesForStats.value = previousStatsList.map { cls ->
                 if (cls.id == classId) {
                     cls.copy(
@@ -4066,7 +4135,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     onSuccess()
                 }
                 .addOnFailureListener { e ->
-                    _allClassesForStats.value = previousStatsList
+                    // لا نتراجع إذا نجحت محاولة أحدث لنفس القسم (يحدث عند إعادة المحاولة في شبكة ضعيفة)
+                    if (activationAttemptGen[classId] == activationGen) _allClassesForStats.value = previousStatsList
                     onFailure(e.message ?: "فشل تفعيل فصول السنة")
                 }
             }
@@ -4649,10 +4719,24 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
 
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             try {
-                if (isNetworkAvailable()) {
-                    FirebaseFirestore.getInstance().collection("teacher_exchanges")
-                        .document(postId)
-                        .update("isApproved", isApproved)
+                // لا نُعلن النجاح إلا بعد تأكيد الخادم؛ وإلا بقي الإعلان غير منشور سحابيًا رغم ظهور "تمت الموافقة"
+                if (!isNetworkAvailable()) {
+                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        onFailure("لا يوجد اتصال بالإنترنت حاليًا")
+                    }
+                    return@launch
+                }
+                val cloudOk = com.example.data.net.FirestoreRetry.updateDoc(
+                    FirebaseFirestore.getInstance().collection("teacher_exchanges").document(postId),
+                    mapOf("isApproved" to isApproved),
+                    attempts = 1,
+                    perTryMs = 20_000L
+                )
+                if (!cloudOk) {
+                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        onFailure("تعذّر تأكيد الحالة على الخادم بسبب ضعف الشبكة")
+                    }
+                    return@launch
                 }
 
                 val currentPosts = activeDatabase.teacherDao().getAllExchangePosts()
