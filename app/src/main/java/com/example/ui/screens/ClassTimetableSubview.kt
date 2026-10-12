@@ -70,24 +70,28 @@ fun ClassTimetableSubview(
 
     // local memory persistence for regional Hijri adjustment
     val prefs = remember { context.getSharedPreferences("app_settings", Context.MODE_PRIVATE) }
-    var hijriOffset by remember { mutableStateOf(prefs.getLong("hijri_offset_days_v2", 0L)) }
+    var hijriShifts by remember { mutableStateOf(com.example.data.calendar.HijriMauritania.load(prefs)) }
 
     // Calculations of local Date Offline
     val todayG = LocalDate.now()
-    val adjustedG = remember(todayG, hijriOffset) { todayG.plusDays(hijriOffset) }
 
-    // Hijri date conversion
-    val adjustedHijri = remember(adjustedG) {
+    // التاريخ الهجري حسب موريتانيا: أم القرى + إزاحة خاصة بكل شهر
+    val mauritanianHijri = remember(todayG, hijriShifts) {
         try {
-            HijrahDate.from(adjustedG)
+            com.example.data.calendar.HijriMauritania.resolve(todayG, hijriShifts)
         } catch (e: Exception) {
-            HijrahDate.now()
+            val fallback = HijrahDate.from(todayG)
+            com.example.data.calendar.HijriMauritania.HDate(
+                fallback.get(ChronoField.YEAR),
+                fallback.get(ChronoField.MONTH_OF_YEAR),
+                fallback.get(ChronoField.DAY_OF_MONTH)
+            )
         }
     }
 
-    val hijriDay = adjustedHijri.get(ChronoField.DAY_OF_MONTH)
-    val hijriMonth = adjustedHijri.get(ChronoField.MONTH_OF_YEAR)
-    val hijriYear = adjustedHijri.get(ChronoField.YEAR)
+    val hijriDay = mauritanianHijri.day
+    val hijriMonth = mauritanianHijri.month
+    val hijriYear = mauritanianHijri.year
 
     val hijriMonthNames = listOf(
         "محرم", "صفر", "ربيع الأول", "ربيع الآخر",
@@ -589,8 +593,10 @@ fun ClassTimetableSubview(
 
                         TextButton(
                             onClick = {
-                                hijriOffset = 0L
-                                prefs.edit().putLong("hijri_offset_days_v2", 0L).apply()
+                                // إعادة الضبط تخصّ الشهر المعروض فقط
+                                val resetMap = hijriShifts - com.example.data.calendar.HijriMauritania.keyOf(hijriYear, hijriMonth)
+                                hijriShifts = resetMap
+                                com.example.data.calendar.HijriMauritania.save(prefs, resetMap)
                                 showAdjustDialog = false
                             },
                             modifier = Modifier.weight(1.2f)
@@ -601,22 +607,22 @@ fun ClassTimetableSubview(
                         Button(
                             onClick = {
                                 try {
-                                    val selectedHijri = HijrahDate.of(tempYear, tempMonth, tempDay)
-                                    val targetGregorian = LocalDate.from(selectedHijri)
-                                    val computedOffset = ChronoUnit.DAYS.between(LocalDate.now(), targetGregorian)
-                                    hijriOffset = computedOffset
-                                    prefs.edit().putLong("hijri_offset_days_v2", computedOffset).apply()
-                                } catch (e: Exception) {
-                                    try {
-                                        // fallback for short month lengths
-                                        val selectedHijri = HijrahDate.of(tempYear, tempMonth, 29)
-                                        val targetGregorian = LocalDate.from(selectedHijri)
-                                        val computedOffset = ChronoUnit.DAYS.between(LocalDate.now(), targetGregorian)
-                                        hijriOffset = computedOffset
-                                        prefs.edit().putLong("hijri_offset_days_v2", computedOffset).apply()
-                                    } catch (e2: Exception) {
-                                        // ignore
+                                    val shift = com.example.data.calendar.HijriMauritania.shiftFor(
+                                        LocalDate.now(), tempYear, tempMonth, tempDay
+                                    )
+                                    if (shift == null) {
+                                        android.widget.Toast.makeText(
+                                            context,
+                                            "التاريخ المختار بعيد عن الحساب بأكثر من يومين، تحقق من اليوم والشهر.",
+                                            android.widget.Toast.LENGTH_LONG
+                                        ).show()
+                                    } else {
+                                        val updated = hijriShifts + (com.example.data.calendar.HijriMauritania.keyOf(tempYear, tempMonth) to shift)
+                                        hijriShifts = updated
+                                        com.example.data.calendar.HijriMauritania.save(prefs, updated)
                                     }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
                                 }
                                 showAdjustDialog = false
                             },
