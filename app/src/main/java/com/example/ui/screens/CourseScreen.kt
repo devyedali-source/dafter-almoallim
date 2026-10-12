@@ -181,6 +181,19 @@ fun CourseScreen() {
         store.putBoolean(context, "course_in_writings", writingsSubject != null)
     }
 
+    // زر الرجوع في الهاتف: خطوة واحدة إلى الخلف داخل الدورة
+    androidx.activity.compose.BackHandler(enabled = selectedSpec != null) {
+        when {
+            inTest -> inTest = false
+            selectedLessonId != null -> selectedLessonId = null
+            writingsSubject != null -> writingsSubject = null
+            examsSubject != null -> examsSubject = null
+            inSimulator -> inSimulator = false
+            selectedSubject != null -> selectedSubject = null
+            else -> selectedSpec = null
+        }
+    }
+
     androidx.compose.runtime.DisposableEffect(Unit) {
         onDispose {
             try {

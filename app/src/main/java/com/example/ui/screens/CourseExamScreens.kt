@@ -70,6 +70,7 @@ fun CourseSubjectExamsScreen(subjectName: String, onBack: () -> Unit) {
             if (examsUnlockedAtStart) com.example.data.state.LastPlaceStore.getString(context, placeKeyOpen) else null
         )
     }
+    androidx.activity.compose.BackHandler(enabled = openedExamId != null) { openedExamId = null }
     LaunchedEffect(openedExamId) {
         com.example.data.state.LastPlaceStore.putString(context, placeKeyOpen, openedExamId)
     }
