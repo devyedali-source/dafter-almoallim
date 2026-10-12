@@ -255,7 +255,7 @@ fun ClassTimetableSubview(
                         modifier = Modifier.size(12.dp)
                     )
                     Text(
-                        text = "تحقق من توافق التاريخ الهجري مع موريتانيا",
+                        text = "عدّل التاريخ الهجري بعد انتهاء كل اجتماع للجنة الأهلة ليبقى التاريخ الهجري صحيحًا ومحليًا دون إنترنت",
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold,
                         color = BentoPrimaryDesc.copy(alpha = 0.7f)
