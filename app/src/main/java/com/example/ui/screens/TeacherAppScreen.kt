@@ -4737,10 +4737,11 @@ fun GradesEntryTab(
                                         Toast.LENGTH_LONG
                                     ).show()
                                 } else {
-                                    viewModel.saveGrades(parseList)
-                                    val now = System.currentTimeMillis()
-                                    savedNow.forEach { id -> recentlySavedSubjectStudentIds[id] = now }
-                                    Toast.makeText(context, "تم حفظ درجات المادة بنجاح!", Toast.LENGTH_SHORT).show()
+                                    if (viewModel.saveGrades(parseList)) {
+                                        val now = System.currentTimeMillis()
+                                        savedNow.forEach { id -> recentlySavedSubjectStudentIds[id] = now }
+                                        Toast.makeText(context, "تم حفظ درجات المادة بنجاح!", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             }
                         }
@@ -5071,10 +5072,11 @@ fun GradesEntryTab(
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
-                                viewModel.saveGrades(parseList)
-                                val now = System.currentTimeMillis()
-                                savedNow.forEach { id -> recentlySavedSubjectIds[id] = now }
-                                Toast.makeText(context, "تم حفظ درجات الطالب بنجاح!", Toast.LENGTH_SHORT).show()
+                                if (viewModel.saveGrades(parseList)) {
+                                    val now = System.currentTimeMillis()
+                                    savedNow.forEach { id -> recentlySavedSubjectIds[id] = now }
+                                    Toast.makeText(context, "تم حفظ درجات الطالب بنجاح!", Toast.LENGTH_SHORT).show()
+                                }
                             }
                         }
                     }

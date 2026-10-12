@@ -3282,7 +3282,19 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         return true
     }
 
+    /** للمعدلات اليدوية (وضع الفصل الرابع): الفصل المختار حاليًا يجب أن يكون مفعّلًا لقسم التلميذ. */
+    private fun isSelectedTermOpenForStudent(studentId: Long): Boolean {
+        val classId = _students.value.find { it.id == studentId }?.classId ?: return true
+        val cls = _classSections.value.find { it.id == classId } ?: return true
+        return cls.isTermUnlocked(_selectedTermId.value)
+    }
+
+    @Volatile private var lastTermLockedToastAt = 0L
+
     private fun notifyTermLocked() {
+        val nowMs = System.currentTimeMillis()
+        if (nowMs - lastTermLockedToastAt < 2500L) return
+        lastTermLockedToastAt = nowMs
         android.os.Handler(android.os.Looper.getMainLooper()).post {
             android.widget.Toast.makeText(
                 getApplication(),
@@ -3293,11 +3305,13 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // Save grades list (bulk entry for subject or student)
-    fun saveGrades(allGrades: List<Grade>) {
-        if (allGrades.isEmpty()) return
+    // يعيد true إذا حُفظت كل الدرجات، وfalse إذا رُفض بعضها أو كلها بسبب قفل الفصل
+    fun saveGrades(allGrades: List<Grade>): Boolean {
+        if (allGrades.isEmpty()) return true
         val gradesList = allGrades.filter { isGradeWriteAllowed(it.studentId, it.termId) }
-        if (gradesList.size != allGrades.size) notifyTermLocked()
-        if (gradesList.isEmpty()) return
+        val allAllowed = gradesList.size == allGrades.size
+        if (!allAllowed) notifyTermLocked()
+        if (gradesList.isEmpty()) return false
 
         // Coerce grades to be within [0, maxPoints] of their subject in this student's class
         val validatedGradesList = gradesList.map { grade ->
@@ -3316,6 +3330,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                 e.printStackTrace()
             }
         }
+        return allAllowed
     }
 
     // Single grade saving
@@ -3530,6 +3545,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun saveStudentManualTermAverage(studentId: Long, termId: Int, score: Double) {
+        if (!isSelectedTermOpenForStudent(studentId)) {
+            notifyTermLocked()
+            return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             val manualAvg = com.example.data.models.StudentManualTermAverage(studentId, termId, score.coerceIn(0.0, 20.0))
             repository.insertManualTermAverage(manualAvg)
@@ -3541,6 +3560,10 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun deleteStudentManualTermAverage(studentId: Long, termId: Int) {
+        if (!isSelectedTermOpenForStudent(studentId)) {
+            notifyTermLocked()
+            return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             repository.deleteManualTermAverage(studentId, termId)
             val current = _manualTermAverages.value.toMutableList()
@@ -3584,8 +3607,13 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         averagesMap: Map<Long, Double>,
         onSuccess: (() -> Unit)? = null
     ) {
+        val allowedMap = averagesMap.filter { (studentId, _) -> isSelectedTermOpenForStudent(studentId) }
+        if (allowedMap.size != averagesMap.size) {
+            notifyTermLocked()
+            if (allowedMap.isEmpty()) return
+        }
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            val list = averagesMap.map { (studentId, score) ->
+            val list = allowedMap.map { (studentId, score) ->
                 com.example.data.models.StudentManualTermAverage(studentId, termId, score.coerceIn(0.0, 20.0))
             }
             list.forEach { repository.insertManualTermAverage(it) }
