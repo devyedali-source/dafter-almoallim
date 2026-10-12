@@ -332,6 +332,25 @@ private fun CourseSpecializationList(onSelect: (CourseSpecialization) -> Unit) {
     val currentUid = currentUser?.uid ?: ""
     val currentEmail = currentUser?.email ?: ""
     var lockedSpec by remember { mutableStateOf<CourseSpecialization?>(null) }
+    // يزيد بعد استرجاع التفعيلات من الخادم لإعادة رسم القائمة
+    var restoreTick by remember { mutableStateOf(0) }
+    var restoring by remember { mutableStateOf(false) }
+
+    // استرجاع التفعيلات من الخادم (بعد إعادة تثبيت التطبيق أو تغيير الهاتف)
+    LaunchedEffect(currentUid) {
+        if (currentUid.isNotBlank()) {
+            restoring = true
+            val before = COURSE_SPECIALIZATIONS.map {
+                CourseSubscriptionStore.getExpiryMillis(context, it.id)
+            }
+            CourseSubscriptionStore.restoreFromServer(context, currentUid)
+            val after = COURSE_SPECIALIZATIONS.map {
+                CourseSubscriptionStore.getExpiryMillis(context, it.id)
+            }
+            if (before != after) restoreTick++
+            restoring = false
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -389,6 +408,7 @@ private fun CourseSpecializationList(onSelect: (CourseSpecialization) -> Unit) {
         }
 
         for (spec in COURSE_SPECIALIZATIONS) {
+            @Suppress("UNUSED_VARIABLE") val tick = restoreTick
             val unlocked = CourseSubscriptionStore.isUnlocked(context, spec.id, currentUid)
             val daysLeft = CourseSubscriptionStore.remainingDays(context, spec.id)
             val expiryText = CourseSubscriptionStore.formatExpiryDate(context, spec.id)
