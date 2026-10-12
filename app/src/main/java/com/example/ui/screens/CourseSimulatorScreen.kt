@@ -149,6 +149,7 @@ fun CourseSimulatorScreen(trackKey: String, subjectName: String, onBack: () -> U
     var openedId by remember(trackKey) {
         mutableStateOf<String?>(com.example.data.state.LastPlaceStore.getString(context, placeKeyOpen))
     }
+    androidx.activity.compose.BackHandler(enabled = openedId != null) { openedId = null }
     LaunchedEffect(openedId) {
         com.example.data.state.LastPlaceStore.putString(context, placeKeyOpen, openedId)
     }

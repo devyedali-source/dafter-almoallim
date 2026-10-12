@@ -67,6 +67,7 @@ private fun WrBackLink(text: String, onClick: () -> Unit) {
 fun CourseWritingsScreen(subjectName: String, onBack: () -> Unit) {
     val context = LocalContext.current
     var openedId by remember(subjectName) { mutableStateOf<String?>(null) }
+    androidx.activity.compose.BackHandler(enabled = openedId != null) { openedId = null }
 
     val writings = CourseRepository.getWritings(context, subjectName)
     val opened = writings.firstOrNull { it.id == openedId }
