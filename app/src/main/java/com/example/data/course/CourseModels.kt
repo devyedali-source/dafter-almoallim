@@ -84,7 +84,18 @@ data class CourseExam(
     val msg: String = "",
     @Json(name = "text_title") val textTitle: String? = null,
     val text: String? = null,
-    @Json(name = "situation_text") val situationText: String? = null
+    @Json(name = "situation_text") val situationText: String? = null,
+    // يُبنى وقت التشغيل للمحاكي الشامل فقط (لا يوجد في ملف البيانات)
+    val sections: List<CourseSimSection> = emptyList()
+)
+
+@JsonClass(generateAdapter = true)
+data class CourseSimSection(
+    val title: String = "",
+    val start: Int = 0,
+    val textTitle: String? = null,
+    val text: String? = null,
+    val situationText: String? = null
 )
 
 @JsonClass(generateAdapter = true)

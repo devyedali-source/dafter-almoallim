@@ -64,21 +64,14 @@ private fun ExamBackLink(text: String, onClick: () -> Unit) {
 fun CourseSubjectExamsScreen(subjectName: String, onBack: () -> Unit) {
     val context = LocalContext.current
     val placeKeyOpen = "course_exam_open_" + subjectName
-    val placeKeySim = "course_exam_sim_" + subjectName
     val examsUnlockedAtStart = remember(subjectName) { CourseProgressStore.areSubjectExamsUnlocked(context, subjectName) }
     var openedExamId by remember(subjectName) {
         mutableStateOf<String?>(
             if (examsUnlockedAtStart) com.example.data.state.LastPlaceStore.getString(context, placeKeyOpen) else null
         )
     }
-    var inSimulator by remember(subjectName) {
-        mutableStateOf(examsUnlockedAtStart && com.example.data.state.LastPlaceStore.getBoolean(context, placeKeySim))
-    }
     LaunchedEffect(openedExamId) {
         com.example.data.state.LastPlaceStore.putString(context, placeKeyOpen, openedExamId)
-    }
-    LaunchedEffect(inSimulator) {
-        com.example.data.state.LastPlaceStore.putBoolean(context, placeKeySim, inSimulator)
     }
     var showLockMessage by remember(subjectName) { mutableStateOf(false) }
 
@@ -92,14 +85,6 @@ fun CourseSubjectExamsScreen(subjectName: String, onBack: () -> Unit) {
             subjectName = subjectName,
             exam = openedExam,
             onBack = { openedExamId = null }
-        )
-        return
-    }
-
-    if (inSimulator) {
-        CourseSimulatorScreen(
-            subjectName = subjectName,
-            onBack = { inSimulator = false }
         )
         return
     }
@@ -141,7 +126,7 @@ fun CourseSubjectExamsScreen(subjectName: String, onBack: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "تُفتح امتحانات المادة والمحاكي بعد إنجاز $neededLessons درسًا.",
+                        text = "تُفتح امتحانات المادة بعد إنجاز $neededLessons درسًا.",
                         fontSize = 14.sp
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -165,38 +150,6 @@ fun CourseSubjectExamsScreen(subjectName: String, onBack: () -> Unit) {
                         Text(text = "حسنًا", fontSize = 14.sp)
                     }
                 }
-            }
-        }
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)
-                .clickable {
-                    if (unlocked) {
-                        inSimulator = true
-                    } else {
-                        showLockMessage = true
-                    }
-                }
-        ) {
-            Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
-                Text(
-                    text = if (unlocked) {
-                        "🎯 المحاكي (نمط اللجنة الوطنية)"
-                    } else {
-                        "🔒 المحاكي (نمط اللجنة الوطنية)"
-                    },
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Black,
-                    color = ExamWarnColor
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = "خمسة خيارات · مؤقّت نازل · تسليم نهائي · تصحيح بالشروح",
-                    fontSize = 12.sp,
-                    color = ExamMutedColor
-                )
             }
         }
 

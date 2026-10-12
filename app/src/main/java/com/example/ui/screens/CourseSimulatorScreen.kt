@@ -43,6 +43,7 @@ import com.example.data.course.CourseAttemptStore
 import com.example.data.course.CourseExam
 import com.example.data.course.CourseProgressStore
 import com.example.data.course.CourseRepository
+import com.example.data.course.CourseSimSection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -92,12 +93,67 @@ private fun SimBackLink(text: String, onClick: () -> Unit) {
     )
 }
 
-@Composable
-fun CourseSimulatorScreen(subjectName: String, onBack: () -> Unit) {
-    val context = LocalContext.current
-    var openedId by remember(subjectName) { mutableStateOf<String?>(null) }
+private fun simSectionHasContent(section: CourseSimSection): Boolean {
+    return section.title.isNotBlank() ||
+        !section.text.isNullOrBlank() ||
+        !section.situationText.isNullOrBlank()
+}
 
-    val exams = CourseRepository.getSimulatorExams(context, subjectName)
+@Composable
+private fun SimSectionHeader(section: CourseSimSection) {
+    Column(modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)) {
+        if (section.title.isNotBlank()) {
+            Text(
+                text = "📘 مادة: ${section.title}",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Black,
+                color = SimWarnColor,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+        if (!section.text.isNullOrBlank()) {
+            Card(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    if (!section.textTitle.isNullOrBlank()) {
+                        Text(
+                            text = section.textTitle ?: "",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                    }
+                    Text(text = section.text ?: "", fontSize = 14.sp)
+                }
+            }
+        }
+        if (!section.situationText.isNullOrBlank()) {
+            Card(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text(
+                        text = "الوضعية",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Black
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(text = section.situationText ?: "", fontSize = 14.sp)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CourseSimulatorScreen(trackKey: String, subjectName: String, onBack: () -> Unit) {
+    val context = LocalContext.current
+    val placeKeyOpen = "course_merged_sim_open_" + trackKey
+    var openedId by remember(trackKey) {
+        mutableStateOf<String?>(com.example.data.state.LastPlaceStore.getString(context, placeKeyOpen))
+    }
+    LaunchedEffect(openedId) {
+        com.example.data.state.LastPlaceStore.putString(context, placeKeyOpen, openedId)
+    }
+
+    val exams = remember(trackKey) { CourseRepository.getMergedSimulators(context, trackKey) }
     val opened = exams.firstOrNull { it.id == openedId }
 
     if (opened != null) {
@@ -115,12 +171,12 @@ fun CourseSimulatorScreen(subjectName: String, onBack: () -> Unit) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        SimBackLink(text = "رجوع إلى الامتحانات", onClick = onBack)
+        SimBackLink(text = "رجوع إلى المواد", onClick = onBack)
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = "المحاكي", fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "$subjectName · ${exams.size} امتحانًا على نمط اللجنة الوطنية",
+            text = "$subjectName · ${exams.size} محاكاة شاملة على نمط اللجنة الوطنية",
             fontSize = 13.sp,
             color = SimMutedColor
         )
@@ -197,9 +253,22 @@ private fun CourseSimulatorRunner(
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
-    val hasText = exam.text != null && exam.text!!.isNotBlank()
-    val hasSituation = exam.situationText != null && exam.situationText!!.isNotBlank()
-    val headerCount = 1 + (if (hasText) 1 else 0) + (if (hasSituation) 1 else 0)
+    // في المحاكاة الشاملة لكل مادة قسمها (نصّها ووضعيتها)؛ وفي غيرها قسم واحد من بيانات الامتحان نفسه
+    val sections: List<CourseSimSection> = if (exam.sections.isNotEmpty()) {
+        exam.sections
+    } else {
+        listOf(
+            CourseSimSection(
+                title = "",
+                start = 0,
+                textTitle = exam.textTitle,
+                text = exam.text,
+                situationText = exam.situationText
+            )
+        )
+    }
+    val headerSections = sections.filter { simSectionHasContent(it) }
+    fun itemIndexOfQuestion(qi: Int): Int = 1 + headerSections.count { it.start <= qi } + qi
 
     var earnedPoints = 0
     for (i in questions.indices) {
@@ -528,7 +597,7 @@ private fun CourseSimulatorRunner(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "محاكاة ${exam.n} · $subjectName",
+                        text = "محاكاة شاملة ${exam.n} · $subjectName",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = SimMutedColor
@@ -565,7 +634,7 @@ private fun CourseSimulatorRunner(
                                     .border(2.dp, chipColor, RoundedCornerShape(9.dp))
                                     .clickable {
                                         scope.launch {
-                                            listState.animateScrollToItem(headerCount + qi)
+                                            listState.animateScrollToItem(itemIndexOfQuestion(qi))
                                         }
                                     },
                                 contentAlignment = Alignment.Center
@@ -591,41 +660,13 @@ private fun CourseSimulatorRunner(
             }
         }
 
-        if (hasText) {
-            item {
-                Card(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        if (!exam.textTitle.isNullOrBlank()) {
-                            Text(
-                                text = exam.textTitle ?: "",
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Black
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                        }
-                        Text(text = exam.text ?: "", fontSize = 14.sp)
-                    }
-                }
-            }
-        }
-
-        if (hasSituation) {
-            item {
-                Card(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(
-                            text = "الوضعية",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Black
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Text(text = exam.situationText ?: "", fontSize = 14.sp)
-                    }
-                }
-            }
-        }
-
-        itemsIndexed(questions) { qIndex, question ->
+        for (qIndex in questions.indices) {
+          val sectionHere = headerSections.firstOrNull { it.start == qIndex }
+          if (sectionHere != null) {
+              item { SimSectionHeader(sectionHere) }
+          }
+          item {
+            val question = questions[qIndex]
             val given = answers[qIndex] ?: emptySet()
             val isMulti = question.m == "multi"
             val isMarked = marked[qIndex] == true
@@ -721,6 +762,7 @@ private fun CourseSimulatorRunner(
                     }
                 }
             }
+          }
         }
 
         item {

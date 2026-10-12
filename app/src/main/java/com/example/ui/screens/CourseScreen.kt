@@ -124,6 +124,7 @@ fun CourseScreen() {
     var examsSubject by remember { mutableStateOf<String?>(null) }
     var writingsSubject by remember { mutableStateOf<String?>(null) }
     var placeRestored by remember { mutableStateOf(false) }
+    var inSimulator by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         val ok = withContext(Dispatchers.IO) {
@@ -139,8 +140,13 @@ fun CourseScreen() {
                 val sp = COURSE_SPECIALIZATIONS.find { it.id == savedSpecId }
                 if (sp != null && CourseSubscriptionStore.isUnlocked(context, sp.id, uid)) {
                     selectedSpec = sp
+                    if (store.getBoolean(context, "course_merged_sim") &&
+                        CourseProgressStore.isMergedSimulatorUnlocked(context, sp.trackKey)
+                    ) {
+                        inSimulator = true
+                    }
                     val subj = store.getString(context, "course_subject")
-                    if (subj != null && CourseRepository.getSubjectNames(context, sp.trackKey).contains(subj)) {
+                    if (!inSimulator && subj != null && CourseRepository.getSubjectNames(context, sp.trackKey).contains(subj)) {
                         selectedSubject = subj
                         if (store.getBoolean(context, "course_in_exams")) {
                             examsSubject = subj
@@ -163,13 +169,14 @@ fun CourseScreen() {
         loading = false
     }
 
-    LaunchedEffect(placeRestored, selectedSpec?.id, selectedSubject, selectedLessonId, inTest, examsSubject, writingsSubject) {
+    LaunchedEffect(placeRestored, selectedSpec?.id, selectedSubject, selectedLessonId, inTest, examsSubject, writingsSubject, inSimulator) {
         if (!placeRestored) return@LaunchedEffect
         val store = com.example.data.state.LastPlaceStore
         store.putString(context, "course_spec", selectedSpec?.id)
         store.putString(context, "course_subject", selectedSubject)
         store.putString(context, "course_lesson", selectedLessonId)
         store.putBoolean(context, "course_in_test", inTest)
+        store.putBoolean(context, "course_merged_sim", inSimulator)
         store.putBoolean(context, "course_in_exams", examsSubject != null)
         store.putBoolean(context, "course_in_writings", writingsSubject != null)
     }
@@ -228,6 +235,7 @@ fun CourseScreen() {
 
     if (spec == null) {
         CourseSpecializationList(onSelect = {
+            inSimulator = false
             selectedSpec = it
             selectedSubject = null
             selectedLessonId = null
@@ -237,6 +245,14 @@ fun CourseScreen() {
     }
 
     if (subjectName == null) {
+        if (inSimulator) {
+            CourseSimulatorScreen(
+                trackKey = spec.trackKey,
+                subjectName = spec.title,
+                onBack = { inSimulator = false }
+            )
+            return
+        }
         CourseSubjectList(
             spec = spec,
             onBack = { selectedSpec = null },
@@ -244,7 +260,8 @@ fun CourseScreen() {
                 selectedSubject = it
                 selectedLessonId = null
                 inTest = false
-            }
+            },
+            onOpenSimulator = { inSimulator = true }
         )
         return
     }
@@ -480,10 +497,14 @@ private fun CourseSpecializationList(onSelect: (CourseSpecialization) -> Unit) {
 private fun CourseSubjectList(
     spec: CourseSpecialization,
     onBack: () -> Unit,
-    onSelect: (String) -> Unit
+    onSelect: (String) -> Unit,
+    onOpenSimulator: () -> Unit
 ) {
     val context = LocalContext.current
     val subjectNames = CourseRepository.getSubjectNames(context, spec.trackKey)
+    val simUnlocked = CourseProgressStore.isMergedSimulatorUnlocked(context, spec.trackKey)
+    val simMissing = CourseProgressStore.simulatorMissingBySubject(context, spec.trackKey)
+    var showSimLock by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -501,7 +522,7 @@ private fun CourseSubjectList(
         for (name in subjectNames) {
             val subject = CourseRepository.getSubject(context, name)
             val lessonsCount = subject?.lessons?.size ?: 0
-            val examsCount = (subject?.sub?.size ?: 0) + (subject?.sim?.size ?: 0)
+            val examsCount = subject?.sub?.size ?: 0
             val writingsCount = subject?.wr?.size ?: 0
             val passed = CourseProgressStore.countPassedLessons(context, name)
             val percent = CourseProgressStore.subjectProgressPercent(context, name)
@@ -531,6 +552,81 @@ private fun CourseSubjectList(
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(10.dp))
+        if (showSimLock && !simUnlocked) {
+            Card(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Text(
+                        text = "🔒 المحاكي مقفل",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Black,
+                        color = CourseWarnColor
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "يُفتح المحاكي بعد النجاح في ${CourseProgressStore.SIMULATOR_LESSONS_PER_SUBJECT} دروس من كل مادة.",
+                        fontSize = 14.sp
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    for ((name, missing) in simMissing) {
+                        Text(
+                            text = "• $name: تبقّى $missing درسًا",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = CourseWarnColor
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = "والدرس يُحسب منجَزًا إذا نلتَ في اختباره عشرة من عشرين فما فوق.",
+                        fontSize = 12.sp,
+                        color = CourseMutedColor
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    OutlinedButton(
+                        onClick = { showSimLock = false },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "حسنًا", fontSize = 14.sp)
+                    }
+                }
+            }
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp)
+                .clickable {
+                    if (simUnlocked) onOpenSimulator() else showSimLock = true
+                }
+        ) {
+            Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
+                Text(
+                    text = if (simUnlocked) "🎯 المحاكي الشامل" else "🔒 المحاكي الشامل",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Black,
+                    color = CourseWarnColor
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "كل المواد في امتحان واحد · ${subjectNames.size * 20} سؤالًا (20 من كل مادة) · 3 ساعات",
+                    fontSize = 13.sp,
+                    color = CourseMutedColor
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = if (simUnlocked) {
+                        "خمسة خيارات · مؤقّت نازل · تسليم نهائي · تصحيح بالشروح"
+                    } else {
+                        "يُفتح بعد النجاح في ${CourseProgressStore.SIMULATOR_LESSONS_PER_SUBJECT} دروس من كل مادة"
+                    },
+                    fontSize = 12.sp,
+                    color = CourseMutedColor
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -823,7 +919,7 @@ private fun CourseLessonTest(
     val context = LocalContext.current
     val total = lesson.qs.size
 
-    val testPosId = "lesson_" + lesson.id
+    val testPosId = "lesson15_" + lesson.id
     val restoredPos = remember(lesson.id) {
         com.example.data.course.CourseAttemptStore.loadTestPosition(context, testPosId)
             ?.takeIf { it.first in 0 until total && it.second in 0..it.first }
@@ -1174,7 +1270,7 @@ fun CourseVerificationScreen() {
                 Column(modifier = Modifier.padding(12.dp)) {
                     CourseCheckRow("المواد", s.subjects, 4)
                     CourseCheckRow("الدروس", s.lessons, 181)
-                    CourseCheckRow("أسئلة الدروس", s.lessonQuestions, 5430)
+                    CourseCheckRow("أسئلة الدروس", s.lessonQuestions, 2715)
                     CourseCheckRow("الامتحانات", s.exams, 80)
                     CourseCheckRow("أسئلة الامتحانات", s.examQuestions, 1800)
                     CourseCheckRow("مواضيع الإنتاج الكتابي", s.writings, 20)
