@@ -11244,6 +11244,9 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                     filteredClasses
                         .groupBy { if (it.wilaya.trim().isBlank()) "غير محددة" else it.wilaya.trim() }
                         .mapValues { it.value.size }
+                        .toList()
+                        .sortedWith(compareByDescending<Pair<String, Int>> { it.second }.thenBy { it.first })
+                        .toMap()
                 }
 
                 Column(
