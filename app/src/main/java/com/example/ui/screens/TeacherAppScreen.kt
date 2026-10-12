@@ -4274,12 +4274,10 @@ fun AcademicYearSelectorDropdown(
     }
 
     val currentAcademicYear = "$baseStartYear-${baseStartYear + 1}"
-    val nextAcademicYear = "${baseStartYear + 1}-${baseStartYear + 2}"
     val prevAcademicYear = "${baseStartYear - 1}-$baseStartYear"
 
     val options = listOf(
         currentAcademicYear to "العام الدراسي الحالي ($currentAcademicYear)",
-        nextAcademicYear to "العام الدراسي المقبل ($nextAcademicYear)",
         prevAcademicYear to "العام الدراسي السابق ($prevAcademicYear)"
     )
 

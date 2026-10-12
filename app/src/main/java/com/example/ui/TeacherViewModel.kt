@@ -2638,7 +2638,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     // --- CRUD Actions ---
 
     fun getAutomaticAcademicYear(): String {
-        val calendar = java.util.Calendar.getInstance()
+        val calendar = java.util.Calendar.getInstance().apply { timeInMillis = com.example.data.security.TrustedClock.now() }
         val year = calendar.get(java.util.Calendar.YEAR)
         val month = calendar.get(java.util.Calendar.MONTH) + 1 // 1-indexed (Jan is 1, Dec is 12)
         // Starts in December (12). So if month is 12 or Jan-July (month <= 7) we format it.
