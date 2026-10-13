@@ -4277,7 +4277,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // --- TEACHER EXCHANGE / TRANSFER FIREBASE & OFFLINE METHODS (Cloud-Sync Mode) ---
-    private var exchangePostsLimit = 4L
+    private var exchangePostsLimit = 50L
     private var exchangePostsListener: ListenerRegistration? = null
 
     private val _hasMoreExchangePosts = MutableStateFlow(true)
@@ -4290,12 +4290,12 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
      */
     fun fetchExchangePostsFromCloud(resetLimit: Boolean = false, force: Boolean = false) {
         if (resetLimit) {
-            exchangePostsLimit = 4L
+            exchangePostsLimit = 50L
             _hasMoreExchangePosts.value = true
         }
 
         val nowMs = System.currentTimeMillis()
-        val lastFetchMs = prefs.getLong("last_exchange_fetch_time", 0L)
+        val lastFetchMs = prefs.getLong("last_exchange_fetch_time_v2", 0L)
         val withinDailyWindow = (nowMs - lastFetchMs) < 86400000L
         val skipServer = withinDailyWindow && !force
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
@@ -4312,16 +4312,23 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
 
         if (skipServer) return
         if (!isNetworkAvailable()) return
-        prefs.edit().putLong("last_exchange_fetch_time", nowMs).apply()
         try {
-            FirebaseFirestore.getInstance().collection("teacher_exchanges")
-                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            val exchangeCol = FirebaseFirestore.getInstance().collection("teacher_exchanges")
+            val myUidForQuery = _currentUser.value?.uid ?: ""
+            exchangeCol
+                .whereEqualTo("isApproved", true)
                 .limit(exchangePostsLimit)
                 .get(com.google.firebase.firestore.Source.SERVER)
                 .addOnSuccessListener { snapshot ->
                     if (snapshot == null) return@addOnSuccessListener
+                    prefs.edit().putLong("last_exchange_fetch_time_v2", nowMs).apply()
                     _hasMoreExchangePosts.value = snapshot.documents.size >= exchangePostsLimit
-                    val remotePosts = snapshot.documents.mapNotNull { doc ->
+                    val approvedDocs = snapshot.documents
+                    val ownQuery = if (myUidForQuery.isNotBlank())
+                        exchangeCol.whereEqualTo("userId", myUidForQuery).get(com.google.firebase.firestore.Source.SERVER)
+                    else null
+                    val processDocs: (List<com.google.firebase.firestore.DocumentSnapshot>) -> Unit = processDocs@{ allDocs ->
+                    val remotePosts = allDocs.distinctBy { it.id }.mapNotNull { doc ->
                         try {
                             TeacherExchangePost(
                                 id = doc.id,
@@ -4386,6 +4393,15 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                             e.printStackTrace()
                         }
                     }
+                    }
+                    if (ownQuery == null) {
+                        processDocs(approvedDocs)
+                    } else {
+                        ownQuery.addOnCompleteListener { ownTask ->
+                            val ownDocs = if (ownTask.isSuccessful) ownTask.result?.documents.orEmpty() else emptyList()
+                            processDocs(approvedDocs + ownDocs)
+                        }
+                    }
                 }
                 .addOnFailureListener { e ->
                     e.printStackTrace()
@@ -4434,7 +4450,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun loadMoreExchangePosts() {
-        exchangePostsLimit += 4
+        exchangePostsLimit += 50
         exchangePostsListener?.remove()
         listenToExchangePosts()
         fetchExchangePostsFromCloud(force = true)
