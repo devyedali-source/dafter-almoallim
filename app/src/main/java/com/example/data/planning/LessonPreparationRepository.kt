@@ -240,7 +240,10 @@ object LessonPreparationRepository {
             referenceText = referenceText,
             teachingAids = teachingAidsText,
             specificObjective = specificObjective,
-            procedureSteps = procedureSteps
+            procedureSteps = procedureSteps,
+            bookPages = prep.livre?.takeIf { it.book.isNotBlank() && it.pages.isNotEmpty() }?.let {
+                com.example.data.planning.LessonBookPages(it.book, it.titre, it.pages, it.aux)
+            }
         )
     }
 

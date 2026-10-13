@@ -142,7 +142,16 @@ data class LessonProposalData(
     val referenceText: String, // المرجع
     val teachingAids: String, // الوسائل التعليمية
     val specificObjective: String, // الهدف المميز / الخاص للحصة
-    val procedureSteps: List<LessonProcedureStep> // جدول سير الحصة
+    val procedureSteps: List<LessonProcedureStep>, // جدول سير الحصة
+    val bookPages: LessonBookPages? = null // صفحات الكتاب المرتبطة بالتحضير
+)
+
+/** صفحات كتاب مدرسي (صور داخل assets/books/<book>/<page>.webp). aux=true تعني «مقترح تربوي مساعد». */
+data class LessonBookPages(
+    val book: String,
+    val title: String,
+    val pages: List<Int>,
+    val aux: Boolean = false
 )
 
 enum class TimetablePeriodType {

@@ -18,7 +18,8 @@ data class PreparationItem(
     val fiche: PreparationFiche,
     val deroulement: PreparationDeroulement,
     val evaluation: PreparationEvaluation? = null,
-    val continuity: PreparationContinuity? = null
+    val continuity: PreparationContinuity? = null,
+    val livre: PreparationLivre? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -94,4 +95,13 @@ data class PreparationContinuity(
     val current_week_focus: String? = null,
     val next_week_focus: String? = null,
     val role_partie: String? = null
+)
+
+/** صفحات الكتاب المدرسي المرتبطة بالتحضير (تظهر بعد ورقة التحضير). */
+@JsonClass(generateAdapter = true)
+data class PreparationLivre(
+    val book: String = "",
+    val titre: String = "",
+    val pages: List<Int> = emptyList(),
+    val aux: Boolean = false
 )

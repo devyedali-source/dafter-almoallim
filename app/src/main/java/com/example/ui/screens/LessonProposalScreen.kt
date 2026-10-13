@@ -5,7 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.DisableSelection
@@ -634,6 +638,16 @@ fun LessonProposalScreen(
                                             .padding(top = 8.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
                                     )
                                 }
+                            }
+                        }
+
+                        // صفحات الكتاب المرتبطة بالتحضير: تظهر بعد انتهاء ورقة التحضير
+                        proposalData.bookPages?.let { bp ->
+                            item(key = "book_pages_header") {
+                                BookPagesHeader(bp = bp, isFrench = fr)
+                            }
+                            items(bp.pages, key = { "book_${bp.book}_$it" }) { pageNumber ->
+                                BookPageImage(book = bp.book, page = pageNumber)
                             }
                         }
 
@@ -1551,6 +1565,90 @@ private fun RemediationProposalCard(
                         modifier = Modifier.weight(1f)
                     )
                 }
+            }
+        }
+    }
+}
+
+
+/** عنوان قسم صفحات الكتاب (يظهر بعد ورقة التحضير). */
+@Composable
+private fun BookPagesHeader(bp: com.example.data.planning.LessonBookPages, isFrench: Boolean) {
+    val pagesText = bp.pages.joinToString(if (isFrench) ", " else "، ")
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 8.dp, start = 4.dp, end = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = if (isFrench) "Pages du manuel liées à cette préparation" else "صفحات الكتاب المرتبطة بهذا التحضير",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Black,
+            color = Color(0xFF1E3A8A),
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = bp.title + (if (isFrench) " — p. " else " — ص ") + pagesText,
+            fontSize = 11.sp,
+            color = Color(0xFF475569),
+            textAlign = TextAlign.Center,
+            lineHeight = 16.sp
+        )
+        if (bp.aux) {
+            Text(
+                text = if (isFrench) "Pages suggérées (مقترح تربوي مساعد) : à vérifier par l'enseignant." else "صفحات مقترحة للاستئناس (مقترح تربوي مساعد) وليست مرجعًا رسميًا ملزمًا.",
+                fontSize = 11.sp,
+                color = Color(0xFFD32F2F),
+                textAlign = TextAlign.Center,
+                lineHeight = 16.sp
+            )
+        }
+    }
+}
+
+/** صورة صفحة من الكتاب مخزنة في assets/books/<book>/<page>.webp. */
+@Composable
+private fun BookPageImage(book: String, page: Int) {
+    val context = LocalContext.current
+    val bitmapState = produceState<androidx.compose.ui.graphics.ImageBitmap?>(initialValue = null, book, page) {
+        value = withContext(Dispatchers.IO) {
+            try {
+                val path = "books/$book/" + page.toString().padStart(3, '0') + ".webp"
+                context.assets.open(path).use { input ->
+                    android.graphics.BitmapFactory.decodeStream(input)?.asImageBitmap()
+                }
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+    val bitmap = bitmapState.value
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .shadow(1.dp, RoundedCornerShape(4.dp))
+            .border(1.dp, Color(0xFFD1D5DB), RoundedCornerShape(4.dp)),
+        color = Color.White,
+        shape = RoundedCornerShape(4.dp)
+    ) {
+        if (bitmap != null) {
+            Image(
+                bitmap = bitmap,
+                contentDescription = "ص $page",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 2.dp, color = Color(0xFF1E3A8A))
             }
         }
     }
