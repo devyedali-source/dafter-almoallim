@@ -17,8 +17,8 @@ android {
     applicationId = "com.elyedali.schoolmanager"
     minSdk = 24
     targetSdk = 36
-    versionCode = 26
-    versionName = "0.0.0.26"
+    versionCode = 28
+    versionName = "0.0.0.28"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
