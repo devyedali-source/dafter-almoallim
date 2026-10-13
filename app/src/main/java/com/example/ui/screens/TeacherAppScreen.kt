@@ -5478,6 +5478,18 @@ fun GradesEntryTab(
                 }
             }
 
+            // صفحة إدراج النتائج لا تُفتح على فصل مقفول: إن جاء الفصل المختار من صفحة الكشوف
+            // (أو من حفظ سابق) ولم يكن مفعّلًا، نعيد الاختيار إلى أول فصل مفعّل.
+            LaunchedEffect(activeTermId, activeClass?.id, activeClass?.isTerm2Activated, activeClass?.isTerm3Activated, activeClass?.isTerm4Activated, terms) {
+                val cls = activeClass
+                if (cls != null && !cls.isTermUnlocked(activeTermId)) {
+                    val firstOpen = terms.firstOrNull { cls.isTermUnlocked(it.first) }
+                    if (firstOpen != null && firstOpen.first != activeTermId) {
+                        viewModel.selectTerm(firstOpen.first)
+                    }
+                }
+            }
+
             val currentGradeTermTuple = terms.find { it.first == activeTermId } ?: terms.first()
             val isCurrentGradeTermLocked = activeClass?.isTermUnlocked(currentGradeTermTuple.first) == false
             val currentGradeTermDisplay = if (isCurrentGradeTermLocked) "${currentGradeTermTuple.second} 🔒" else currentGradeTermTuple.second
