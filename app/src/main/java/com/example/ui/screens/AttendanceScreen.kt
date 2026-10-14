@@ -344,7 +344,7 @@ private fun AttendanceEditor(
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-        ) { Text("إنهاء السجل") }
+        ) { Text("حفظ السجل") }
     }
 
     summary?.let { list ->
