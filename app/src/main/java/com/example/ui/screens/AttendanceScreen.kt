@@ -128,6 +128,8 @@ fun AttendanceScreen(
                 onDone = { editingDate = null }
             )
             monthView != null -> AttendanceMonthPage(
+                viewModel = viewModel,
+                section = section,
                 students = students,
                 records = classRecords,
                 teachingDays = teachingDays,
@@ -378,6 +380,8 @@ private fun AttendanceEditor(
 
 @Composable
 private fun AttendanceMonthPage(
+    viewModel: TeacherViewModel,
+    section: ClassSection,
     students: List<Student>,
     records: List<AttendanceRecord>,
     teachingDays: Set<String>,
@@ -397,7 +401,19 @@ private fun AttendanceMonthPage(
     Column(Modifier.fillMaxSize().padding(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-            Text("غياب شهر ${MONTH_NAMES[month]} $year", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("غياب شهر ${MONTH_NAMES[month]} $year", fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
+            val ctx = LocalContext.current
+            Button(
+                onClick = {
+                    val label = "${MONTH_NAMES[month]} $year"
+                    val html = com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
+                        ctx, section, students, records, days, label, viewModel
+                    )
+                    com.example.ui.HtmlReportHelper.shareHtmlAsPdf(ctx, html, "سجل_النداء_${MONTH_NAMES[month]}_$year", isLandscape = true)
+                },
+                enabled = days.isNotEmpty(),
+                colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
+            ) { Text("مشاركة PDF") }
         }
         if (days.isEmpty()) {
             Text("لا توجد أيام تدريس في هذا الشهر. غيّر «أيام التدريس».", color = BentoPrimaryDesc)

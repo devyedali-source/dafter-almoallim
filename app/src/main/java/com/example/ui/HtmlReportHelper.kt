@@ -1365,6 +1365,94 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    // سجل النداء (الغياب) لشهر واحد
+    fun generateAttendanceMonthHtml(
+        context: Context,
+        activeClass: ClassSection,
+        students: List<Student>,
+        records: List<com.example.data.models.AttendanceRecord>,
+        days: List<java.time.LocalDate>,
+        monthLabel: String,
+        viewModel: TeacherViewModel? = null
+    ): String {
+        val teacherStampHtml = if (viewModel != null) getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
+        val principalStampHtml = if (viewModel != null) getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
+        val sorted = students.sortedBy { it.id }
+        val seal = getMauritanianSealImg(context)
+        val styles = getCommonStyles(
+            isLandscape = true,
+            isList = true,
+            schoolName = activeClass.schoolName,
+            fileTitle = "سجل النداء"
+        )
+        val byKey = records.associateBy { it.studentId to it.date }
+        val recordedDates = records.map { it.date }.toSet()
+        val counted = days.filter { it.toString() in recordedDates }
+        val expected = counted.size * 2
+
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>سجل النداء</title>$styles")
+        html.append("<style>.att td, .att th { padding: 1px 0 !important; font-size: 8px !important; } .att .nm { text-align: right; padding-right: 4px !important; font-size: 9px !important; font-weight: bold; white-space: nowrap; }</style>")
+        html.append("</head><body><div class=\"sheet-card\">")
+        html.append("""
+        <div class="header-section">
+            <div class="header-column right">
+                الجمهورية الإسلامية الموريتانية<br>
+                وزارة التربية وإصلاح النظام التعليمي<br>
+                الإدارة الجهوية للتربية: ${activeClass.wilaya.ifBlank { "غوركل" }}<br>
+                مفتشية مقاطعة: ${activeClass.moughataa.ifBlank { "لكصيبه 1" }}<br>
+                مدرسة: ${activeClass.schoolName.ifBlank { "الطلحايه 1" }}
+            </div>
+            <div class="header-column center">
+                $seal
+                <div class="header-title-main" style="margin-top: 6px;">سجل النداء</div>
+            </div>
+            <div class="header-column left">
+                شرف - إخاء - عدالة<br>
+                السنة الدراسية: ${activeClass.academicYear.ifBlank { "2025 - 2026" }}<br>
+                القسم: ${getDisplayClassName(activeClass)}<br>
+                الشهر: $monthLabel
+            </div>
+        </div>
+        """)
+        html.append("<table class=\"sheet-table att\" style=\"table-layout: auto;\"><thead><tr>")
+        html.append("<th rowspan=\"2\">الرقم</th><th rowspan=\"2\">الاسم الكامل</th>")
+        days.forEach { d -> html.append("<th colspan=\"2\">${d.dayOfMonth}</th>") }
+        html.append("<th rowspan=\"2\">الحضور<br>المتوقع</th><th rowspan=\"2\">غياب<br>الشهر</th><th rowspan=\"2\">الحضور<br>الفعلي</th></tr><tr>")
+        days.forEach { _ -> html.append("<th>ص</th><th>م</th>") }
+        html.append("</tr></thead><tbody>")
+        sorted.forEachIndexed { index, st ->
+            var abs = 0
+            html.append("<tr class=\"${if (index % 2 == 1) "row-bg-accent" else ""}\"><td>${index + 1}</td><td class=\"nm\">${st.name}</td>")
+            days.forEach { d ->
+                val r = byKey[st.id to d.toString()]
+                val inCount = d.toString() in recordedDates
+                val m = r?.morningAbsent == true
+                val a = r?.afternoonAbsent == true
+                if (inCount) abs += (if (m) 1 else 0) + (if (a) 1 else 0)
+                html.append("<td>${if (m) "✗" else "&nbsp;"}</td><td>${if (a) "✗" else "&nbsp;"}</td>")
+            }
+            val actual = expected - abs
+            fun pct(n: Int) = if (expected > 0) Math.round(n * 100f / expected) else 0
+            html.append("<td>$expected<br>100%</td><td>$abs<br>${pct(abs)}%</td><td>$actual<br>${pct(actual)}%</td></tr>")
+        }
+        html.append("</tbody></table>")
+        html.append("""
+        <div class="sheet-footer-signals" style="margin-top: 14px; page-break-inside: avoid; break-inside: avoid;">
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المعلم</div>
+                <div style="height: 46px; display: flex; align-items: center; justify-content: center;">$teacherStampHtml</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المدير</div>
+                <div style="height: 46px; display: flex; align-items: center; justify-content: center;">$principalStampHtml</div>
+            </div>
+        </div>
+        """)
+        html.append("</div></body></html>")
+        return html.toString()
+    }
+
     // French Grades Entry List
     fun generateFrenchGradesEntryHtml(
         context: Context,
