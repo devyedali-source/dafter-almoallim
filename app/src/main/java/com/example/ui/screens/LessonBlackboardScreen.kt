@@ -29,6 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,10 +94,30 @@ fun LessonBlackboardScreen(
             .background(BoardBlack)
             .systemBarsPadding()
     ) {
+        // تقريب السبورة بإصبعين وسحبها، والنقر مرتين للعودة
+        var scale by remember { mutableStateOf(1f) }
+        var offX by remember { mutableStateOf(0f) }
+        var offY by remember { mutableStateOf(0f) }
+        var boxSize by remember { mutableStateOf(IntSize.Zero) }
         CompositionLocalProvider(LocalLayoutDirection provides direction) {
             BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxSize()
+                    .onSizeChanged { boxSize = it }
+                    .pointerInput(Unit) {
+                        detectTransformGestures { _, pan, zoom, _ ->
+                            val ns = (scale * zoom).coerceIn(1f, 5f)
+                            val maxX = (ns - 1f) * boxSize.width / 2f
+                            val maxY = (ns - 1f) * boxSize.height / 2f
+                            scale = ns
+                            offX = (offX + pan.x * ns).coerceIn(-maxX, maxX)
+                            offY = (offY + pan.y * ns).coerceIn(-maxY, maxY)
+                        }
+                    }
+                    .pointerInput(Unit) {
+                        detectTapGestures(onDoubleTap = { scale = 1f; offX = 0f; offY = 0f })
+                    }
+                    .graphicsLayer(scaleX = scale, scaleY = scale, translationX = offX, translationY = offY)
                     .padding(6.dp)
                     .border(3.dp, BoardFrame, RoundedCornerShape(6.dp))
                     .padding(4.dp)
