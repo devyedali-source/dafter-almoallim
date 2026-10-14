@@ -290,8 +290,8 @@ object LessonPreparationRepository {
 
     /**
      * يبني محتوى السبورة من التحضير نفسه دون إضافة معلومات جديدة:
-     * الدرس = النصوص التي يكتبها المعلم بنصها (بين « »)، التطبيق = تعليمة وتمرين خطوة التطبيق،
-     * الإدماج = تعليمة وربط خطوة الإدماج (إن وجدت).
+     * الدرس = النصوص التي يكتبها المعلم بنصها (بين « »)، التطبيق = ما يُطلب من التلاميذ في خطوة التطبيق،
+     * الإدماج = ما يُطلب منهم في خطوة الإدماج (إن وجدت). لا تدخل إجراءات المعلم.
      */
     private fun buildBoardData(prep: PreparationItem, isFrench: Boolean): com.example.data.planning.LessonBoardData? {
         val etapes = prep.deroulement.etapes
@@ -330,12 +330,22 @@ object LessonPreparationRepository {
             parts.joinToString("\n\n")
         }
 
+        // التطبيق/الإدماج: ما يطلب من التلاميذ فعله (تعليمة التلميذ + الأسئلة والنصوص المكتوبة)، دون إجراءات المعلم
+        val questionRegex = Regex("[^:؟.«»\\n]+؟")
         fun stepText(e: com.example.data.planning.canonical.PreparationEtape?): String {
             if (e == null) return ""
             val parts = mutableListOf<String>()
-            e.consigne?.takeIf { it.isNotBlank() }?.let { parts.add(it.trim()) }
-            val teacher = e.activites_enseignant.joinToString(" ").trim()
-            if (teacher.isNotBlank()) parts.add(boardShorten(teacher, 320))
+            e.consigne?.takeIf { it.isNotBlank() }?.let { parts.add("• " + it.trim()) }
+            val lines = e.activites_enseignant
+            val extra = mutableListOf<String>()
+            lines.forEach { line ->
+                boardExtractQuotes(line).filter { it.length >= 6 }.forEach { extra.add(it) }
+                questionRegex.findAll(line.replace(Regex("«[^»]*»"), "")).forEach { m ->
+                    val q = m.value.trim()
+                    if (q.length >= 6) extra.add(q)
+                }
+            }
+            extra.distinct().forEach { parts.add("• $it") }
             return parts.joinToString("\n\n")
         }
 
