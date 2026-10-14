@@ -143,8 +143,18 @@ data class LessonProposalData(
     val teachingAids: String, // الوسائل التعليمية
     val specificObjective: String, // الهدف المميز / الخاص للحصة
     val procedureSteps: List<LessonProcedureStep>, // جدول سير الحصة
-    val bookPages: LessonBookPages? = null // صفحات الكتاب المرتبطة بالتحضير
+    val bookPages: LessonBookPages? = null, // صفحات الكتاب المرتبطة بالتحضير
+    val board: LessonBoardData? = null // محتوى السبورة المقترح (الدرس، التطبيق، الإدماج)
 )
+
+/** محتوى السبورة: ما يكتبه المعلم ويكتبه التلاميذ. integration فارغ إذا لم يكن في الحصة إدماج. */
+data class LessonBoardData(
+    val lesson: String,
+    val application: String,
+    val integration: String = ""
+) {
+    val hasIntegration: Boolean get() = integration.isNotBlank()
+}
 
 /** صفحات كتاب مدرسي (صور داخل assets/books/<book>/<page>.webp). aux=true تعني «مقترح تربوي مساعد». */
 data class LessonBookPages(

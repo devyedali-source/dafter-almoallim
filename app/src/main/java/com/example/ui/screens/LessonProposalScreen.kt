@@ -130,6 +130,8 @@ fun LessonProposalScreen(
         mutableStateOf(initialTaught)
     }
 
+    var showBoard by remember(lesson.id) { mutableStateOf(false) }
+
     val domainText = remember(lesson, context) {
         val lvlCode = com.example.data.planning.canonical.OfficialAnnualPlanningRepository.getLevelCodeFromInt(lesson.level)
         val rawDomain = lesson.domain.ifBlank { "المجال العام" }
@@ -208,6 +210,7 @@ fun LessonProposalScreen(
     }
 
     DisableSelection {
+        Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -272,6 +275,25 @@ fun LessonProposalScreen(
                         }
                     }
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                    if (proposalDataState.value?.board != null) {
+                        Button(
+                            onClick = { showBoard = true },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF111111), contentColor = Color.White),
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp),
+                            modifier = Modifier.height(32.dp)
+                        ) {
+                            Text(
+                                text = if (fr) "Tableau" else "السبورة",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Black
+                            )
+                        }
+                    }
                     if (classId != 0L) {
                         OutlinedButton(
                             onClick = {
@@ -300,6 +322,7 @@ fun LessonProposalScreen(
                         ) {
                             Icon(Icons.Default.Close, contentDescription = "إغلاق", tint = InkDarkBlue)
                         }
+                    }
                     }
                 }
             }
@@ -675,6 +698,20 @@ fun LessonProposalScreen(
                     }
                 }
             }
+        }
+
+        if (showBoard) {
+            proposalDataState.value?.let { pd ->
+                LessonBlackboardScreen(
+                    data = pd,
+                    isFrench = fr,
+                    subjectFallback = lesson.subject,
+                    domainFallback = domainText,
+                    topicFallback = lesson.title,
+                    onClose = { showBoard = false }
+                )
+            }
+        }
         }
     }
 }
@@ -1679,7 +1716,7 @@ private fun BookPageImage(book: String, page: Int) {
  * يكبّر ورقة التحضير وصفحات الكتب معًا.
  */
 @Composable
-private fun ZoomableSheet(content: @Composable () -> Unit) {
+internal fun ZoomableSheet(content: @Composable () -> Unit) {
     val contentDirection = LocalLayoutDirection.current
     val baseDensity = LocalDensity.current
     var scale by remember { mutableStateOf(1f) }

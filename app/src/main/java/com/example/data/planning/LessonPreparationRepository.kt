@@ -243,8 +243,70 @@ object LessonPreparationRepository {
             procedureSteps = procedureSteps,
             bookPages = prep.livre?.takeIf { it.book.isNotBlank() && it.pages.isNotEmpty() }?.let {
                 com.example.data.planning.LessonBookPages(it.book, it.titre, it.pages, it.aux)
-            }
+            },
+            board = buildBoardData(prep, isFrench)
         )
+    }
+
+    private val boardSectionLabels = listOf(
+        "ألاحظ وأكتشف", "أنمي معارفي", "أتمرن", "أستنتج", "أطبق", "أوظف مكتسباتي", "أقوم مكتسباتي", "أثري تعلمي", "أختبر تعلمي"
+    )
+
+    private val boardQuoteRegex = Regex("[«“\"]([^»”\"]{6,})[»”\"]")
+
+    private fun boardShorten(text: String, max: Int): String {
+        val t = text.trim()
+        if (t.length <= max) return t
+        val cut = t.substring(0, max)
+        val end = maxOf(cut.lastIndexOf('.'), cut.lastIndexOf('؟'), cut.lastIndexOf('?'), cut.lastIndexOf('؛'), cut.lastIndexOf('\n'))
+        return (if (end > max / 2) cut.substring(0, end + 1) else cut.trimEnd() + "…").trim()
+    }
+
+    /**
+     * يبني محتوى السبورة من التحضير نفسه دون إضافة معلومات جديدة:
+     * الدرس = النصوص التي يكتبها المعلم بنصها (بين « »)، التطبيق = تعليمة وتمرين خطوة التطبيق،
+     * الإدماج = تعليمة وربط خطوة الإدماج (إن وجدت).
+     */
+    private fun buildBoardData(prep: PreparationItem, isFrench: Boolean): com.example.data.planning.LessonBoardData? {
+        val etapes = prep.deroulement.etapes
+        if (etapes.isEmpty()) return null
+        fun byCode(code: String) = etapes.firstOrNull { it.code == code }
+        val dev = byCode("developpement")
+        val pres = byCode("presentation")
+        val app = byCode("application")
+        val integ = byCode("integration")
+
+        fun quotes(e: com.example.data.planning.canonical.PreparationEtape?): List<String> =
+            e?.activites_enseignant.orEmpty()
+                .flatMap { line -> boardQuoteRegex.findAll(line).map { it.groupValues[1].trim() }.toList() }
+                .filter { it.length >= 10 && boardSectionLabels.none { label -> it.contains(label) && it.length <= label.length + 4 } }
+
+        var lessonParts = quotes(dev)
+        if (lessonParts.isEmpty()) lessonParts = quotes(pres)
+        val lessonText = if (lessonParts.isNotEmpty()) {
+            lessonParts.joinToString("\n\n")
+        } else {
+            val parts = mutableListOf<String>()
+            dev?.consigne?.takeIf { it.isNotBlank() }?.let { parts.add(it.trim()) }
+            if (prep.fiche.vocabulaire_cle.isNotEmpty()) {
+                parts.add((if (isFrench) "Mots-clés : " else "المفردات: ") + prep.fiche.vocabulaire_cle.joinToString(if (isFrench) ", " else "، "))
+            }
+            parts.joinToString("\n\n")
+        }
+
+        fun stepText(e: com.example.data.planning.canonical.PreparationEtape?): String {
+            if (e == null) return ""
+            val parts = mutableListOf<String>()
+            e.consigne?.takeIf { it.isNotBlank() }?.let { parts.add(it.trim()) }
+            val teacher = e.activites_enseignant.joinToString(" ").trim()
+            if (teacher.isNotBlank()) parts.add(boardShorten(teacher, 320))
+            return parts.joinToString("\n\n")
+        }
+
+        val application = stepText(app)
+        val integration = stepText(integ)
+        if (lessonText.isBlank() && application.isBlank() && integration.isBlank()) return null
+        return com.example.data.planning.LessonBoardData(lessonText, application, integration)
     }
 
     /**
