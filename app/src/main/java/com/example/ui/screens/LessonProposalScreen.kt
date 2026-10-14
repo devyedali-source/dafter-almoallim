@@ -6,6 +6,22 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateCentroid
+import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.graphics.asImageBitmap
@@ -316,7 +332,8 @@ fun LessonProposalScreen(
                 }
             } else {
                 CompositionLocalProvider(LocalLayoutDirection provides (if (fr) LayoutDirection.Ltr else LayoutDirection.Rtl)) {
-                    // Scrollable White Preparation Sheet
+                    // Scrollable White Preparation Sheet (قابلة للتقريب بإصبعين)
+                    ZoomableSheet {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
@@ -654,6 +671,7 @@ fun LessonProposalScreen(
                         item {
                             Spacer(modifier = Modifier.height(20.dp))
                         }
+                    }
                     }
                 }
             }
@@ -1649,6 +1667,87 @@ private fun BookPageImage(book: String, page: Int) {
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 2.dp, color = Color(0xFF1E3A8A))
+            }
+        }
+    }
+}
+
+
+/**
+ * تقريب الشاشة: قرص بإصبعين للتكبير والتصغير (من 1× إلى 3×)، سحب بإصبع واحد للتنقل جانبيًا
+ * عند التكبير، والنقر مرتين للتكبير أو للعودة إلى الحجم العادي. التمرير الطولي يبقى كما هو.
+ * يكبّر ورقة التحضير وصفحات الكتب معًا.
+ */
+@Composable
+private fun ZoomableSheet(content: @Composable () -> Unit) {
+    val contentDirection = LocalLayoutDirection.current
+    val baseDensity = LocalDensity.current
+    var scale by remember { mutableStateOf(1f) }
+    var offsetX by remember { mutableStateOf(0f) }
+    var widthPx by remember { mutableStateOf(0f) }
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .clipToBounds()
+                .onSizeChanged { widthPx = it.width.toFloat() }
+                .pointerInput(Unit) {
+                    detectTapGestures(onDoubleTap = { tap ->
+                        val target = if (scale > 1.05f) 1f else 2f
+                        val ratio = target / scale
+                        val maxOff = size.width * (target - 1f)
+                        offsetX = ((offsetX + tap.x) * ratio - tap.x).coerceIn(0f, maxOff)
+                        scale = target
+                    })
+                }
+                .pointerInput(Unit) {
+                    awaitEachGesture {
+                        awaitFirstDown(requireUnconsumed = false)
+                        do {
+                            val event = awaitPointerEvent(PointerEventPass.Initial)
+                            if (event.changes.size >= 2) {
+                                val zoom = event.calculateZoom()
+                                if (zoom != 1f) {
+                                    val c = event.calculateCentroid()
+                                    val newScale = (scale * zoom).coerceIn(1f, 3f)
+                                    val ratio = newScale / scale
+                                    val maxOff = size.width * (newScale - 1f)
+                                    offsetX = ((offsetX + c.x) * ratio - c.x).coerceIn(0f, maxOff)
+                                    scale = newScale
+                                    event.changes.forEach { it.consume() }
+                                }
+                            }
+                        } while (event.changes.any { it.pressed })
+                    }
+                }
+                .draggable(
+                    orientation = Orientation.Horizontal,
+                    enabled = scale > 1.05f,
+                    state = rememberDraggableState { delta ->
+                        val maxOff = widthPx * (scale - 1f)
+                        offsetX = (offsetX - delta).coerceIn(0f, maxOff)
+                    }
+                )
+        ) {
+            val viewWidth = maxWidth
+            val viewHeight = maxHeight
+            val s = scale
+            CompositionLocalProvider(
+                LocalDensity provides Density(baseDensity.density * s, baseDensity.fontScale)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .wrapContentSize(Alignment.TopStart, unbounded = true)
+                        .requiredSize(viewWidth, viewHeight / s)
+                        .graphicsLayer {
+                            transformOrigin = TransformOrigin(0f, 0f)
+                            translationX = -offsetX
+                        }
+                ) {
+                    CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
+                        content()
+                    }
+                }
             }
         }
     }
