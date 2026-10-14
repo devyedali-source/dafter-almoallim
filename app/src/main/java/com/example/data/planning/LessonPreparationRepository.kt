@@ -294,6 +294,14 @@ object LessonPreparationRepository {
      * الإدماج = ما يُطلب منهم في خطوة الإدماج (إن وجدت). لا تدخل إجراءات المعلم.
      */
     private fun buildBoardData(prep: PreparationItem, isFrench: Boolean): com.example.data.planning.LessonBoardData? {
+        // السبورة تُبنى من نص مكتوب خصيصاً للتلاميذ فقط؛ ولا تُشتق من عبارات التحضير الموجهة للمعلم
+        val t = prep.tableau ?: return null
+        if (t.lesson.isBlank() && t.application.isBlank()) return null
+        return com.example.data.planning.LessonBoardData(t.lesson, t.application, t.integration, t.aux)
+    }
+
+    @Suppress("unused")
+    private fun buildBoardDataFromPrep(prep: PreparationItem, isFrench: Boolean): com.example.data.planning.LessonBoardData? {
         val etapes = prep.deroulement.etapes
         if (etapes.isEmpty()) return null
         fun byCode(code: String) = etapes.firstOrNull { it.code == code }

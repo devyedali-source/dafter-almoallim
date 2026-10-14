@@ -86,7 +86,7 @@ fun LessonBlackboardScreen(
         (if (isFrench) "Matière : " else "المادة: ") + subject,
         (if (isFrench) "Domaine : " else "المجال: ") + domain,
         (if (isFrench) "Thème : " else "الموضوع: ") + topic
-    ).joinToString("\n")
+    ).joinToString("\n") + (if (board.aux) "\n\n" + (if (isFrench) "(Proposition pédagogique d'appui)" else "(مقترح تربوي مساعد)") else "")
 
     Box(
         modifier = Modifier

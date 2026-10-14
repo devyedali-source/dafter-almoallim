@@ -19,7 +19,8 @@ data class PreparationItem(
     val deroulement: PreparationDeroulement,
     val evaluation: PreparationEvaluation? = null,
     val continuity: PreparationContinuity? = null,
-    val livre: PreparationLivre? = null
+    val livre: PreparationLivre? = null,
+    val tableau: PreparationTableau? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -104,4 +105,13 @@ data class PreparationLivre(
     val titre: String = "",
     val pages: List<Int> = emptyList(),
     val aux: Boolean = false
+)
+
+/** سبورة المعلم المكتوبة: ما يكتبه المعلم وينقله التلاميذ في دفاترهم (الدرس، الإدماج، التمارين). */
+@JsonClass(generateAdapter = true)
+data class PreparationTableau(
+    val lesson: String = "",
+    val integration: String = "",
+    val application: String = "",
+    val aux: Boolean = true
 )

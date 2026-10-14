@@ -151,7 +151,8 @@ data class LessonProposalData(
 data class LessonBoardData(
     val lesson: String,
     val application: String,
-    val integration: String = ""
+    val integration: String = "",
+    val aux: Boolean = false
 ) {
     val hasIntegration: Boolean get() = integration.isNotBlank()
 }
