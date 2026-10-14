@@ -1447,6 +1447,10 @@ object HtmlReportHelper {
                 <div style="font-weight: 800; font-size: 11px;">توقيع المدير</div>
                 <div style="height: 46px; display: flex; align-items: center; justify-content: center;">$principalStampHtml</div>
             </div>
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المفتش</div>
+                <div style="height: 46px;"></div>
+            </div>
         </div>
         """)
         html.append("</div></body></html>")
