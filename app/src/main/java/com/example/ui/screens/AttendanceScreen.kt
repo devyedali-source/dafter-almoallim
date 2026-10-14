@@ -444,19 +444,22 @@ private fun AttendanceMonthPage(
                             }
                         }
                     }
-                    // إحصائيات الشهر: الحضور المتوقع / غياب الشهر / الحضور الفعلي
-                    val expected = days.size * 2
+                    // إحصائيات الشهر: الحضور المتوقع / غياب الشهر / الحضور الفعلي (حسب الأيام المسجلة)
+                    // المتوقع = الأيام التي أُنشئ لها سجل فقط × 2
+                    val recordedDates = records.map { it.date }.toSet()
+                    val daysCounted = days.filter { it.toString() in recordedDates }
+                    val expected = daysCounted.size * 2
                     val statW = 64.dp
                     val stats = listOf<Pair<String, (Student) -> Int>>(
                         "الحضور المتوقع" to { _ -> expected },
                         "غياب الشهر" to { st ->
-                            days.sumOf { d ->
+                            daysCounted.sumOf { d ->
                                 val r = byKey[st.id to d.toString()]
                                 (if (r?.morningAbsent == true) 1 else 0) + (if (r?.afternoonAbsent == true) 1 else 0)
                             }
                         },
                         "الحضور الفعلي" to { st ->
-                            expected - days.sumOf { d ->
+                            expected - daysCounted.sumOf { d ->
                                 val r = byKey[st.id to d.toString()]
                                 (if (r?.morningAbsent == true) 1 else 0) + (if (r?.afternoonAbsent == true) 1 else 0)
                             }
