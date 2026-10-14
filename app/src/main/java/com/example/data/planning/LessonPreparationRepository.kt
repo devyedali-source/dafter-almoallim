@@ -252,7 +252,33 @@ object LessonPreparationRepository {
         "ألاحظ وأكتشف", "أنمي معارفي", "أتمرن", "أستنتج", "أطبق", "أوظف مكتسباتي", "أقوم مكتسباتي", "أثري تعلمي", "أختبر تعلمي"
     )
 
-    private val boardQuoteRegex = Regex("[«“\"]([^»”\"]{6,})[»”\"]")
+    /** يستخرج النصوص المقتبسة من المستوى الأعلى بين « »، مع احترام الاقتباس المتداخل (« » داخل « »). */
+    private fun boardExtractQuotes(line: String): List<String> {
+        val out = mutableListOf<String>()
+        if (line.contains('«')) {
+            var depth = 0
+            var start = -1
+            for (i in line.indices) {
+                val c = line[i]
+                if (c == '«') {
+                    if (depth == 0) start = i + 1
+                    depth++
+                } else if (c == '»' && depth > 0) {
+                    depth--
+                    if (depth == 0 && start >= 0) {
+                        out.add(line.substring(start, i).trim())
+                        start = -1
+                    }
+                }
+            }
+        } else if (line.count { it == '"' } >= 2) {
+            val parts = line.split('"')
+            for (k in 1 until parts.size step 2) {
+                if (k < parts.size - 1) out.add(parts[k].trim())
+            }
+        }
+        return out
+    }
 
     private fun boardShorten(text: String, max: Int): String {
         val t = text.trim()
@@ -278,7 +304,7 @@ object LessonPreparationRepository {
 
         fun quotes(e: com.example.data.planning.canonical.PreparationEtape?): List<String> =
             e?.activites_enseignant.orEmpty()
-                .flatMap { line -> boardQuoteRegex.findAll(line).map { it.groupValues[1].trim() }.toList() }
+                .flatMap { line -> boardExtractQuotes(line) }
                 .filter { it.length >= 10 && boardSectionLabels.none { label -> it.contains(label) && it.length <= label.length + 4 } }
 
         var lessonParts = quotes(dev)
