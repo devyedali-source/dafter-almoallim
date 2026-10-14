@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -41,7 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -178,29 +181,113 @@ private fun BoardSection(title: String?, text: String, modifier: Modifier) {
     }
 }
 
-/** نص يصغَّر خطه تدريجياً حتى يتسع كله في المساحة المتاحة دون تمرير. */
+private sealed class BoardBlock {
+    data class Para(val text: String) : BoardBlock()
+    data class Table(val rows: List<List<String>>) : BoardBlock()
+    data class Fig(val name: String) : BoardBlock()
+}
+
+/** يفكّك نص القسم إلى فقرات وجداول (أسطر تبدأ بـ |) ورسومات (سطر [[fig:اسم]]). */
+private fun parseBoardBlocks(text: String): List<BoardBlock> {
+    val out = mutableListOf<BoardBlock>()
+    val para = StringBuilder()
+    val rows = mutableListOf<List<String>>()
+    fun flushPara() {
+        val t = para.toString().trim('\n')
+        if (t.isNotEmpty()) out.add(BoardBlock.Para(t))
+        para.clear()
+    }
+    fun flushRows() {
+        if (rows.isNotEmpty()) out.add(BoardBlock.Table(rows.toList()))
+        rows.clear()
+    }
+    for (line in text.split('\n')) {
+        val t = line.trim()
+        if (t.startsWith("[[fig:") && t.endsWith("]]")) {
+            flushPara(); flushRows()
+            out.add(BoardBlock.Fig(t.removePrefix("[[fig:").removeSuffix("]]").trim()))
+        } else if (t.startsWith("|")) {
+            flushPara()
+            rows.add(t.trim('|').split('|').map { it.trim() })
+        } else {
+            flushRows()
+            para.append(line).append('\n')
+        }
+    }
+    flushPara(); flushRows()
+    return out
+}
+
+/**
+ * يعرض محتوى القسم (نص وجداول ورسومات) ويصغّر الخط تدريجياً حتى يتسع كله في المساحة المتاحة دون تمرير.
+ */
 @Composable
 private fun AutoFitChalkText(text: String, modifier: Modifier) {
     BoxWithConstraints(modifier = modifier) {
+        val availPx = with(LocalDensity.current) { maxHeight.roundToPx() }
         var size by remember(text, maxWidth, maxHeight) { mutableStateOf(26f) }
         var ready by remember(text, maxWidth, maxHeight) { mutableStateOf(false) }
-        Text(
-            text = text,
-            style = ChalkStyle,
-            fontSize = size.sp,
-            lineHeight = (size * 1.45f).sp,
-            overflow = TextOverflow.Clip,
+        val blocks = remember(text) { parseBoardBlocks(text) }
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .drawWithContent { if (ready) drawContent() },
-            onTextLayout = { r ->
-                if (r.didOverflowHeight && size > 8f) {
-                    size = (size * 0.93f).coerceAtLeast(8f)
-                } else {
-                    ready = true
+                .fillMaxWidth()
+                .wrapContentHeight(align = Alignment.Top, unbounded = true)
+                .onSizeChanged { s ->
+                    if (s.height > availPx && size > 8f) {
+                        size = (size * 0.93f).coerceAtLeast(8f)
+                    } else {
+                        ready = true
+                    }
+                }
+                .drawWithContent { if (ready) drawContent() }
+        ) {
+            blocks.forEach { b ->
+                when (b) {
+                    is BoardBlock.Para -> Text(
+                        text = b.text,
+                        style = ChalkStyle,
+                        fontSize = size.sp,
+                        lineHeight = (size * 1.45f).sp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    is BoardBlock.Table -> BoardTable(b.rows, size)
+                    is BoardBlock.Fig -> BoardFigure(
+                        name = b.name,
+                        maxHeight = (size * 7f).dp,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
                 }
             }
-        )
+        }
+    }
+}
+
+@Composable
+private fun BoardTable(rows: List<List<String>>, size: Float) {
+    val cols = rows.maxOf { it.size }
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).border(2.dp, ChalkWhite)) {
+        rows.forEach { r ->
+            Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+                for (i in 0 until cols) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .border(1.dp, ChalkWhite)
+                            .padding(horizontal = 3.dp, vertical = 2.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = r.getOrElse(i) { "" },
+                            style = ChalkStyle,
+                            fontSize = (size * 0.92f).sp,
+                            lineHeight = (size * 1.3f).sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
