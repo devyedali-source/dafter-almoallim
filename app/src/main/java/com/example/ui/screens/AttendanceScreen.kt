@@ -469,7 +469,12 @@ private fun AttendanceMonthPage(
                             }
                             students.forEach { st ->
                                 Box(Modifier.width(statW).height(rowH).border(0.5.dp, Color.Gray), contentAlignment = Alignment.Center) {
-                                    Text("${calc(st)}", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                    val n = calc(st)
+                                    val pct = if (expected > 0) Math.round(n * 100f / expected) else 0
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Text("$n", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                        Text("$pct%", fontSize = 10.sp, color = BentoPrimaryDesc)
+                                    }
                                 }
                             }
                         }
