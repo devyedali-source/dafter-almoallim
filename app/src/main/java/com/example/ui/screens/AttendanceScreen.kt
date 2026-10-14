@@ -444,6 +444,36 @@ private fun AttendanceMonthPage(
                             }
                         }
                     }
+                    // إحصائيات الشهر: الحضور المتوقع / غياب الشهر / الحضور الفعلي
+                    val expected = days.size * 2
+                    val statW = 64.dp
+                    val stats = listOf<Pair<String, (Student) -> Int>>(
+                        "الحضور المتوقع" to { _ -> expected },
+                        "غياب الشهر" to { st ->
+                            days.sumOf { d ->
+                                val r = byKey[st.id to d.toString()]
+                                (if (r?.morningAbsent == true) 1 else 0) + (if (r?.afternoonAbsent == true) 1 else 0)
+                            }
+                        },
+                        "الحضور الفعلي" to { st ->
+                            expected - days.sumOf { d ->
+                                val r = byKey[st.id to d.toString()]
+                                (if (r?.morningAbsent == true) 1 else 0) + (if (r?.afternoonAbsent == true) 1 else 0)
+                            }
+                        }
+                    )
+                    stats.forEach { (label, calc) ->
+                        Column {
+                            Box(Modifier.width(statW).height(rowH * 2).border(0.5.dp, Color.Gray).background(BentoLightPink), contentAlignment = Alignment.Center) {
+                                Text(label, fontWeight = FontWeight.Bold, fontSize = 11.sp, textAlign = TextAlign.Center)
+                            }
+                            students.forEach { st ->
+                                Box(Modifier.width(statW).height(rowH).border(0.5.dp, Color.Gray), contentAlignment = Alignment.Center) {
+                                    Text("${calc(st)}", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
