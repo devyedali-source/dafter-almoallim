@@ -480,6 +480,36 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     private val deletedGlobalSubjectIds = MutableStateFlow<Set<Long>>(emptySet())
     private val _students = MutableStateFlow<List<Student>>(emptyList())
     private val _grades = MutableStateFlow<List<Grade>>(emptyList())
+    private val _attendance = MutableStateFlow<List<com.example.data.models.AttendanceRecord>>(emptyList())
+    val attendance: StateFlow<List<com.example.data.models.AttendanceRecord>> = _attendance.asStateFlow()
+
+    /** أيام التدريس (MON..FRI) — افتراضياً كل أيام الأسبوع الدراسي */
+    private val _teachingDays = MutableStateFlow(
+        (prefs.getString("teaching_days", null) ?: "MON,TUE,WED,THU,FRI").split(",").filter { it.isNotBlank() }.toSet()
+    )
+    val teachingDays: StateFlow<Set<String>> = _teachingDays.asStateFlow()
+
+    fun saveTeachingDays(days: Set<String>) {
+        _teachingDays.value = days
+        prefs.edit().putString("teaching_days", days.joinToString(",")).apply()
+    }
+
+    /** يحفظ سجل غياب يوم كامل لقسم: لكل تلميذ (صباحاً، مساءً) غائب أم لا */
+    fun saveAttendanceDay(classId: Long, date: String, absences: Map<Long, Pair<Boolean, Boolean>>) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            val records = absences.map { (sid, p) ->
+                com.example.data.models.AttendanceRecord(sid, date, classId, p.first, p.second)
+            }
+            repository.insertAttendance(records)
+        }
+    }
+
+    fun deleteAttendanceDay(classId: Long, date: String) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            repository.deleteAttendanceDay(classId, date)
+        }
+    }
+
     private val _manualTermAverages = MutableStateFlow<List<com.example.data.models.StudentManualTermAverage>>(emptyList())
     val manualTermAverages: StateFlow<List<com.example.data.models.StudentManualTermAverage>> = _manualTermAverages.asStateFlow()
     private val _customizations = MutableStateFlow<List<ClassSubjectCustomization>>(emptyList())
@@ -743,6 +773,11 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             launch {
                 activeRepo.allGrades.collect { list ->
                     _grades.value = list
+                }
+            }
+            launch {
+                activeRepo.allAttendance.collect { list ->
+                    _attendance.value = list
                 }
             }
             launch {
@@ -3037,6 +3072,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                 viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
                     try {
                         repository.deleteManualTermAveragesByClass(id)
+                        repository.deleteAttendanceByClass(id)
                         repository.deleteGradesByClass(id)
                         repository.deleteStudentsByClass(id)
                         repository.deleteCustomizationsByClass(id)
@@ -3115,6 +3151,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             try {
                 repository.deleteGradesByStudent(id)
                 repository.deleteManualTermAveragesByStudent(id)
+                repository.deleteAttendanceByStudent(id)
                 repository.deleteStudent(id)
             } catch (e: Exception) {
                 e.printStackTrace()

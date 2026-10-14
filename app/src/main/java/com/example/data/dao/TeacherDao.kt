@@ -13,6 +13,7 @@ import com.example.data.models.ClassSubjectCustomization
 import com.example.data.models.TeacherExchangePost
 import com.example.data.models.StudentManualTermAverage
 import com.example.data.models.LocalNotification
+import com.example.data.models.AttendanceRecord
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -160,7 +161,8 @@ interface TeacherDao {
         grades: List<Grade>,
         customizations: List<ClassSubjectCustomization>,
         manualTermAverages: List<StudentManualTermAverage>,
-        localNotifications: List<LocalNotification>
+        localNotifications: List<LocalNotification>,
+        attendance: List<AttendanceRecord> = emptyList()
     ) {
         deleteAllClassSections()
         deleteAllStudents()
@@ -169,6 +171,7 @@ interface TeacherDao {
         deleteAllCustomizations()
         deleteAllManualTermAverages()
         deleteAllLocalNotifications()
+        deleteAllAttendance()
 
         insertClassSections(sections)
         insertStudents(students)
@@ -177,7 +180,30 @@ interface TeacherDao {
         insertCustomizations(customizations)
         insertManualTermAverages(manualTermAverages)
         insertLocalNotifications(localNotifications)
+        insertAttendance(attendance)
     }
+
+    // --- Attendance ---
+    @Query("SELECT * FROM attendance_records")
+    fun getAllAttendance(): Flow<List<AttendanceRecord>>
+
+    @Query("SELECT * FROM attendance_records")
+    suspend fun getAllAttendanceList(): List<AttendanceRecord>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAttendance(records: List<AttendanceRecord>)
+
+    @Query("DELETE FROM attendance_records")
+    suspend fun deleteAllAttendance()
+
+    @Query("DELETE FROM attendance_records WHERE classId = :classId AND date = :date")
+    suspend fun deleteAttendanceDay(classId: Long, date: String)
+
+    @Query("DELETE FROM attendance_records WHERE studentId = :studentId")
+    suspend fun deleteAttendanceByStudent(studentId: Long)
+
+    @Query("DELETE FROM attendance_records WHERE classId = :classId")
+    suspend fun deleteAttendanceByClass(classId: Long)
 
     // --- Teacher Exchange Posts ---
     @Query("SELECT * FROM teacher_exchange_posts ORDER BY timestamp DESC")

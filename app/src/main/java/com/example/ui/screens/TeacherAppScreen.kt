@@ -2184,6 +2184,17 @@ fun ClassStudentsSubview(
         }
     }
 
+    var showAttendance by remember { mutableStateOf(false) }
+    if (showAttendance) {
+        AttendanceScreen(
+            viewModel = viewModel,
+            section = activeSection,
+            students = classStudents,
+            onClose = { showAttendance = false }
+        )
+        return
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -2191,6 +2202,10 @@ fun ClassStudentsSubview(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
+            OutlinedButton(
+                onClick = { showAttendance = true },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("الغياب") }
         }
 
         // Smaller Add Student Button and Search Toggle in a Row
