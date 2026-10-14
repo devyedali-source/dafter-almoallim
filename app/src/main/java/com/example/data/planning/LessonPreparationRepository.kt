@@ -309,8 +309,18 @@ object LessonPreparationRepository {
 
         var lessonParts = quotes(dev)
         if (lessonParts.isEmpty()) lessonParts = quotes(pres)
+        // دروس القراءة: يضاف جدول المفردات الذي يثبّته المعلم على السبورة بعد مطلع النص
+        val isReading = prep.official.domaine.endsWith("LECT")
+        val vocabLines = if (isReading) {
+            dev?.activites_enseignant.orEmpty()
+                .filter { it.contains("المفردات") && it.contains(":") }
+                .map { it.substringAfter(":").trim() }
+                .filter { it.isNotBlank() }
+                .map { (if (isFrench) "Vocabulaire : " else "المفردات: ") + it }
+        } else emptyList()
+
         val lessonText = if (lessonParts.isNotEmpty()) {
-            lessonParts.joinToString("\n\n")
+            (lessonParts + vocabLines).joinToString("\n\n")
         } else {
             val parts = mutableListOf<String>()
             dev?.consigne?.takeIf { it.isNotBlank() }?.let { parts.add(it.trim()) }
