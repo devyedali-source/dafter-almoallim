@@ -131,6 +131,7 @@ fun LessonProposalScreen(
     }
 
     var showBoard by remember(lesson.id) { mutableStateOf(false) }
+    var showBook by remember(lesson.id) { mutableStateOf(false) }
 
     val domainText = remember(lesson, context) {
         val lvlCode = com.example.data.planning.canonical.OfficialAnnualPlanningRepository.getLevelCodeFromInt(lesson.level)
@@ -289,6 +290,21 @@ fun LessonProposalScreen(
                         ) {
                             Text(
                                 text = if (fr) "Tableau" else "السبورة",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Black
+                            )
+                        }
+                    }
+                    if (proposalDataState.value?.bookPages != null) {
+                        Button(
+                            onClick = { showBook = true },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = InkDarkBlue, contentColor = Color.White),
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp),
+                            modifier = Modifier.height(32.dp)
+                        ) {
+                            Text(
+                                text = if (fr) "Manuel" else "صفحات الكتاب",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Black
                             )
@@ -681,16 +697,6 @@ fun LessonProposalScreen(
                             }
                         }
 
-                        // صفحات الكتاب المرتبطة بالتحضير: تظهر بعد انتهاء ورقة التحضير
-                        proposalData.bookPages?.let { bp ->
-                            item(key = "book_pages_header") {
-                                BookPagesHeader(bp = bp, isFrench = fr)
-                            }
-                            items(bp.pages, key = { "book_${bp.book}_$it" }) { pageNumber ->
-                                BookPageImage(book = bp.book, page = pageNumber)
-                            }
-                        }
-
                         item {
                             Spacer(modifier = Modifier.height(20.dp))
                         }
@@ -700,6 +706,11 @@ fun LessonProposalScreen(
             }
         }
 
+        if (showBook) {
+            proposalDataState.value?.bookPages?.let { bp ->
+                BookPagesViewer(bp = bp, isFrench = fr, onClose = { showBook = false })
+            }
+        }
         if (showBoard) {
             proposalDataState.value?.let { pd ->
                 LessonBlackboardScreen(
@@ -1784,6 +1795,66 @@ internal fun ZoomableSheet(content: @Composable () -> Unit) {
                     CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
                         content()
                     }
+                }
+            }
+        }
+    }
+}
+
+
+/** عرض صفحات الكتاب المرتبطة بالتحضير في شاشة مستقلة، مع التقريب بإصبعين. */
+@Composable
+private fun BookPagesViewer(
+    bp: com.example.data.planning.LessonBookPages,
+    isFrench: Boolean,
+    onClose: () -> Unit
+) {
+    androidx.activity.compose.BackHandler(onBack = onClose)
+    CompositionLocalProvider(LocalLayoutDirection provides (if (isFrench) LayoutDirection.Ltr else LayoutDirection.Rtl)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF1F5F9))
+        ) {
+            Surface(modifier = Modifier.fillMaxWidth(), color = PaperPureWhite, shadowElevation = 1.dp) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .statusBarsPadding()
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    IconButton(
+                        onClick = onClose,
+                        modifier = Modifier
+                            .size(36.dp)
+                            .background(Color(0xFFF8FAFC), CircleShape)
+                    ) {
+                        Icon(Icons.Default.Close, contentDescription = "إغلاق", tint = InkDarkBlue)
+                    }
+                    Text(
+                        text = if (isFrench) "Pages du manuel" else "صفحات الكتاب",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Black,
+                        color = InkDarkBlue
+                    )
+                }
+            }
+            ZoomableSheet {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 10.dp, vertical = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item(key = "book_pages_header") {
+                        BookPagesHeader(bp = bp, isFrench = isFrench)
+                    }
+                    items(bp.pages, key = { "book_${bp.book}_$it" }) { pageNumber ->
+                        BookPageImage(book = bp.book, page = pageNumber)
+                    }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
                 }
             }
         }
