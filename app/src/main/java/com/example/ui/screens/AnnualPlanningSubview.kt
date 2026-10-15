@@ -835,8 +835,12 @@ private fun WeeksListScreen(
             }
             val officialLabel = cleanLabelExams(rawOfficialLabel)
 
-            val weekPreps = remember(levelCode, weekNumber) {
-                OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, weekNumber).size
+            val weekInstances = remember(levelCode, weekNumber) {
+                OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, weekNumber)
+            }
+            val weekPreps = weekInstances.size
+            val weekContent = remember(weekInstances, levelCode) {
+                com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, weekInstances)
             }
 
             val (cardBg, borderColor, badgeBg, badgeColor) = when (weekType) {
@@ -908,6 +912,7 @@ private fun WeeksListScreen(
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
+                        ContentChips(weekContent.first, weekContent.second, weekPreps)
                     }
 
                     Row(
@@ -1161,10 +1166,14 @@ private fun SubjectsListScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(activeSubjects, key = { it.nom }) { subject ->
-                val prepCount = remember(levelCode, selectedWeek, subject) {
-                    OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek).count {
+                val subjectInstances = remember(levelCode, selectedWeek, subject) {
+                    OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek).filter {
                         it.matiere.equals(subject.nom, ignoreCase = true) || it.matiere.equals(subject.code, ignoreCase = true)
                     }
+                }
+                val prepCount = subjectInstances.size
+                val subjectContent = remember(subjectInstances, levelCode) {
+                    com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, subjectInstances)
                 }
 
                 Card(
@@ -1202,12 +1211,15 @@ private fun SubjectsListScreen(
                                 }
                             }
 
-                            Text(
-                                text = OfficialAnnualPlanningRepository.mapMatiereToArabic(subject.nom),
-                                fontWeight = FontWeight.Black,
-                                fontSize = 14.5.sp,
-                                color = BentoPrimary
-                            )
+                            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                Text(
+                                    text = OfficialAnnualPlanningRepository.mapMatiereToArabic(subject.nom),
+                                    fontWeight = FontWeight.Black,
+                                    fontSize = 14.5.sp,
+                                    color = BentoPrimary
+                                )
+                                ContentChips(subjectContent.first, subjectContent.second, prepCount)
+                            }
                         }
 
                         Row(
@@ -1279,11 +1291,15 @@ private fun DomainsListScreen(
                     getDomainArabicLabel(context, levelCode, domainCode)
                 }
 
-                val prepCount = remember(levelCode, selectedWeek, selectedSubject, domainCode) {
-                    OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek).count {
+                val domainInstances = remember(levelCode, selectedWeek, selectedSubject, domainCode) {
+                    OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek).filter {
                         (it.matiere.equals(selectedSubject.nom, ignoreCase = true) || it.matiere.equals(selectedSubject.code, ignoreCase = true)) &&
                         it.domaine == domainCode
                     }
+                }
+                val prepCount = domainInstances.size
+                val domainContent = remember(domainInstances, levelCode) {
+                    com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, domainInstances)
                 }
 
                 Card(
@@ -1328,6 +1344,7 @@ private fun DomainsListScreen(
                                     fontSize = 14.sp,
                                     color = BentoPrimary
                                 )
+                                ContentChips(domainContent.first, domainContent.second, prepCount)
                             }
                         }
 
@@ -1495,6 +1512,11 @@ private fun LessonsListScreen(
                                     }
                                 }
                             }
+
+                            val lessonFlags = remember(lesson, levelCode) {
+                                com.example.data.planning.LessonPreparationRepository.contentFlags(context, levelCode, lesson)
+                            }
+                            LessonContentChips(lessonFlags.first, lessonFlags.second)
 
                             if (cleanComp.isNotBlank()) {
                                 Text(
@@ -2405,3 +2427,55 @@ private data class QuadColor(
     val badgeBg: Color,
     val badgeColor: Color
 )
+
+
+/** شارتان صغيرتان: كم درسًا له كتاب وكم درسًا له سبورة (من إجمالي الدروس). */
+@Composable
+internal fun ContentChips(books: Int, boards: Int, total: Int) {
+    if (total <= 0) return
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Surface(shape = RoundedCornerShape(5.dp), color = Color(0xFFE3F2FD)) {
+            Text(
+                text = "📖 $books/$total",
+                fontSize = 9.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1565C0),
+                modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+            )
+        }
+        Surface(shape = RoundedCornerShape(5.dp), color = Color(0xFFEEEEEE)) {
+            Text(
+                text = "⬛ $boards/$total",
+                fontSize = 9.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF212121),
+                modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+            )
+        }
+    }
+}
+
+/** في صف الدرس: هل فيه صفحات كتاب؟ وهل فيه سبورة؟ قبل فتح التحضير. */
+@Composable
+internal fun LessonContentChips(hasBook: Boolean, hasBoard: Boolean) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Surface(shape = RoundedCornerShape(5.dp), color = if (hasBook) Color(0xFFE3F2FD) else Color(0xFFF5F5F5)) {
+            Text(
+                text = if (hasBook) "📖 فيه كتاب" else "بلا كتاب",
+                fontSize = 9.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (hasBook) Color(0xFF1565C0) else Color(0xFF9E9E9E),
+                modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+            )
+        }
+        Surface(shape = RoundedCornerShape(5.dp), color = if (hasBoard) Color(0xFFEEEEEE) else Color(0xFFF5F5F5)) {
+            Text(
+                text = if (hasBoard) "⬛ فيه سبورة" else "بلا سبورة",
+                fontSize = 9.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (hasBoard) Color(0xFF212121) else Color(0xFF9E9E9E),
+                modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+            )
+        }
+    }
+}

@@ -456,6 +456,44 @@ object LessonPreparationRepository {
         return null
     }
 
+    private fun levelIntOf(levelCode: String): Int =
+        when (OfficialAnnualPlanningRepository.normalizeLevelCode(levelCode)) {
+            "1AP" -> 1
+            "2AP" -> 2
+            "3AP" -> 3
+            "4AP" -> 4
+            "5AP" -> 5
+            "6AP" -> 6
+            else -> 1
+        }
+
+    private fun findPrepFor(
+        lvl: Int,
+        inst: com.example.data.planning.canonical.CanonicalLessonInstance
+    ): PreparationItem? {
+        val list = prepsByLevelAndWeek[Pair(lvl, inst.semaine)] ?: return null
+        return (list.firstOrNull {
+            it.first.official.lesson_unit_id.equals(inst.lesson_unit_id, ignoreCase = true) &&
+                it.first.official.partie == inst.partie
+        } ?: list.firstOrNull {
+            it.first.official.lesson_unit_id.equals(inst.lesson_unit_id, ignoreCase = true)
+        })?.first
+    }
+
+    /** هل للدرس صفحات كتاب؟ وهل له سبورة مكتوبة؟ (قبل فتح التحضير) */
+    fun contentFlags(
+        context: Context,
+        levelCode: String,
+        inst: com.example.data.planning.canonical.CanonicalLessonInstance
+    ): Pair<Boolean, Boolean> {
+        initialize(context)
+        val prep = findPrepFor(levelIntOf(levelCode), inst) ?: return Pair(false, false)
+        val hasBook = !prep.livre?.pages.isNullOrEmpty()
+        val t = prep.tableau
+        val hasBoard = t != null && (t.lesson.isNotBlank() || t.application.isNotBlank())
+        return Pair(hasBook, hasBoard)
+    }
+
     /**
      * عدد الدروس التي لها صفحات كتاب وعدد التي لها سبورة مكتوبة، من بين الدروس المعطاة.
      * يعيد Pair(عدد محتوى الكتب، عدد محتوى السبورات).
@@ -465,29 +503,12 @@ object LessonPreparationRepository {
         levelCode: String,
         instances: List<com.example.data.planning.canonical.CanonicalLessonInstance>
     ): Pair<Int, Int> {
-        initialize(context)
-        val lvl = when (OfficialAnnualPlanningRepository.normalizeLevelCode(levelCode)) {
-            "1AP" -> 1
-            "2AP" -> 2
-            "3AP" -> 3
-            "4AP" -> 4
-            "5AP" -> 5
-            "6AP" -> 6
-            else -> 1
-        }
         var books = 0
         var boards = 0
         for (inst in instances) {
-            val list = prepsByLevelAndWeek[Pair(lvl, inst.semaine)] ?: continue
-            val prep = (list.firstOrNull {
-                it.first.official.lesson_unit_id.equals(inst.lesson_unit_id, ignoreCase = true) &&
-                    it.first.official.partie == inst.partie
-            } ?: list.firstOrNull {
-                it.first.official.lesson_unit_id.equals(inst.lesson_unit_id, ignoreCase = true)
-            })?.first ?: continue
-            if (!prep.livre?.pages.isNullOrEmpty()) books++
-            val t = prep.tableau
-            if (t != null && (t.lesson.isNotBlank() || t.application.isNotBlank())) boards++
+            val (b, t) = contentFlags(context, levelCode, inst)
+            if (b) books++
+            if (t) boards++
         }
         return Pair(books, boards)
     }
