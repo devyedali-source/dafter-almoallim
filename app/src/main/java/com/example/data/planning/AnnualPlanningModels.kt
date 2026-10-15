@@ -157,7 +157,7 @@ data class LessonBoardData(
     val hasIntegration: Boolean get() = integration.isNotBlank()
 }
 
-/** صفحات كتاب مدرسي (صور داخل assets/books/<book>/<page>.webp). aux=true تعني «مقترح تربوي مساعد». */
+/** صفحات كتاب مدرسي (صور داخل حزمة books: books/<book>/<page>.webp). aux=true تعني «مقترح تربوي مساعد». */
 data class LessonBookPages(
     val book: String,
     val title: String,

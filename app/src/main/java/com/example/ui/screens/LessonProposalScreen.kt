@@ -1674,19 +1674,27 @@ private fun BookPagesHeader(bp: com.example.data.planning.LessonBookPages, isFre
     }
 }
 
-/** صورة صفحة من الكتاب مخزنة في assets/books/<book>/<page>.webp. */
+/** صورة صفحة من الكتاب: تُقرأ من حزمة الكتب التي تنزّلها Google Play بعد التثبيت. */
 @Composable
 private fun BookPageImage(book: String, page: Int) {
     val context = LocalContext.current
     val bitmapState = produceState<androidx.compose.ui.graphics.ImageBitmap?>(initialValue = null, book, page) {
-        value = withContext(Dispatchers.IO) {
-            try {
-                val path = "books/$book/" + page.toString().padStart(3, '0') + ".webp"
-                context.assets.open(path).use { input ->
-                    android.graphics.BitmapFactory.decodeStream(input)?.asImageBitmap()
+        var tries = 0
+        while (value == null && tries < 200) {
+            value = withContext(Dispatchers.IO) {
+                try {
+                    com.example.data.BookPack.open(context, book, page)?.use { input ->
+                        android.graphics.BitmapFactory.decodeStream(input)?.asImageBitmap()
+                    }
+                } catch (e: Exception) {
+                    null
                 }
-            } catch (e: Exception) {
-                null
+            }
+            if (value == null) {
+                // الحزمة لم تصل بعد: اطلب التنزيل وأعد المحاولة بعد قليل
+                com.example.data.BookPack.requestDownload(context)
+                kotlinx.coroutines.delay(3000)
+                tries++
             }
         }
     }
@@ -1714,7 +1722,16 @@ private fun BookPageImage(book: String, page: Int) {
                     .height(240.dp),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 2.dp, color = Color(0xFF1E3A8A))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 2.dp, color = Color(0xFF1E3A8A))
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "جاري تحميل الكتب… تحتاج إنترنت مرة واحدة فقط",
+                        fontSize = 11.sp,
+                        color = Color(0xFF6B7280),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

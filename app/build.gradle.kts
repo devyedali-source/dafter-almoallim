@@ -17,8 +17,8 @@ android {
     applicationId = "com.elyedali.schoolmanager"
     minSdk = 24
     targetSdk = 36
-    versionCode = 28
-    versionName = "0.0.0.28"
+    versionCode = 29
+    versionName = "0.0.0.29"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -80,6 +80,7 @@ android {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
   }
+  assetPacks += listOf(":books_pack")
   buildFeatures {
     compose = true
     buildConfig = true
@@ -133,6 +134,7 @@ dependencies {
   implementation(libs.play.services.auth)
   implementation(libs.play.app.update)
   implementation(libs.play.app.update.ktx)
+  implementation(libs.play.asset.delivery)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.logging.interceptor)
