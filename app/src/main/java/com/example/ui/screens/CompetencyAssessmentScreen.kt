@@ -102,6 +102,22 @@ fun CompetencyAssessmentScreen(
                 ) { Text("PDF كل المواد") }
             }
 
+            OutlinedButton(
+                onClick = {
+                    if (catalog.isNotEmpty()) {
+                        val blank = (1..60).map { Student(id = -it.toLong(), name = "", classId = section.id) }
+                        val html = com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
+                            ctx, section, blank, catalog, emptyMap(), emptyMap(), viewModel
+                        )
+                        com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
+                            ctx, html, "نموذج_فارغ_تقييم_الكفايات_جميع_المواد.pdf", isLandscape = true
+                        )
+                    }
+                },
+                enabled = catalog.isNotEmpty(),
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("PDF فارغ لكل المواد (60 سطراً)") }
+
             if (catalog.isEmpty()) {
                 Text("لا توجد كفايات متاحة لهذا المستوى.", color = BentoPrimaryDesc, modifier = Modifier.padding(16.dp))
                 return@Column
