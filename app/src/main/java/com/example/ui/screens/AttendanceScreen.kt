@@ -140,7 +140,7 @@ fun AttendanceScreen(
             else -> Column(Modifier.fillMaxSize().padding(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-                    Text("الغياب — ${section.name}", fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
+                    Text("دفتر الغياب — ${section.name}", fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
                 }
                 Spacer(Modifier.height(8.dp))
                 Button(

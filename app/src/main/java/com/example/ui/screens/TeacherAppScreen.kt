@@ -2217,7 +2217,7 @@ fun ClassStudentsSubview(
                 OutlinedButton(
                     onClick = { showAttendance = true },
                     modifier = Modifier.weight(1f)
-                ) { Text("الغياب") }
+                ) { Text("دفتر الغياب") }
                 OutlinedButton(
                     onClick = { showCompetency = true },
                     modifier = Modifier.weight(1f)
