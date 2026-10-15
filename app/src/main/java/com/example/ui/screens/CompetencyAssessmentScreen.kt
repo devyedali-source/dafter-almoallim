@@ -49,6 +49,11 @@ fun CompetencyAssessmentScreen(
     val all by viewModel.competencies.collectAsState()
     val sorted = remember(students) { students.sortedBy { it.id } }
 
+    // بدون تلاميذ: يُسحب نموذج فارغ بـ 60 سطراً ليُكتب بالقلم بعد الطباعة
+    val exportStudents = remember(students, section.id) {
+        if (students.isEmpty()) (1..60).map { Student(id = -it.toLong(), name = "", classId = section.id) } else students
+    }
+
     var discIdx by remember { mutableStateOf(0) }
     var chunkIdx by remember { mutableStateOf(0) }
     var tab by remember { mutableStateOf(0) } // 0 = دفتر المتابعة ، 1 = جدول الدعم
@@ -71,14 +76,14 @@ fun CompetencyAssessmentScreen(
                     onClick = {
                         if (disc != null) {
                             val html = com.example.ui.HtmlReportHelper.generateCompetencyHtml(
-                                ctx, section, students, disc, marks, notes, viewModel
+                                ctx, section, exportStudents, disc, marks, notes, viewModel
                             )
                             com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
                                 ctx, html, "تقييم_الكفايات_${disc.label}.pdf", isLandscape = true
                             )
                         }
                     },
-                    enabled = disc != null && students.isNotEmpty(),
+                    enabled = disc != null,
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                 ) { Text("PDF المادة") }
                 Spacer(Modifier.width(6.dp))
@@ -86,14 +91,14 @@ fun CompetencyAssessmentScreen(
                     onClick = {
                         if (catalog.isNotEmpty()) {
                             val html = com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
-                                ctx, section, students, catalog, marks, notes, viewModel
+                                ctx, section, exportStudents, catalog, marks, notes, viewModel
                             )
                             com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
                                 ctx, html, "تقييم_الكفايات_جميع_المواد_${section.name}.pdf", isLandscape = true
                             )
                         }
                     },
-                    enabled = catalog.isNotEmpty() && students.isNotEmpty()
+                    enabled = catalog.isNotEmpty()
                 ) { Text("PDF كل المواد") }
             }
 
@@ -102,8 +107,10 @@ fun CompetencyAssessmentScreen(
                 return@Column
             }
             if (students.isEmpty()) {
-                Text("أضف تلاميذ إلى القسم أولاً.", color = BentoPrimaryDesc, modifier = Modifier.padding(16.dp))
-                return@Column
+                Text(
+                    "لا يوجد تلاميذ في القسم. يمكنك سحب نموذج فارغ بـ 60 سطراً (PDF) وتعبئته يدوياً، أو أضف التلاميذ ليظهروا في الجدول.",
+                    color = BentoPrimaryDesc, fontSize = 12.sp, modifier = Modifier.padding(vertical = 6.dp)
+                )
             }
 
             val disc = catalog[discIdx.coerceIn(0, catalog.lastIndex)]
