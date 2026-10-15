@@ -531,10 +531,23 @@ fun ClassTimetableSubview(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         items(subjectChoices) { sc ->
-                            AssistChip(onClick = { subject = sc; french = sc.contains("Fran", ignoreCase = true) }, label = { Text(sc, fontSize = 11.sp) })
+                            AssistChip(onClick = { subject = sc; branch = ""; french = sc.contains("Fran", ignoreCase = true) }, label = { Text(sc, fontSize = 11.sp) })
                         }
                     }
                     OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("المادة") }, singleLine = true)
+                    val branchChoices = remember(subject, level) {
+                        (listOf(level) + (1..6).filter { it != level })
+                            .flatMap { OfficialTimetableRepository.getTimetableForLevel(it) }
+                            .filter { it.subject == subject && it.branch.isNotBlank() }
+                            .map { it.branch }.distinct()
+                    }
+                    if (branchChoices.isNotEmpty()) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            items(branchChoices) { bc ->
+                                AssistChip(onClick = { branch = bc }, label = { Text(bc, fontSize = 11.sp) })
+                            }
+                        }
+                    }
                     OutlinedTextField(value = branch, onValueChange = { branch = it }, label = { Text("الفرع / النشاط") }, singleLine = true)
                     OutlinedTextField(
                         value = minutes, onValueChange = { minutes = it.filter { c -> c.isDigit() }.take(3) },
