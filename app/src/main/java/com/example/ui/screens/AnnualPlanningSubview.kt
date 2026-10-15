@@ -347,32 +347,62 @@ private fun AnnualPlanningScreenContent(
                     }
 
                     // Dynamic Count Badge (الأعداد تُحسب ديناميكيًا من المجموعات الفعلية)
-                    val activeCount = remember(currentLevel, selectedTerm, selectedWeek, selectedSubject, selectedDomain, levelCode) {
+                    val activeInstances = remember(currentLevel, selectedTerm, selectedWeek, selectedSubject, selectedDomain, levelCode) {
                         when (currentLevel) {
-                            NavLevel.TERMS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).size
-                            NavLevel.WEEKS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).count { it.fasl == selectedTerm }
-                            NavLevel.SUBJECTS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1).size
-                            NavLevel.DOMAINS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1).count { it.matiere.equals(selectedSubject?.nom, ignoreCase = true) || it.matiere.equals(selectedSubject?.code, ignoreCase = true) }
-                            NavLevel.LESSONS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1).count {
+                            NavLevel.TERMS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode)
+                            NavLevel.WEEKS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).filter { it.fasl == selectedTerm }
+                            NavLevel.SUBJECTS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1)
+                            NavLevel.DOMAINS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1).filter { it.matiere.equals(selectedSubject?.nom, ignoreCase = true) || it.matiere.equals(selectedSubject?.code, ignoreCase = true) }
+                            NavLevel.LESSONS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1).filter {
                                 (it.matiere.equals(selectedSubject?.nom, ignoreCase = true) || it.matiere.equals(selectedSubject?.code, ignoreCase = true)) &&
                                 (it.domaine.equals(selectedDomain, ignoreCase = true) || getDomainArabicLabel(context, levelCode, it.domaine).equals(selectedDomain, ignoreCase = true))
                             }
-                            else -> 0
+                            else -> emptyList()
                         }
+                    }
+                    val activeCount = activeInstances.size
+                    val booksAndBoards = remember(activeInstances, levelCode) {
+                        com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, activeInstances)
                     }
 
                     val countLabel = if (activeCount > 10) "تحضيراً" else "تحاضير"
-                    Surface(
-                        shape = RoundedCornerShape(8.dp),
-                        color = Color(0xFFE8F5E9)
-                    ) {
-                        Text(
-                            text = "$activeCount $countLabel",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Black,
-                            color = Color(0xFF2E7D32),
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
+                    Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = Color(0xFFE8F5E9)
+                        ) {
+                            Text(
+                                text = "$activeCount $countLabel",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Black,
+                                color = Color(0xFF2E7D32),
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = Color(0xFFE3F2FD)
+                        ) {
+                            Text(
+                                text = "محتوى كتب: ${booksAndBoards.first}",
+                                fontSize = 10.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF1565C0),
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                            )
+                        }
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = Color(0xFFEEEEEE)
+                        ) {
+                            Text(
+                                text = "محتوى سبورات: ${booksAndBoards.second}",
+                                fontSize = 10.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF212121),
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                            )
+                        }
                     }
                 }
 

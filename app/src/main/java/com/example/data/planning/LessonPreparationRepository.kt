@@ -457,6 +457,42 @@ object LessonPreparationRepository {
     }
 
     /**
+     * عدد الدروس التي لها صفحات كتاب وعدد التي لها سبورة مكتوبة، من بين الدروس المعطاة.
+     * يعيد Pair(عدد محتوى الكتب، عدد محتوى السبورات).
+     */
+    fun countBooksAndBoards(
+        context: Context,
+        levelCode: String,
+        instances: List<com.example.data.planning.canonical.CanonicalLessonInstance>
+    ): Pair<Int, Int> {
+        initialize(context)
+        val lvl = when (OfficialAnnualPlanningRepository.normalizeLevelCode(levelCode)) {
+            "1AP" -> 1
+            "2AP" -> 2
+            "3AP" -> 3
+            "4AP" -> 4
+            "5AP" -> 5
+            "6AP" -> 6
+            else -> 1
+        }
+        var books = 0
+        var boards = 0
+        for (inst in instances) {
+            val list = prepsByLevelAndWeek[Pair(lvl, inst.semaine)] ?: continue
+            val prep = (list.firstOrNull {
+                it.first.official.lesson_unit_id.equals(inst.lesson_unit_id, ignoreCase = true) &&
+                    it.first.official.partie == inst.partie
+            } ?: list.firstOrNull {
+                it.first.official.lesson_unit_id.equals(inst.lesson_unit_id, ignoreCase = true)
+            })?.first ?: continue
+            if (!prep.livre?.pages.isNullOrEmpty()) books++
+            val t = prep.tableau
+            if (t != null && (t.lesson.isNotBlank() || t.application.isNotBlank())) boards++
+        }
+        return Pair(books, boards)
+    }
+
+    /**
      * Retrieves the raw PreparationItem if needed for advanced pedagogical inspection.
      */
     fun getRawPreparation(preparationId: String): PreparationItem? {
