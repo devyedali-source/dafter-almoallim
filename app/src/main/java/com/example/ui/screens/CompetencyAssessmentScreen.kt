@@ -70,7 +70,7 @@ fun CompetencyAssessmentScreen(
         Column(Modifier.fillMaxSize().padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-                Text("تقييم الكفايات — ${section.name}", fontWeight = FontWeight.Bold, fontSize = 17.sp, modifier = Modifier.weight(1f))
+                Text("دفتر المتابعة — ${section.name}", fontWeight = FontWeight.Bold, fontSize = 17.sp, modifier = Modifier.weight(1f))
                 val disc = catalog.getOrNull(discIdx)
                 Button(
                     onClick = {
@@ -79,13 +79,13 @@ fun CompetencyAssessmentScreen(
                                 ctx, section, exportStudents, disc, marks, notes, viewModel
                             )
                             com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
-                                ctx, html, "تقييم_الكفايات_${disc.label}.pdf", isLandscape = true
+                                ctx, html, "دفتر_المتابعة_${disc.label}.pdf", isLandscape = true
                             )
                         }
                     },
                     enabled = disc != null,
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-                ) { Text("PDF المادة") }
+                ) { Text("سحب لائحة المادة") }
                 Spacer(Modifier.width(6.dp))
                 OutlinedButton(
                     onClick = {
@@ -94,12 +94,12 @@ fun CompetencyAssessmentScreen(
                                 ctx, section, exportStudents, catalog, marks, notes, viewModel
                             )
                             com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
-                                ctx, html, "تقييم_الكفايات_جميع_المواد_${section.name}.pdf", isLandscape = true
+                                ctx, html, "دفتر_المتابعة_جميع_المواد_${section.name}.pdf", isLandscape = true
                             )
                         }
                     },
                     enabled = catalog.isNotEmpty()
-                ) { Text("PDF كل المواد") }
+                ) { Text("سحب لوائح كل المواد") }
             }
 
             OutlinedButton(
@@ -110,13 +110,13 @@ fun CompetencyAssessmentScreen(
                             ctx, section, blank, catalog, emptyMap(), emptyMap(), viewModel
                         )
                         com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
-                            ctx, html, "نموذج_فارغ_تقييم_الكفايات_جميع_المواد.pdf", isLandscape = true
+                            ctx, html, "دفتر_المتابعة_فارغ_جميع_المواد.pdf", isLandscape = true
                         )
                     }
                 },
                 enabled = catalog.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("PDF فارغ لكل المواد (60 سطراً)") }
+            ) { Text("سحب لوائح فارغة لكل المواد (60 سطراً)") }
 
             if (catalog.isEmpty()) {
                 Text("لا توجد كفايات متاحة لهذا المستوى.", color = BentoPrimaryDesc, modifier = Modifier.padding(16.dp))
@@ -153,7 +153,7 @@ fun CompetencyAssessmentScreen(
 
             Spacer(Modifier.height(4.dp))
             TabRow(selectedTabIndex = tab, containerColor = Color.Transparent) {
-                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text("دفتر المتابعة") })
+                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text("تقييم الكفايات") })
                 Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text("جدول الدعم") })
             }
             Spacer(Modifier.height(6.dp))

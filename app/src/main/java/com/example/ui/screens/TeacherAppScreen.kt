@@ -2221,7 +2221,7 @@ fun ClassStudentsSubview(
                 OutlinedButton(
                     onClick = { showCompetency = true },
                     modifier = Modifier.weight(1f)
-                ) { Text("تقييم الكفايات") }
+                ) { Text("دفتر المتابعة") }
             }
         }
 
