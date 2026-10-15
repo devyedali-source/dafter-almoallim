@@ -30,6 +30,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.data.models.ClassSection
 import com.example.data.planning.AnnualPlanningRepository
 import com.example.data.planning.DayOfWeekAr
+import com.example.data.planning.CustomTimetableStore
 import com.example.data.planning.OfficialTimetableRepository
 import com.example.data.planning.OfficialTimetableSlot
 import com.example.data.planning.TimetablePeriodType
@@ -122,8 +123,28 @@ fun ClassTimetableSubview(
     var showAdjustDialog by remember { mutableStateOf(false) }
 
     // Retrieve active level timetable slots
-    val daySlots = remember(level, selectedDay) {
-        OfficialTimetableRepository.getSlotsForDay(level, selectedDay)
+    // جدول شخصي محلي (اختياري): إن وُجد يُعرض بدل الجدول الرسمي
+    var customSlots by remember(activeClass.id) { mutableStateOf(CustomTimetableStore.load(context, activeClass.id)) }
+    var editMode by remember { mutableStateOf(false) }
+    var editingSlot by remember { mutableStateOf<OfficialTimetableSlot?>(null) }
+    var addingPeriod by remember { mutableStateOf<TimetablePeriodType?>(null) }
+    var showResetConfirm by remember { mutableStateOf(false) }
+
+    val daySlots = remember(level, selectedDay, customSlots) {
+        val src = customSlots
+        if (src != null) {
+            src.filter { it.day == selectedDay }.sortedWith(compareBy({ it.periodType.ordinal }, { it.slotIndex }))
+        } else {
+            OfficialTimetableRepository.getSlotsForDay(level, selectedDay)
+        }
+    }
+
+    /** أي تعديل يبدأ من نسخة من الجدول الرسمي ثم يُحفظ محلياً */
+    fun mutateTimetable(change: (List<OfficialTimetableSlot>) -> List<OfficialTimetableSlot>) {
+        val base = customSlots ?: OfficialTimetableRepository.getTimetableForLevel(level)
+        val updated = change(base)
+        CustomTimetableStore.save(context, activeClass.id, updated)
+        customSlots = updated
     }
 
     val periodBeforeRecess = remember(daySlots) {
@@ -176,7 +197,7 @@ fun ClassTimetableSubview(
                         color = BentoLightLavender
                     ) {
                         Text(
-                            text = "رسمي",
+                            text = if (customSlots != null) "شخصي" else "رسمي",
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Black,
@@ -351,6 +372,27 @@ fun ClassTimetableSubview(
             contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            item {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = { editMode = !editMode },
+                        modifier = Modifier.weight(1f)
+                    ) { Text(if (editMode) "إنهاء التعديل" else "تعديل جدولي") }
+                    if (customSlots != null) {
+                        OutlinedButton(
+                            onClick = { showResetConfirm = true },
+                            modifier = Modifier.weight(1f)
+                        ) { Text("العودة للجدول الرسمي") }
+                    }
+                }
+                if (editMode) {
+                    Text(
+                        "تعديلك يُحفظ على هذا الجهاز فقط، ولا يغيّر الجدول الرسمي.",
+                        fontSize = 11.sp, color = BentoPrimaryDesc, modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
+
             // PERIOD 1: MORNING 08:00 -> 10:00
             item {
                 PeriodHeaderCard(
@@ -364,7 +406,16 @@ fun ClassTimetableSubview(
                 item { EmptyPeriodCard() }
             } else {
                 items(periodBeforeRecess, key = { it.id }) { slot ->
-                    TimetableSlotCard(slot = slot)
+                    TimetableSlotCard(
+                        slot = slot, editMode = editMode,
+                        onEdit = { editingSlot = slot },
+                        onDelete = { mutateTimetable { l -> l.filter { it.id != slot.id } } }
+                    )
+                }
+            }
+            if (editMode) {
+                item {
+                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_BEFORE_RECESS }) { Text("＋ إضافة حصة") }
                 }
             }
 
@@ -386,7 +437,16 @@ fun ClassTimetableSubview(
                 item { EmptyPeriodCard() }
             } else {
                 items(periodAfterRecess, key = { it.id }) { slot ->
-                    TimetableSlotCard(slot = slot)
+                    TimetableSlotCard(
+                        slot = slot, editMode = editMode,
+                        onEdit = { editingSlot = slot },
+                        onDelete = { mutateTimetable { l -> l.filter { it.id != slot.id } } }
+                    )
+                }
+            }
+            if (editMode) {
+                item {
+                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_AFTER_RECESS }) { Text("＋ إضافة حصة") }
                 }
             }
 
@@ -421,10 +481,97 @@ fun ClassTimetableSubview(
                 }
             } else {
                 items(periodAfternoon, key = { it.id }) { slot ->
-                    TimetableSlotCard(slot = slot)
+                    TimetableSlotCard(
+                        slot = slot, editMode = editMode,
+                        onEdit = { editingSlot = slot },
+                        onDelete = { mutateTimetable { l -> l.filter { it.id != slot.id } } }
+                    )
+                }
+            }
+            if (editMode) {
+                item {
+                    TextButton(onClick = { addingPeriod = TimetablePeriodType.AFTERNOON }) { Text("＋ إضافة حصة") }
                 }
             }
         }
+    }
+
+    if (showResetConfirm) {
+        AlertDialog(
+            onDismissRequest = { showResetConfirm = false },
+            title = { Text("العودة للجدول الرسمي") },
+            text = { Text("سيُحذف جدولك الشخصي ويُعرض الجدول الرسمي. هل تريد المتابعة؟") },
+            confirmButton = {
+                TextButton(onClick = {
+                    CustomTimetableStore.clear(context, activeClass.id)
+                    customSlots = null
+                    editMode = false
+                    showResetConfirm = false
+                }) { Text("نعم") }
+            },
+            dismissButton = { TextButton(onClick = { showResetConfirm = false }) { Text("إلغاء") } }
+        )
+    }
+
+    val dialogSlot = editingSlot
+    val dialogPeriod = addingPeriod
+    if (dialogSlot != null || dialogPeriod != null) {
+        val subjectChoices = remember(level) {
+            OfficialTimetableRepository.getTimetableForLevel(level).map { it.subject }.distinct()
+        }
+        var subject by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.subject ?: "") }
+        var branch by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.branch ?: "") }
+        var minutes by remember(dialogSlot, dialogPeriod) { mutableStateOf((dialogSlot?.durationMinutes ?: 30).toString()) }
+        var french by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.isFrench ?: false) }
+        val close = { editingSlot = null; addingPeriod = null }
+        AlertDialog(
+            onDismissRequest = close,
+            title = { Text(if (dialogSlot != null) "تعديل الحصة" else "إضافة حصة") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        items(subjectChoices) { sc ->
+                            AssistChip(onClick = { subject = sc; french = sc.contains("Fran", ignoreCase = true) }, label = { Text(sc, fontSize = 11.sp) })
+                        }
+                    }
+                    OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("المادة") }, singleLine = true)
+                    OutlinedTextField(value = branch, onValueChange = { branch = it }, label = { Text("الفرع / النشاط") }, singleLine = true)
+                    OutlinedTextField(
+                        value = minutes, onValueChange = { minutes = it.filter { c -> c.isDigit() }.take(3) },
+                        label = { Text("المدة بالدقائق") }, singleLine = true
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { french = !french }) {
+                        Checkbox(checked = french, onCheckedChange = { french = it })
+                        Text("حصة فرنسية")
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = subject.isNotBlank(),
+                    onClick = {
+                        val dur = minutes.toIntOrNull()?.coerceIn(5, 240) ?: 30
+                        if (dialogSlot != null) {
+                            mutateTimetable { l ->
+                                l.map { if (it.id == dialogSlot.id) it.copy(subject = subject.trim(), branch = branch.trim(), durationMinutes = dur, isFrench = french) else it }
+                            }
+                        } else if (dialogPeriod != null) {
+                            mutateTimetable { l ->
+                                val next = (l.filter { it.day == selectedDay }.maxOfOrNull { it.slotIndex } ?: 0) + 1
+                                l + OfficialTimetableSlot(
+                                    id = "C_${selectedDay.code}_${System.currentTimeMillis()}",
+                                    level = level, day = selectedDay, periodType = dialogPeriod,
+                                    slotIndex = next, subject = subject.trim(), branch = branch.trim(),
+                                    durationMinutes = dur, isFrench = french
+                                )
+                            }
+                        }
+                        close()
+                    }
+                ) { Text("حفظ") }
+            },
+            dismissButton = { TextButton(onClick = close) { Text("إلغاء") } }
+        )
     }
 
     // 4. HIJRI ADJUSTMENT CALENDAR PICKER DIALOG
@@ -753,7 +900,10 @@ private fun RecessCard() {
 
 @Composable
 private fun TimetableSlotCard(
-    slot: OfficialTimetableSlot
+    slot: OfficialTimetableSlot,
+    editMode: Boolean = false,
+    onEdit: () -> Unit = {},
+    onDelete: () -> Unit = {}
 ) {
     val icon = remember(slot.subject, slot.branch) {
         val sub = slot.subject.lowercase()
@@ -836,6 +986,14 @@ private fun TimetableSlotCard(
                 }
             }
 
+            if (editMode) {
+                IconButton(onClick = onEdit, modifier = Modifier.size(32.dp)) {
+                    Icon(Icons.Default.Edit, contentDescription = "تعديل", tint = BentoPrimary, modifier = Modifier.size(18.dp))
+                }
+                IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
+                    Icon(Icons.Default.Delete, contentDescription = "حذف", tint = Color(0xFFD32F2F), modifier = Modifier.size(18.dp))
+                }
+            }
             Surface(
                 shape = RoundedCornerShape(6.dp),
                 color = Color(0xFFF1F5F9)
