@@ -33,5 +33,6 @@ data class BackupData(
     val manualTermAverages: List<StudentManualTermAverage> = emptyList(),
     val teacherSettings: Map<String, String> = emptyMap(),
     val localNotifications: List<LocalNotification> = emptyList(),
-    val attendance: List<com.example.data.models.AttendanceRecord> = emptyList()
+    val attendance: List<com.example.data.models.AttendanceRecord> = emptyList(),
+    val competencies: List<com.example.data.models.CompetencyEntry> = emptyList()
 )

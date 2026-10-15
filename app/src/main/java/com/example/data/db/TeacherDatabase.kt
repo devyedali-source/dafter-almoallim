@@ -14,6 +14,7 @@ import com.example.data.models.TeacherExchangePost
 import com.example.data.models.StudentManualTermAverage
 import com.example.data.models.LocalNotification
 import com.example.data.models.AttendanceRecord
+import com.example.data.models.CompetencyEntry
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.util.concurrent.ConcurrentHashMap
@@ -28,9 +29,10 @@ import java.util.concurrent.ConcurrentHashMap
         TeacherExchangePost::class,
         StudentManualTermAverage::class,
         LocalNotification::class,
-        AttendanceRecord::class
+        AttendanceRecord::class,
+        CompetencyEntry::class
     ],
-    version = 19,
+    version = 20,
     exportSchema = false
 )
 abstract class TeacherDatabase : RoomDatabase() {
@@ -45,6 +47,17 @@ abstract class TeacherDatabase : RoomDatabase() {
                     "CREATE TABLE IF NOT EXISTS `attendance_records` (`studentId` INTEGER NOT NULL, `date` TEXT NOT NULL, `classId` INTEGER NOT NULL, `morningAbsent` INTEGER NOT NULL, `afternoonAbsent` INTEGER NOT NULL, PRIMARY KEY(`studentId`, `date`))"
                 )
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_attendance_records_classId_date` ON `attendance_records` (`classId`, `date`)")
+            }
+        }
+
+        /** إضافة جدول تقييم الكفايات دون المساس بأي بيانات موجودة */
+        private val MIGRATION_19_20 = object : Migration(19, 20) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `competency_entries` (`classId` INTEGER NOT NULL, `studentId` INTEGER NOT NULL, `entryKey` TEXT NOT NULL, `value` INTEGER NOT NULL, `note` TEXT NOT NULL, PRIMARY KEY(`classId`, `studentId`, `entryKey`))"
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_competency_entries_classId` ON `competency_entries` (`classId`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_competency_entries_studentId` ON `competency_entries` (`studentId`)")
             }
         }
 
@@ -64,7 +77,7 @@ abstract class TeacherDatabase : RoomDatabase() {
                         TeacherDatabase::class.java,
                         dbName
                     )
-                    .addMigrations(MIGRATION_18_19)
+                    .addMigrations(MIGRATION_18_19, MIGRATION_19_20)
                     .fallbackToDestructiveMigration()
                     .build().also { INSTANCES[dbName] = it }
                 }

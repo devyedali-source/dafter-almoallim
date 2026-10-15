@@ -2195,6 +2195,17 @@ fun ClassStudentsSubview(
         return
     }
 
+    var showCompetency by remember { mutableStateOf(false) }
+    if (showCompetency) {
+        CompetencyAssessmentScreen(
+            viewModel = viewModel,
+            section = activeSection,
+            students = classStudents,
+            onClose = { showCompetency = false }
+        )
+        return
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -2202,10 +2213,16 @@ fun ClassStudentsSubview(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
-            OutlinedButton(
-                onClick = { showAttendance = true },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("الغياب") }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(
+                    onClick = { showAttendance = true },
+                    modifier = Modifier.weight(1f)
+                ) { Text("الغياب") }
+                OutlinedButton(
+                    onClick = { showCompetency = true },
+                    modifier = Modifier.weight(1f)
+                ) { Text("تقييم الكفايات") }
+            }
         }
 
         // Smaller Add Student Button and Search Toggle in a Row

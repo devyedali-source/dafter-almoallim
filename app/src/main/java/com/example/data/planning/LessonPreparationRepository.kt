@@ -516,6 +516,50 @@ object LessonPreparationRepository {
     /**
      * Retrieves the raw PreparationItem if needed for advanced pedagogical inspection.
      */
+    /** مجال داخل مادة: الكفايات (1..3) ونصّها المأخوذ من المنهاج الموريتاني */
+    data class CompSphere(val code: String, val label: String, val cbs: Map<Int, String>)
+    data class CompDiscipline(val code: String, val label: String, val spheres: List<CompSphere>)
+
+    private val competencyCatalogCache = mutableMapOf<Int, List<CompDiscipline>>()
+
+    /**
+     * فهرس المواد والمجالات والكفايات (K1..K3) لمستوى معيّن، من بيانات التحضير الرسمية.
+     * التربية البدنية مستثناة (نشاط ساحة وليست درساً).
+     */
+    fun getCompetencyCatalog(context: Context, level: Int): List<CompDiscipline> {
+        initialize(context)
+        synchronized(this) {
+            competencyCatalogCache[level]?.let { return it }
+            val prefix = "${level}AP|"
+            val order = listOf("TIS", "AR", "FR", "MATH", "SCI", "SOC", "CIV", "ART", "TIC")
+            val labels = LinkedHashMap<String, String>()
+            val spheres = LinkedHashMap<String, LinkedHashMap<String, Pair<String, MutableMap<Int, String>>>>()
+            for (prep in rawPrepItemsCache.values) {
+                val o = prep.official
+                if (!o.lesson_unit_id.startsWith(prefix)) continue
+                if (o.matiere == "EPS") continue
+                labels.putIfAbsent(o.matiere, o.matiere_label ?: o.matiere)
+                val sph = spheres.getOrPut(o.matiere) { LinkedHashMap() }
+                val entry = sph.getOrPut(o.domaine) { Pair(o.domaine_label ?: o.domaine, mutableMapOf()) }
+                val k = o.competence?.filter { it.isDigit() }?.toIntOrNull() ?: continue
+                if (k !in 1..3) continue
+                val txt = (o.competence_enonce ?: "").trim()
+                    .replace(Regex("^ك\\s*:\\s*"), "")
+                if (txt.isNotBlank()) entry.second.putIfAbsent(k, txt)
+            }
+            val result = labels.keys
+                .sortedBy { val i = order.indexOf(it); if (i < 0) 99 else i }
+                .map { m ->
+                    CompDiscipline(
+                        m, labels[m] ?: m,
+                        spheres[m].orEmpty().map { (code, v) -> CompSphere(code, v.first, v.second.toSortedMap()) }
+                    )
+                }
+            competencyCatalogCache[level] = result
+            return result
+        }
+    }
+
     fun getRawPreparation(preparationId: String): PreparationItem? {
         return rawPrepItemsCache[preparationId]
     }

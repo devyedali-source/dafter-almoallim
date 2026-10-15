@@ -337,6 +337,7 @@ class GoogleDriveBackupManager(
             val manualTermAverages = repository.getAllManualTermAveragesList()
             val localNotifications = repository.getAllLocalNotificationsList()
             val attendance = repository.getAllAttendanceList()
+            val competencies = repository.getAllCompetenciesList()
 
             val settingsKeys = listOf(
                 "stamp_teacher_name", "stamp_teacher_role", "stamp_teacher_shape", "stamp_teacher_financial_id", "stamp_teacher_show_in_reports",
@@ -374,7 +375,8 @@ class GoogleDriveBackupManager(
                 manualTermAverages = manualTermAverages,
                 teacherSettings = teacherSettings,
                 localNotifications = localNotifications,
-                attendance = attendance
+                attendance = attendance,
+                competencies = competencies
             )
 
             val jsonContent = backupAdapter.toJson(backupData)
@@ -526,7 +528,8 @@ class GoogleDriveBackupManager(
                 customizations = backupData.customizations,
                 manualTermAverages = backupData.manualTermAverages,
                 localNotifications = backupData.localNotifications,
-                attendance = backupData.attendance
+                attendance = backupData.attendance,
+                competencies = backupData.competencies
             )
 
             try {

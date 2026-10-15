@@ -483,6 +483,20 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     private val _attendance = MutableStateFlow<List<com.example.data.models.AttendanceRecord>>(emptyList())
     val attendance: StateFlow<List<com.example.data.models.AttendanceRecord>> = _attendance.asStateFlow()
 
+    private val _competencies = MutableStateFlow<List<com.example.data.models.CompetencyEntry>>(emptyList())
+    val competencies: StateFlow<List<com.example.data.models.CompetencyEntry>> = _competencies.asStateFlow()
+
+    /** يحفظ خانة تقييم: value=0 وملاحظة فارغة تعني حذف الخانة */
+    fun saveCompetencyEntry(classId: Long, studentId: Long, entryKey: String, value: Int, note: String = "") {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            if (value == 0 && note.isBlank()) {
+                repository.deleteCompetency(classId, studentId, entryKey)
+            } else {
+                repository.insertCompetencies(listOf(com.example.data.models.CompetencyEntry(classId, studentId, entryKey, value, note)))
+            }
+        }
+    }
+
     /** أيام التدريس (MON..FRI) — افتراضياً كل أيام الأسبوع الدراسي */
     private val _teachingDays = MutableStateFlow(
         (prefs.getString("teaching_days", null) ?: "MON,TUE,WED,THU,FRI").split(",").filter { it.isNotBlank() }.toSet()
@@ -773,6 +787,11 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             launch {
                 activeRepo.allGrades.collect { list ->
                     _grades.value = list
+                }
+            }
+            launch {
+                activeRepo.allCompetencies.collect { list ->
+                    _competencies.value = list
                 }
             }
             launch {
@@ -3073,6 +3092,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     try {
                         repository.deleteManualTermAveragesByClass(id)
                         repository.deleteAttendanceByClass(id)
+                        repository.deleteCompetenciesByClass(id)
                         repository.deleteGradesByClass(id)
                         repository.deleteStudentsByClass(id)
                         repository.deleteCustomizationsByClass(id)
@@ -3152,6 +3172,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                 repository.deleteGradesByStudent(id)
                 repository.deleteManualTermAveragesByStudent(id)
                 repository.deleteAttendanceByStudent(id)
+                repository.deleteCompetenciesByStudent(id)
                 repository.deleteStudent(id)
             } catch (e: Exception) {
                 e.printStackTrace()

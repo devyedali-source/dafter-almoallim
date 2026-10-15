@@ -1457,6 +1457,134 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    private fun escCompHtml(t: String) = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    /**
+     * دفتر متابعة القسم (تقييم الكفايات) + جدول دعم المجموعات، لمادة واحدة.
+     * marks: مفتاحها "studentId|المادة|المجال|k" وقيمتها 1 (+) أو -1 (−).
+     * notes: مفتاحها "SUP|المادة|k" وقيمتها نص خانة «الدعم المدرسي».
+     */
+    fun generateCompetencyHtml(
+        context: Context,
+        activeClass: ClassSection,
+        students: List<Student>,
+        discipline: com.example.data.planning.LessonPreparationRepository.CompDiscipline,
+        marks: Map<String, Int>,
+        notes: Map<String, String>,
+        viewModel: TeacherViewModel? = null
+    ): String {
+        val teacherStampHtml = if (viewModel != null) getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
+        val principalStampHtml = if (viewModel != null) getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
+        val sorted = students.sortedBy { it.id }
+        val seal = getMauritanianSealImg(context)
+        val styles = getCommonStyles(isLandscape = true, isList = true, schoolName = activeClass.schoolName, fileTitle = "دفتر متابعة القسم")
+        val discLabel = escCompHtml(discipline.label)
+
+        fun header(title: String) = """
+        <div class="header-section">
+            <div class="header-column right">
+                الجمهورية الإسلامية الموريتانية<br>
+                وزارة التربية وإصلاح النظام التعليمي<br>
+                الإدارة الجهوية للتربية: ${escCompHtml(activeClass.wilaya.ifBlank { "غوركل" })}<br>
+                مفتشية مقاطعة: ${escCompHtml(activeClass.moughataa.ifBlank { "لكصيبه 1" })}<br>
+                مدرسة: ${escCompHtml(activeClass.schoolName.ifBlank { "الطلحايه 1" })}
+            </div>
+            <div class="header-column center">
+                $seal
+                <div class="header-title-main" style="margin-top: 6px;">$title</div>
+            </div>
+            <div class="header-column left">
+                شرف - إخاء - عدالة<br>
+                السنة الدراسية: ${escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })}<br>
+                القسم: ${escCompHtml(getDisplayClassName(activeClass))}<br>
+                المادة: $discLabel
+            </div>
+        </div>
+        """
+
+        val footer = """
+        <div class="sheet-footer-signals" style="margin-top: 14px; page-break-inside: avoid; break-inside: avoid;">
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المعلم</div>
+                <div style="height: 46px; display: flex; align-items: center; justify-content: center;">$teacherStampHtml</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المدير</div>
+                <div style="height: 46px; display: flex; align-items: center; justify-content: center;">$principalStampHtml</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المفتش</div>
+                <div style="height: 46px;"></div>
+            </div>
+        </div>
+        """
+
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر متابعة القسم</title>$styles")
+        html.append("<style>.cmp td, .cmp th { padding: 2px 3px !important; font-size: 9px !important; } .cmp .nm { text-align: right; padding-right: 5px !important; font-weight: bold; white-space: nowrap; } .cmp .mk { font-size: 12px !important; font-weight: 900; } .cmp .lg { font-size: 8px; text-align: right; margin-top: 6px; line-height: 1.5; } .pg { page-break-after: always; break-after: page; } .pg:last-child { page-break-after: auto; break-after: auto; }</style>")
+        html.append("</head><body>")
+
+        val chunks = discipline.spheres.chunked(3).ifEmpty { listOf(emptyList()) }
+        chunks.forEachIndexed { ci, chunk ->
+            val isLast = ci == chunks.lastIndex
+            // ---------- الصفحة 1: دفتر متابعة القسم ----------
+            html.append("<div class=\"sheet-card pg\">")
+            html.append(header("دفتر متابعة القسم<br><span style=\"font-size:10px;font-weight:600;\">Cahier de suivi de classe</span>"))
+            html.append("<div style=\"font-size:10px;font-weight:700;margin:4px 0;\">نبيّن بإشارة (+) الكفايات التي امتلكها التلاميذ وبإشارة (−) الكفايات التي لم يمتلكوها.</div>")
+            html.append("<table class=\"sheet-table cmp\" style=\"table-layout: auto;\"><thead>")
+            html.append("<tr><th rowspan=\"2\">الرقم</th><th rowspan=\"2\">اسم التلميذ<br>Nom de l'élève</th>")
+            chunk.forEach { sp -> html.append("<th colspan=\"3\">المجال / Sphère<br>${escCompHtml(sp.label)}</th>") }
+            html.append("</tr><tr>")
+            chunk.forEach { _ -> for (k in 1..3) html.append("<th>الكفاية $k<br>CB$k</th>") }
+            html.append("</tr></thead><tbody>")
+            sorted.forEachIndexed { i, st ->
+                html.append("<tr class=\"${if (i % 2 == 1) "row-bg-accent" else ""}\"><td>${i + 1}</td><td class=\"nm\">${escCompHtml(st.name)}</td>")
+                chunk.forEach { sp ->
+                    for (k in 1..3) {
+                        val v = marks["${st.id}|${discipline.code}|${sp.code}|$k"] ?: 0
+                        val txt = when { v > 0 -> "+"; v < 0 -> "−"; else -> "&nbsp;" }
+                        html.append("<td class=\"mk\">$txt</td>")
+                    }
+                }
+                html.append("</tr>")
+            }
+            html.append("</tbody></table>")
+            val legend = StringBuilder()
+            chunk.forEach { sp ->
+                sp.cbs.forEach { (k, t) -> legend.append("<b>${escCompHtml(sp.label)} — الكفاية $k:</b> ${escCompHtml(t)}<br>") }
+            }
+            if (legend.isNotEmpty()) html.append("<div class=\"cmp\"><div class=\"lg\">$legend</div></div>")
+            html.append(footer)
+            html.append("</div>")
+
+            // ---------- الصفحة 2: جدول دعم المجموعات ----------
+            html.append("<div class=\"sheet-card${if (isLast) "" else " pg"}\">")
+            html.append(header("جدول دعم مجموعات التلاميذ الذين لم يمتلكوا بعض الكفايات في مادة $discLabel<br><span style=\"font-size:10px;font-weight:600;\">Tableau de soutien des groupes des élèves n'ayant pas acquis certaines CB</span>"))
+            html.append("<div style=\"font-size:10px;font-weight:700;margin:4px 0;\">أرقام أفراد المجموعات (من لم يمتلك الكفاية) حسب رقم التلميذ في اللائحة.</div>")
+            html.append("<table class=\"sheet-table cmp\" style=\"table-layout: auto;\"><thead><tr>")
+            html.append("<th>الدعم المدرسي<br>Soutien scolaire</th><th>المجموعات<br>Groupes</th>")
+            chunk.forEach { sp -> html.append("<th>المجال / Sphère<br>${escCompHtml(sp.label)}</th>") }
+            html.append("</tr></thead><tbody>")
+            for (k in 1..3) {
+                val note = notes["SUP|${discipline.code}|$k"].orEmpty()
+                html.append("<tr style=\"height:44px;\"><td>${escCompHtml(note)}</td>")
+                html.append("<td style=\"font-weight:800;\">المجموعة التي لم تمتلك الكفاية $k<br>Le groupe n'ayant pas acquis la CB$k</td>")
+                chunk.forEach { sp ->
+                    val nums = sorted.mapIndexedNotNull { i, st ->
+                        if ((marks["${st.id}|${discipline.code}|${sp.code}|$k"] ?: 0) < 0) (i + 1).toString() else null
+                    }
+                    html.append("<td>${nums.joinToString(" - ")}</td>")
+                }
+                html.append("</tr>")
+            }
+            html.append("</tbody></table>")
+            html.append(footer)
+            html.append("</div>")
+        }
+        html.append("</body></html>")
+        return html.toString()
+    }
+
     // French Grades Entry List
     fun generateFrenchGradesEntryHtml(
         context: Context,
