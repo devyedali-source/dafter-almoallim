@@ -416,7 +416,7 @@ private fun AnnualPlanningScreenContent(
                         trail.add("الأسبوع $selectedWeek")
                     }
                     if (navHistory.size > 3 && selectedSubject != null) {
-                        trail.add(OfficialAnnualPlanningRepository.mapMatiereToArabic(selectedSubject!!.nom))
+                        trail.add(planningSubjectLabel(selectedSubject!!.nom))
                     }
                     if (navHistory.size > 4 && selectedDomain != null) {
                         trail.add(getDomainArabicLabel(context, levelCode, selectedDomain!!))
@@ -1108,7 +1108,7 @@ private fun SubjectsListScreen(
                                             verticalArrangement = Arrangement.spacedBy(2.dp)
                                         ) {
                                             Text(
-                                                text = subject.name,
+                                                text = subject.name.let { if (it == "اللغة الفرنسية" || it == "الفرنسية") "Français" else it },
                                                 fontWeight = FontWeight.Black,
                                                 fontSize = 14.5.sp,
                                                 color = BentoPrimary
@@ -1215,7 +1215,7 @@ private fun SubjectsListScreen(
 
                             Column(modifier = Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                                 Text(
-                                    text = OfficialAnnualPlanningRepository.mapMatiereToArabic(subject.nom),
+                                    text = planningSubjectLabel(subject.nom),
                                     fontWeight = FontWeight.Black,
                                     fontSize = 14.5.sp,
                                     color = BentoPrimary
@@ -2112,7 +2112,7 @@ private fun SubjectSectionInWeek(
                     }
                 }
                 Text(
-                    text = OfficialAnnualPlanningRepository.mapMatiereToArabic(subject.nom),
+                    text = planningSubjectLabel(subject.nom),
                     fontWeight = FontWeight.Black,
                     fontSize = 13.sp,
                     color = BentoPrimary
@@ -2481,4 +2481,11 @@ internal fun LessonContentChips(hasBook: Boolean, hasBoard: Boolean) {
             )
         }
     }
+}
+
+
+/** اسم المادة في التخطيط السنوي: الفرنسية تُكتب Français وليس بالعربية */
+private fun planningSubjectLabel(matiere: String): String {
+    val ar = com.example.data.planning.canonical.OfficialAnnualPlanningRepository.mapMatiereToArabic(matiere)
+    return if (ar == "اللغة الفرنسية") "Français" else ar
 }
