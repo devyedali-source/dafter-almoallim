@@ -156,8 +156,8 @@ fun CompetencyAssessmentScreen(
 
             Spacer(Modifier.height(4.dp))
             TabRow(selectedTabIndex = tab, containerColor = Color.Transparent) {
-                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text(uiT("تقييم الكفايات")) })
-                Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text(uiT("جدول الدعم")) })
+                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text(if (com.example.ui.utils.AppLocalization.lang == "fr") "Évaluation CB" else "تقييم الكفايات", maxLines = 1) })
+                Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text(uiT("جدول الدعم"), maxLines = 1) })
             }
             Spacer(Modifier.height(6.dp))
 
