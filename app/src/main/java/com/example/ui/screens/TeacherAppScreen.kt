@@ -2095,13 +2095,13 @@ fun InnerTeacherAppScreenContent(
                                 selected = insideTab == 4,
                                 onClick = { insideTab = 4 },
                                 icon = { Icon(Icons.Default.EditCalendar, contentDescription = "التخطيط السنوي") },
-                                label = { Text(if (appLanguage == "fr") "Planning" else "التخطيط السنوي", fontSize = 8.5.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
+                                label = { Text(if (appLanguage == "fr") "Planification annuelle" else "التخطيط السنوي", fontSize = 8.5.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
                             )
                             NavigationBarItem(
                                 selected = insideTab == 5,
                                 onClick = { insideTab = 5 },
                                 icon = { Icon(Icons.Default.ListAlt, contentDescription = "الجدول الزمني") },
-                                label = { Text(if (appLanguage == "fr") "Horaires" else "الجدول الزمني", fontSize = 8.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
+                                label = { Text(if (appLanguage == "fr") "Emploi du temps" else "الجدول الزمني", fontSize = 8.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
                             )
                         }
                     }
