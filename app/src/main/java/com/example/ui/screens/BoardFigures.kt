@@ -2,10 +2,10 @@ package com.example.ui.screens
 
 import android.content.Context
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -68,12 +68,15 @@ private fun figColor(s: String?, fallback: Color): Color =
 fun BoardFigure(name: String, maxHeight: Dp, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val fig = remember(name) { BoardFigureStore.get(context, name) } ?: return
-    Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+    val limitH = maxHeight
+    BoxWithConstraints(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        // الرسم يُلائَم داخل العرض المتاح والارتفاع الأقصى معاً حتى لا يتجاوز مساحته ويتداخل مع النص
+        val ratio = fig.w / fig.h
+        val drawW = minOf(this.maxWidth, limitH * ratio)
         Canvas(
             modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = maxHeight)
-                .aspectRatio(fig.w / fig.h)
+                .width(drawW)
+                .height(drawW / ratio)
         ) {
             val k = size.width / fig.w
             for (it in fig.items) {
