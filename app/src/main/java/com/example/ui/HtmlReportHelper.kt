@@ -1531,6 +1531,11 @@ object HtmlReportHelper {
             html.append("<div class=\"sheet-card pg\">")
             html.append(header("دفتر متابعة القسم<br><span style=\"font-size:10px;font-weight:600;\">Cahier de suivi de classe</span>"))
             html.append("<div style=\"font-size:10px;font-weight:700;margin:4px 0;\">نبيّن بإشارة (+) الكفايات التي امتلكها التلاميذ وبإشارة (−) الكفايات التي لم يمتلكوها.</div>")
+            val legend = StringBuilder()
+            chunk.forEach { sp ->
+                sp.cbs.forEach { (k, t) -> legend.append("<b>${escCompHtml(sp.label)} — الكفاية $k (CB$k):</b> ${escCompHtml(t)}<br>") }
+            }
+            if (legend.isNotEmpty()) html.append("<div class=\"cmp\"><div class=\"lg\" style=\"font-size:9px;border:1px solid #999;padding:3px 6px;margin-bottom:5px;\">$legend</div></div>")
             html.append("<table class=\"sheet-table cmp\" style=\"table-layout: auto;\"><thead>")
             html.append("<tr><th rowspan=\"2\">الرقم</th><th rowspan=\"2\">اسم التلميذ<br>Nom de l'élève</th>")
             chunk.forEach { sp -> html.append("<th colspan=\"3\">المجال / Sphère<br>${escCompHtml(sp.label)}</th>") }
@@ -1549,11 +1554,6 @@ object HtmlReportHelper {
                 html.append("</tr>")
             }
             html.append("</tbody></table>")
-            val legend = StringBuilder()
-            chunk.forEach { sp ->
-                sp.cbs.forEach { (k, t) -> legend.append("<b>${escCompHtml(sp.label)} — الكفاية $k:</b> ${escCompHtml(t)}<br>") }
-            }
-            if (legend.isNotEmpty()) html.append("<div class=\"cmp\"><div class=\"lg\">$legend</div></div>")
             html.append(footer)
             html.append("</div>")
 

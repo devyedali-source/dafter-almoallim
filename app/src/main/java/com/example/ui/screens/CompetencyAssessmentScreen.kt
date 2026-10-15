@@ -123,6 +123,12 @@ fun CompetencyAssessmentScreen(
 
             Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
                 if (tab == 0) {
+                    chunk.forEach { sp ->
+                        sp.cbs.forEach { (k, t) ->
+                            Text("${sp.label} — الكفاية $k: $t", fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(vertical = 2.dp))
+                        }
+                    }
+                    Spacer(Modifier.height(6.dp))
                     Text("اضغط على الخانة: + (امتلك) ← − (لم يمتلك) ← فارغة", fontSize = 11.sp, color = BentoPrimaryDesc)
                     Spacer(Modifier.height(4.dp))
                     Column(Modifier.horizontalScroll(rememberScrollState())) {
@@ -165,12 +171,6 @@ fun CompetencyAssessmentScreen(
                                     }
                                 }
                             }
-                        }
-                    }
-                    Spacer(Modifier.height(10.dp))
-                    chunk.forEach { sp ->
-                        sp.cbs.forEach { (k, t) ->
-                            Text("${sp.label} — الكفاية $k: $t", fontSize = 11.sp, color = BentoPrimaryDesc, modifier = Modifier.padding(vertical = 2.dp))
                         }
                     }
                 } else {
