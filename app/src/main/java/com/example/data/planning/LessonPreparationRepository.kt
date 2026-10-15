@@ -531,15 +531,27 @@ object LessonPreparationRepository {
         synchronized(this) {
             competencyCatalogCache[level]?.let { return it }
             val prefix = "${level}AP|"
-            val order = listOf("TIS", "AR", "FR", "MATH", "SCI", "SOC", "CIV", "ART", "TIC")
+            // نفس أسماء وترتيب المواد في صفحة النتائج
+            val order = listOf("TIS", "AR", "MATH", "CIV", "ART", "FR", "SOC", "SCI")
+            val resultsNames = mapOf(
+                "TIS" to "التربية الإسلامية - Education Islamique",
+                "AR" to "اللغة العربية - Langue arabe",
+                "MATH" to "الرياضيات - Mathématiques",
+                "CIV" to "التربية المدنية - Education Civique",
+                "ART" to "التربية الفنية - Education Technique",
+                "FR" to "الفرنسية - Français",
+                "SOC" to "التاريخ والجغرافيا - Histoire Géographie",
+                "SCI" to "العلوم الطبيعية - Sciences Naturelles"
+            )
             val labels = LinkedHashMap<String, String>()
             val spheres = LinkedHashMap<String, LinkedHashMap<String, Pair<String, MutableMap<Int, String>>>>()
             for (prep in rawPrepItemsCache.values) {
                 val o = prep.official
                 if (!o.lesson_unit_id.startsWith(prefix)) continue
                 if (o.matiere == "EPS") continue
-                labels.putIfAbsent(o.matiere, o.matiere_label ?: o.matiere)
-                val sph = spheres.getOrPut(o.matiere) { LinkedHashMap() }
+                val mat = if (o.matiere == "TIC") "ART" else o.matiere
+                labels.putIfAbsent(mat, resultsNames[mat] ?: o.matiere_label ?: mat)
+                val sph = spheres.getOrPut(mat) { LinkedHashMap() }
                 val entry = sph.getOrPut(o.domaine) { Pair(o.domaine_label ?: o.domaine, mutableMapOf()) }
                 val k = o.competence?.filter { it.isDigit() }?.toIntOrNull() ?: continue
                 if (k !in 1..3) continue
