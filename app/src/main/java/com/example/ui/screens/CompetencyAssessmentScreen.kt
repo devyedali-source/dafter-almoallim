@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -70,7 +73,7 @@ fun CompetencyAssessmentScreen(
         Column(Modifier.fillMaxSize().padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-                Text("دفتر المتابعة — ${section.name}", fontWeight = FontWeight.Bold, fontSize = 17.sp, modifier = Modifier.weight(1f))
+                Text(uiTf("دفتر المتابعة — {0}", section.name), fontWeight = FontWeight.Bold, fontSize = 17.sp, modifier = Modifier.weight(1f))
                 val disc = catalog.getOrNull(discIdx)
                 Button(
                     onClick = {
@@ -85,7 +88,7 @@ fun CompetencyAssessmentScreen(
                     },
                     enabled = disc != null,
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-                ) { Text("سحب لائحة المادة") }
+                ) { Text(uiT("سحب لائحة المادة")) }
                 Spacer(Modifier.width(6.dp))
                 OutlinedButton(
                     onClick = {
@@ -99,7 +102,7 @@ fun CompetencyAssessmentScreen(
                         }
                     },
                     enabled = catalog.isNotEmpty()
-                ) { Text("سحب لوائح كل المواد") }
+                ) { Text(uiT("سحب لوائح كل المواد")) }
             }
 
             OutlinedButton(
@@ -116,15 +119,15 @@ fun CompetencyAssessmentScreen(
                 },
                 enabled = catalog.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("سحب لوائح فارغة لكل المواد (60 سطراً)") }
+            ) { Text(uiT("سحب لوائح فارغة لكل المواد (60 سطراً)")) }
 
             if (catalog.isEmpty()) {
-                Text("لا توجد كفايات متاحة لهذا المستوى.", color = BentoPrimaryDesc, modifier = Modifier.padding(16.dp))
+                Text(uiT("لا توجد كفايات متاحة لهذا المستوى."), color = BentoPrimaryDesc, modifier = Modifier.padding(16.dp))
                 return@Column
             }
             if (students.isEmpty()) {
                 Text(
-                    "لا يوجد تلاميذ في القسم. يمكنك سحب نموذج فارغ بـ 60 سطراً (PDF) وتعبئته يدوياً، أو أضف التلاميذ ليظهروا في الجدول.",
+                    uiT("لا يوجد تلاميذ في القسم. يمكنك سحب نموذج فارغ بـ 60 سطراً (PDF) وتعبئته يدوياً، أو أضف التلاميذ ليظهروا في الجدول."),
                     color = BentoPrimaryDesc, fontSize = 12.sp, modifier = Modifier.padding(vertical = 6.dp)
                 )
             }
@@ -132,7 +135,7 @@ fun CompetencyAssessmentScreen(
             val disc = catalog[discIdx.coerceIn(0, catalog.lastIndex)]
             val chunks = disc.spheres.chunked(3)
 
-            Text("المادة", fontSize = 12.sp, color = BentoPrimaryDesc)
+            Text(uiT("المادة"), fontSize = 12.sp, color = BentoPrimaryDesc)
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 catalog.forEachIndexed { i, d ->
                     FilterChip(selected = i == discIdx, onClick = { discIdx = i; chunkIdx = 0 }, label = { Text(d.label) })
@@ -153,8 +156,8 @@ fun CompetencyAssessmentScreen(
 
             Spacer(Modifier.height(4.dp))
             TabRow(selectedTabIndex = tab, containerColor = Color.Transparent) {
-                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text("تقييم الكفايات") })
-                Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text("جدول الدعم") })
+                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text(uiT("تقييم الكفايات")) })
+                Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text(uiT("جدول الدعم")) })
             }
             Spacer(Modifier.height(6.dp))
 
@@ -162,11 +165,11 @@ fun CompetencyAssessmentScreen(
                 if (tab == 0) {
                     chunk.forEach { sp ->
                         sp.cbs.forEach { (k, t) ->
-                            Text("${sp.label} — الكفاية $k: $t", fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(vertical = 2.dp))
+                            Text(uiTf("{0} — الكفاية {1}: {2}", sp.label, k, t), fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(vertical = 2.dp))
                         }
                     }
                     Spacer(Modifier.height(6.dp))
-                    Text("اضغط على الخانة: + (امتلك) ← − (لم يمتلك) ← فارغة", fontSize = 11.sp, color = BentoPrimaryDesc)
+                    Text(uiT("اضغط على الخانة: + (امتلك) ← − (لم يمتلك) ← فارغة"), fontSize = 11.sp, color = BentoPrimaryDesc)
                     Spacer(Modifier.height(4.dp))
                     Column(Modifier.horizontalScroll(rememberScrollState())) {
                         // رأس المجالات
@@ -211,7 +214,7 @@ fun CompetencyAssessmentScreen(
                         }
                     }
                 } else {
-                    Text("المجموعات تُحسب تلقائياً من الخانات المعلّمة بـ (−) وتظهر بأرقام التلاميذ.", fontSize = 11.sp, color = BentoPrimaryDesc)
+                    Text(uiT("المجموعات تُحسب تلقائياً من الخانات المعلّمة بـ (−) وتظهر بأرقام التلاميذ."), fontSize = 11.sp, color = BentoPrimaryDesc)
                     Spacer(Modifier.height(6.dp))
                     for (k in 1..3) {
                         Card(
@@ -219,7 +222,7 @@ fun CompetencyAssessmentScreen(
                             colors = CardDefaults.cardColors(containerColor = Color.White)
                         ) {
                             Column(Modifier.padding(10.dp)) {
-                                Text("المجموعة التي لم تمتلك الكفاية $k", fontWeight = FontWeight.Bold)
+                                Text(uiTf("المجموعة التي لم تمتلك الكفاية {0}", k), fontWeight = FontWeight.Bold)
                                 chunk.forEach { sp ->
                                     val nums = sorted.mapIndexedNotNull { i, st ->
                                         if ((marks["${st.id}|${disc.code}|${sp.code}|$k"] ?: 0) < 0) (i + 1).toString() else null
@@ -237,7 +240,7 @@ fun CompetencyAssessmentScreen(
                                         text = it
                                         viewModel.saveCompetencyEntry(section.id, 0L, noteKey, 0, it)
                                     },
-                                    label = { Text("الدعم المدرسي") },
+                                    label = { Text(uiT("الدعم المدرسي")) },
                                     modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
                                 )
                             }

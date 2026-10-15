@@ -1,6 +1,25 @@
 package com.example.ui.utils
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
+/** ترجمة نص واجهة (عربي ← فرنسي) حسب لغة التطبيق الحالية؛ تعيد النص العربي نفسه إن لم توجد ترجمة. */
+fun uiT(ar: String): String =
+    if (AppLocalization.lang == "fr") UiFrench.map[ar] ?: ar else ar
+
+/** نفس uiT لكن لنصوص فيها متغيّرات {0} {1} ... */
+fun uiTf(ar: String, vararg args: Any?): String {
+    val template = if (AppLocalization.lang == "fr") UiFrench.map[ar] ?: ar else ar
+    var out = template
+    args.forEachIndexed { i, a -> out = out.replace("{" + i + "}", a?.toString() ?: "") }
+    return out
+}
+
 object AppLocalization {
+    /** لغة الواجهة الحالية ("ar" أو "fr")؛ حالة Compose فيُعاد رسم الشاشات عند تغييرها. */
+    var lang by mutableStateOf("ar")
+
     private val frMap = mapOf(
         // Login & Auth
         "title" to "Connexion de l'Enseignant",

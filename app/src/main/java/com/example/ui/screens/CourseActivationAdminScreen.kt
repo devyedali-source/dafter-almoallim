@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -108,7 +111,7 @@ fun CourseActivationAdminView(
         ) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "جارٍ جلب طلب تفعيل الدورة...", fontSize = 14.sp)
+            Text(text = uiT("جارٍ جلب طلب تفعيل الدورة..."), fontSize = 14.sp)
         }
         return
     }
@@ -120,28 +123,28 @@ fun CourseActivationAdminView(
             .padding(16.dp)
     ) {
         Text(
-            text = "تفعيل دورة تحضير مسابقات المعلمين",
+            text = uiT("تفعيل دورة تحضير مسابقات المعلمين"),
             fontSize = 18.sp,
             fontWeight = FontWeight.Black
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = "رقم الطلب: $requestId", fontSize = 11.sp, color = AdmMutedColor)
+        Text(text = uiTf("رقم الطلب: {0}", requestId), fontSize = 11.sp, color = AdmMutedColor)
         Spacer(modifier = Modifier.height(14.dp))
 
         if (notFound) {
             Text(
-                text = "لم يُعثر على هذا الطلب. قد يكون المرسل في منطقة ضعيفة الشبكة ولم يصل طلبه بعد، فأعد المحاولة بعد قليل.",
+                text = uiT("لم يُعثر على هذا الطلب. قد يكون المرسل في منطقة ضعيفة الشبكة ولم يصل طلبه بعد، فأعد المحاولة بعد قليل."),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = AdmBadColor
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { reloadKey++ }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "إعادة المحاولة 🔄", fontSize = 15.sp)
+                Text(text = uiT("إعادة المحاولة 🔄"), fontSize = 15.sp)
             }
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedButton(onClick = { onClose() }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "إغلاق والعودة", fontSize = 15.sp)
+                Text(text = uiT("إغلاق والعودة"), fontSize = 15.sp)
             }
             return
         }
@@ -157,11 +160,11 @@ fun CourseActivationAdminView(
                 )
             }
             Button(onClick = { reloadKey++ }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "إعادة المحاولة 🔄", fontSize = 15.sp)
+                Text(text = uiT("إعادة المحاولة 🔄"), fontSize = 15.sp)
             }
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedButton(onClick = { onClose() }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "إغلاق والعودة", fontSize = 15.sp)
+                Text(text = uiT("إغلاق والعودة"), fontSize = 15.sp)
             }
             return
         }
@@ -169,7 +172,7 @@ fun CourseActivationAdminView(
         if (errorText.isNotBlank()) {
             Card(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)) {
                 Text(
-                    text = "خطأ: $errorText",
+                    text = uiTf("خطأ: {0}", errorText),
                     fontSize = 13.sp,
                     color = AdmBadColor,
                     modifier = Modifier.padding(12.dp)
@@ -183,14 +186,14 @@ fun CourseActivationAdminView(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "بريد المعلّم", fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("بريد المعلّم"), fontSize = 13.sp, color = AdmMutedColor)
                     Text(text = email.ifBlank { "—" }, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "التخصّص", fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("التخصّص"), fontSize = 13.sp, color = AdmMutedColor)
                     Text(
                         text = specTitle.ifBlank { specId.ifBlank { "—" } },
                         fontSize = 13.sp,
@@ -201,21 +204,21 @@ fun CourseActivationAdminView(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "المدّة", fontSize = 13.sp, color = AdmMutedColor)
-                    Text(text = "$days يومًا", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                    Text(text = uiT("المدّة"), fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiTf("{0} يومًا", days), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "وقت الطلب", fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("وقت الطلب"), fontSize = 13.sp, color = AdmMutedColor)
                     Text(text = admFormatMillis(createdAt), fontSize = 13.sp)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "الحالة", fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("الحالة"), fontSize = 13.sp, color = AdmMutedColor)
                     Text(
                         text = if (status == "completed") "مفعَّل" else "قيد الانتظار",
                         fontSize = 13.sp,
@@ -228,7 +231,7 @@ fun CourseActivationAdminView(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "ينتهي في", fontSize = 13.sp, color = AdmMutedColor)
+                        Text(text = uiT("ينتهي في"), fontSize = 13.sp, color = AdmMutedColor)
                         Text(
                             text = admFormatDate(expiresAt),
                             fontSize = 13.sp,
@@ -244,14 +247,14 @@ fun CourseActivationAdminView(
 
         if (status == "completed") {
             Text(
-                text = "هذا الطلب مفعَّل بالفعل.",
+                text = uiT("هذا الطلب مفعَّل بالفعل."),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = AdmOkColor
             )
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedButton(onClick = { onClose() }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "إغلاق والعودة", fontSize = 15.sp)
+                Text(text = uiT("إغلاق والعودة"), fontSize = 15.sp)
             }
         } else {
             Button(
@@ -293,7 +296,7 @@ fun CourseActivationAdminView(
             }
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedButton(onClick = { onClose() }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "إغلاق بلا تفعيل", fontSize = 15.sp)
+                Text(text = uiT("إغلاق بلا تفعيل"), fontSize = 15.sp)
             }
         }
 

@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -339,7 +342,7 @@ private fun AnnualPlanningScreenContent(
                             }
                         }
                         Text(
-                            text = "التخطيط السنوي للمنهاج الرسمي",
+                            text = uiT("التخطيط السنوي للمنهاج الرسمي"),
                             fontWeight = FontWeight.Black,
                             fontSize = 15.sp,
                             color = BentoPrimary
@@ -384,7 +387,7 @@ private fun AnnualPlanningScreenContent(
                             color = Color(0xFFE3F2FD)
                         ) {
                             Text(
-                                text = "محتوى كتب: ${booksAndBoards.first}",
+                                text = uiTf("محتوى كتب: {0}", booksAndBoards.first),
                                 fontSize = 10.5.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF1565C0),
@@ -396,7 +399,7 @@ private fun AnnualPlanningScreenContent(
                             color = Color(0xFFEEEEEE)
                         ) {
                             Text(
-                                text = "محتوى سبورات: ${booksAndBoards.second}",
+                                text = uiTf("محتوى سبورات: {0}", booksAndBoards.second),
                                 fontSize = 10.5.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF212121),
@@ -504,13 +507,13 @@ private fun AnnualPlanningScreenContent(
                                                         verticalArrangement = Arrangement.spacedBy(6.dp)
                                                     ) {
                                                         Text(
-                                                            text = "دليل النجاح في مسابقة دخول سنة أولى إعدادية",
+                                                            text = uiT("دليل النجاح في مسابقة دخول سنة أولى إعدادية"),
                                                             fontSize = 15.5.sp,
                                                             fontWeight = FontWeight.Bold,
                                                             color = BentoPrimary
                                                         )
                                                         Text(
-                                                            text = "$subjectsCount مواد • $totalExercisesCount تمرين",
+                                                            text = uiTf("{0} مواد • {1} تمرين", subjectsCount, totalExercisesCount),
                                                             fontSize = 12.5.sp,
                                                             color = BentoPrimaryDesc,
                                                             fontWeight = FontWeight.Medium
@@ -743,7 +746,7 @@ private fun TermsListScreen(
                                     color = BentoPrimary
                                 )
                                 Text(
-                                    text = "الأسابيع ${weeksForTerm.firstOrNull() ?: 1} - ${weeksForTerm.lastOrNull() ?: 13} (${weeksForTerm.size} أسبوعاً)",
+                                    text = uiTf("الأسابيع {0} - {1} ({2} أسبوعاً)", weeksForTerm.firstOrNull() ?: 1, weeksForTerm.lastOrNull() ?: 13, weeksForTerm.size),
                                     fontSize = 11.5.sp,
                                     color = BentoPrimaryDesc,
                                     fontWeight = FontWeight.Medium
@@ -771,7 +774,7 @@ private fun TermsListScreen(
                                     color = Color(0xFFFFEBEE)
                                 ) {
                                     Text(
-                                        text = "مقفل",
+                                        text = uiT("مقفل"),
                                         fontSize = 10.5.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color(0xFFD32F2F),
@@ -887,7 +890,7 @@ private fun WeeksListScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             Text(
-                                text = "الأسبوع $weekNumber",
+                                text = uiTf("الأسبوع {0}", weekNumber),
                                 fontWeight = FontWeight.Black,
                                 fontSize = 15.sp,
                                 color = BentoPrimary
@@ -940,7 +943,7 @@ private fun WeeksListScreen(
                                 color = Color(0xFFE8F5E9)
                             ) {
                                 Text(
-                                    text = "🌴 عطلة سعيدة",
+                                    text = uiT("🌴 عطلة سعيدة"),
                                     fontSize = 10.5.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFF2E7D32),
@@ -1043,7 +1046,7 @@ private fun SubjectsListScreen(
 
                             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(
-                                    text = "مقترحات امتحان الأسبوع $selectedWeek",
+                                    text = uiTf("مقترحات امتحان الأسبوع {0}", selectedWeek),
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = BentoPrimary
@@ -1142,7 +1145,7 @@ private fun SubjectsListScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "لا توجد مواد أو دروس مقررة في هذا الأسبوع المخصص لـ (الأنشطة والامتحانات أو العطل).",
+                        text = uiT("لا توجد مواد أو دروس مقررة في هذا الأسبوع المخصص لـ (الأنشطة والامتحانات أو العطل)."),
                         textAlign = TextAlign.Center,
                         fontSize = 13.sp,
                         color = BentoPrimaryDesc,
@@ -1275,7 +1278,7 @@ private fun DomainsListScreen(
     if (activeDomains.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
-                text = "لا توجد مجالات فرعية مقررة لهذه المادة في هذا الأسبوع.",
+                text = uiT("لا توجد مجالات فرعية مقررة لهذه المادة في هذا الأسبوع."),
                 textAlign = TextAlign.Center,
                 fontSize = 13.sp,
                 color = BentoPrimaryDesc,
@@ -1406,7 +1409,7 @@ private fun LessonsListScreen(
     if (lessons.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
-                text = "لا توجد دروس مقررة في هذا المجال الفرعي لهذا الأسبوع.",
+                text = uiT("لا توجد دروس مقررة في هذا المجال الفرعي لهذا الأسبوع."),
                 textAlign = TextAlign.Center,
                 fontSize = 13.sp,
                 color = BentoPrimaryDesc,
@@ -1523,7 +1526,7 @@ private fun LessonsListScreen(
 
                             if (cleanComp.isNotBlank()) {
                                 Text(
-                                    text = "🎯 الكفاية: $cleanComp",
+                                    text = uiTf("🎯 الكفاية: {0}", cleanComp),
                                     fontSize = 11.sp,
                                     color = Color(0xFF455A64),
                                     maxLines = 1,
@@ -1634,7 +1637,7 @@ private fun CurriculumHeaderCard(
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
-                        text = "تقدم إنجاز البرنامج الدراسي 📈",
+                        text = uiT("تقدم إنجاز البرنامج الدراسي 📈"),
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
                         color = BentoPrimary
@@ -1672,14 +1675,14 @@ private fun CurriculumHeaderCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "الإنجاز: $completedWeeks من $totalWeeks أسبوعاً",
+                        text = uiTf("الإنجاز: {0} من {1} أسبوعاً", completedWeeks, totalWeeks),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = BentoPrimary
                     )
                     if (currentWeek in 1..38) {
                         Text(
-                            text = "الأسبوع الدراسي الحالي: $currentWeek",
+                            text = uiTf("الأسبوع الدراسي الحالي: {0}", currentWeek),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = BentoPrimaryDesc
@@ -1711,7 +1714,7 @@ private fun CompactColorKeyBar() {
         ) {
             item {
                 Text(
-                    text = "دليل الألوان:",
+                    text = uiT("دليل الألوان:"),
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Black,
                     color = BentoPrimary
@@ -1850,7 +1853,7 @@ private fun TermAccordionCard(
                         color = Color(0xFFFFEBEE)
                     ) {
                         Text(
-                            text = "مقفل",
+                            text = uiT("مقفل"),
                             fontSize = 10.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFFD32F2F),
@@ -1958,7 +1961,7 @@ private fun WeeklyPlanCard(
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(
-                            text = "الأسبوع $week",
+                            text = uiTf("الأسبوع {0}", week),
                             fontWeight = FontWeight.Black,
                             fontSize = 15.5.sp,
                             color = BentoPrimary
@@ -2165,7 +2168,7 @@ private fun SubjectSectionInWeek(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Text(
-                                text = "↳ المجال: $domainName",
+                                text = uiTf("↳ المجال: {0}", domainName),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = BentoPrimaryDesc
@@ -2267,7 +2270,7 @@ private fun LessonRowInsideDomain(
 
                 if (competence.isNotBlank()) {
                     Text(
-                        text = "🎯 الكفاية: $competence",
+                        text = uiTf("🎯 الكفاية: {0}", competence),
                         fontSize = 10.5.sp,
                         color = Color(0xFF455A64),
                         maxLines = 2,
@@ -2319,7 +2322,7 @@ private fun IntegrationStationBox(
                     color = Color(0xFFE65100)
                 ) {
                     Text(
-                        text = "إدماج / تقويم / علاج",
+                        text = uiT("إدماج / تقويم / علاج"),
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
@@ -2380,14 +2383,14 @@ private fun UnassignedLevelCard(
                     modifier = Modifier.size(48.dp)
                 )
                 Text(
-                    text = "تحديد مستوى القسم",
+                    text = uiT("تحديد مستوى القسم"),
                     fontWeight = FontWeight.Black,
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "لم يتم تحديد مستوى هذا القسم (${activeClass.getFormattedName()}) في السجل المحلي.\nيرجى اختيار المستوى التعليمي لعرض التخطيط السنوي:",
+                    text = uiTf("لم يتم تحديد مستوى هذا القسم ({0}) في السجل المحلي.\nيرجى اختيار المستوى التعليمي لعرض التخطيط السنوي:", activeClass.getFormattedName()),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

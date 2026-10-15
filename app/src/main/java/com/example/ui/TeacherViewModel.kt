@@ -81,12 +81,17 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
 
     private val prefs = application.getSharedPreferences("teacher_settings_prefs", android.content.Context.MODE_PRIVATE)
 
-    private val _appLanguage = MutableStateFlow("ar")
+    private val _appLanguage = MutableStateFlow(
+        (prefs.getString("app_language", "ar") ?: "ar").let { if (it == "fr") "fr" else "ar" }
+    ).also { com.example.ui.utils.AppLocalization.lang = it.value }
     val appLanguage: StateFlow<String> = _appLanguage.asStateFlow()
 
+    /** لغة واجهة التطبيق فقط ("ar" أو "fr")؛ لا تمسّ البيانات ولا ملفات PDF. */
     fun setAppLanguage(lang: String) {
-        _appLanguage.value = "ar"
-        prefs.edit().putString("app_language", "ar").apply()
+        val l = if (lang == "fr") "fr" else "ar"
+        _appLanguage.value = l
+        com.example.ui.utils.AppLocalization.lang = l
+        prefs.edit().putString("app_language", l).apply()
     }
 
     private var currentRepository: TeacherRepository? = null

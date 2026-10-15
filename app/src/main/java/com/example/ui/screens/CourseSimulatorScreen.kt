@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -104,7 +107,7 @@ private fun SimSectionHeader(section: CourseSimSection) {
     Column(modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)) {
         if (section.title.isNotBlank()) {
             Text(
-                text = "📘 مادة: ${section.title}",
+                text = uiTf("📘 مادة: {0}", section.title),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
                 color = SimWarnColor,
@@ -130,7 +133,7 @@ private fun SimSectionHeader(section: CourseSimSection) {
             Card(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
-                        text = "الوضعية",
+                        text = uiT("الوضعية"),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Black
                     )
@@ -174,10 +177,10 @@ fun CourseSimulatorScreen(trackKey: String, subjectName: String, onBack: () -> U
     ) {
         SimBackLink(text = "رجوع إلى المواد", onClick = onBack)
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = "المحاكي", fontSize = 18.sp, fontWeight = FontWeight.Black)
+        Text(text = uiT("المحاكي"), fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "$subjectName · ${exams.size} محاكاة شاملة على نمط اللجنة الوطنية",
+            text = uiTf("{0} · {1} محاكاة شاملة على نمط اللجنة الوطنية", subjectName, exams.size),
             fontSize = 13.sp,
             color = SimMutedColor
         )
@@ -193,7 +196,7 @@ fun CourseSimulatorScreen(trackKey: String, subjectName: String, onBack: () -> U
             ) {
                 Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
                     Text(
-                        text = "محاكاة رقم ${exam.n}",
+                        text = uiTf("محاكاة رقم {0}", exam.n),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -204,7 +207,7 @@ fun CourseSimulatorScreen(trackKey: String, subjectName: String, onBack: () -> U
                     if (score != null) {
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = "أفضل نقطة لك: $score/20",
+                            text = uiTf("أفضل نقطة لك: {0}/20", score),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color = if (score >= 10) SimOkColor else SimWarnColor
@@ -316,7 +319,7 @@ private fun CourseSimulatorRunner(
             SimBackLink(text = "رجوع إلى المحاكي", onClick = onBack)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "محاكاة رقم ${exam.n}",
+                text = uiTf("محاكاة رقم {0}", exam.n),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Black
             )
@@ -344,18 +347,18 @@ private fun CourseSimulatorRunner(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
-                        text = "تنبيهات قبل البدء",
+                        text = uiT("تنبيهات قبل البدء"),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Black,
                         color = SimWarnColor
                     )
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(text = "• المؤقّت ينزل ولا يتوقّف بعد البدء.", fontSize = 13.sp)
-                    Text(text = "• كل الأسئلة في صفحة واحدة، والتنقّل بينها حرّ.", fontSize = 13.sp)
-                    Text(text = "• بعض الأسئلة تقبل أكثر من إجابة صحيحة.", fontSize = 13.sp)
-                    Text(text = "• التسليم نهائي لا رجعة فيه.", fontSize = 13.sp)
+                    Text(text = uiT("• المؤقّت ينزل ولا يتوقّف بعد البدء."), fontSize = 13.sp)
+                    Text(text = uiT("• كل الأسئلة في صفحة واحدة، والتنقّل بينها حرّ."), fontSize = 13.sp)
+                    Text(text = uiT("• بعض الأسئلة تقبل أكثر من إجابة صحيحة."), fontSize = 13.sp)
+                    Text(text = uiT("• التسليم نهائي لا رجعة فيه."), fontSize = 13.sp)
                     Text(
-                        text = "• عند انتهاء الوقت يُسلَّم الامتحان تلقائيًّا.",
+                        text = uiT("• عند انتهاء الوقت يُسلَّم الامتحان تلقائيًّا."),
                         fontSize = 13.sp
                     )
                 }
@@ -370,7 +373,7 @@ private fun CourseSimulatorRunner(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "بدء المحاكاة ($total سؤالًا)", fontSize = 15.sp)
+                Text(text = uiTf("بدء المحاكاة ({0} سؤالًا)", total), fontSize = 15.sp)
             }
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -384,13 +387,13 @@ private fun CourseSimulatorRunner(
             item {
                 Column {
                     Text(
-                        text = "نتيجة المحاكاة",
+                        text = uiT("نتيجة المحاكاة"),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Black
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "محاكاة رقم ${exam.n} · $subjectName",
+                        text = uiTf("محاكاة رقم {0} · {1}", exam.n, subjectName),
                         fontSize = 13.sp,
                         color = SimMutedColor
                     )
@@ -408,7 +411,7 @@ private fun CourseSimulatorRunner(
                             )
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
-                                text = "النقاط المحصّلة: $earnedPoints من $totalPoints",
+                                text = uiTf("النقاط المحصّلة: {0} من {1}", earnedPoints, totalPoints),
                                 fontSize = 14.sp,
                                 color = SimMutedColor
                             )
@@ -433,7 +436,7 @@ private fun CourseSimulatorRunner(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "التصحيح بالشروح",
+                        text = uiT("التصحيح بالشروح"),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Black
                     )
@@ -453,7 +456,7 @@ private fun CourseSimulatorRunner(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "السؤال ${qIndex + 1}",
+                                text = uiTf("السؤال {0}", qIndex + 1),
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = SimMutedColor
@@ -526,14 +529,14 @@ private fun CourseSimulatorRunner(
                         onClick = { attempt++ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = "إعادة المحاكاة", fontSize = 15.sp)
+                        Text(text = uiT("إعادة المحاكاة"), fontSize = 15.sp)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedButton(
                         onClick = { onBack() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = "رجوع إلى المحاكي", fontSize = 15.sp)
+                        Text(text = uiT("رجوع إلى المحاكي"), fontSize = 15.sp)
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -549,20 +552,20 @@ private fun CourseSimulatorRunner(
         AlertDialog(
             onDismissRequest = { showSummary = false },
             title = {
-                Text(text = "ملخّص المحاولة", fontWeight = FontWeight.Black)
+                Text(text = uiT("ملخّص المحاولة"), fontWeight = FontWeight.Black)
             },
             text = {
                 Column {
-                    Text(text = "المُجاب عنها: $answeredCount من $total", fontSize = 14.sp)
+                    Text(text = uiTf("المُجاب عنها: {0} من {1}", answeredCount, total), fontSize = 14.sp)
                     Text(
-                        text = "الفارغة: ${total - answeredCount}",
+                        text = uiTf("الفارغة: {0}", total - answeredCount),
                         fontSize = 14.sp,
                         color = if (answeredCount < total) SimWarnColor else SimMutedColor
                     )
-                    Text(text = "الموسومة بعلامة: $markedCount", fontSize = 14.sp)
+                    Text(text = uiTf("الموسومة بعلامة: {0}", markedCount), fontSize = 14.sp)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        text = "التسليم نهائي لا رجعة فيه.",
+                        text = uiT("التسليم نهائي لا رجعة فيه."),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Black,
                         color = SimBadColor
@@ -574,12 +577,12 @@ private fun CourseSimulatorRunner(
                     showSummary = false
                     submitted = true
                 }) {
-                    Text(text = "تسليم نهائي", color = SimBadColor, fontWeight = FontWeight.Black)
+                    Text(text = uiT("تسليم نهائي"), color = SimBadColor, fontWeight = FontWeight.Black)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showSummary = false }) {
-                    Text(text = "متابعة الامتحان")
+                    Text(text = uiT("متابعة الامتحان"))
                 }
             }
         )
@@ -598,7 +601,7 @@ private fun CourseSimulatorRunner(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "محاكاة شاملة ${exam.n} · $subjectName",
+                        text = uiTf("محاكاة شاملة {0} · {1}", exam.n, subjectName),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = SimMutedColor
@@ -612,7 +615,7 @@ private fun CourseSimulatorRunner(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "المُجاب: $answeredCount / $total · الموسوم: $markedCount",
+                    text = uiTf("المُجاب: {0} / {1} · الموسوم: {2}", answeredCount, total, markedCount),
                     fontSize = 12.sp,
                     color = SimMutedColor
                 )
@@ -655,7 +658,7 @@ private fun CourseSimulatorRunner(
                     onClick = { showSummary = true },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "تسليم الامتحان", fontSize = 15.sp)
+                    Text(text = uiT("تسليم الامتحان"), fontSize = 15.sp)
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -680,7 +683,7 @@ private fun CourseSimulatorRunner(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "السؤال ${qIndex + 1} من $total",
+                            text = uiTf("السؤال {0} من {1}", qIndex + 1, total),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = SimMutedColor
@@ -711,7 +714,7 @@ private fun CourseSimulatorRunner(
                     if (isMulti) {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "هذا السؤال يقبل أكثر من إجابة صحيحة",
+                            text = uiT("هذا السؤال يقبل أكثر من إجابة صحيحة"),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = SimWarnColor
@@ -773,7 +776,7 @@ private fun CourseSimulatorRunner(
                     onClick = { showSummary = true },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "تسليم الامتحان", fontSize = 15.sp)
+                    Text(text = uiT("تسليم الامتحان"), fontSize = 15.sp)
                 }
                 Spacer(modifier = Modifier.height(28.dp))
             }

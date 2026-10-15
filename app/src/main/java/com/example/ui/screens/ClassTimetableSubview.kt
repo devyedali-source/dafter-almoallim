@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -185,7 +188,7 @@ fun ClassTimetableSubview(
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
-                            text = "الجدول الزمني للقسم",
+                            text = uiT("الجدول الزمني للقسم"),
                             fontWeight = FontWeight.Black,
                             fontSize = 16.sp,
                             color = BentoPrimary
@@ -276,7 +279,7 @@ fun ClassTimetableSubview(
                         modifier = Modifier.size(12.dp)
                     )
                     Text(
-                        text = "عدّل التاريخ الهجري بعد انتهاء كل اجتماع للجنة الأهلة ليبقى التاريخ الهجري صحيحًا ومحليًا دون إنترنت",
+                        text = uiT("عدّل التاريخ الهجري بعد انتهاء كل اجتماع للجنة الأهلة ليبقى التاريخ الهجري صحيحًا ومحليًا دون إنترنت"),
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold,
                         color = BentoPrimaryDesc.copy(alpha = 0.7f)
@@ -355,7 +358,7 @@ fun ClassTimetableSubview(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = "نهاية الأسبوع: اليوم ليس من أيام الجدول الدراسي المعتمد.",
+                        text = uiT("نهاية الأسبوع: اليوم ليس من أيام الجدول الدراسي المعتمد."),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFE65100)
@@ -382,12 +385,12 @@ fun ClassTimetableSubview(
                         OutlinedButton(
                             onClick = { showResetConfirm = true },
                             modifier = Modifier.weight(1f)
-                        ) { Text("العودة للجدول الرسمي") }
+                        ) { Text(uiT("العودة للجدول الرسمي")) }
                     }
                 }
                 if (editMode) {
                     Text(
-                        "تعديلك يُحفظ على هذا الجهاز فقط، ولا يغيّر الجدول الرسمي.",
+                        uiT("تعديلك يُحفظ على هذا الجهاز فقط، ولا يغيّر الجدول الرسمي."),
                         fontSize = 11.sp, color = BentoPrimaryDesc, modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -415,7 +418,7 @@ fun ClassTimetableSubview(
             }
             if (editMode) {
                 item {
-                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_BEFORE_RECESS }) { Text("＋ إضافة حصة") }
+                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_BEFORE_RECESS }) { Text(uiT("＋ إضافة حصة")) }
                 }
             }
 
@@ -446,7 +449,7 @@ fun ClassTimetableSubview(
             }
             if (editMode) {
                 item {
-                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_AFTER_RECESS }) { Text("＋ إضافة حصة") }
+                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_AFTER_RECESS }) { Text(uiT("＋ إضافة حصة")) }
                 }
             }
 
@@ -468,7 +471,7 @@ fun ClassTimetableSubview(
                         border = BorderStroke(0.8.dp, BentoGrayOutline.copy(alpha = 0.3f))
                     ) {
                         Text(
-                            text = "لا توجد حصص مبرمجة في الفترة المسائية",
+                            text = uiT("لا توجد حصص مبرمجة في الفترة المسائية"),
                             fontSize = 11.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = BentoPrimaryDesc.copy(alpha = 0.8f),
@@ -490,7 +493,7 @@ fun ClassTimetableSubview(
             }
             if (editMode) {
                 item {
-                    TextButton(onClick = { addingPeriod = TimetablePeriodType.AFTERNOON }) { Text("＋ إضافة حصة") }
+                    TextButton(onClick = { addingPeriod = TimetablePeriodType.AFTERNOON }) { Text(uiT("＋ إضافة حصة")) }
                 }
             }
         }
@@ -499,17 +502,17 @@ fun ClassTimetableSubview(
     if (showResetConfirm) {
         AlertDialog(
             onDismissRequest = { showResetConfirm = false },
-            title = { Text("العودة للجدول الرسمي") },
-            text = { Text("سيُحذف جدولك الشخصي ويُعرض الجدول الرسمي. هل تريد المتابعة؟") },
+            title = { Text(uiT("العودة للجدول الرسمي")) },
+            text = { Text(uiT("سيُحذف جدولك الشخصي ويُعرض الجدول الرسمي. هل تريد المتابعة؟")) },
             confirmButton = {
                 TextButton(onClick = {
                     CustomTimetableStore.clear(context, activeClass.id)
                     customSlots = null
                     editMode = false
                     showResetConfirm = false
-                }) { Text("نعم") }
+                }) { Text(uiT("نعم")) }
             },
-            dismissButton = { TextButton(onClick = { showResetConfirm = false }) { Text("إلغاء") } }
+            dismissButton = { TextButton(onClick = { showResetConfirm = false }) { Text(uiT("إلغاء")) } }
         )
     }
 
@@ -534,7 +537,7 @@ fun ClassTimetableSubview(
                             AssistChip(onClick = { subject = sc; branch = ""; french = sc.contains("Fran", ignoreCase = true) }, label = { Text(sc, fontSize = 11.sp) })
                         }
                     }
-                    OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("المادة") }, singleLine = true)
+                    OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text(uiT("المادة")) }, singleLine = true)
                     val branchChoices = remember(subject, level) {
                         (listOf(level) + (1..6).filter { it != level })
                             .flatMap { OfficialTimetableRepository.getTimetableForLevel(it) }
@@ -548,14 +551,14 @@ fun ClassTimetableSubview(
                             }
                         }
                     }
-                    OutlinedTextField(value = branch, onValueChange = { branch = it }, label = { Text("الفرع / النشاط") }, singleLine = true)
+                    OutlinedTextField(value = branch, onValueChange = { branch = it }, label = { Text(uiT("الفرع / النشاط")) }, singleLine = true)
                     OutlinedTextField(
                         value = minutes, onValueChange = { minutes = it.filter { c -> c.isDigit() }.take(3) },
-                        label = { Text("المدة بالدقائق") }, singleLine = true
+                        label = { Text(uiT("المدة بالدقائق")) }, singleLine = true
                     )
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { french = !french }) {
                         Checkbox(checked = french, onCheckedChange = { french = it })
-                        Text("حصة فرنسية")
+                        Text(uiT("حصة فرنسية"))
                     }
                 }
             },
@@ -581,9 +584,9 @@ fun ClassTimetableSubview(
                         }
                         close()
                     }
-                ) { Text("حفظ") }
+                ) { Text(uiT("حفظ")) }
             },
-            dismissButton = { TextButton(onClick = close) { Text("إلغاء") } }
+            dismissButton = { TextButton(onClick = close) { Text(uiT("إلغاء")) } }
         )
     }
 
@@ -608,7 +611,7 @@ fun ClassTimetableSubview(
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     Text(
-                        text = "تعديل التاريخ الهجري محلياً",
+                        text = uiT("تعديل التاريخ الهجري محلياً"),
                         fontWeight = FontWeight.Black,
                         fontSize = 15.sp,
                         color = BentoPrimary,
@@ -627,7 +630,7 @@ fun ClassTimetableSubview(
                             Icon(Icons.Default.Remove, contentDescription = "السنة السابقة", tint = BentoPrimary)
                         }
                         Text(
-                            text = "السنة: $tempYear هـ",
+                            text = uiTf("السنة: {0} هـ", tempYear),
                             fontWeight = FontWeight.Black,
                             fontSize = 14.sp,
                             color = BentoPrimary,
@@ -644,7 +647,7 @@ fun ClassTimetableSubview(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = "الشهر الهجري المعتمد:",
+                            text = uiT("الشهر الهجري المعتمد:"),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = BentoPrimaryDesc
@@ -681,7 +684,7 @@ fun ClassTimetableSubview(
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(
-                            text = "يوم الشهر:",
+                            text = uiT("يوم الشهر:"),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = BentoPrimaryDesc
@@ -726,7 +729,7 @@ fun ClassTimetableSubview(
                         color = BentoLightLavender.copy(alpha = 0.5f)
                     ) {
                         Text(
-                            text = "التاريخ الهجري المحدد: $tempDay $selectedMonthName $tempYear هـ",
+                            text = uiTf("التاريخ الهجري المحدد: {0} {1} {2} هـ", tempDay, selectedMonthName, tempYear),
                             fontSize = 11.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = BentoPrimary,
@@ -744,7 +747,7 @@ fun ClassTimetableSubview(
                             onClick = { showAdjustDialog = false },
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("إلغاء", fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
+                            Text(uiT("إلغاء"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
                         }
 
                         TextButton(
@@ -755,7 +758,7 @@ fun ClassTimetableSubview(
                             },
                             modifier = Modifier.weight(1.2f)
                         ) {
-                            Text("إعادة الضبط", color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                            Text(uiT("إعادة الضبط"), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold, fontSize = 11.sp)
                         }
 
                         Button(
@@ -785,7 +788,7 @@ fun ClassTimetableSubview(
                             shape = RoundedCornerShape(8.dp),
                             contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
                         ) {
-                            Text("حفظ التعديل", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                            Text(uiT("حفظ التعديل"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
                         }
                     }
                 }
@@ -849,7 +852,7 @@ private fun EmptyPeriodCard() {
         border = BorderStroke(0.8.dp, BentoGrayOutline.copy(alpha = 0.3f))
     ) {
         Text(
-            text = "لا توجد حصص مبرمجة في هذه الفترة",
+            text = uiT("لا توجد حصص مبرمجة في هذه الفترة"),
             fontSize = 11.sp,
             color = BentoPrimaryDesc.copy(alpha = 0.6f),
             textAlign = TextAlign.Center,
@@ -894,7 +897,7 @@ private fun RecessCard() {
                     }
                 }
                 Text(
-                    text = "استراحة مبرمجة بيداغوجياً",
+                    text = uiT("استراحة مبرمجة بيداغوجياً"),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Black,
                     color = Color(0xFF00695C)
@@ -902,7 +905,7 @@ private fun RecessCard() {
             }
 
             Text(
-                text = "15 دقيقة",
+                text = uiT("15 دقيقة"),
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Black,
                 color = Color(0xFF00695C)
@@ -990,7 +993,7 @@ private fun TimetableSlotCard(
                     
                     if (slot.isFrench) {
                         Text(
-                            text = "اللغة الفرنسية • Programme de Français",
+                            text = uiT("اللغة الفرنسية • Programme de Français"),
                             fontSize = 10.sp,
                             color = Color(0xFF1976D2),
                             fontWeight = FontWeight.Bold
@@ -1012,7 +1015,7 @@ private fun TimetableSlotCard(
                 color = Color(0xFFF1F5F9)
             ) {
                 Text(
-                    text = "${slot.durationMinutes} دقيقة",
+                    text = uiTf("{0} دقيقة", slot.durationMinutes),
                     fontSize = 10.5.sp,
                     fontWeight = FontWeight.Black,
                     color = BentoPrimaryDesc,

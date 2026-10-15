@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -251,21 +254,21 @@ fun LessonProposalScreen(
 
                         Column {
                             Text(
-                                text = "مذكرة تحضير الدرس",
+                                text = uiT("مذكرة تحضير الدرس"),
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Black,
                                 color = InkDarkBlue
                             )
                             val termNum = OfficialPlanningHierarchyAdapter.getTermForWeek(currentWeek)
                             Text(
-                                text = "الفصل ${getFaslArabicName(termNum)} ← الأسبوع $currentWeek ← ${com.example.data.planning.canonical.OfficialAnnualPlanningRepository.mapMatiereToArabic(lesson.subject)} ← $domainText",
+                                text = uiTf("الفصل {0} ← الأسبوع {1} ← {2} ← {3}", getFaslArabicName(termNum), currentWeek, com.example.data.planning.canonical.OfficialAnnualPlanningRepository.mapMatiereToArabic(lesson.subject), domainText),
                                 fontSize = 11.sp,
                                 color = InkSoftBlue,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
                             Text(
-                                text = "الدرس: ${lesson.title}",
+                                text = uiTf("الدرس: {0}", lesson.title),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = InkDarkBlue,
@@ -362,7 +365,7 @@ fun LessonProposalScreen(
                             strokeWidth = 3.dp
                         )
                         Text(
-                            text = "جارٍ تحضير الورقة...",
+                            text = uiT("جارٍ تحضير الورقة..."),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color = InkDarkBlue
@@ -1726,7 +1729,7 @@ private fun BookPageImage(book: String, page: Int) {
                     CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 2.dp, color = Color(0xFF1E3A8A))
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "جاري تحميل الكتب… تحتاج إنترنت مرة واحدة فقط",
+                        text = uiT("جاري تحميل الكتب… تحتاج إنترنت مرة واحدة فقط"),
                         fontSize = 11.sp,
                         color = Color(0xFF6B7280),
                         textAlign = TextAlign.Center

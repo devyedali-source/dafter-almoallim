@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -84,7 +87,7 @@ fun ConcoursSubjectScreen(subjectCode: String, onBack: () -> Unit) {
         ) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "جارٍ تحميل المحتوى...", fontSize = 14.sp)
+            Text(text = uiT("جارٍ تحميل المحتوى..."), fontSize = 14.sp)
         }
         return
     }
@@ -105,7 +108,7 @@ fun ConcoursSubjectScreen(subjectCode: String, onBack: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "تعذّر تحميل المحتوى",
+                text = uiT("تعذّر تحميل المحتوى"),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = CourseBadColor
@@ -207,7 +210,7 @@ fun ConcoursSubjectScreen(subjectCode: String, onBack: () -> Unit) {
                                 color = ConcoursInkBlue
                             )
                             Text(
-                                text = "${domain.items.size} تمرين",
+                                text = uiTf("{0} تمرين", domain.items.size),
                                 fontSize = 12.5.sp,
                                 color = ConcoursInkBlue
                             )
@@ -267,13 +270,13 @@ fun ConcoursSubjectScreen(subjectCode: String, onBack: () -> Unit) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "وضعيات عامة",
+                                text = uiT("وضعيات عامة"),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = ConcoursInkBlue
                             )
                             Text(
-                                text = "${subject.situations.size} وضعية",
+                                text = uiTf("{0} وضعية", subject.situations.size),
                                 fontSize = 12.5.sp,
                                 color = ConcoursInkBlue
                             )

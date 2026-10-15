@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import android.app.DatePickerDialog
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -140,21 +143,21 @@ fun AttendanceScreen(
             else -> Column(Modifier.fillMaxSize().padding(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-                    Text("دفتر الغياب — ${section.name}", fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
+                    Text(uiTf("دفتر الغياب — {0}", section.name), fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
                 }
                 Spacer(Modifier.height(8.dp))
                 Button(
                     onClick = { editingDate = LocalDate.now().toString() },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-                ) { Text("＋ إنشاء غياب جديد") }
+                ) { Text(uiT("＋ إنشاء غياب جديد")) }
                 Spacer(Modifier.height(6.dp))
                 OutlinedButton(onClick = { showDaysDialog = true }, modifier = Modifier.fillMaxWidth()) {
-                    Text("أيام التدريس")
+                    Text(uiT("أيام التدريس"))
                 }
                 Spacer(Modifier.height(12.dp))
 
-                Text("صفحات الأشهر", fontWeight = FontWeight.Bold)
+                Text(uiT("صفحات الأشهر"), fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(6.dp))
                 val today = LocalDate.now()
                 val startYear = if (today.monthValue >= 7) today.year else today.year - 1
@@ -168,10 +171,10 @@ fun AttendanceScreen(
                 }
                 Spacer(Modifier.height(14.dp))
 
-                Text("سجلات الغياب (${dates.size})", fontWeight = FontWeight.Bold)
+                Text(uiTf("سجلات الغياب ({0})", dates.size), fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(6.dp))
                 if (dates.isEmpty()) {
-                    Text("لا يوجد أي سجل غياب بعد.", color = BentoPrimaryDesc)
+                    Text(uiT("لا يوجد أي سجل غياب بعد."), color = BentoPrimaryDesc)
                 }
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(dates) { d ->
@@ -206,10 +209,10 @@ fun AttendanceScreen(
         var selected by remember { mutableStateOf(teachingDays) }
         AlertDialog(
             onDismissRequest = { showDaysDialog = false },
-            title = { Text("الأيام التي تدرّسها") },
+            title = { Text(uiT("الأيام التي تدرّسها")) },
             text = {
                 Column {
-                    Text("السبت والأحد مستثنيان دائماً. الأيام غير المحددة لا تظهر في سجلات الغياب.", fontSize = 12.sp)
+                    Text(uiT("السبت والأحد مستثنيان دائماً. الأيام غير المحددة لا تظهر في سجلات الغياب."), fontSize = 12.sp)
                     Spacer(Modifier.height(8.dp))
                     ATT_DAYS.forEach { (k, name) ->
                         Row(
@@ -230,24 +233,24 @@ fun AttendanceScreen(
                 TextButton(onClick = {
                     viewModel.saveTeachingDays(selected)
                     showDaysDialog = false
-                }) { Text("حفظ") }
+                }) { Text(uiT("حفظ")) }
             },
-            dismissButton = { TextButton(onClick = { showDaysDialog = false }) { Text("إلغاء") } }
+            dismissButton = { TextButton(onClick = { showDaysDialog = false }) { Text(uiT("إلغاء")) } }
         )
     }
 
     dateToDelete?.let { d ->
         AlertDialog(
             onDismissRequest = { dateToDelete = null },
-            title = { Text("حذف سجل الغياب") },
-            text = { Text("هل تريد حذف سجل غياب يوم $d؟") },
+            title = { Text(uiT("حذف سجل الغياب")) },
+            text = { Text(uiTf("هل تريد حذف سجل غياب يوم {0}؟", d)) },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteAttendanceDay(section.id, d)
                     dateToDelete = null
-                }) { Text("حذف", color = AttRed) }
+                }) { Text(uiT("حذف"), color = AttRed) }
             },
-            dismissButton = { TextButton(onClick = { dateToDelete = null }) { Text("إلغاء") } }
+            dismissButton = { TextButton(onClick = { dateToDelete = null }) { Text(uiT("إلغاء")) } }
         )
     }
 }
@@ -283,7 +286,7 @@ private fun AttendanceEditor(
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onDone) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-            Text("سجل غياب", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(uiT("سجل غياب"), fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
         Card(
             modifier = Modifier.fillMaxWidth().clickable {
@@ -295,7 +298,7 @@ private fun AttendanceEditor(
             colors = CardDefaults.cardColors(containerColor = BentoLightLavender)
         ) {
             Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("التاريخ (اضغط لتغييره)", fontSize = 12.sp, color = BentoPrimaryDesc)
+                Text(uiT("التاريخ (اضغط لتغييره)"), fontSize = 12.sp, color = BentoPrimaryDesc)
                 Text(date, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 if (ld != null) Text(dayNameAr(ld), fontSize = 13.sp)
             }
@@ -303,12 +306,12 @@ private fun AttendanceEditor(
         error?.let { Text(it, color = AttRed, fontSize = 13.sp, modifier = Modifier.padding(top = 6.dp)) }
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
-            Text("التلميذ", Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
-            Text("صباحاً", Modifier.width(60.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text(uiT("التلميذ"), Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text(uiT("صباحاً"), Modifier.width(60.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 13.sp)
             Spacer(Modifier.width(8.dp))
-            Text("مساءً", Modifier.width(60.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text(uiT("مساءً"), Modifier.width(60.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 13.sp)
         }
-        Text("أخضر = حاضر ، حرّك الزر لليمين ليصبح أحمر = غائب", fontSize = 11.sp, color = BentoPrimaryDesc)
+        Text(uiT("أخضر = حاضر ، حرّك الزر لليمين ليصبح أحمر = غائب"), fontSize = 11.sp, color = BentoPrimaryDesc)
         Spacer(Modifier.height(4.dp))
         LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             items(students, key = { it.id }) { s ->
@@ -346,21 +349,21 @@ private fun AttendanceEditor(
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-        ) { Text("حفظ السجل") }
+        ) { Text(uiT("حفظ السجل")) }
     }
 
     summary?.let { list ->
         AlertDialog(
             onDismissRequest = { summary = null; onDone() },
-            title = { Text("معلومات الغياب — $date") },
+            title = { Text(uiTf("معلومات الغياب — {0}", date)) },
             text = {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
-                    Text("عدد التلاميذ: ${students.size}")
+                    Text(uiTf("عدد التلاميذ: {0}", students.size))
                     Text("غياب الصباح: ${list.count { it.second.first }}")
                     Text("غياب المساء: ${list.count { it.second.second }}")
                     Spacer(Modifier.height(8.dp))
                     if (list.isEmpty()) {
-                        Text("لا غياب اليوم 🎉", color = AttGreen, fontWeight = FontWeight.Bold)
+                        Text(uiT("لا غياب اليوم 🎉"), color = AttGreen, fontWeight = FontWeight.Bold)
                     } else {
                         list.forEach { (s, p) ->
                             val where = when {
@@ -373,7 +376,7 @@ private fun AttendanceEditor(
                     }
                 }
             },
-            confirmButton = { TextButton(onClick = { summary = null; onDone() }) { Text("حسناً") } }
+            confirmButton = { TextButton(onClick = { summary = null; onDone() }) { Text(uiT("حسناً")) } }
         )
     }
 }
@@ -401,7 +404,7 @@ private fun AttendanceMonthPage(
     Column(Modifier.fillMaxSize().padding(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-            Text("غياب شهر ${MONTH_NAMES[month]} $year", fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
+            Text(uiTf("غياب شهر {0} {1}", MONTH_NAMES[month], year), fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
             val ctx = LocalContext.current
             Button(
                 onClick = {
@@ -413,20 +416,20 @@ private fun AttendanceMonthPage(
                 },
                 enabled = days.isNotEmpty(),
                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-            ) { Text("مشاركة PDF") }
+            ) { Text(uiT("مشاركة PDF")) }
         }
         if (days.isEmpty()) {
-            Text("لا توجد أيام تدريس في هذا الشهر. غيّر «أيام التدريس».", color = BentoPrimaryDesc)
+            Text(uiT("لا توجد أيام تدريس في هذا الشهر. غيّر «أيام التدريس»."), color = BentoPrimaryDesc)
             return@Column
         }
-        Text("ص = الحصة الصباحية ، م = الحصة المسائية ، ✗ = غائب", fontSize = 11.sp, color = BentoPrimaryDesc)
+        Text(uiT("ص = الحصة الصباحية ، م = الحصة المسائية ، ✗ = غائب"), fontSize = 11.sp, color = BentoPrimaryDesc)
         Spacer(Modifier.height(6.dp))
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             Row {
                 // عمود الأسماء
                 Column {
                     Box(Modifier.width(nameW).height(rowH * 2).border(0.5.dp, Color.Gray).background(BentoSoftPurpleContainer), contentAlignment = Alignment.Center) {
-                        Text("التلميذ", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        Text(uiT("التلميذ"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                     }
                     students.forEach { s ->
                         Box(Modifier.width(nameW).height(rowH).border(0.5.dp, Color.Gray).padding(horizontal = 4.dp), contentAlignment = Alignment.CenterStart) {

@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.uiT
+import com.example.ui.utils.uiTf
+
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -89,10 +92,10 @@ fun CourseWritingsScreen(subjectName: String, onBack: () -> Unit) {
     ) {
         WrBackLink(text = "رجوع إلى الدروس", onClick = onBack)
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = "الإنتاج الكتابي", fontSize = 18.sp, fontWeight = FontWeight.Black)
+        Text(text = uiT("الإنتاج الكتابي"), fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "$subjectName · ${writings.size} موضوعًا",
+            text = uiTf("{0} · {1} موضوعًا", subjectName, writings.size),
             fontSize = 13.sp,
             color = WrMutedColor
         )
@@ -113,7 +116,7 @@ fun CourseWritingsScreen(subjectName: String, onBack: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "${writing.g} · ${writing.m} د · ${writing.p} نقاط · ${writing.mw} كلمة على الأقل",
+                        text = uiTf("{0} · {1} د · {2} نقاط · {3} كلمة على الأقل", writing.g, writing.m, writing.p, writing.mw),
                         fontSize = 12.sp,
                         color = WrMutedColor
                     )
@@ -165,15 +168,15 @@ private fun CourseWritingDetail(
                 modifier = Modifier.fillMaxWidth().padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "المدّة: ${writing.m} د", fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                Text(text = "النقاط: ${writing.p}", fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                Text(text = "≥ ${writing.mw} كلمة", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                Text(text = uiTf("المدّة: {0} د", writing.m), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                Text(text = uiTf("النقاط: {0}", writing.p), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                Text(text = uiTf("≥ {0} كلمة", writing.mw), fontSize = 13.sp, fontWeight = FontWeight.Bold)
             }
         }
 
         Spacer(modifier = Modifier.height(14.dp))
         Text(
-            text = "نصّ الموضوع",
+            text = uiT("نصّ الموضوع"),
             fontSize = 15.sp,
             fontWeight = FontWeight.Black,
             color = WrOkColor
@@ -186,14 +189,14 @@ private fun CourseWritingDetail(
         if (writing.cr.isNotEmpty()) {
             Spacer(modifier = Modifier.height(18.dp))
             Text(
-                text = "معايير التصحيح",
+                text = uiT("معايير التصحيح"),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Black,
                 color = WrOkColor
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "اكتب موضوعك على ورقة، ثم ضع علامتك بنفسك على كل معيار تحقّق فيه.",
+                text = uiT("اكتب موضوعك على ورقة، ثم ضع علامتك بنفسك على كل معيار تحقّق فيه."),
                 fontSize = 12.sp,
                 color = WrMutedColor
             )
@@ -243,7 +246,7 @@ private fun CourseWritingDetail(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "تقديرك الذاتي: $earned من $totalPoints",
+                        text = uiTf("تقديرك الذاتي: {0} من {1}", earned, totalPoints),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Black,
                         color = if (earned * 2 >= totalPoints) WrOkColor else WrWarnColor
@@ -266,17 +269,17 @@ private fun CourseWritingDetail(
                     onClick = { showModel = true },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "عرض النموذج المقترح", fontSize = 15.sp)
+                    Text(text = uiT("عرض النموذج المقترح"), fontSize = 15.sp)
                 }
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "لا تفتحه إلا بعد أن تكتب موضوعك بنفسك.",
+                    text = uiT("لا تفتحه إلا بعد أن تكتب موضوعك بنفسك."),
                     fontSize = 12.sp,
                     color = WrWarnColor
                 )
             } else {
                 Text(
-                    text = "النموذج المقترح",
+                    text = uiT("النموذج المقترح"),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
                     color = WrOkColor
@@ -290,7 +293,7 @@ private fun CourseWritingDetail(
                     onClick = { showModel = false },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "إخفاء النموذج", fontSize = 15.sp)
+                    Text(text = uiT("إخفاء النموذج"), fontSize = 15.sp)
                 }
             }
         }
