@@ -703,6 +703,7 @@ private fun TermsListScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(
+                            modifier = Modifier.weight(1f),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
@@ -1193,6 +1194,7 @@ private fun SubjectsListScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(
+                            modifier = Modifier.weight(1f),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
@@ -1211,7 +1213,7 @@ private fun SubjectsListScreen(
                                 }
                             }
 
-                            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Column(modifier = Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                                 Text(
                                     text = OfficialAnnualPlanningRepository.mapMatiereToArabic(subject.nom),
                                     fontWeight = FontWeight.Black,
@@ -1319,6 +1321,7 @@ private fun DomainsListScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(
+                            modifier = Modifier.weight(1f),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
@@ -1337,7 +1340,7 @@ private fun DomainsListScreen(
                                 }
                             }
 
-                            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Column(modifier = Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(
                                     text = domainArabicName,
                                     fontWeight = FontWeight.Black,
