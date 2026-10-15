@@ -73,26 +73,44 @@ fun CompetencyAssessmentScreen(
         Column(Modifier.fillMaxSize().padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع") }
-                Text(uiTf("دفتر المتابعة — {0}", section.name), fontWeight = FontWeight.Bold, fontSize = 17.sp, modifier = Modifier.weight(1f))
-                val disc = catalog.getOrNull(discIdx)
+                Text(
+                    uiTf("دفتر المتابعة — {0}", section.name),
+                    fontWeight = FontWeight.Bold, fontSize = 17.sp,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            // أزرار السحب في قائمة واحدة حتى لا تضيق الشاشة على الهاتف
+            val disc0 = catalog.getOrNull(discIdx)
+            var exportMenu by remember { mutableStateOf(false) }
+            Box(Modifier.fillMaxWidth()) {
                 Button(
-                    onClick = {
-                        if (disc != null) {
-                            val html = com.example.ui.HtmlReportHelper.generateCompetencyHtml(
-                                ctx, section, exportStudents, disc, marks, notes, viewModel
-                            )
-                            com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
-                                ctx, html, "دفتر_المتابعة_${disc.label}.pdf", isLandscape = true
-                            )
-                        }
-                    },
-                    enabled = disc != null,
+                    onClick = { exportMenu = true },
+                    modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-                ) { Text(uiT("سحب لائحة المادة")) }
-                Spacer(Modifier.width(6.dp))
-                OutlinedButton(
-                    onClick = {
-                        if (catalog.isNotEmpty()) {
+                ) { Text(uiT("سحب لوائح المتابعة (PDF) ▾"), maxLines = 1) }
+                DropdownMenu(expanded = exportMenu, onDismissRequest = { exportMenu = false }) {
+                    DropdownMenuItem(
+                        text = { Text(uiT("سحب لائحة المادة")) },
+                        enabled = disc0 != null,
+                        onClick = {
+                            exportMenu = false
+                            if (disc0 != null) {
+                                val html = com.example.ui.HtmlReportHelper.generateCompetencyHtml(
+                                    ctx, section, exportStudents, disc0, marks, notes, viewModel
+                                )
+                                com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
+                                    ctx, html, "دفتر_المتابعة_${disc0.label}.pdf", isLandscape = true
+                                )
+                            }
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(uiT("سحب لوائح كل المواد")) },
+                        enabled = catalog.isNotEmpty(),
+                        onClick = {
+                            exportMenu = false
                             val html = com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
                                 ctx, section, exportStudents, catalog, marks, notes, viewModel
                             )
@@ -100,26 +118,23 @@ fun CompetencyAssessmentScreen(
                                 ctx, html, "دفتر_المتابعة_جميع_المواد_${section.name}.pdf", isLandscape = true
                             )
                         }
-                    },
-                    enabled = catalog.isNotEmpty()
-                ) { Text(uiT("سحب لوائح كل المواد")) }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(uiT("سحب لوائح فارغة لكل المواد (60 سطراً)")) },
+                        enabled = catalog.isNotEmpty(),
+                        onClick = {
+                            exportMenu = false
+                            val blank = (1..60).map { Student(id = -it.toLong(), name = "", classId = section.id) }
+                            val html = com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
+                                ctx, section, blank, catalog, emptyMap(), emptyMap(), viewModel
+                            )
+                            com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
+                                ctx, html, "دفتر_المتابعة_فارغ_جميع_المواد.pdf", isLandscape = true
+                            )
+                        }
+                    )
+                }
             }
-
-            OutlinedButton(
-                onClick = {
-                    if (catalog.isNotEmpty()) {
-                        val blank = (1..60).map { Student(id = -it.toLong(), name = "", classId = section.id) }
-                        val html = com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
-                            ctx, section, blank, catalog, emptyMap(), emptyMap(), viewModel
-                        )
-                        com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
-                            ctx, html, "دفتر_المتابعة_فارغ_جميع_المواد.pdf", isLandscape = true
-                        )
-                    }
-                },
-                enabled = catalog.isNotEmpty(),
-                modifier = Modifier.fillMaxWidth()
-            ) { Text(uiT("سحب لوائح فارغة لكل المواد (60 سطراً)")) }
 
             if (catalog.isEmpty()) {
                 Text(uiT("لا توجد كفايات متاحة لهذا المستوى."), color = BentoPrimaryDesc, modifier = Modifier.padding(16.dp))
@@ -163,9 +178,17 @@ fun CompetencyAssessmentScreen(
 
             Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
                 if (tab == 0) {
-                    chunk.forEach { sp ->
-                        sp.cbs.forEach { (k, t) ->
-                            Text(uiTf("{0} — الكفاية {1}: {2}", sp.label, k, t), fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(vertical = 2.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(Modifier.padding(10.dp)) {
+                            Text(uiT("لائحة الكفايات"), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                            chunk.forEach { sp ->
+                                sp.cbs.forEach { (k, t) ->
+                                    Text(uiTf("{0} — الكفاية {1}: {2}", sp.label, k, t), fontSize = 12.sp, modifier = Modifier.padding(vertical = 2.dp))
+                                }
+                            }
                         }
                     }
                     Spacer(Modifier.height(6.dp))

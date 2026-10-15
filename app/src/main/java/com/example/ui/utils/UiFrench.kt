@@ -378,6 +378,8 @@ object UiFrench {
         "سجلات الغياب ({0})" to "Registres d'absence ({0})",
         "سحب الكشوف والتقارير 📋" to "Imprimer les relevés et rapports 📋",
         "سحب لائحة المادة" to "Exporter la liste",
+        "سحب لوائح المتابعة (PDF) ▾" to "Exporter en PDF ▾",
+        "لائحة الكفايات" to "Liste des compétences de base",
         "سحب لوائح فارغة لكل المواد (60 سطراً)" to "Listes vierges (60 lignes)",
         "سحب لوائح كل المواد" to "Exporter toutes les matières",
         "سعر نشر الإعلان 200 أوقية جديدة. تواصل مع الإدارة لتفعيل المنشور." to "Prix de publication d'une annonce : 200 nouvelles ouguiyas. Contactez l'administration pour activer la publication.",
