@@ -1434,7 +1434,12 @@ object HtmlReportHelper {
             }
             val actual = expected - abs
             fun pct(n: Int) = if (expected > 0) Math.round(n * 100f / expected) else 0
-            html.append("<td>$expected<br>100%</td><td>$abs<br>${pct(abs)}%</td><td>$actual<br>${pct(actual)}%</td></tr>")
+            if (expected == 0) {
+                // لائحة فارغة (لا نداء مسجّل): تُترك الإحصائيات فارغة ليكتبها المعلم يدوياً
+                html.append("<td>&nbsp;<br>&nbsp;</td><td>&nbsp;<br>&nbsp;</td><td>&nbsp;<br>&nbsp;</td></tr>")
+            } else {
+                html.append("<td>$expected<br>100%</td><td>$abs<br>${pct(abs)}%</td><td>$actual<br>${pct(actual)}%</td></tr>")
+            }
         }
         html.append("</tbody></table>")
         html.append("""
