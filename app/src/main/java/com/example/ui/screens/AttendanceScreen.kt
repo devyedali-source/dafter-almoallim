@@ -465,7 +465,7 @@ private fun AttendanceMonthPage(
                     val recordedDates = records.map { it.date }.toSet()
                     val daysCounted = days.filter { it.toString() in recordedDates }
                     val expected = daysCounted.size * 2
-                    val statW = 64.dp
+                    val statW = 76.dp
                     val stats = listOf<Pair<String, (Student) -> Int>>(
                         "الحضور المتوقع" to { _ -> expected },
                         "غياب الشهر" to { st ->
@@ -490,8 +490,9 @@ private fun AttendanceMonthPage(
                                 Box(Modifier.width(statW).height(rowH).border(0.5.dp, Color.Gray), contentAlignment = Alignment.Center) {
                                     val n = calc(st)
                                     val pct = if (expected > 0) Math.round(n * 100f / expected) else 0
-                                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
-                                        Text("$n", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                                        Text("$n", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                        Box(Modifier.width(1.dp).height(16.dp).background(Color.Gray))
                                         Text("$pct%", fontSize = 10.sp, color = BentoPrimaryDesc, maxLines = 1)
                                     }
                                 }
