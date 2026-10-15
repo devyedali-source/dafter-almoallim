@@ -409,7 +409,7 @@ private fun AttendanceMonthPage(
                     val html = com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
                         ctx, section, students, records, days, label, viewModel
                     )
-                    com.example.ui.HtmlReportHelper.shareHtmlAsPdf(ctx, html, "سجل_النداء_${MONTH_NAMES[month]}_$year", isLandscape = true)
+                    com.example.ui.HtmlReportHelper.shareHtmlAsPdf(ctx, html, "سجل_النداء_${MONTH_NAMES[month]}_$year.pdf", isLandscape = true)
                 },
                 enabled = days.isNotEmpty(),
                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
