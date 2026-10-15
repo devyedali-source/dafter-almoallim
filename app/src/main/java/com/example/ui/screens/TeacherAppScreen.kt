@@ -2077,31 +2077,31 @@ fun InnerTeacherAppScreenContent(
                                 selected = insideTab == 0,
                                 onClick = { insideTab = 0 },
                                 icon = { Icon(Icons.Default.Person, contentDescription = "تسيير الطلاب") },
-                                label = { Text(AppLocalization.tr("tab_students", "الطلاب", appLanguage), fontSize = 9.sp, fontWeight = FontWeight.Bold) }
+                                label = { Text(if (appLanguage == "fr") "Élèves" else "الطلاب", fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
                             )
                             NavigationBarItem(
                                 selected = insideTab == 1,
                                 onClick = { insideTab = 1 },
                                 icon = { Icon(Icons.Default.EditCalendar, contentDescription = "تسيير النتائج") },
-                                label = { Text(AppLocalization.tr("tab_grades", "النتائج", appLanguage), fontSize = 9.sp, fontWeight = FontWeight.Bold) }
+                                label = { Text(if (appLanguage == "fr") "Résultats" else "النتائج", fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
                             )
                             NavigationBarItem(
                                 selected = insideTab == 2,
                                 onClick = { insideTab = 2 },
                                 icon = { Icon(Icons.Default.Print, contentDescription = "سحب اللوائح والكشوف") },
-                                label = { Text(AppLocalization.tr("tab_reports", "الكشوف", appLanguage), fontSize = 9.sp, fontWeight = FontWeight.Bold) }
+                                label = { Text(if (appLanguage == "fr") "Relevés" else "الكشوف", fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
                             )
                             NavigationBarItem(
                                 selected = insideTab == 4,
                                 onClick = { insideTab = 4 },
                                 icon = { Icon(Icons.Default.EditCalendar, contentDescription = "التخطيط السنوي") },
-                                label = { Text(AppLocalization.tr("tab_annual_planning", "التخطيط السنوي", appLanguage), fontSize = 8.5.sp, fontWeight = FontWeight.Bold) }
+                                label = { Text(if (appLanguage == "fr") "Planning" else "التخطيط السنوي", fontSize = 8.5.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
                             )
                             NavigationBarItem(
                                 selected = insideTab == 5,
                                 onClick = { insideTab = 5 },
                                 icon = { Icon(Icons.Default.ListAlt, contentDescription = "الجدول الزمني") },
-                                label = { Text(AppLocalization.tr("tab_timetable", "الجدول الزمني", appLanguage), fontSize = 8.sp, fontWeight = FontWeight.Bold) }
+                                label = { Text(if (appLanguage == "fr") "Horaires" else "الجدول الزمني", fontSize = 8.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) }
                             )
                         }
                     }
