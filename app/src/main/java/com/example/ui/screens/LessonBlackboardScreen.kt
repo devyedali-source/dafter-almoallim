@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -228,6 +229,15 @@ private fun AutoFitChalkText(text: String, modifier: Modifier) {
         var size by remember(text, maxWidth, maxHeight) { mutableStateOf(26f) }
         var ready by remember(text, maxWidth, maxHeight) { mutableStateOf(false) }
         val blocks = remember(text) { parseBoardBlocks(text) }
+        // شبكة أمان: إن توقفت عملية ملاءمة الخط قبل الاكتمال لأي سبب، لا يبقى القسم فارغًا
+        LaunchedEffect(text, maxWidth, maxHeight) {
+            kotlinx.coroutines.delay(500)
+            if (!ready) {
+                if (size > 14f) size = 14f
+                kotlinx.coroutines.delay(250)
+                ready = true
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
