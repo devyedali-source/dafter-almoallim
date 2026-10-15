@@ -517,7 +517,7 @@ fun ClassTimetableSubview(
     val dialogPeriod = addingPeriod
     if (dialogSlot != null || dialogPeriod != null) {
         val subjectChoices = remember(level) {
-            OfficialTimetableRepository.getTimetableForLevel(level).map { it.subject }.distinct()
+            OfficialTimetableRepository.getTimetableForLevel(level).map { if (it.subject == "Français") "اللغة الفرنسية" else it.subject }.distinct()
         }
         var subject by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.subject ?: "") }
         var branch by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.branch ?: "") }
@@ -531,14 +531,14 @@ fun ClassTimetableSubview(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         items(subjectChoices) { sc ->
-                            AssistChip(onClick = { subject = sc; branch = ""; french = sc.contains("Fran", ignoreCase = true) }, label = { Text(sc, fontSize = 11.sp) })
+                            AssistChip(onClick = { subject = sc; branch = ""; french = sc.contains("الفرنسية") }, label = { Text(sc, fontSize = 11.sp) })
                         }
                     }
                     OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("المادة") }, singleLine = true)
                     val branchChoices = remember(subject, level) {
                         (listOf(level) + (1..6).filter { it != level })
                             .flatMap { OfficialTimetableRepository.getTimetableForLevel(it) }
-                            .filter { it.subject == subject && it.branch.isNotBlank() }
+                            .filter { (if (it.subject == "Français") "اللغة الفرنسية" else it.subject) == subject && it.branch.isNotBlank() }
                             .map { it.branch }.distinct()
                     }
                     if (branchChoices.isNotEmpty()) {
@@ -976,10 +976,8 @@ private fun TimetableSlotCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = if (slot.branch.isNotBlank() && slot.branch != slot.subject) {
-                            "${slot.subject} (${slot.branch})"
-                        } else {
-                            slot.subject
+                        text = (if (slot.subject == "Français") "اللغة الفرنسية" else slot.subject).let { subj ->
+                            if (slot.branch.isNotBlank() && slot.branch != slot.subject) "$subj (${slot.branch})" else subj
                         },
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
