@@ -80,7 +80,21 @@ fun CompetencyAssessmentScreen(
                     },
                     enabled = disc != null && students.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-                ) { Text("مشاركة PDF") }
+                ) { Text("PDF المادة") }
+                Spacer(Modifier.width(6.dp))
+                OutlinedButton(
+                    onClick = {
+                        if (catalog.isNotEmpty()) {
+                            val html = com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
+                                ctx, section, students, catalog, marks, notes, viewModel
+                            )
+                            com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
+                                ctx, html, "تقييم_الكفايات_جميع_المواد_${section.name}.pdf", isLandscape = true
+                            )
+                        }
+                    },
+                    enabled = catalog.isNotEmpty() && students.isNotEmpty()
+                ) { Text("PDF كل المواد") }
             }
 
             if (catalog.isEmpty()) {

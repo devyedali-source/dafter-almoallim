@@ -1585,6 +1585,28 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    /** كل مواد القسم النشط في ملف واحد (بأسماء التلاميذ حتى لو كان التقييم فارغاً) */
+    fun generateCompetencyAllHtml(
+        context: Context,
+        activeClass: ClassSection,
+        students: List<Student>,
+        disciplines: List<com.example.data.planning.LessonPreparationRepository.CompDiscipline>,
+        marks: Map<String, Int>,
+        notes: Map<String, String>,
+        viewModel: TeacherViewModel? = null
+    ): String {
+        var head = ""
+        val bodies = StringBuilder()
+        disciplines.forEachIndexed { i, d ->
+            val h = generateCompetencyHtml(context, activeClass, students, d, marks, notes, viewModel)
+            if (i == 0) head = h.substringBefore("<body>")
+            bodies.append("<div style=\"page-break-after: always; break-after: page;\">")
+            bodies.append(h.substringAfter("<body>").substringBeforeLast("</body>"))
+            bodies.append("</div>")
+        }
+        return "$head<body>$bodies</body></html>"
+    }
+
     // French Grades Entry List
     fun generateFrenchGradesEntryHtml(
         context: Context,
