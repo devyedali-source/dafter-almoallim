@@ -178,7 +178,46 @@ private fun BoardSection(title: String?, text: String, modifier: Modifier) {
                 modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
             )
         }
-        AutoFitChalkText(text, Modifier.fillMaxWidth().weight(1f))
+        if (title == null) {
+            BoardHeader(text, Modifier.fillMaxWidth().weight(1f))
+        } else {
+            AutoFitChalkText(text, Modifier.fillMaxWidth().weight(1f))
+        }
+    }
+}
+
+/**
+ * ترويسة السبورة: التاريخان، ثم المادة والمجال، ثم الموضوع (عنوان الدرس). تُعرض بخط ثابت مقروء
+ * دون خوارزمية ملاءمة، حتى لا تغيب أبدًا.
+ */
+@Composable
+private fun BoardHeader(text: String, modifier: Modifier) {
+    val lines = text.split('\n')
+    val cell: @Composable (String, Modifier) -> Unit = { t, m ->
+        Text(
+            text = t,
+            style = ChalkStyle,
+            fontSize = 14.sp,
+            lineHeight = 19.sp,
+            modifier = m
+        )
+    }
+    Column(modifier = modifier, verticalArrangement = Arrangement.SpaceEvenly) {
+        if (lines.size >= 2) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                cell(lines[0], Modifier.weight(1f))
+                cell(lines[1], Modifier.weight(1f))
+            }
+        }
+        if (lines.size >= 4) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                cell(lines[2], Modifier.weight(1f))
+                cell(lines[3], Modifier.weight(1f))
+            }
+        }
+        if (lines.size >= 5) cell(lines[4], Modifier.fillMaxWidth())
+        val extra = lines.drop(5).filter { it.isNotBlank() }
+        if (extra.isNotEmpty()) cell(extra.joinToString(" "), Modifier.fillMaxWidth())
     }
 }
 
