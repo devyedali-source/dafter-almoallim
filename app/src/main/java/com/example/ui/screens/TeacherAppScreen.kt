@@ -10582,7 +10582,19 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                // صورة تعريفية بالتطبيق أعلى زر الدخول
+                androidx.compose.foundation.Image(
+                    painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.img_login_promo),
+                    contentDescription = null,
+                    contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1080f / 720f)
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(1.dp, Color(0xFF1B5E20).copy(alpha = 0.25f), RoundedCornerShape(16.dp))
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // Beautifully designed Google Sign-In button as the primary mechanism
                 Button(
