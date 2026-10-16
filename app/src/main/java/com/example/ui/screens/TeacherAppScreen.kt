@@ -8682,6 +8682,20 @@ fun EnhancedReportsTab(
                                 .verticalScroll(rememberScrollState()),
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
+                                shape = RoundedCornerShape(14.dp),
+                                border = BorderStroke(1.dp, Color(0xFFFB8C00).copy(alpha = 0.5f))
+                            ) {
+                                Text(
+                                    text = uiT("ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا."),
+                                    modifier = Modifier.padding(14.dp),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF8D4B00)
+                                )
+                            }
                             // --- Quick Subjects Editor ---
                             Card(
                                 modifier = Modifier

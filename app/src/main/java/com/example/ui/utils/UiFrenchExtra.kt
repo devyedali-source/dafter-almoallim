@@ -291,6 +291,7 @@ object UiFrenchExtra {
         "توزيع وتنظيم طلاب القسم إلى 5 مجموعات نظافة دورية على مدار أيام الأسبوع الدراسي (الاثنين إلى الجمعة)، لغرس قيم التعاون والنظافة." to "Répartition des élèves en 5 groupes de propreté par roulement sur les jours de classe (lundi au vendredi), pour cultiver l'entraide et l'hygiène.",
         "💚 مشاركة جدول النظافة كملف PDF" to "💚 Partager le tableau de propreté en PDF",
         "جاري تصدير ومشاركة جدول النظافة كملف PDF..." to "Exportation du tableau de propreté en PDF…",
+        "ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا." to "ℹ️ Attention : ces paramètres concernent uniquement les enseignants qui utilisent un système de résultats différent du système officiel du ministère. Si vous suivez le système officiel, ne modifiez rien ici.",
         "📝 سجل معلم الفرنسية" to "📝 Registre de l'enseignant de français",
         "لا توجد أسماء طلاب بالقسم بعد للطباعة" to "Aucun nom d'élève à imprimer",
         "لا توجد أسماء طلاب بالقسم بعد للمشاركة" to "Aucun nom d'élève à partager",
