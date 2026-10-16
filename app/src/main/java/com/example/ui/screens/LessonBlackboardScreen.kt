@@ -109,12 +109,12 @@ fun LessonBlackboardScreen(
         CompositionLocalProvider(LocalLayoutDirection provides direction) {
           Column(Modifier.fillMaxSize()) {
             // تاريخا اليوم المسجّلان محلياً فوق السبورة (خارج إطارها)
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 52.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Text(hijriLine, style = ChalkStyle, fontSize = 13.sp)
-                Text(gregLine, style = ChalkStyle, fontSize = 13.sp)
+                Text(hijriLine, style = ChalkStyle, fontSize = 13.sp, modifier = Modifier.fillMaxWidth())
+                Text(gregLine, style = ChalkStyle, fontSize = 13.sp, modifier = Modifier.fillMaxWidth())
             }
             BoxWithConstraints(
                 modifier = Modifier

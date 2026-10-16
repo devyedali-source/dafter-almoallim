@@ -400,12 +400,12 @@ fun LessonProposalScreen(
                                     // 0. تاريخا اليوم المسجّلان محلياً أعلى الورقة (خارج الجدول)
                                     val prepCtx = androidx.compose.ui.platform.LocalContext.current
                                     val (prepHijri, prepGreg) = remember(fr) { com.example.ui.utils.LocalDates.today(prepCtx, fr) }
-                                    Row(
+                                    Column(
                                         modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                        verticalArrangement = Arrangement.spacedBy(2.dp)
                                     ) {
-                                        Text(text = prepHijri, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue)
-                                        Text(text = prepGreg, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue)
+                                        Text(text = prepHijri, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue, modifier = Modifier.fillMaxWidth())
+                                        Text(text = prepGreg, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue, modifier = Modifier.fillMaxWidth())
                                     }
 
                                     // 1. ترويسة من صفّين، كل صف أربع خانات
