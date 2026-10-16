@@ -21,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.clipToBounds
 import com.example.ui.utils.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -278,17 +279,17 @@ private fun parseBoardBlocks(text: String): List<BoardBlock> {
  */
 @Composable
 private fun AutoFitChalkText(text: String, modifier: Modifier) {
-    BoxWithConstraints(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier.clipToBounds()) {
         val availPx = with(LocalDensity.current) { maxHeight.roundToPx() }
         var size by remember(text, maxWidth, maxHeight) { mutableStateOf(26f) }
         var ready by remember(text, maxWidth, maxHeight) { mutableStateOf(false) }
         val blocks = remember(text) { parseBoardBlocks(text) }
         // شبكة أمان: إن توقفت عملية ملاءمة الخط قبل الاكتمال لأي سبب، لا يبقى القسم فارغًا
         LaunchedEffect(text, maxWidth, maxHeight) {
-            kotlinx.coroutines.delay(500)
+            kotlinx.coroutines.delay(1500)
             if (!ready) {
-                if (size > 14f) size = 14f
-                kotlinx.coroutines.delay(250)
+                size = 7f
+                kotlinx.coroutines.delay(300)
                 ready = true
             }
         }
@@ -297,8 +298,9 @@ private fun AutoFitChalkText(text: String, modifier: Modifier) {
                 .fillMaxWidth()
                 .wrapContentHeight(align = Alignment.Top, unbounded = true)
                 .onSizeChanged { s ->
-                    if (s.height > availPx && size > 8f) {
-                        size = (size * 0.93f).coerceAtLeast(8f)
+                    if (s.height > availPx && size > 7f) {
+                        val ratio = kotlin.math.sqrt(availPx.toFloat() / s.height.toFloat()) * 0.96f
+                        size = (size * ratio.coerceAtMost(0.95f)).coerceAtLeast(7f)
                     } else {
                         ready = true
                     }
