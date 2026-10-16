@@ -1728,11 +1728,11 @@ object HtmlReportHelper {
             isLandscape = false,
             isList = true,
             schoolName = activeClass.schoolName,
-            fileTitle = "لائحة إدراج نتائج الفرنسية"
+            fileTitle = "سجل معلم الفرنسية"
         )
         
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة إدراج نتائج الفرنسية</title>${styles}</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>سجل معلم الفرنسية</title>${styles}</head><body>")
         
         html.append("<div class=\"sheet-card\">")
         
@@ -1748,7 +1748,7 @@ object HtmlReportHelper {
             </div>
             <div class="header-column center">
                 ${seal}
-                <div class="header-title-main" style="margin-top: 6px;">لائحة إدراج نتائج الفرنسية</div>
+                <div class="header-title-main" style="margin-top: 6px;">سجل معلم الفرنسية</div>
             </div>
             <div class="header-column left">
                 شرف - إخاء - عدالة<br>

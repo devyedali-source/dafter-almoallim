@@ -634,7 +634,7 @@ object UiFrench {
         "📑 كشف درجات المعدلات والرتبة السنوية فقط (3 بالورقة عمودياً)" to "📑 Relevé des moyennes et du rang annuel seulement (3 par feuille en portrait)",
         "📘 مادة: {0}" to "📘 Matière : {0}",
         "📚 الفصل المراد تفعيله: {0}" to "📚 Trimestre à activer : {0}",
-        "📝 إدراج الفرنسية 📥" to "📝 Saisie du français 📥",
+        "📝 سجل معلم الفرنسية 📥" to "📝 Registre de l'enseignant de français 📥",
         "📢 التواصل والقنوات الرسمية للتطبيق" to "📢 Contact et chaînes officielles de l'application",
         "📢 عن الدورة" to "📢 À propos du cours",
         "📥 سحب ومشاركة كشف النتائج التفصيلي (PDF)" to "📥 Exporter et partager le relevé détaillé des résultats (PDF)",

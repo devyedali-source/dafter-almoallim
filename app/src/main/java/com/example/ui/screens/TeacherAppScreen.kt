@@ -2309,7 +2309,7 @@ fun ClassStudentsSubview(
                             }
                         }
                     }
-                    PullItem("📝 إدراج الفرنسية 📥") {
+                    PullItem("📝 سجل معلم الفرنسية 📥") {
                         if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً لسحب الورقة")) {
                             val frenchSub = viewModel.buildClassSubjects(activeSection.id, activeSection.level, allSubjectsForPull, allCustomForPull)
                                 .find { it.name.contains("فرنسية") || it.name.lowercase().contains("french") }
@@ -10085,7 +10085,7 @@ fun EnhancedReportsTab(
                     val frenchMaxPoints = frenchSub?.maxPoints ?: 20
 
                     ReportExportActionCard(
-                        title = "📝 لائحة إدراج نتائج مادة اللغة الفرنسية يدوياً",
+                        title = "📝 سجل معلم الفرنسية",
                         description = "توليد ورقة رصد درجات اللغة الفرنسية للقسم فارغة وتحتوي على رقم النداء والاسم بالعربية والفرنسية، ليقوم معلم الفرنسية بتسجيل العلامات عليها يدوياً وإعادتها لإدارجها في التطبيق (مجموع نقاط المادة لهذا المستوى: $frenchMaxPoints ن)",
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         onPrintClick = {
