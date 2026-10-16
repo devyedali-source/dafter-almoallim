@@ -4360,7 +4360,9 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         val nowMs = System.currentTimeMillis()
         val lastFetchMs = prefs.getLong("last_exchange_fetch_time", 0L)
         val withinDailyWindow = (nowMs - lastFetchMs) < 86400000L
-        val skipServer = withinDailyWindow && !force
+        // لا نتخطى الاتصال بالخادم إذا لم يكن لدينا أي إعلان معتمد محفوظ محلياً (وإلا تبقى الصفحة فارغة 24 ساعة)
+        val hasApprovedCached = _exchangePosts.value.any { it.isApproved }
+        val skipServer = withinDailyWindow && !force && hasApprovedCached
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             try {
                 val localPosts = activeDatabase.teacherDao().getAllExchangePosts()
@@ -4377,14 +4379,16 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         if (!isNetworkAvailable()) return
         prefs.edit().putLong("last_exchange_fetch_time", nowMs).apply()
         try {
+            // نجلب الإعلانات المعتمدة فقط (بدون orderBy حتى لا نحتاج فهرساً مركّباً) ثم نرتّبها محلياً،
+            // وإلا ضاعت المعتمدة بين آخر 4 إعلانات قد تكون كلها قيد المراجعة.
             FirebaseFirestore.getInstance().collection("teacher_exchanges")
-                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
-                .limit(exchangePostsLimit)
+                .whereEqualTo("isApproved", true)
+                .limit(exchangePostsLimit + 16L)
                 .get(com.google.firebase.firestore.Source.SERVER)
                 .addOnSuccessListener { snapshot ->
                     if (snapshot == null) return@addOnSuccessListener
-                    _hasMoreExchangePosts.value = snapshot.documents.size >= exchangePostsLimit
-                    val remotePosts = snapshot.documents.mapNotNull { doc ->
+                    _hasMoreExchangePosts.value = snapshot.documents.size >= exchangePostsLimit + 16L
+                    val mapDoc: (com.google.firebase.firestore.DocumentSnapshot) -> TeacherExchangePost? = { doc ->
                         try {
                             TeacherExchangePost(
                                 id = doc.id,
@@ -4413,8 +4417,24 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                             null
                         }
                     }
+                    val approvedPosts = snapshot.documents.mapNotNull(mapDoc)
                     viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
                         try {
+                            // إعلاناتي أنا (حتى غير المعتمدة) لتبقى ظاهرة في «منشوراتي»
+                            val ownPosts: List<TeacherExchangePost> = try {
+                                val uid = _currentUser.value?.uid ?: ""
+                                if (uid.isBlank()) emptyList() else {
+                                    val ownSnap = com.google.android.gms.tasks.Tasks.await(
+                                        FirebaseFirestore.getInstance().collection("teacher_exchanges")
+                                            .whereEqualTo("userId", uid)
+                                            .get(com.google.firebase.firestore.Source.SERVER)
+                                    )
+                                    ownSnap.documents.mapNotNull(mapDoc)
+                                }
+                            } catch (ex: Exception) {
+                                emptyList()
+                            }
+                            val remotePosts = (approvedPosts + ownPosts).distinctBy { it.id }
                             try {
                                 val myUid = _currentUser.value?.uid ?: ""
                                 if (myUid.isNotBlank()) {
