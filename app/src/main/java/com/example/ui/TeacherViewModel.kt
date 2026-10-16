@@ -3070,8 +3070,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             onResult(false, validation)
             return
         }
-        if (reason.length < 5) {
-            onResult(false, "اكتب سبب التصحيح (5 أحرف على الأقل) ليراجعه المدير.")
+        if (reason.isEmpty()) {
+            onResult(false, "اكتب سبب التصحيح (كلمة واحدة تكفي) ليراجعه المدير.")
             return
         }
         if (reason.length > 300) {

@@ -296,7 +296,7 @@ fun EditClassInfoDialog(
                         Text(text = errorText ?: "", color = Color(0xFFC62828), fontSize = 12.sp, fontWeight = FontWeight.Bold, lineHeight = 18.sp)
                     }
 
-                    val canSubmit = !busy && schoolName.trim().length >= 2 && (isDirect || reason.trim().length >= 5)
+                    val canSubmit = !busy && schoolName.trim().length >= 2 && (isDirect || reason.isNotBlank())
                     Button(
                         onClick = {
                             errorText = null
