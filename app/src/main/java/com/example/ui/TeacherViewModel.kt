@@ -3166,6 +3166,36 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     private val _classInfoRequests = MutableStateFlow<List<ClassInfoRequest>>(emptyList())
     val classInfoRequests: StateFlow<List<ClassInfoRequest>> = _classInfoRequests.asStateFlow()
 
+    /** المدير: يفتح طلباً واحداً من رابط الواتساب (يقرأ مستند القسم من الخادم). */
+    fun loadClassInfoRequest(teacherId: String, classId: Long, onResult: (ClassInfoRequest?, String?) -> Unit) {
+        if (!isClassInfoAdmin()) {
+            onResult(null, "هذه الصفحة مخصصة لمدير الأقسام فقط.")
+            return
+        }
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            var req: ClassInfoRequest? = null
+            var err: String? = null
+            try {
+                val doc = Tasks.await(
+                    FirebaseFirestore.getInstance().collection("teachers").document(teacherId)
+                        .collection("classes").document(classId.toString())
+                        .get(com.google.firebase.firestore.Source.SERVER),
+                    15, java.util.concurrent.TimeUnit.SECONDS
+                )
+                if (!doc.exists()) {
+                    err = "لم يُعثر على هذا القسم في السحابة."
+                } else {
+                    req = parseClassInfoRequest(doc)
+                    if (req == null) err = "لا يوجد طلب تصحيح معلّق لهذا القسم (ربما عولج سابقاً)."
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                err = "📶 الاتصال ضعيف: تعذّر تحميل الطلب. تأكد من الشبكة ثم أعد المحاولة."
+            }
+            withContext(kotlinx.coroutines.Dispatchers.Main) { onResult(req, err) }
+        }
+    }
+
     /** موافقة المدير: يطبّق التغيير في مستند القسم ويترك النتيجة لجهاز المعلم ليطبّقها محلياً. */
     fun approveClassInfoRequest(req: ClassInfoRequest, onResult: (Boolean, String) -> Unit) {
         if (!isClassInfoAdmin()) {

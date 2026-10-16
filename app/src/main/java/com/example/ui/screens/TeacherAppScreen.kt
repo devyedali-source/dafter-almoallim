@@ -641,6 +641,7 @@ fun InnerTeacherAppScreenContent(
             var activeActivationRequestId by remember { mutableStateOf<String?>(null) }
             var activeExchangeApprovalRequestId by remember { mutableStateOf<String?>(null) }
             var activeCourseActivationRequestId by remember { mutableStateOf<String?>(null) }
+            var activeClassInfoRequestKey by remember { mutableStateOf<String?>(null) }
             var currentOuterTab by remember {
                 mutableStateOf(
                     com.example.data.state.LastPlaceStore.getInt(context, "outer_tab")
@@ -813,6 +814,15 @@ fun InnerTeacherAppScreenContent(
                     val courseReqId = uri.lastPathSegment
                     if (!courseReqId.isNullOrBlank()) {
                         activeCourseActivationRequestId = courseReqId
+                        onDeepLinkConsumed?.invoke()
+                        return@LaunchedEffect
+                    }
+                }
+
+                if (uri.host == "diftar-almoaalim.web.app" && uri.path?.startsWith("/activate-class-info") == true) {
+                    val infoKey = uri.lastPathSegment
+                    if (!infoKey.isNullOrBlank()) {
+                        activeClassInfoRequestKey = infoKey
                         onDeepLinkConsumed?.invoke()
                         return@LaunchedEffect
                     }
@@ -1294,6 +1304,14 @@ fun InnerTeacherAppScreenContent(
                     )
                 }
             } else
+            if (activeClassInfoRequestKey != null) {
+                ClassInfoRequestLinkView(
+                    requestKey = activeClassInfoRequestKey!!,
+                    viewModel = viewModel,
+                    currentUser = currentUser,
+                    onClose = { activeClassInfoRequestKey = null }
+                )
+            } else
             if (activeActivationRequestId != null || activeExchangeApprovalRequestId != null) {
                 val isLinkOwner = currentUser?.email?.trim()?.lowercase() == "elyedalimoctar@gmail.com"
                 if (!isLinkOwner) {
@@ -1386,6 +1404,7 @@ fun InnerTeacherAppScreenContent(
             androidx.activity.compose.BackHandler(
                 enabled = drawerState.currentValue == DrawerValue.Open ||
                     activeCourseActivationRequestId != null ||
+                    activeClassInfoRequestKey != null ||
                     activeActivationRequestId != null ||
                     activeExchangeApprovalRequestId != null ||
                     isNotificationsOpen ||
@@ -1397,6 +1416,7 @@ fun InnerTeacherAppScreenContent(
                 when {
                     drawerState.currentValue == DrawerValue.Open -> scope.launch { drawerState.close() }
                     activeCourseActivationRequestId != null -> activeCourseActivationRequestId = null
+                    activeClassInfoRequestKey != null -> activeClassInfoRequestKey = null
                     activeActivationRequestId != null || activeExchangeApprovalRequestId != null -> {
                         activeActivationRequestId = null
                         activeExchangeApprovalRequestId = null

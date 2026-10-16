@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
@@ -345,7 +347,9 @@ private fun openClassInfoWhatsApp(
     reason: String
 ) {
     try {
-        val email = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email ?: ""
+        val authUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        val email = authUser?.email ?: ""
+        val uid = authUser?.uid ?: ""
         val message = "السلام عليكم،\n" +
             "أنا المعلم صاحب البريد: $email\n" +
             "أطلب تصحيح بيانات القسم: ${section.getFormattedName()}\n\n" +
@@ -353,7 +357,8 @@ private fun openClassInfoWhatsApp(
             "المدرسة الصحيحة: $newSchool\n" +
             "الولاية: $newWilaya — المقاطعة: $newMoughataa\n" +
             "السبب: $reason\n\n" +
-            "🔑 رقم القسم الفريد:\n${section.id}"
+            "🔑 رقم القسم الفريد:\n${section.id}" +
+            if (uid.isNotBlank()) "\n------------------------------------\nرابط مراجعة الطلب:\nhttps://diftar-almoaalim.web.app/activate-class-info/${uid}_${section.id}" else ""
         val url = "https://api.whatsapp.com/send?phone=22237786585&text=${android.net.Uri.encode(message)}"
         context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
     } catch (e: Exception) {
@@ -508,7 +513,7 @@ fun AdminClassInfoRequestsTab(viewModel: TeacherViewModel) {
 }
 
 @Composable
-private fun ClassInfoRequestCard(
+fun ClassInfoRequestCard(
     req: ClassInfoRequest,
     busy: Boolean,
     anyBusy: Boolean,
@@ -615,6 +620,159 @@ private fun ClassInfoRequestCard(
                     Text(uiT("رفض"), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold, maxLines = 1)
                 }
             }
+        }
+    }
+}
+
+// ============================================================
+// صفحة المدير التي يفتحها رابط الواتساب: طلب تصحيح واحد
+// الرابط: https://diftar-almoaalim.web.app/activate-class-info/{uidالمعلم}_{رقمالقسم}
+// ============================================================
+
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@Composable
+fun ClassInfoRequestLinkView(
+    requestKey: String,
+    viewModel: TeacherViewModel,
+    currentUser: com.google.firebase.auth.FirebaseUser?,
+    onClose: () -> Unit
+) {
+    val context = LocalContext.current
+    val isAdmin = currentUser?.email?.trim()?.lowercase() == "elyedalimoctar@gmail.com"
+    val sep = requestKey.lastIndexOf('_')
+    val teacherId = if (sep > 0) requestKey.substring(0, sep) else ""
+    val classId = if (sep > 0) requestKey.substring(sep + 1).toLongOrNull() else null
+
+    var req by remember { mutableStateOf<ClassInfoRequest?>(null) }
+    var loading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf<String?>(null) }
+    var doneMessage by remember { mutableStateOf<String?>(null) }
+    var busy by remember { mutableStateOf(false) }
+    var reloadKey by remember { mutableStateOf(0) }
+    var showReject by remember { mutableStateOf(false) }
+    var rejectNote by remember { mutableStateOf("") }
+
+    LaunchedEffect(requestKey, reloadKey, isAdmin) {
+        if (!isAdmin) return@LaunchedEffect
+        if (teacherId.isBlank() || classId == null) {
+            error = "رابط الطلب غير صالح."
+            loading = false
+            return@LaunchedEffect
+        }
+        loading = true
+        error = null
+        viewModel.loadClassInfoRequest(teacherId, classId) { r, e ->
+            req = r
+            error = e
+            loading = false
+        }
+    }
+
+    val current = req
+    if (showReject && current != null) {
+        AlertDialog(
+            onDismissRequest = { showReject = false },
+            title = { Text(uiT("رفض الطلب"), fontWeight = FontWeight.Bold) },
+            text = {
+                OutlinedTextField(
+                    value = rejectNote,
+                    onValueChange = { if (it.length <= 200) rejectNote = it },
+                    label = { Text(uiT("ملاحظة للمعلم (اختياري)")) },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 2,
+                    maxLines = 3
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showReject = false
+                        busy = true
+                        viewModel.rejectClassInfoRequest(current, rejectNote) { ok, msg ->
+                            busy = false
+                            if (ok) doneMessage = msg else Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
+                ) { Text(uiT("رفض الطلب"), color = Color.White, fontWeight = FontWeight.Bold) }
+            },
+            dismissButton = { TextButton(onClick = { showReject = false }) { Text(uiT("إلغاء")) } }
+        )
+    }
+
+    androidx.compose.material3.Scaffold(
+        topBar = {
+            androidx.compose.material3.TopAppBar(
+                title = {
+                    Text(
+                        text = uiT("طلب تصحيح بيانات قسم ✏️"),
+                        fontWeight = FontWeight.Black,
+                        fontSize = 18.sp,
+                        color = Color.White
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onClose) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع", tint = Color.White)
+                    }
+                },
+                colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(containerColor = BentoPrimary)
+            )
+        },
+        containerColor = Color(0xFFF8FAFC)
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            if (!isAdmin) {
+                Text(
+                    text = "🔒 هذه الصفحة مخصصة لمدير الأقسام فقط. سجّل الدخول بحساب المدير.",
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFC62828)
+                )
+            } else if (doneMessage != null) {
+                Text(text = doneMessage ?: "", fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32), fontSize = 15.sp)
+            } else if (loading) {
+                Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = BentoPrimary)
+                }
+            } else if (current == null) {
+                Text(text = error ?: "تعذّر تحميل الطلب.", color = Color(0xFFC62828), fontWeight = FontWeight.Bold)
+                Button(
+                    onClick = { reloadKey++ },
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
+                    shape = RoundedCornerShape(12.dp)
+                ) { Text(uiT("إعادة المحاولة 🔄"), fontWeight = FontWeight.Bold) }
+            } else {
+                ClassInfoRequestCard(
+                    req = current,
+                    busy = busy,
+                    anyBusy = busy,
+                    onApprove = {
+                        busy = true
+                        viewModel.approveClassInfoRequest(current) { ok, msg ->
+                            busy = false
+                            if (ok) doneMessage = msg else Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    onReject = {
+                        rejectNote = ""
+                        showReject = true
+                    }
+                )
+            }
+            Button(
+                onClick = onClose,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
+                shape = RoundedCornerShape(12.dp)
+            ) { Text(uiT("إغلاق والعودة 🏠"), fontWeight = FontWeight.Bold) }
         }
     }
 }
