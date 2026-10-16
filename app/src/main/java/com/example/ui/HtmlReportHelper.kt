@@ -1365,6 +1365,12 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    /** سطر أسفل الورقة: المستوى + اسم التطبيق */
+    private fun appLevelFooterHtml(activeClass: ClassSection): String {
+        val level = com.example.ui.screens.getLevelArabicName(activeClass.level)
+        return "<div style=\"text-align:center;font-size:9px;font-weight:700;color:#444;margin-top:6px;\">المستوى: $level &nbsp;|&nbsp; تطبيق دفتر المعلم</div>"
+    }
+
     // الجدول الزمني الأسبوعي للقسم (الرسمي أو الشخصي) كملف PDF
     fun generateTimetableHtml(
         context: Context,
@@ -1449,8 +1455,9 @@ object HtmlReportHelper {
                 <div style="height: 46px;"></div>
             </div>
         </div>
-        </div></body></html>
         """)
+        html.append(appLevelFooterHtml(activeClass))
+        html.append("</div></body></html>")
         return html.toString()
     }
 
@@ -1547,6 +1554,7 @@ object HtmlReportHelper {
             </div>
         </div>
         """)
+        html.append(appLevelFooterHtml(activeClass))
         html.append("</div></body></html>")
         return html.toString()
     }
@@ -1649,6 +1657,7 @@ object HtmlReportHelper {
             }
             html.append("</tbody></table>")
             html.append(footer)
+            html.append(appLevelFooterHtml(activeClass))
             html.append("</div>")
 
             // ---------- الصفحة 2: جدول دعم المجموعات ----------
@@ -1673,6 +1682,7 @@ object HtmlReportHelper {
             }
             html.append("</tbody></table>")
             html.append(footer)
+            html.append(appLevelFooterHtml(activeClass))
             html.append("</div>")
         }
         html.append("</body></html>")
