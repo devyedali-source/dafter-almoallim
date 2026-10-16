@@ -84,10 +84,10 @@ fun sendExchangeActivationWhatsApp(
         db.collection("exchange_activation_requests").document(requestId).set(requestDoc)
 
         val adminPhone = "22237786585"
-        val emailText = userEmail.ifBlank { "غير مسجل" }
         val fullMessage = """
-$emailText
-أريد نشر وتفعيل إعلان تبادل بين جمهور المعلمين.
+السلام عليكم،
+أنا المعلم رقم الحساب: $userId
+أريد تفعيل طلب التبادل.
 
 🔑 رقم الإعلان (كود الإعلان):
 $postId

@@ -1401,7 +1401,7 @@ private fun CourseSubscriptionDialog(
     val activationLink = "https://diftar-almoaalim.web.app/course-activate/$requestId"
 
     val messageText = "السلام عليكم،\n" +
-        "أنا المعلم صاحب البريد: ${if (email.isBlank()) "غير متوفّر" else email}\n" +
+        "أنا المستخدم رقم: $currentUidForRequest\n" +
         "أريد تفعيل دورة تحضير مسابقات المعلمين\n\n" +
         "التخصّص المطلوب: ${spec.title}\n" +
         "المدّة: ${CourseSubscriptionStore.SUBSCRIPTION_DAYS} يومًا\n" +

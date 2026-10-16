@@ -11761,7 +11761,7 @@ fun ActivationPromoDialog(
 
     val messageText = if (isFinalOnly) {
         "السلام عليكم،\n" +
-                "أنا المعلم صاحب البريد: $email\n" +
+                "أنا المعلم صاحب القسم رقم: $classId\n" +
                 "أريد تفعيل مسار (استخدام الفصل الأخير فقط بـ 200 أوقية) للقسم: $className\n\n" +
                 "🔑 رقم القسم الفريد (كود التفعيل):\n" +
                 "$classId\n" +
@@ -11771,7 +11771,7 @@ fun ActivationPromoDialog(
     } else {
         if (selectedPlan == "full") {
             "السلام عليكم،\n" +
-                    "أنا المعلم صاحب البريد: $email\n" +
+                    "أنا المعلم صاحب القسم رقم: $classId\n" +
                     "أريد تفعيل اشتراك جميع فصول السنة (الفصل الثاني والثالث) للقسم: $className (350 أوقية)\n\n" +
                     "🔑 رقم القسم الفريد (كود التفعيل):\n" +
                     "$classId\n" +
@@ -11785,7 +11785,7 @@ fun ActivationPromoDialog(
                 else -> ""
             }
             "السلام عليكم،\n" +
-                    "أنا المعلم صاحب البريد: $email\n" +
+                    "أنا المعلم صاحب القسم رقم: $classId\n" +
                     "أريد تفعيل اشتراك القسم: $className" + termLine + termPriceNote + "\n\n" +
                     "🔑 رقم القسم الفريد (كود التفعيل):\n" +
                     "$classId\n" +

@@ -351,7 +351,7 @@ private fun openClassInfoWhatsApp(
         val email = authUser?.email ?: ""
         val uid = authUser?.uid ?: ""
         val message = "السلام عليكم،\n" +
-            "أنا المعلم صاحب البريد: $email\n" +
+            "أنا المعلم صاحب القسم رقم: ${section.id}\n" +
             "أطلب تصحيح بيانات القسم: ${section.getFormattedName()}\n\n" +
             "المدرسة الحالية: ${section.schoolName}\n" +
             "المدرسة الصحيحة: $newSchool\n" +
