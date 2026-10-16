@@ -1,5 +1,7 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.Text
+
 import com.example.ui.utils.uiT
 import com.example.ui.utils.uiTf
 
@@ -397,7 +399,7 @@ fun SchoolLegislationScreen(
                                 }
                                 sharedPrefs.edit().putStringSet("saved_articles", newSet).apply()
                                 savedArticleIds = newSet
-                                Toast.makeText(
+                                com.example.ui.utils.toastTr(
                                     context,
                                     if (newSet.contains(article.id)) "تم حفظ المادة في المفضلة ⭐" else "تمت الإزالة من المفضلة 🗑️",
                                     Toast.LENGTH_SHORT

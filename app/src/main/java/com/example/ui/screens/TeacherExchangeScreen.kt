@@ -1,5 +1,7 @@
 package com.example.ui.screens
 
+import com.example.ui.utils.Text
+
 import com.example.ui.utils.uiT
 import com.example.ui.utils.uiTf
 
@@ -68,7 +70,7 @@ fun sendExchangeActivationWhatsApp(
     userEmail: String
 ) {
     if (postId.isBlank()) {
-        Toast.makeText(context, "لم يكتمل نشر الإعلان بعد. انتظر لحظات ثم أعد المحاولة.", Toast.LENGTH_LONG).show()
+        com.example.ui.utils.toastTr(context, "لم يكتمل نشر الإعلان بعد. انتظر لحظات ثم أعد المحاولة.", Toast.LENGTH_LONG).show()
         return
     }
     try {
@@ -99,7 +101,7 @@ https://diftar-almoaalim.web.app/exchange-approve/$requestId
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$adminPhone&text=$encoded"))
         context.startActivity(intent)
     } catch (e: Exception) {
-        Toast.makeText(context, "تعذر فتح تطبيق الواتساب تلقائياً", Toast.LENGTH_SHORT).show()
+        com.example.ui.utils.toastTr(context, "تعذر فتح تطبيق الواتساب تلقائياً", Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -210,7 +212,7 @@ fun TeacherExchangeScreen(
         if (targetPost != null && !targetPost.isSynced) {
             LaunchedEffect(pendingActivationPostId) {
                 viewModel.syncPendingExchangePosts()
-                Toast.makeText(
+                com.example.ui.utils.toastTr(
                     context,
                     "لم يصل إعلانك إلى الخادم بعد. تأكد من اتصالك بالإنترنت وأعد المحاولة بعد لحظات.",
                     Toast.LENGTH_LONG
@@ -303,7 +305,7 @@ fun TeacherExchangeScreen(
                         selectedTab = 0
                         pendingActivationPostId = postId
                         if (isOffline) {
-                            Toast.makeText(
+                            com.example.ui.utils.toastTr(
                                 context,
                                 "هذا الاعلان لم يتم نشره بعد للعامة بسبب عدم توفر الانترنت سيتم نشره فور توفر الاتصال بالإنترنت",
                                 Toast.LENGTH_LONG
@@ -1211,7 +1213,7 @@ fun ExchangeOfferCard(
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/$fullPhone?text=$prefilledMessage"))
                     context.startActivity(intent)
                 } catch (e: Exception) {
-                    Toast.makeText(context, "تعذر فتح تطبيق الواتساب", Toast.LENGTH_SHORT).show()
+                    com.example.ui.utils.toastTr(context, "تعذر فتح تطبيق الواتساب", Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -1930,7 +1932,7 @@ fun ContactTeacherDialog(
                         userWorkPlace.isBlank() ||
                         userSchoolName.isBlank()
                     ) {
-                        Toast.makeText(context, "يرجى تعبئة جميع بيانات التواصل الموضحة أولاً", Toast.LENGTH_SHORT).show()
+                        com.example.ui.utils.toastTr(context, "يرجى تعبئة جميع بيانات التواصل الموضحة أولاً", Toast.LENGTH_SHORT).show()
                         return@Button
                     }
 
@@ -2555,7 +2557,7 @@ fun CreateExchangePostForm(
                     Button(
                         onClick = {
                             if (whatsappPhone.isBlank()) {
-                                Toast.makeText(context, "الرجاء كتابة رقم الواتساب للتواصل!", Toast.LENGTH_SHORT).show()
+                                com.example.ui.utils.toastTr(context, "الرجاء كتابة رقم الواتساب للتواصل!", Toast.LENGTH_SHORT).show()
                                 return@Button
                             }
 
@@ -2564,14 +2566,14 @@ fun CreateExchangePostForm(
 
                             if (isInterMoughataaMode) {
                                 if (selectedTargetMoughataasInWilaya.isEmpty()) {
-                                    Toast.makeText(context, "الرجاء اختيار مقاطعة واحدة على الأقل تود التحويل إليها داخل الولاية!", Toast.LENGTH_SHORT).show()
+                                    com.example.ui.utils.toastTr(context, "الرجاء اختيار مقاطعة واحدة على الأقل تود التحويل إليها داخل الولاية!", Toast.LENGTH_SHORT).show()
                                     return@Button
                                 }
                                 formattedTargets = currentWilaya
                                 formattedMoughataas = selectedTargetMoughataasInWilaya.joinToString(", ")
                             } else {
                                 if (selectedTargetWilayas.isEmpty()) {
-                                    Toast.makeText(context, "الرجاء اختيار ولاية واحدة على الأقل تود التحويل إليها!", Toast.LENGTH_SHORT).show()
+                                    com.example.ui.utils.toastTr(context, "الرجاء اختيار ولاية واحدة على الأقل تود التحويل إليها!", Toast.LENGTH_SHORT).show()
                                     return@Button
                                 }
                                 formattedTargets = selectedTargetWilayas.joinToString(", ")
@@ -2611,7 +2613,7 @@ fun CreateExchangePostForm(
                                     },
                                     onFailure = { msg ->
                                         isSubmitting = false
-                                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_LONG).show()
                                     }
                                 )
                             } else {
@@ -2623,7 +2625,7 @@ fun CreateExchangePostForm(
                                     },
                                     onFailure = { msg ->
                                         isSubmitting = false
-                                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_LONG).show()
                                     }
                                 )
                             }
@@ -2741,13 +2743,13 @@ fun MyExchangePostsSubview(
             onPostSuccess = { isOffline, postId ->
                 editingPost = null
                 if (isOffline) {
-                    Toast.makeText(
+                    com.example.ui.utils.toastTr(
                         context,
                         "هذا الاعلان لم يتم نشره بعد للعامة بسبب عدم توفر الانترنت سيتم نشره فور توفر الاتصال بالإنترنت",
                         Toast.LENGTH_LONG
                     ).show()
                 } else {
-                    Toast.makeText(context, "تم تعديل الإعلان بنجاح!", Toast.LENGTH_SHORT).show()
+                    com.example.ui.utils.toastTr(context, "تم تعديل الإعلان بنجاح!", Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -2766,8 +2768,8 @@ fun MyExchangePostsSubview(
                         deletingPostId = null
                         viewModel.deleteExchangePost(
                             postId = id,
-                            onSuccess = { Toast.makeText(context, "تم حذف الإعلان بنجاح", Toast.LENGTH_SHORT).show() },
-                            onFailure = { msg -> Toast.makeText(context, msg, Toast.LENGTH_LONG).show() }
+                            onSuccess = { com.example.ui.utils.toastTr(context, "تم حذف الإعلان بنجاح", Toast.LENGTH_SHORT).show() },
+                            onFailure = { msg -> com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_LONG).show() }
                         )
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))

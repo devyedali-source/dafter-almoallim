@@ -654,6 +654,7 @@ object UiFrench {
     )
     val map: Map<String, String> by lazy {
         val m = HashMap<String, String>()
+        m.putAll(UiFrenchExtra.map)
         m.putAll(part0())
         m.putAll(part1())
         m.putAll(part2())

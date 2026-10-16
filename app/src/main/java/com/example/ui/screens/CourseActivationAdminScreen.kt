@@ -17,7 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import com.example.ui.utils.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -186,14 +186,18 @@ fun CourseActivationAdminView(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("بريد المعلّم"), fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("بريد المعلّم"), fontSize = 13.sp, color = AdmMutedColor,
+                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
+                    )
                     Text(text = email.ifBlank { "—" }, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("التخصّص"), fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("التخصّص"), fontSize = 13.sp, color = AdmMutedColor,
+                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
+                    )
                     Text(
                         text = specTitle.ifBlank { specId.ifBlank { "—" } },
                         fontSize = 13.sp,
@@ -204,21 +208,27 @@ fun CourseActivationAdminView(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("المدّة"), fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("المدّة"), fontSize = 13.sp, color = AdmMutedColor,
+                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
+                    )
                     Text(text = uiTf("{0} يومًا", days), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("وقت الطلب"), fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("وقت الطلب"), fontSize = 13.sp, color = AdmMutedColor,
+                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
+                    )
                     Text(text = admFormatMillis(createdAt), fontSize = 13.sp)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("الحالة"), fontSize = 13.sp, color = AdmMutedColor)
+                    Text(text = uiT("الحالة"), fontSize = 13.sp, color = AdmMutedColor,
+                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
+                    )
                     Text(
                         text = if (status == "completed") "مفعَّل" else "قيد الانتظار",
                         fontSize = 13.sp,
@@ -231,7 +241,9 @@ fun CourseActivationAdminView(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = uiT("ينتهي في"), fontSize = 13.sp, color = AdmMutedColor)
+                        Text(text = uiT("ينتهي في"), fontSize = 13.sp, color = AdmMutedColor,
+                            modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
+                        )
                         Text(
                             text = admFormatDate(expiresAt),
                             fontSize = 13.sp,

@@ -19,7 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import com.example.ui.utils.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -168,7 +168,9 @@ private fun CourseWritingDetail(
                 modifier = Modifier.fillMaxWidth().padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = uiTf("المدّة: {0} د", writing.m), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                Text(text = uiTf("المدّة: {0} د", writing.m), fontSize = 13.sp, fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
+                )
                 Text(text = uiTf("النقاط: {0}", writing.p), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                 Text(text = uiTf("≥ {0} كلمة", writing.mw), fontSize = 13.sp, fontWeight = FontWeight.Bold)
             }

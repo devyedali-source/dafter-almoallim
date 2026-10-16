@@ -25,7 +25,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import com.example.ui.utils.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -459,7 +459,8 @@ private fun CourseSimulatorRunner(
                                 text = uiTf("السؤال {0}", qIndex + 1),
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = SimMutedColor
+                                color = SimMutedColor,
+                                modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
                             )
                             Text(
                                 text = if (isRight) {
@@ -604,7 +605,8 @@ private fun CourseSimulatorRunner(
                         text = uiTf("محاكاة شاملة {0} · {1}", exam.n, subjectName),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
-                        color = SimMutedColor
+                        color = SimMutedColor,
+                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
                     )
                     Text(
                         text = "⏳ ${simFormatTime(remaining)}",
@@ -686,7 +688,8 @@ private fun CourseSimulatorRunner(
                             text = uiTf("السؤال {0} من {1}", qIndex + 1, total),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SimMutedColor
+                            color = SimMutedColor,
+                            modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
                         )
                         Text(
                             text = if (isMarked) "★ ضع علامة" else "☆ ضع علامة",
