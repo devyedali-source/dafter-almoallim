@@ -378,8 +378,15 @@ fun ClassTimetableSubview(
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
                         onClick = { editMode = !editMode },
-                        modifier = Modifier.weight(1f)
-                    ) { Text(if (editMode) "إنهاء التعديل" else "تعديل جدولي") }
+                        modifier = Modifier.width(80.dp).height(36.dp),
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (editMode) Icons.Default.Check else Icons.Default.Edit,
+                            contentDescription = if (editMode) "إنهاء التعديل" else "تعديل جدولي",
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
                     Button(
                         onClick = {
                             val all = customSlots ?: OfficialTimetableRepository.getTimetableForLevel(level)
