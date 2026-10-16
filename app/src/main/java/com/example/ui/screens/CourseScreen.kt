@@ -1524,7 +1524,7 @@ private fun CourseSubscriptionDialog(
                         )
                         context.startActivity(intent)
                     } catch (e: Exception) {
-                        com.example.ui.utils.toastTr(
+                        android.widget.Toast.makeText(
                             context,
                             "لم نتمكن من فتح الواتساب، يرجى التأكد من توفر التطبيق على جهازك.",
                             android.widget.Toast.LENGTH_LONG

@@ -399,7 +399,7 @@ fun SchoolLegislationScreen(
                                 }
                                 sharedPrefs.edit().putStringSet("saved_articles", newSet).apply()
                                 savedArticleIds = newSet
-                                com.example.ui.utils.toastTr(
+                                android.widget.Toast.makeText(
                                     context,
                                     if (newSet.contains(article.id)) "تم حفظ المادة في المفضلة ⭐" else "تمت الإزالة من المفضلة 🗑️",
                                     Toast.LENGTH_SHORT

@@ -693,7 +693,7 @@ fun InnerTeacherAppScreenContent(
                 if (currentUser?.uid != null) {
                     kotlinx.coroutines.delay(2000)
                     viewModel.performAutoRestoreIfEmpty { lastSyncDate ->
-                        com.example.ui.utils.toastTr(
+                        android.widget.Toast.makeText(
                             context,
                             "تمت استعادة بياناتك من Google Drive ✅\nآخر مزامنة: $lastSyncDate",
                             android.widget.Toast.LENGTH_LONG
@@ -848,7 +848,7 @@ fun InnerTeacherAppScreenContent(
 
                         if (currentUser != null && !isAdminUser) {
                             // User is NOT Admin -> Deny access!
-                            com.example.ui.utils.toastTr(
+                            android.widget.Toast.makeText(
                                 context,
                                 "⛔ عذراً! هذا الرابط مخصص لمدير الأقسام فقط (elyedalimoctar@gmail.com).\nحسابك الحالي ليس له صلاحية مدير الأقسام.",
                                 android.widget.Toast.LENGTH_LONG
@@ -860,7 +860,7 @@ fun InnerTeacherAppScreenContent(
                             targetActivationClassId = classId
                             showClassManagerInside = true
                             val targetInfo = if (!email.isNullOrBlank()) "المعلم: $email" else "القسم رقم: $classId"
-                            com.example.ui.utils.toastTr(
+                            android.widget.Toast.makeText(
                                 context,
                                 "✨ تم التوجيه التلقائي لوجهة مدير الأقسام لتفعيل $targetInfo",
                                 android.widget.Toast.LENGTH_LONG
@@ -1218,7 +1218,7 @@ fun InnerTeacherAppScreenContent(
                                         onClick = {
                                             viewModel.signOutTeacherWithCheck(
                                                 onBlocked = { msg ->
-                                                    com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_LONG).show()
+                                                    android.widget.Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                                                 },
                                                 onSuccess = {
                                                     scope.launch { drawerState.close() }
@@ -1768,7 +1768,7 @@ fun InnerTeacherAppScreenContent(
                                                         TextButton(
                                                             onClick = {
                                                                 viewModel.deleteClassSection(section.id) { msg ->
-                                                                    com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_LONG).show()
+                                                                    android.widget.Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                                                                 }
                                                                 showDeleteClassConfirmDialog = false
                                                             }
@@ -1852,7 +1852,7 @@ fun InnerTeacherAppScreenContent(
                                                                 Box(
                                                                     modifier = Modifier
                                                                         .clickable {
-                                                                            com.example.ui.utils.toastTr(
+                                                                            android.widget.Toast.makeText(
                                                                                 context,
                                                                                 "قسمك محفوظ في جهازك، وسيتم توثيقه تلقائياً عند توفر الإنترنت. بعد التوثيق يمكنك تفعيل فصوله.",
                                                                                 Toast.LENGTH_LONG
@@ -1978,7 +1978,7 @@ fun InnerTeacherAppScreenContent(
                             )
                             if (isClassCreated) {
                                 selectedYear = academicYear
-                                com.example.ui.utils.toastTr(context, "🎉 تم إنشاء القسم الدراسي بنجاح!", Toast.LENGTH_LONG).show()
+                                android.widget.Toast.makeText(context, "🎉 تم إنشاء القسم الدراسي بنجاح!", Toast.LENGTH_LONG).show()
                             }
                         }
                     )
@@ -2395,10 +2395,10 @@ fun ClassStudentsSubview(
                             viewModel.selectClass(activeSection.id)
                             viewModel.fillActiveClassWithDemoStudents(
                                 onSuccess = {
-                                    com.example.ui.utils.toastTr(context, "تم ملء القسم ببيانات تجريبية كاملة", Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, "تم ملء القسم ببيانات تجريبية كاملة", Toast.LENGTH_LONG).show()
                                 },
                                 onFailure = { err ->
-                                    com.example.ui.utils.toastTr(context, "خطأ: $err", Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, "خطأ: $err", Toast.LENGTH_LONG).show()
                                 }
                             )
                         },
@@ -2861,7 +2861,7 @@ fun ClassStudentsSubview(
                                 )
                                 editingStudent = null
                                 viewingStudent = null // Closes both the edit dialog and the student profile view, returning to student list
-                                com.example.ui.utils.toastTr(context, "تم حفظ التعديلات بنجاح! 🟢", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "تم حفظ التعديلات بنجاح! 🟢", Toast.LENGTH_SHORT).show()
                             }
                         },
                         enabled = editName.isNotBlank() && !isEditSchoolIdError && !isEditNationalIdError,
@@ -2900,7 +2900,7 @@ fun ClassStudentsSubview(
                 studentParentPhone2 = ""
                 studentGender = "ذكر"
                 showAddStudentDialog = false
-                com.example.ui.utils.toastTr(context, "تم تسجيل الطالب بنجاح! 🎉", Toast.LENGTH_SHORT).show()
+                android.widget.Toast.makeText(context, "تم تسجيل الطالب بنجاح! 🎉", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -3239,7 +3239,7 @@ fun BentoDashboard(
                                             val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
                                             val clip = android.content.ClipData.newPlainText("UID", currentUser?.uid ?: "")
                                             clipboard.setPrimaryClip(clip)
-                                            com.example.ui.utils.toastTr(context, "تم نسخ معرف المعلم (UID)", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "تم نسخ معرف المعلم (UID)", Toast.LENGTH_SHORT).show()
                                         },
                                         modifier = Modifier.size(28.dp)
                                     ) {
@@ -3262,7 +3262,7 @@ fun BentoDashboard(
                         onClick = {
                             viewModel.signOutTeacherWithCheck(
                                 onBlocked = { msg ->
-                                    com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                                 },
                                 onSuccess = {
                                     showProfileDialog = false
@@ -3386,7 +3386,7 @@ fun BentoDashboard(
                         showDeleteAccountConfirmDialog = false
                         showProfileDialog = false
                         viewModel.deleteTeacherAccount { success, message ->
-                            com.example.ui.utils.toastTr(context, message, Toast.LENGTH_LONG).show()
+                            android.widget.Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
@@ -3470,7 +3470,7 @@ fun BentoDashboard(
                                 val clipboard = contextVal.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
                                 val clip = android.content.ClipData.newPlainText("UID", uid)
                                 clipboard.setPrimaryClip(clip)
-                                com.example.ui.utils.toastTr(contextVal, "تم نسخ معرف المعلم (UID)", android.widget.Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(contextVal, "تم نسخ معرف المعلم (UID)", android.widget.Toast.LENGTH_SHORT).show()
                             }
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
@@ -4721,7 +4721,7 @@ fun GradesEntryTab(
                                     viewModel.saveStudentManualTermAverage(studentId, 1, p)
                                     recentlySavedSubjectStudentIds[studentId] = System.currentTimeMillis()
                                 } else {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
                                 }
                             } else if (userTouchedScoreIds[studentId] == true) {
                                 viewModel.deleteStudentManualTermAverage(studentId, 1)
@@ -4733,7 +4733,7 @@ fun GradesEntryTab(
                                     viewModel.saveStudentManualTermAverage(studentId, 2, p)
                                     recentlySavedSubjectStudentIds[studentId] = System.currentTimeMillis()
                                 } else {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
                                 }
                             } else if (userTouchedScoreIds[studentId] == true) {
                                 viewModel.deleteStudentManualTermAverage(studentId, 2)
@@ -4747,7 +4747,7 @@ fun GradesEntryTab(
                                     viewModel.saveSingleGrade(studentId, activeSubject.id, p, targetGradeTerm)
                                     recentlySavedSubjectStudentIds[studentId] = System.currentTimeMillis()
                                 } else {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة درجة صحيحة بين 0 و ${activeSubject.maxPoints}", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة درجة صحيحة بين 0 و ${activeSubject.maxPoints}", Toast.LENGTH_SHORT).show()
                                 }
                             } else if (userTouchedScoreIds[studentId] == true) {
                                 viewModel.deleteGrade(studentId, activeSubject.id, targetGradeTerm)
@@ -4775,12 +4775,12 @@ fun GradesEntryTab(
                                     }
                                 }
                                 if (errorFound) {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة معدلات صحيحة بين 0 و 20", Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة معدلات صحيحة بين 0 و 20", Toast.LENGTH_LONG).show()
                                 } else {
                                     viewModel.saveManualTermAveragesBulk(1, averagesMap) {
                                         val now = System.currentTimeMillis()
                                         savedNow.forEach { id -> recentlySavedSubjectStudentIds[id] = now }
-                                        com.example.ui.utils.toastTr(context, "تم حفظ معدلات الفصل الأول بنجاح!", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "تم حفظ معدلات الفصل الأول بنجاح!", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             } else if (activeSubject.id == -102L) {
@@ -4799,12 +4799,12 @@ fun GradesEntryTab(
                                     }
                                 }
                                 if (errorFound) {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة معدلات صحيحة بين 0 و 20", Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة معدلات صحيحة بين 0 و 20", Toast.LENGTH_LONG).show()
                                 } else {
                                     viewModel.saveManualTermAveragesBulk(2, averagesMap) {
                                         val now = System.currentTimeMillis()
                                         savedNow.forEach { id -> recentlySavedSubjectStudentIds[id] = now }
-                                        com.example.ui.utils.toastTr(context, "تم حفظ معدلات الفصل الثاني بنجاح!", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "تم حفظ معدلات الفصل الثاني بنجاح!", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             } else {
@@ -4825,7 +4825,7 @@ fun GradesEntryTab(
                                 }
 
                                 if (errorFound) {
-                                    com.example.ui.utils.toastTr(
+                                    android.widget.Toast.makeText(
                                         context,
                                         "الرجاء كتابة درجات صحيحة بين 0 و ${activeSubject.maxPoints}",
                                         Toast.LENGTH_LONG
@@ -4834,7 +4834,7 @@ fun GradesEntryTab(
                                     if (viewModel.saveGrades(parseList)) {
                                         val now = System.currentTimeMillis()
                                         savedNow.forEach { id -> recentlySavedSubjectStudentIds[id] = now }
-                                        com.example.ui.utils.toastTr(context, "تم حفظ درجات المادة بنجاح!", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "تم حفظ درجات المادة بنجاح!", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -5080,7 +5080,7 @@ fun GradesEntryTab(
                                     viewModel.saveSingleGrade(activeStudent.id, subjectId, p, targetGradeTerm)
                                     recentlySavedSubjectIds[subjectId] = System.currentTimeMillis()
                                 } else {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة درجة صحيحة بين 0 و $limit", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة درجة صحيحة بين 0 و $limit", Toast.LENGTH_SHORT).show()
                                 }
                             } else if (userTouchedSubjectIds[subjectId] == true) {
                                 viewModel.deleteGrade(activeStudent.id, subjectId, targetGradeTerm)
@@ -5096,7 +5096,7 @@ fun GradesEntryTab(
                                 if (p != null && p in 0.0..20.0) {
                                     viewModel.saveStudentManualTermAverage(activeStudent.id, 1, p)
                                 } else {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
                                 }
                             } else if (userTouchedTerm1Avg.value) {
                                 viewModel.deleteStudentManualTermAverage(activeStudent.id, 1)
@@ -5112,7 +5112,7 @@ fun GradesEntryTab(
                                 if (p != null && p in 0.0..20.0) {
                                     viewModel.saveStudentManualTermAverage(activeStudent.id, 2, p)
                                 } else {
-                                    com.example.ui.utils.toastTr(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "الرجاء كتابة معدل صحيح بين 0 و 20", Toast.LENGTH_SHORT).show()
                                 }
                             } else if (userTouchedTerm2Avg.value) {
                                 viewModel.deleteStudentManualTermAverage(activeStudent.id, 2)
@@ -5161,7 +5161,7 @@ fun GradesEntryTab(
                             }
 
                             if (errorFound) {
-                                com.example.ui.utils.toastTr(
+                                android.widget.Toast.makeText(
                                     context,
                                     "الرجاء كتابة درجات ومعدلات صحيحة لا تتعدى الحد المسموح (0 - 20)",
                                     Toast.LENGTH_LONG
@@ -5170,7 +5170,7 @@ fun GradesEntryTab(
                                 if (viewModel.saveGrades(parseList)) {
                                     val now = System.currentTimeMillis()
                                     savedNow.forEach { id -> recentlySavedSubjectIds[id] = now }
-                                    com.example.ui.utils.toastTr(context, "تم حفظ درجات الطالب بنجاح!", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تم حفظ درجات الطالب بنجاح!", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
@@ -5680,13 +5680,13 @@ fun GradesEntryTab(
                                                 if (!isUnlocked) {
                                                     if (activeClass != null && !activeClass.isSyncedToServer) {
                                                         viewModel.resendUnsyncedClasses()
-                                                        com.example.ui.utils.toastTr(
+                                                        android.widget.Toast.makeText(
                                                             context,
                                                             "لم يصل قسمك إلى الخادم بعد. تأكد من اتصالك بالإنترنت وأعد المحاولة بعد لحظات.",
                                                             Toast.LENGTH_LONG
                                                         ).show()
                                                     } else if (activeClass != null && activeClass.isActivationExpired()) {
-                                                        com.example.ui.utils.toastTr(
+                                                        android.widget.Toast.makeText(
                                                             context,
                                                             "هذا القسم من سنة دراسية منتهية (${activeClass.academicYear})، والتفعيل يخصّ السنة الجارية فقط. أما كشوف هذا القسم فهي متاحة لك بدون تفعيل من صفحة الكشوف.",
                                                             Toast.LENGTH_LONG
@@ -5947,7 +5947,7 @@ fun GradesEntryTab(
                         Button(
                             onClick = {
                                 if (performanceList.isEmpty()) {
-                                    com.example.ui.utils.toastTr(context, "لا توجد علامات مرصودة بالقسم للمشاركة", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "لا توجد علامات مرصودة بالقسم للمشاركة", Toast.LENGTH_SHORT).show()
                                 } else {
                                     viewModel.runWithLoading("جاري تصدير كشوف درجات الطلاب كملف PDF للمشاركة...") {
                                         val html = HtmlReportHelper.generateReportCardsHtml(
@@ -5985,7 +5985,7 @@ fun GradesEntryTab(
                         Button(
                             onClick = {
                                 if (performanceList.isEmpty()) {
-                                    com.example.ui.utils.toastTr(context, "لا توجد علامات مرصودة بالقسم للمشاركة", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "لا توجد علامات مرصودة بالقسم للمشاركة", Toast.LENGTH_SHORT).show()
                                 } else {
                                     viewModel.runWithLoading("جاري تصدير لائحة النتائج التفصيلية كملف PDF للمشاركة...") {
                                         val html = HtmlReportHelper.generateDetailedTermLedgerHtml(
@@ -6032,7 +6032,7 @@ fun GradesEntryTab(
                             Button(
                                 onClick = {
                                     if (performanceList.isEmpty()) {
-                                        com.example.ui.utils.toastTr(context, "لا توجد علامات مرصودة بالقسم للمشاركة", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "لا توجد علامات مرصودة بالقسم للمشاركة", Toast.LENGTH_SHORT).show()
                                     } else {
                                         val labelText = if (activeTermId == 4) "الفصل الأخير" else "الفصل الثالث"
                                         viewModel.runWithLoading("جاري تصدير كشوف درجات $labelText كملف PDF للمشاركة...") {
@@ -6066,7 +6066,7 @@ fun GradesEntryTab(
                             Button(
                                 onClick = {
                                     if (classStudents.isEmpty()) {
-                                        com.example.ui.utils.toastTr(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                                     } else {
                                         viewModel.runWithLoading("جاري تصدير كشوف المعدلات السنوية كملف PDF للمشاركة...") {
                                             val html = HtmlReportHelper.generateAveragesOnlyReportCardsHtml(
@@ -6096,7 +6096,7 @@ fun GradesEntryTab(
                             Button(
                                 onClick = {
                                     if (classStudents.isEmpty()) {
-                                        com.example.ui.utils.toastTr(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                                     } else {
                                         viewModel.runWithLoading("جاري تصدير كشوف النقاط السنوية كملف PDF للمشاركة...") {
                                             val html = HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
@@ -6156,7 +6156,7 @@ fun GradesEntryTab(
                         HtmlReportHelper.printHtml(context, html, "كشف_درجات_${student.name}", isLandscape = true)
                     }
                 } else {
-                    com.example.ui.utils.toastTr(context, "الرجاء التأكد من رصد درجات هذا الطالب", Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(context, "الرجاء التأكد من رصد درجات هذا الطالب", Toast.LENGTH_SHORT).show()
                 }
                 showStudentSelectorInDialog = false
             },
@@ -6853,7 +6853,7 @@ fun ReportsTab(
                                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                         val clip = ClipData.newPlainText("كشف الدرجات", text)
                                         clipboard.setPrimaryClip(clip)
-                                        com.example.ui.utils.toastTr(context, "تم نسخ كشف الدرجات للحافظة", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "تم نسخ كشف الدرجات للحافظة", Toast.LENGTH_SHORT).show()
                                     },
                                     modifier = Modifier.weight(1f),
                                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
@@ -7631,7 +7631,7 @@ fun PersonalClassSubjectsEditor(
                                                     resetAffectedCount = affectedNow
                                                 } else {
                                                     viewModel.removeSubjectCustomization(activeClass.id, subject.id)
-                                                    com.example.ui.utils.toastTr(context, "تمت استعادة الاسم والدرجة الافتراضية بنجاح", Toast.LENGTH_SHORT).show()
+                                                    android.widget.Toast.makeText(context, "تمت استعادة الاسم والدرجة الافتراضية بنجاح", Toast.LENGTH_SHORT).show()
                                                 }
                                             },
                                             modifier = Modifier
@@ -7654,7 +7654,7 @@ fun PersonalClassSubjectsEditor(
                                                 subjectToHideConfirm = subject
                                             } else {
                                             viewModel.hideSubjectInClass(activeClass.id, subject.id) {
-                                                com.example.ui.utils.toastTr(context, "تم إخفاء المادة من هذا القسم", Toast.LENGTH_SHORT).show()
+                                                android.widget.Toast.makeText(context, "تم إخفاء المادة من هذا القسم", Toast.LENGTH_SHORT).show()
                                             }
                                             }
                                         },
@@ -7714,7 +7714,7 @@ fun PersonalClassSubjectsEditor(
                                         Text(text = hiddenSub.name, color = Color.Gray, fontSize = 14.sp)
                                         TextButton(onClick = {
                                             viewModel.unhideSubjectInClass(activeClass.id, hiddenSub.id) {
-                                                com.example.ui.utils.toastTr(context, "تمت إعادة المادة إلى هذا القسم", Toast.LENGTH_SHORT).show()
+                                                android.widget.Toast.makeText(context, "تمت إعادة المادة إلى هذا القسم", Toast.LENGTH_SHORT).show()
                                             }
                                         }) {
                                             Text(uiT("إرجاع"), color = BentoPrimary, fontWeight = FontWeight.Bold)
@@ -7764,15 +7764,15 @@ fun PersonalClassSubjectsEditor(
                                 classId = activeClass.id,
                                 onSuccess = {
                                     showAddSubjectDialog = false
-                                    com.example.ui.utils.toastTr(context, "تمت إضافة المادة بنجاح", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تمت إضافة المادة بنجاح", Toast.LENGTH_SHORT).show()
                                 },
                                 onFailure = { err ->
                                     showAddSubjectDialog = false
-                                    com.example.ui.utils.toastTr(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
                                 }
                             )
                         } else {
-                            com.example.ui.utils.toastTr(context, "الرجاء إدخال اسم المادة", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "الرجاء إدخال اسم المادة", Toast.LENGTH_SHORT).show()
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
@@ -7849,15 +7849,15 @@ fun PersonalClassSubjectsEditor(
                                             newMaxPoints = points
                                         ) { changed ->
                                             if (changed > 0) {
-                                                com.example.ui.utils.toastTr(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
+                                                android.widget.Toast.makeText(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
                                             } else {
-                                                com.example.ui.utils.toastTr(context, "تم تعديل المادة بنجاح", Toast.LENGTH_SHORT).show()
+                                                android.widget.Toast.makeText(context, "تم تعديل المادة بنجاح", Toast.LENGTH_SHORT).show()
                                             }
                                         }
                                     },
                                     onFailure = { err ->
                                         showEditDialog = null
-                                        com.example.ui.utils.toastTr(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
                                     }
                                 )
                             } else {
@@ -7875,14 +7875,14 @@ fun PersonalClassSubjectsEditor(
                                     newMaxPoints = points
                                 ) { changed ->
                                     if (changed > 0) {
-                                        com.example.ui.utils.toastTr(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
+                                        android.widget.Toast.makeText(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
                                     } else {
-                                        com.example.ui.utils.toastTr(context, "تم تعديل المادة بنجاح", Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "تم تعديل المادة بنجاح", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
                         } else {
-                            com.example.ui.utils.toastTr(context, "يرجى كتابة اسم المادة", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "يرجى كتابة اسم المادة", Toast.LENGTH_SHORT).show()
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
@@ -7933,11 +7933,11 @@ fun PersonalClassSubjectsEditor(
                                         oldMaxPoints = rOld,
                                         newMaxPoints = rNew
                                     ) { changed ->
-                                        com.example.ui.utils.toastTr(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
+                                        android.widget.Toast.makeText(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
                                     }
                                 },
                                 onFailure = { err ->
-                                    com.example.ui.utils.toastTr(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
                                 }
                             )
                         } else {
@@ -7953,7 +7953,7 @@ fun PersonalClassSubjectsEditor(
                                 oldMaxPoints = rOld,
                                 newMaxPoints = rNew
                             ) { changed ->
-                                com.example.ui.utils.toastTr(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
+                                android.widget.Toast.makeText(context, "تم تعديل المادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
                             }
                         }
                     },
@@ -7997,7 +7997,7 @@ fun PersonalClassSubjectsEditor(
                             oldMaxPoints = rOld,
                             newMaxPoints = rNew
                         ) { changed ->
-                            com.example.ui.utils.toastTr(context, "تمت الاستعادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
+                            android.widget.Toast.makeText(context, "تمت الاستعادة وتحويل $changed درجة إلى السلم الجديد", Toast.LENGTH_LONG).show()
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
@@ -8051,10 +8051,10 @@ fun PersonalClassSubjectsEditor(
                             viewModel.deleteSubject(
                                 id = subject.id,
                                 onSuccess = {
-                                    com.example.ui.utils.toastTr(context, "تم حذف المادة بنجاح", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تم حذف المادة بنجاح", Toast.LENGTH_SHORT).show()
                                 },
                                 onFailure = { err ->
-                                    com.example.ui.utils.toastTr(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "خطأ: $err", Toast.LENGTH_SHORT).show()
                                 }
                             )
                             subjectToDeleteFor9999 = null
@@ -8088,7 +8088,7 @@ fun PersonalClassSubjectsEditor(
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.hideSubjectInClass(activeClass.id, sub.id) {
-                        com.example.ui.utils.toastTr(context, "تم إخفاء المادة من هذا القسم", Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(context, "تم إخفاء المادة من هذا القسم", Toast.LENGTH_SHORT).show()
                     }
                     subjectToHideConfirm = null
                 }) {
@@ -9073,9 +9073,9 @@ fun EnhancedReportsTab(
                                     .background(MaterialTheme.colorScheme.primary)
                                     .clickable {
                                         if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
                                         } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً لسحب اللائحة", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "الرجاء تسجيل الطلاب للقسم أولاً لسحب اللائحة", Toast.LENGTH_SHORT).show()
                                         } else {
                                             viewModel.runWithLoading("جاري سحب وتصدير لائحة تلاميذ القسم...") {
                                                 val html = HtmlReportHelper.generateStudentDirectoryHtml(
@@ -9108,9 +9108,9 @@ fun EnhancedReportsTab(
                                     .background(MaterialTheme.colorScheme.primary)
                                     .clickable {
                                         if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
                                         } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً لسحب الورقة", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "الرجاء تسجيل الطلاب للقسم أولاً لسحب الورقة", Toast.LENGTH_SHORT).show()
                                         } else {
                                             val frenchSub = resolvedSubjects.find { it.name.contains("فرنسية") || it.name.lowercase().contains("french") }
                                             val frenchMaxPoints = frenchSub?.maxPoints ?: 20
@@ -9151,9 +9151,9 @@ fun EnhancedReportsTab(
                                     .background(MaterialTheme.colorScheme.primary)
                                     .clickable {
                                         if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
                                         } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً للتقسيم", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "الرجاء تسجيل الطلاب للقسم أولاً للتقسيم", Toast.LENGTH_SHORT).show()
                                         } else {
                                             viewModel.runWithLoading("جاري سحب وتصدير لائحة مجموعات المنشدين...") {
                                                 val html = HtmlReportHelper.generateHymnsGroupsHtml(
@@ -9186,9 +9186,9 @@ fun EnhancedReportsTab(
                                     .background(MaterialTheme.colorScheme.primary)
                                     .clickable {
                                         if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
                                         } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "لا توجد أسماء بالقسم لبناء جدول النظافة", Toast.LENGTH_SHORT).show()
+                                            android.widget.Toast.makeText(context, "لا توجد أسماء بالقسم لبناء جدول النظافة", Toast.LENGTH_SHORT).show()
                                         } else {
                                             viewModel.runWithLoading("جاري سحب وتصدير جدول النظافة والكناسة...") {
                                                 val html = HtmlReportHelper.generateCleaningGroupsHtml(
@@ -9510,7 +9510,7 @@ fun EnhancedReportsTab(
                 when (mode) {
                     1 -> {
                         if (performanceList.isEmpty()) {
-                            com.example.ui.utils.toastTr(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
                         } else {
                             val html = HtmlReportHelper.generateReportCardsHtml(
                                 context = context,
@@ -9532,7 +9532,7 @@ fun EnhancedReportsTab(
                     }
                     10 -> {
                         if (performanceList.isEmpty()) {
-                            com.example.ui.utils.toastTr(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
                         } else {
                             val html = HtmlReportHelper.generateReportCardsHtml(
                                 context = context,
@@ -9555,7 +9555,7 @@ fun EnhancedReportsTab(
                     }
                     8 -> {
                         if (classStudents.isEmpty()) {
-                            com.example.ui.utils.toastTr(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                         } else {
                             val html = HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
                                 context = context,
@@ -9570,7 +9570,7 @@ fun EnhancedReportsTab(
                     }
                     11 -> {
                         if (classStudents.isEmpty()) {
-                            com.example.ui.utils.toastTr(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                         } else {
                             val html = HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
                                 context = context,
@@ -9586,7 +9586,7 @@ fun EnhancedReportsTab(
                     }
                     7 -> {
                         if (classStudents.isEmpty()) {
-                            com.example.ui.utils.toastTr(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                         } else {
                             val html = HtmlReportHelper.generateAveragesOnlyReportCardsHtml(
                                 context = context,
@@ -9600,7 +9600,7 @@ fun EnhancedReportsTab(
                     }
                     5 -> {
                         if (performanceList.isEmpty()) {
-                            com.example.ui.utils.toastTr(context, "الرجاء رصد درجات ومواد القسم للحصول على نتائج", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "الرجاء رصد درجات ومواد القسم للحصول على نتائج", Toast.LENGTH_SHORT).show()
                         } else {
                             val html = HtmlReportHelper.generateDetailedTermLedgerHtml(
                                 context = context,
@@ -9623,7 +9623,7 @@ fun EnhancedReportsTab(
                     }
                     6 -> {
                         if (classStudents.isEmpty()) {
-                            com.example.ui.utils.toastTr(context, "القسم فارغ لا يمكن سحب المعدلات", Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "القسم فارغ لا يمكن سحب المعدلات", Toast.LENGTH_SHORT).show()
                         } else {
                             val html = HtmlReportHelper.generateAnnualAveragesHtml(
                                 context = context,
@@ -10041,7 +10041,7 @@ fun EnhancedReportsTab(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         onPrintClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً للطباعة", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "الرجاء تسجيل الطلاب للقسم أولاً للطباعة", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateStudentDirectoryHtml(
                                     context = context,
@@ -10055,7 +10055,7 @@ fun EnhancedReportsTab(
                         },
                         onShareClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً للمشاركة", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "الرجاء تسجيل الطلاب للقسم أولاً للمشاركة", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateStudentDirectoryHtml(
                                     context = context,
@@ -10082,7 +10082,7 @@ fun EnhancedReportsTab(
                         containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         onPrintClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً للتقسيم والطباعة", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "الرجاء تسجيل الطلاب للقسم أولاً للتقسيم والطباعة", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateHymnsGroupsHtml(
                                     context = context,
@@ -10096,7 +10096,7 @@ fun EnhancedReportsTab(
                         },
                         onShareClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً للتقسيم", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "الرجاء تسجيل الطلاب للقسم أولاً للتقسيم", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateHymnsGroupsHtml(
                                     context = context,
@@ -10122,7 +10122,7 @@ fun EnhancedReportsTab(
                         containerColor = Color(0xFFFFF9C4),
                         onPrintClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "لا توجد أسماء بالقسم لبناء جدول النظافة", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "لا توجد أسماء بالقسم لبناء جدول النظافة", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateCleaningGroupsHtml(
                                     context = context,
@@ -10136,7 +10136,7 @@ fun EnhancedReportsTab(
                         },
                         onShareClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "لا توجد أسماء بالقسم لبناء جدول النظافة", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "لا توجد أسماء بالقسم لبناء جدول النظافة", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateCleaningGroupsHtml(
                                     context = context,
@@ -10166,7 +10166,7 @@ fun EnhancedReportsTab(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         onPrintClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "لا توجد أسماء طلاب بالقسم بعد للطباعة", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "لا توجد أسماء طلاب بالقسم بعد للطباعة", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateFrenchGradesEntryHtml(
                                     context = context,
@@ -10181,7 +10181,7 @@ fun EnhancedReportsTab(
                         },
                         onShareClick = {
                             if (classStudents.isEmpty()) {
-                                com.example.ui.utils.toastTr(context, "لا توجد أسماء طلاب بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "لا توجد أسماء طلاب بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
                             } else {
                                 val html = HtmlReportHelper.generateFrenchGradesEntryHtml(
                                     context = context,
@@ -10430,7 +10430,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
     ) { result ->
         if (!isNetworkAvailable(context)) {
             val netErr = "لا يوجد اتصال بالإنترنت أو الاتصال ضعيف"
-            com.example.ui.utils.toastTr(context, netErr, Toast.LENGTH_LONG).show()
+            android.widget.Toast.makeText(context, netErr, Toast.LENGTH_LONG).show()
             lastApiExceptionInfo = netErr
             return@rememberLauncherForActivityResult
         }
@@ -10444,11 +10444,11 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                     lastApiExceptionInfo = null
                     viewModel.clearAuthError()
                     viewModel.loginWithGoogleCredential(idToken) {
-                        com.example.ui.utils.toastTr(context, "تم تسجيل الدخول بنجاح بحساب Google! 🎉", Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(context, "تم تسجيل الدخول بنجاح بحساب Google! 🎉", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     val err = "تعذر الحصول على رمز تعريف Google (ID Token)."
-                    com.example.ui.utils.toastTr(context, err, Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(context, err, Toast.LENGTH_SHORT).show()
                     lastApiExceptionInfo = err
                 }
             } catch (e: ApiException) {
@@ -10464,7 +10464,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                     e.statusCode == 12501 || e.statusCode == 12502 || msg.contains("cancel", ignoreCase = true) -> "تم إلغاء عملية الدخول"
                     else -> "فشل تسجيل الدخول بحساب Google (رمز: ${e.statusCode})"
                 }
-                com.example.ui.utils.toastTr(context, userMsg, Toast.LENGTH_LONG).show()
+                android.widget.Toast.makeText(context, userMsg, Toast.LENGTH_LONG).show()
                 lastApiExceptionInfo = userMsg
             } catch (e: Exception) {
                 val msg = e.localizedMessage ?: ""
@@ -10479,7 +10479,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                     msg.contains("cancel", ignoreCase = true) || msg.contains("12501") -> "تم إلغاء عملية الدخول"
                     else -> "حدث خطأ أثناء المصادقة: ${e.localizedMessage ?: "فشل الاتصال"}"
                 }
-                com.example.ui.utils.toastTr(context, userMsg, Toast.LENGTH_LONG).show()
+                android.widget.Toast.makeText(context, userMsg, Toast.LENGTH_LONG).show()
                 lastApiExceptionInfo = userMsg
             }
         } else {
@@ -10491,7 +10491,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
             } else {
                 "تعذر الاتصال بخدمات الدخول"
             }
-            com.example.ui.utils.toastTr(context, userMsg, Toast.LENGTH_SHORT).show()
+            android.widget.Toast.makeText(context, userMsg, Toast.LENGTH_SHORT).show()
             lastApiExceptionInfo = userMsg
         }
     }
@@ -10610,7 +10610,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                         viewModel.clearAuthError()
                         if (!isNetworkAvailable(context)) {
                             val netErr = "لا يوجد اتصال بالإنترنت أو الاتصال ضعيف"
-                            com.example.ui.utils.toastTr(context, netErr, Toast.LENGTH_LONG).show()
+                            android.widget.Toast.makeText(context, netErr, Toast.LENGTH_LONG).show()
                             lastApiExceptionInfo = netErr
                             return@Button
                         }
@@ -10634,7 +10634,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                                 } else {
                                     "${tr["auth_error_init"] ?: "حدث خطأ في تهيئة خدمات Google: "}$msg"
                                 }
-                                com.example.ui.utils.toastTr(context, userMsg, Toast.LENGTH_LONG).show()
+                                android.widget.Toast.makeText(context, userMsg, Toast.LENGTH_LONG).show()
                                 lastApiExceptionInfo = userMsg
                             }
                         }
@@ -10807,17 +10807,17 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                 Button(
                     onClick = {
                         if (resetEmailInput.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(resetEmailInput).matches()) {
-                            com.example.ui.utils.toastTr(context, "الرجاء إدخال بريد إلكتروني صالح", android.widget.Toast.LENGTH_LONG).show()
+                            android.widget.Toast.makeText(context, "الرجاء إدخال بريد إلكتروني صالح", android.widget.Toast.LENGTH_LONG).show()
                         } else {
                             viewModel.sendPasswordResetEmail(
                                 email = resetEmailInput,
                                 onSuccess = {
-                                    com.example.ui.utils.toastTr(context, "تم إرسال رابط استعادة كلمة المرور لبريدكم بنجاح! 📨", android.widget.Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, "تم إرسال رابط استعادة كلمة المرور لبريدكم بنجاح! 📨", android.widget.Toast.LENGTH_LONG).show()
                                     showForgotPasswordDialog = false
                                     failedAttemptsCount = 0
                                 },
                                 onFailure = { errorMsg ->
-                                    com.example.ui.utils.toastTr(context, "خطأ: $errorMsg", android.widget.Toast.LENGTH_LONG).show()
+                                    android.widget.Toast.makeText(context, "خطأ: $errorMsg", android.widget.Toast.LENGTH_LONG).show()
                                 }
                             )
                         }
@@ -10895,7 +10895,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                         sharedPrefs.edit().putString("web_client_id", cleanId).apply()
                         showClientIdDialog = false
                         if (cleanId.isNotBlank()) {
-                            com.example.ui.utils.toastTr(context, tr["saved_success"] ?: "تم حفظ المعرّف بنجاح! جرب النقر على الدخول مجدداً 🚀", Toast.LENGTH_LONG).show()
+                            android.widget.Toast.makeText(context, tr["saved_success"] ?: "تم حفظ المعرّف بنجاح! جرب النقر على الدخول مجدداً 🚀", Toast.LENGTH_LONG).show()
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -10993,7 +10993,7 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                     onClick = {
                         viewModel.loadStatsData()
                         viewModel.loadStatsCounts()
-                        com.example.ui.utils.toastTr(context, "تم تحديث البيانات والإحصائيات فورياً! 🔄", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(context, "تم تحديث البيانات والإحصائيات فورياً! 🔄", android.widget.Toast.LENGTH_SHORT).show()
                     },
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.textButtonColors(contentColor = BentoPrimary)
@@ -11550,7 +11550,7 @@ fun DeveloperContactBar() {
                                 }
                                 context.startActivity(Intent.createChooser(intent, "إرسال بريد إلكتروني..."))
                             } catch (e: Exception) {
-                                com.example.ui.utils.toastTr(context, "لا يوجد تطبيق بريد إلكتروني مثبت", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "لا يوجد تطبيق بريد إلكتروني مثبت", Toast.LENGTH_SHORT).show()
                             }
                         },
                     colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE)),
@@ -11590,7 +11590,7 @@ fun DeveloperContactBar() {
                                 val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://www.facebook.com/share/1D9F6VUWDY/"))
                                 context.startActivity(intent)
                             } catch (e: Exception) {
-                                com.example.ui.utils.toastTr(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
                             }
                         },
                     colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F0FE)),
@@ -11630,7 +11630,7 @@ fun DeveloperContactBar() {
                                 val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://whatsapp.com/channel/0029Vb8xtQ80AgWAQMnIao1C"))
                                 context.startActivity(intent)
                             } catch (e: Exception) {
-                                com.example.ui.utils.toastTr(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
                             }
                         },
                     colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9)),
@@ -11856,7 +11856,7 @@ fun ActivationPromoDialog(
                                 TextButton(
                                     onClick = {
                                         clipboardManager.setText(androidx.compose.ui.text.AnnotatedString(classId.toString()))
-                                        com.example.ui.utils.toastTr(context, "تم نسخ رقم القسم الفريد ($classId) بنجاح! 📋", android.widget.Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "تم نسخ رقم القسم الفريد ($classId) بنجاح! 📋", android.widget.Toast.LENGTH_SHORT).show()
                                     },
                                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                                 ) {
@@ -11987,7 +11987,7 @@ fun ActivationPromoDialog(
                         val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url))
                         context.startActivity(intent)
                     } catch (e: Exception) {
-                        com.example.ui.utils.toastTr(context, "لم نتمكن من فتح الواتساب، يرجى التأكد من توفر التطبيق على جهازك.", android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(context, "لم نتمكن من فتح الواتساب، يرجى التأكد من توفر التطبيق على جهازك.", android.widget.Toast.LENGTH_LONG).show()
                     }
                     onDismiss()
                 },
@@ -12122,7 +12122,7 @@ fun AboutAppScreen(
                                 try {
                                     context.startActivity(intent)
                                 } catch (e: Exception) {
-                                    com.example.ui.utils.toastTr(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
                                 }
                             },
                         shape = RoundedCornerShape(12.dp),
@@ -12172,7 +12172,7 @@ fun AboutAppScreen(
                                 try {
                                     context.startActivity(intent)
                                 } catch (e: Exception) {
-                                    com.example.ui.utils.toastTr(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
                                 }
                             },
                         shape = RoundedCornerShape(12.dp),
@@ -12222,7 +12222,7 @@ fun AboutAppScreen(
                                 try {
                                     context.startActivity(intent)
                                 } catch (e: Exception) {
-                                    com.example.ui.utils.toastTr(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
                                 }
                             },
                         shape = RoundedCornerShape(12.dp),
@@ -12272,7 +12272,7 @@ fun AboutAppScreen(
                                 try {
                                     context.startActivity(intent)
                                 } catch (e: Exception) {
-                                    com.example.ui.utils.toastTr(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
                                 }
                             },
                         shape = RoundedCornerShape(12.dp),
@@ -12321,7 +12321,7 @@ fun AboutAppScreen(
                                 try {
                                     context.startActivity(intent)
                                 } catch (e: Exception) {
-                                    com.example.ui.utils.toastTr(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
                                 }
                             },
                         shape = RoundedCornerShape(12.dp),
@@ -12700,9 +12700,9 @@ fun SingleRequestActivationView(
                                                 updatedMap["status"] = "completed"
                                                 requestData = updatedMap
                                                 if (marked) {
-                                                    com.example.ui.utils.toastTr(context, "تم تفعيل الاشتراك وتحديث الطلب بنجاح! 🎉", android.widget.Toast.LENGTH_LONG).show()
+                                                    android.widget.Toast.makeText(context, "تم تفعيل الاشتراك وتحديث الطلب بنجاح! 🎉", android.widget.Toast.LENGTH_LONG).show()
                                                 } else {
-                                                    com.example.ui.utils.toastTr(context, "✅ تم التفعيل. تعذّر فقط تحديث حالة الرابط بسبب ضعف الشبكة، ولا يؤثر ذلك على المشترك.", android.widget.Toast.LENGTH_LONG).show()
+                                                    android.widget.Toast.makeText(context, "✅ تم التفعيل. تعذّر فقط تحديث حالة الرابط بسبب ضعف الشبكة، ولا يؤثر ذلك على المشترك.", android.widget.Toast.LENGTH_LONG).show()
                                                 }
                                             }
                                         }
@@ -13273,9 +13273,9 @@ fun ExchangeRequestApprovalView(
                                                     updatedMap["status"] = "completed"
                                                     requestData = updatedMap
                                                     if (marked) {
-                                                        com.example.ui.utils.toastTr(context, "تمت الموافقة على إعلان التبادل ونشره بنجاح! 🎉", android.widget.Toast.LENGTH_LONG).show()
+                                                        android.widget.Toast.makeText(context, "تمت الموافقة على إعلان التبادل ونشره بنجاح! 🎉", android.widget.Toast.LENGTH_LONG).show()
                                                     } else {
-                                                        com.example.ui.utils.toastTr(context, "✅ تم نشر الإعلان. تعذّر فقط تحديث حالة الرابط بسبب ضعف الشبكة، ولا يؤثر ذلك على النشر.", android.widget.Toast.LENGTH_LONG).show()
+                                                        android.widget.Toast.makeText(context, "✅ تم نشر الإعلان. تعذّر فقط تحديث حالة الرابط بسبب ضعف الشبكة، ولا يؤثر ذلك على النشر.", android.widget.Toast.LENGTH_LONG).show()
                                                     }
                                                 }
                                             }
