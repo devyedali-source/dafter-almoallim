@@ -1623,6 +1623,7 @@ fun InnerTeacherAppScreenContent(
                                                 horizontalArrangement = Arrangement.SpaceBetween
                                             ) {
                                                 Row(
+                                                    modifier = Modifier.weight(1f),
                                                     verticalAlignment = Alignment.CenterVertically,
                                                     horizontalArrangement = Arrangement.spacedBy(14.dp)
                                                 ) {
@@ -1635,7 +1636,7 @@ fun InnerTeacherAppScreenContent(
                                                     ) {
                                                         Icon(Icons.Default.Book, contentDescription = null, tint = BentoSecondary)
                                                     }
-                                                    Column {
+                                                    Column(modifier = Modifier.weight(1f)) {
                                                         Row(
                                                             verticalAlignment = Alignment.CenterVertically,
                                                             horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -1643,7 +1644,8 @@ fun InnerTeacherAppScreenContent(
                                                             Text(
                                                                 text = "${AppLocalization.tr("academic_year_prefix", "العام الدراسي:", appLanguage)} $year",
                                                                 fontWeight = FontWeight.Bold,
-                                                                color = BentoText
+                                                                color = BentoText,
+                                                                modifier = Modifier.weight(1f, fill = false)
                                                             )
                                                             if (year == viewModel.getAutomaticAcademicYear()) {
                                                                 Box(
@@ -1666,7 +1668,9 @@ fun InnerTeacherAppScreenContent(
                                                                             text = AppLocalization.tr("ongoing_year_badge", "جارية", appLanguage),
                                                                             color = Color(0xFF2E7D32),
                                                                             fontSize = 10.sp,
-                                                                            fontWeight = FontWeight.Bold
+                                                                            fontWeight = FontWeight.Bold,
+                                                                            maxLines = 1,
+                                                                            softWrap = false
                                                                         )
                                                                     }
                                                                 }
