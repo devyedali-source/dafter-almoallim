@@ -2,6 +2,13 @@ package com.example.data
 
 import android.content.Context
 import com.google.android.play.core.assetpacks.AssetPackManagerFactory
+import com.google.android.play.core.assetpacks.AssetPackState
+import com.google.android.play.core.assetpacks.AssetPackStateUpdateListener
+import com.google.android.play.core.assetpacks.model.AssetPackStatus
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
@@ -45,4 +52,46 @@ object BookPack {
             // لا شيء: سيُعاد المحاولة لاحقًا
         }
     }
+
+    /**
+     * نسبة تنزيل حزمة الكتب (0..100) أثناء التنزيل، أو null إذا لا يوجد تنزيل جارٍ
+     * (اكتمل، أو فشل، أو التطبيق غير مثبّت من Google Play فلا حزمة تُنزَّل).
+     */
+    fun downloadProgress(context: Context): Flow<Int?> = callbackFlow {
+        val mgr = manager(context)
+        fun percentOf(st: AssetPackState?): Int? {
+            if (st == null) return null
+            return when (st.status()) {
+                AssetPackStatus.COMPLETED,
+                AssetPackStatus.FAILED,
+                AssetPackStatus.CANCELED -> null
+                else -> {
+                    val total = st.totalBytesToDownload()
+                    if (total > 0) ((st.bytesDownloaded() * 100L) / total).toInt().coerceIn(0, 100) else 0
+                }
+            }
+        }
+        if (root(context) != null) {
+            trySend(null)
+            close()
+            return@callbackFlow
+        }
+        val listener = object : AssetPackStateUpdateListener {
+            override fun onStateUpdate(state: AssetPackState) {
+                if (state.name() == PACK) trySend(percentOf(state))
+            }
+        }
+        try {
+            mgr.registerListener(listener)
+            requestDownload(context)
+            mgr.getPackStates(listOf(PACK))
+                .addOnSuccessListener { trySend(percentOf(it.packStates()[PACK])) }
+                .addOnFailureListener { trySend(null) }
+        } catch (e: Exception) {
+            trySend(null)
+        }
+        awaitClose {
+            try { mgr.unregisterListener(listener) } catch (e: Exception) { }
+        }
+    }.distinctUntilChanged()
 }

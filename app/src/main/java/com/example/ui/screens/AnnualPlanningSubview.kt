@@ -351,6 +351,26 @@ private fun AnnualPlanningScreenContent(
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f, fill = false)
                         )
+                        // مؤشر دائري صغير بنسبة تنزيل صور الكتب؛ يختفي عند الاكتمال
+                        val booksPercent by remember { com.example.data.BookPack.downloadProgress(context) }
+                            .collectAsState(initial = null)
+                        booksPercent?.let { pct ->
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(34.dp)) {
+                                CircularProgressIndicator(
+                                    progress = { pct / 100f },
+                                    modifier = Modifier.size(34.dp),
+                                    strokeWidth = 3.dp,
+                                    color = BentoPrimary,
+                                    trackColor = BentoLightLavender
+                                )
+                                Text(
+                                    text = "$pct%",
+                                    fontSize = 8.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = BentoPrimary
+                                )
+                            }
+                        }
                     }
 
                     // Dynamic Count Badge (الأعداد تُحسب ديناميكيًا من المجموعات الفعلية)
