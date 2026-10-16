@@ -1624,6 +1624,10 @@ object HtmlReportHelper {
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر متابعة القسم</title>$styles")
         html.append("<style>.cmp td, .cmp th { padding: 2px 3px !important; font-size: 9px !important; } .cmp .nm { text-align: right; padding-right: 5px !important; font-weight: bold; white-space: nowrap; } .cmp .mk { font-size: 12px !important; font-weight: 900; } .cmp .lg { font-size: 8px; text-align: right; margin-top: 6px; line-height: 1.5; } .pg { page-break-after: always; break-after: page; } .pg:last-child { page-break-after: auto; break-after: auto; }</style>")
+        if (sorted.size > 28) {
+            // أقسام كبيرة: نضغط الصفوف والتوقيعات حتى لا تنزل التواقيع وحدها في صفحة فارغة
+            html.append("<style>.cmp td, .cmp th { padding: 0px 3px !important; line-height: 1.05 !important; } .sheet-footer-signals { margin-top: 3px !important; } .sheet-footer-signals div[style*=\"height: 46px\"] { height: 22px !important; }</style>")
+        }
         html.append("</head><body>")
 
         val chunks = discipline.spheres.chunked(3).ifEmpty { listOf(emptyList()) }
