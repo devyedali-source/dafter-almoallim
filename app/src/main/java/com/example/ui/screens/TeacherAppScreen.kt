@@ -6065,7 +6065,7 @@ fun GradesEntryTab(
                                     }
                                 }
                             },
-                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
                         ) {
@@ -6103,7 +6103,7 @@ fun GradesEntryTab(
                                     }
                                 }
                             },
-                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
                         ) {
@@ -6146,7 +6146,7 @@ fun GradesEntryTab(
                                         }
                                     }
                                 },
-                                modifier = Modifier.fillMaxWidth().height(48.dp),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
                             ) {
@@ -6176,7 +6176,7 @@ fun GradesEntryTab(
                                         }
                                     }
                                 },
-                                modifier = Modifier.fillMaxWidth().height(48.dp),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
                             ) {
@@ -6207,7 +6207,7 @@ fun GradesEntryTab(
                                         }
                                     }
                                 },
-                                modifier = Modifier.fillMaxWidth().height(48.dp),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
                             ) {
@@ -7237,7 +7237,7 @@ fun SubjectsTab(
             if (onClose != null) {
                 OutlinedButton(
                     onClick = onClose,
-                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = BentoPrimary),
                     border = BorderStroke(1.dp, BentoPrimary),
                     shape = RoundedCornerShape(12.dp)
@@ -7598,7 +7598,7 @@ fun PersonalClassSubjectsEditor(
             },
             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
             shape = RoundedCornerShape(14.dp),
-            modifier = Modifier.fillMaxWidth().height(50.dp)
+            modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp)
         ) {
             Icon(Icons.Default.Add, contentDescription = null, tint = Color.White)
             Spacer(modifier = Modifier.width(8.dp))
@@ -12409,7 +12409,7 @@ fun SingleRequestActivationView(
 
                         Button(
                             onClick = onClose,
-                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                             shape = RoundedCornerShape(12.dp)
                         ) {
@@ -12489,7 +12489,7 @@ fun SingleRequestActivationView(
                             if (errorMessage?.startsWith("📶") == true) {
                                 Button(
                                     onClick = { reloadKey++ },
-                                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
@@ -12498,7 +12498,7 @@ fun SingleRequestActivationView(
                             }
                             Button(
                                 onClick = onClose,
-                                modifier = Modifier.fillMaxWidth().height(48.dp),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
@@ -12649,7 +12649,7 @@ fun SingleRequestActivationView(
                                             }
                                         }
                                     },
-                                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
                                     shape = RoundedCornerShape(12.dp),
                                     enabled = !isActivating
@@ -12666,7 +12666,7 @@ fun SingleRequestActivationView(
                             } else {
                                 Button(
                                     onClick = onClose,
-                                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
@@ -12962,7 +12962,7 @@ fun ExchangeRequestApprovalView(
 
                         Button(
                             onClick = onClose,
-                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                             shape = RoundedCornerShape(12.dp)
                         ) {
@@ -13057,7 +13057,7 @@ fun ExchangeRequestApprovalView(
                             if (errorMessage?.startsWith("📶") == true) {
                                 Button(
                                     onClick = { reloadKey++ },
-                                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
@@ -13066,7 +13066,7 @@ fun ExchangeRequestApprovalView(
                             }
                             Button(
                                 onClick = onClose,
-                                modifier = Modifier.fillMaxWidth().height(48.dp),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
@@ -13222,7 +13222,7 @@ fun ExchangeRequestApprovalView(
                                                 }
                                             }
                                         },
-                                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                                        modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
                                         colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
                                         shape = RoundedCornerShape(12.dp),
                                         enabled = !isApproving
@@ -13239,7 +13239,7 @@ fun ExchangeRequestApprovalView(
                                 } else {
                                     Button(
                                         onClick = onClose,
-                                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                         colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                         shape = RoundedCornerShape(12.dp)
                                     ) {
