@@ -3639,7 +3639,7 @@ fun BentoDashboard(
                 ) {
                     val currentUserState by viewModel.currentUser.collectAsState()
                     Text(
-                        text = if (currentUserState?.displayName.isNullOrBlank()) "دفتر المعلم" else "دفتر المعلم - ${currentUserState?.displayName}",
+                        text = "دفتر المعلم",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = com.example.ui.theme.BentoText,
