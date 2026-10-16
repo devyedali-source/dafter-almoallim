@@ -8553,6 +8553,25 @@ fun EnhancedReportsTab(
 
     var showSubjectsManagerInsideSettings by remember { mutableStateOf(false) }
     var showStampSettingsDialog by remember { mutableStateOf(false) }
+    var showSubjectsNotice by remember { mutableStateOf(false) }
+
+    if (showSubjectsNotice) {
+        AlertDialog(
+            onDismissRequest = { showSubjectsNotice = false },
+            title = { Text(uiT("تنبيه"), fontWeight = FontWeight.ExtraBold) },
+            text = { Text(uiT("ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا.")) },
+            confirmButton = {
+                Button(onClick = {
+                    showSubjectsNotice = false
+                    showSettingsDialog = false
+                    showSubjectsManagerInsideSettings = true
+                }) { Text(uiT("متابعة")) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSubjectsNotice = false }) { Text(uiT("إلغاء")) }
+            }
+        )
+    }
 
     if (showSubjectsManagerInsideSettings) {
         if (activeClass != null) {
@@ -8682,27 +8701,12 @@ fun EnhancedReportsTab(
                                 .verticalScroll(rememberScrollState()),
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            Card(
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
-                                shape = RoundedCornerShape(14.dp),
-                                border = BorderStroke(1.dp, Color(0xFFFB8C00).copy(alpha = 0.5f))
-                            ) {
-                                Text(
-                                    text = uiT("ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا."),
-                                    modifier = Modifier.padding(14.dp),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF8D4B00)
-                                )
-                            }
                             // --- Quick Subjects Editor ---
                             Card(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        showSettingsDialog = false
-                                        showSubjectsManagerInsideSettings = true
+                                        showSubjectsNotice = true
                                     },
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)),
                                 shape = RoundedCornerShape(16.dp),

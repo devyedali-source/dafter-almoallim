@@ -333,6 +333,7 @@ object UiFrenchExtra {
         "لا يوجد تطبيق بريد إلكتروني مثبت" to "Aucune application de messagerie installée",
         "تعذر فتح الرابط" to "Impossible d'ouvrir le lien",
         "تنبيه" to "Attention",
+        "متابعة" to "Continuer",
         "تفعيل مسار الفصل الأخير فقط 🔓" to "Activer uniquement le dernier trimestre 🔓",
         "تفعيل القسم 🔓" to "Activer la classe 🔓",
         "جميع فصول السنة (الثاني والثالث)" to "Tous les trimestres (2e et 3e)",
