@@ -1645,7 +1645,7 @@ object HtmlReportHelper {
             chunk.forEach { _ -> for (k in 1..3) html.append("<th>الكفاية $k<br>CB$k</th>") }
             html.append("</tr></thead><tbody>")
             sorted.forEachIndexed { i, st ->
-                html.append("<tr class=\"${if (i % 2 == 1) "row-bg-accent" else ""}\"><td>${i + 1}</td><td class=\"nm\">${escCompHtml(st.name)}</td>")
+                html.append("<tr class=\"${if (i % 2 == 1) "row-bg-accent" else ""}\"><td>${i + 1}</td><td class=\"nm\">${escCompHtml(compNameCell(st, discipline))}</td>")
                 chunk.forEach { sp ->
                     for (k in 1..3) {
                         val v = marks["${st.id}|${discipline.code}|${sp.code}|$k"] ?: 0
@@ -1687,6 +1687,17 @@ object HtmlReportHelper {
         }
         html.append("</body></html>")
         return html.toString()
+    }
+
+    /** في دفتر متابعة الفرنسية: الاسم بالعربية ثم « - » ثم الاسم بالفرنسية (إن وُجد). */
+    private fun compNameCell(
+        st: Student,
+        discipline: com.example.data.planning.LessonPreparationRepository.CompDiscipline
+    ): String {
+        val code = discipline.code.trim().uppercase()
+        val isFr = code == "FRN" || code == "FR" || discipline.label.contains("فرنس") ||
+            discipline.label.lowercase().contains("fran")
+        return if (isFr && st.frenchName.isNotBlank()) "${st.name} - ${st.frenchName}" else st.name
     }
 
     /** كل مواد القسم النشط في ملف واحد (بأسماء التلاميذ حتى لو كان التقييم فارغاً) */
