@@ -1060,6 +1060,34 @@ fun InnerTeacherAppScreenContent(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
                             )
 
+                            // كتبي: فتح موقع الكتب المدرسية في المتصفح
+                            val koutoubiContext = LocalContext.current
+                            NavigationDrawerItem(
+                                label = {
+                                    Text(
+                                        text = "كتبي 📚",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 12.5.sp
+                                    )
+                                },
+                                selected = false,
+                                onClick = {
+                                    scope.launch { drawerState.close() }
+                                    try {
+                                        val intent = android.content.Intent(
+                                            android.content.Intent.ACTION_VIEW,
+                                            android.net.Uri.parse("https://koutoubi.mr/")
+                                        )
+                                        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        koutoubiContext.startActivity(intent)
+                                    } catch (e: Exception) {
+                                        Toast.makeText(koutoubiContext, "تعذر فتح الرابط", Toast.LENGTH_SHORT).show()
+                                    }
+                                },
+                                icon = { Icon(Icons.Default.Book, contentDescription = null, tint = BentoPrimary) },
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
+                            )
+
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 16.dp),
                                 color = BentoGrayOutline.copy(alpha = 0.5f)
