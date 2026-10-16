@@ -5820,25 +5820,31 @@ fun GradesEntryTab(
                                         },
                                         onClick = {
                                             expandedGradeTermDropdown = false
-                                            viewModel.checkTermLockAndSelect(termId, activeClass?.id) { isUnlocked ->
-                                                if (!isUnlocked) {
-                                                    if (activeClass != null && !activeClass.isSyncedToServer) {
-                                                        viewModel.resendUnsyncedClasses()
-                                                        Toast.makeText(
-                                                            context,
-                                                            "لم يصل قسمك إلى الخادم بعد. تأكد من اتصالك بالإنترنت وأعد المحاولة بعد لحظات.",
-                                                            Toast.LENGTH_LONG
-                                                        ).show()
-                                                    } else if (activeClass != null && activeClass.isActivationExpired()) {
-                                                        Toast.makeText(
-                                                            context,
-                                                            "هذا القسم من سنة دراسية منتهية (${activeClass.academicYear})، والتفعيل يخصّ السنة الجارية فقط. أما كشوف هذا القسم فهي متاحة لك بدون تفعيل من صفحة الكشوف.",
-                                                            Toast.LENGTH_LONG
-                                                        ).show()
-                                                    } else {
+                                            // الفصل المقفول محليًا: نُظهر النتيجة فورًا دون انتظار الخادم (حتى لا يظنّ المستخدم أن التطبيق تعطّل)،
+                                            // ويستمر التحقق من الخادم في الخلفية، فإن كان الفصل مفعّلًا هناك فُتح وأُغلقت النافذة تلقائيًا.
+                                            val lockedLocally = activeClass != null && !activeClass.isTermUnlocked(termId)
+                                            if (lockedLocally && activeClass != null) {
+                                                if (!activeClass.isSyncedToServer) {
+                                                    viewModel.resendUnsyncedClasses()
+                                                    Toast.makeText(
+                                                        context,
+                                                        "لم يصل قسمك إلى الخادم بعد. تأكد من اتصالك بالإنترنت وأعد المحاولة بعد لحظات.",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                } else if (activeClass.isActivationExpired()) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "هذا القسم من سنة دراسية منتهية (${activeClass.academicYear})، والتفعيل يخصّ السنة الجارية فقط. أما كشوف هذا القسم فهي متاحة لك بدون تفعيل من صفحة الكشوف.",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                } else {
                                                     targetTermNameForActivation = termName
                                                     showActivationPromoDialog = true
-                                                    }
+                                                }
+                                            }
+                                            viewModel.checkTermLockAndSelect(termId, activeClass?.id) { isUnlocked ->
+                                                if (isUnlocked && lockedLocally) {
+                                                    showActivationPromoDialog = false
                                                 }
                                             }
                                         }
