@@ -1222,7 +1222,7 @@ private fun SubjectsListScreen(
                                 }
                             }
 
-                            Column(modifier = Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                                 Text(
                                     text = planningSubjectLabel(subject.nom),
                                     fontWeight = FontWeight.Black,
@@ -1349,9 +1349,10 @@ private fun DomainsListScreen(
                                 }
                             }
 
-                            Column(modifier = Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(
                                     text = domainArabicName,
+                                    modifier = Modifier.fillMaxWidth(),
                                     fontWeight = FontWeight.Black,
                                     fontSize = 14.sp,
                                     color = BentoPrimary
