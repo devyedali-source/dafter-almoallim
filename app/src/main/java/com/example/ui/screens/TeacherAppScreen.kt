@@ -10210,7 +10210,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
         if (appLanguage == "fr") {
             mapOf(
                 "title" to "Connexion de l'Enseignant",
-                "welcome" to "Bienvenue à nouveau ! Connectez-vous rapidement pour lier vos données, suivre et gérer les notes et les élèves de vos classes en toute sécurité.",
+                "welcome" to "Bienvenue à nouveau ! Connectez-vous rapidement pour lier vos données, suivre et gérer les notes et les élèves de vos classes.",
                 "google_sign_in" to "Connexion rapide avec Google 🚀",
                 "footer" to "Tous droits réservés © Développeur : El Moctar Yedaly 🇲🇷 2026",
                 "web_client_title" to "Configuration de la connexion Google",
