@@ -397,22 +397,18 @@ fun LessonProposalScreen(
                                         .padding(horizontal = 12.dp, vertical = 12.dp),
                                     verticalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
-                                    // 0. التاريخان فوق الجدول (خارجه) ليكتبهما المعلم بخط اليد
+                                    // 0. تاريخا اليوم المسجّلان محلياً أعلى الورقة (خارج الجدول)
+                                    val prepCtx = androidx.compose.ui.platform.LocalContext.current
+                                    val (prepHijri, prepGreg) = remember(fr) { com.example.ui.utils.LocalDates.today(prepCtx, fr) }
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(
-                                            text = (if (fr) "Date (hégire) : " else "التاريخ الهجري: ") + "................",
-                                            fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue
-                                        )
-                                        Text(
-                                            text = (if (fr) "Date : " else "الموافق الميلادي: ") + "................",
-                                            fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue
-                                        )
+                                        Text(text = prepHijri, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue)
+                                        Text(text = prepGreg, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue)
                                     }
 
-                                    // 1. ترويسة من صفّين
+                                    // 1. ترويسة من صفّين، كل صف أربع خانات
                                     Box(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -428,6 +424,18 @@ fun LessonProposalScreen(
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 HeaderCell(
+                                                    title = (if (fr) "Date (hégire) :" else "التاريخ الهجري:"),
+                                                    value = "................",
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                                PaperVerticalLine()
+                                                HeaderCell(
+                                                    title = (if (fr) "Date :" else "الموافق الميلادي:"),
+                                                    value = "................",
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                                PaperVerticalLine()
+                                                HeaderCell(
                                                     title = (if (fr) "Niveau :" else "المستوى:"),
                                                     value = if (fr) "${getLevelFrenchName(lesson.level)} année" else proposalData.levelTitle.ifBlank { "${getLevelArabicName(lesson.level)} ابتدائي" },
                                                     modifier = Modifier.weight(1f)
@@ -436,18 +444,6 @@ fun LessonProposalScreen(
                                                 HeaderCell(
                                                     title = if (proposalData.sessionInfo.isNotBlank()) (if (fr) "Séance :" else "رمز الحصة:") else "",
                                                     value = proposalData.sessionInfo,
-                                                    modifier = Modifier.weight(1f)
-                                                )
-                                                PaperVerticalLine()
-                                                HeaderCell(
-                                                    title = (if (fr) "Matière :" else "المادة:"),
-                                                    value = proposalData.subject.ifBlank { lesson.subject },
-                                                    modifier = Modifier.weight(1f)
-                                                )
-                                                PaperVerticalLine()
-                                                HeaderCell(
-                                                    title = if (proposalData.durationText.isNotBlank()) (if (fr) "Durée :" else "المدة:") else "",
-                                                    value = proposalData.durationText,
                                                     modifier = Modifier.weight(1f)
                                                 )
                                             }
@@ -462,6 +458,12 @@ fun LessonProposalScreen(
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 HeaderCell(
+                                                    title = (if (fr) "Matière :" else "المادة:"),
+                                                    value = proposalData.subject.ifBlank { lesson.subject },
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                                PaperVerticalLine()
+                                                HeaderCell(
                                                     title = (if (fr) "Domaine :" else "المجال:"),
                                                     value = proposalData.domain.ifBlank { domainText },
                                                     modifier = Modifier.weight(1f)
@@ -470,7 +472,13 @@ fun LessonProposalScreen(
                                                 HeaderCell(
                                                     title = (if (fr) "Thème :" else "الموضوع:"),
                                                     value = proposalData.topic.ifBlank { lesson.title },
-                                                    modifier = Modifier.weight(2f)
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                                PaperVerticalLine()
+                                                HeaderCell(
+                                                    title = if (proposalData.durationText.isNotBlank()) (if (fr) "Durée :" else "المدة:") else "",
+                                                    value = proposalData.durationText,
+                                                    modifier = Modifier.weight(1f)
                                                 )
                                             }
                                         }

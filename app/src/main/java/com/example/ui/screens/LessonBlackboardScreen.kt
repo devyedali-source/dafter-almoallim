@@ -84,10 +84,11 @@ fun LessonBlackboardScreen(
     val domain = data.domain.ifBlank { domainFallback }
     val topic = data.topic.ifBlank { topicFallback }
 
-    // التاريخان يظهران فوق السبورة (خارج إطارها) ليكتبهما المعلم بخط اليد
-    val hijriLine = (if (isFrench) "Date (hégire) : " else "التاريخ الهجري: ") + BOARD_DOTS
-    val gregLine = (if (isFrench) "Date : " else "التاريخ الميلادي: ") + BOARD_DOTS
+    val localCtx = androidx.compose.ui.platform.LocalContext.current
+    val (hijriLine, gregLine) = remember(isFrench) { com.example.ui.utils.LocalDates.today(localCtx, isFrench) }
     val headerText = listOf(
+        (if (isFrench) "Date (hégire) : " else "التاريخ الهجري: ") + BOARD_DOTS,
+        (if (isFrench) "Date : " else "التاريخ الميلادي: ") + BOARD_DOTS,
         (if (isFrench) "Matière : " else "المادة: ") + subject,
         (if (isFrench) "Domaine : " else "المجال: ") + domain,
         (if (isFrench) "Thème : " else "الموضوع: ") + topic
@@ -106,12 +107,13 @@ fun LessonBlackboardScreen(
         var boxSize by remember { mutableStateOf(IntSize.Zero) }
         CompositionLocalProvider(LocalLayoutDirection provides direction) {
           Column(Modifier.fillMaxSize()) {
+            // تاريخا اليوم المسجّلان محلياً فوق السبورة (خارج إطارها)
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 52.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(hijriLine, style = ChalkStyle, fontSize = 14.sp)
-                Text(gregLine, style = ChalkStyle, fontSize = 14.sp)
+                Text(hijriLine, style = ChalkStyle, fontSize = 13.sp)
+                Text(gregLine, style = ChalkStyle, fontSize = 13.sp)
             }
             BoxWithConstraints(
                 modifier = Modifier
@@ -220,8 +222,14 @@ private fun BoardHeader(text: String, modifier: Modifier) {
                 cell(lines[1], Modifier.weight(1f))
             }
         }
-        if (lines.size >= 3) cell(lines[2], Modifier.fillMaxWidth())
-        val extra = lines.drop(3).filter { it.isNotBlank() }
+        if (lines.size >= 4) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                cell(lines[2], Modifier.weight(1f))
+                cell(lines[3], Modifier.weight(1f))
+            }
+        }
+        if (lines.size >= 5) cell(lines[4], Modifier.fillMaxWidth())
+        val extra = lines.drop(5).filter { it.isNotBlank() }
         if (extra.isNotEmpty()) cell(extra.joinToString(" "), Modifier.fillMaxWidth())
     }
 }
