@@ -2166,6 +2166,21 @@ fun InnerTeacherAppScreenContent(
 
 
 @Composable
+private fun PullListButton(label: String, onDismiss: () -> Unit, onClick: () -> Unit) {
+    Button(
+        onClick = {
+            onDismiss()
+            onClick()
+        },
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
+    ) {
+        Text(uiT(label), fontWeight = FontWeight.Bold, maxLines = 1)
+    }
+}
+
+
+@Composable
 fun ClassStudentsSubview(
     viewModel: TeacherViewModel,
     activeSection: ClassSection,
@@ -2242,12 +2257,13 @@ fun ClassStudentsSubview(
     val allCustomForPull by viewModel.customizations.collectAsState()
     if (showPullMenu) {
         val pullClassName = activeSection.name.replace(" ", "_")
-        fun needStudents(msg: String): Boolean {
+        val needStudents: (String) -> Boolean = { msg ->
             if (classStudents.isEmpty()) {
                 com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_SHORT).show()
-                return true
+                true
+            } else {
+                false
             }
-            return false
         }
         AlertDialog(
             onDismissRequest = { showPullMenu = false },
@@ -2257,15 +2273,7 @@ fun ClassStudentsSubview(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.verticalScroll(rememberScrollState())
                 ) {
-                    @Composable
-                    fun PullItem(label: String, onClick: () -> Unit) {
-                        Button(
-                            onClick = { showPullMenu = false; onClick() },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
-                        ) { Text(uiT(label), fontWeight = FontWeight.Bold, maxLines = 1) }
-                    }
-                    PullItem("👥 لائحة الطلاب 📥") {
+                    PullListButton("👥 لائحة الطلاب 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً لسحب اللائحة")) {
                             viewModel.runWithLoading("جاري سحب وتصدير لائحة تلاميذ القسم...") {
                                 val html = HtmlReportHelper.generateStudentDirectoryHtml(
@@ -2279,9 +2287,9 @@ fun ClassStudentsSubview(
                             }
                         }
                     }
-                    PullItem("دفتر الغياب") { showAttendance = true }
-                    PullItem("دفتر المتابعة") { showCompetency = true }
-                    PullItem("🎤 المنشدين 📥") {
+                    PullListButton("دفتر الغياب", onDismiss = { showPullMenu = false }) { showAttendance = true }
+                    PullListButton("دفتر المتابعة", onDismiss = { showPullMenu = false }) { showCompetency = true }
+                    PullListButton("🎤 المنشدين 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً للتقسيم")) {
                             viewModel.runWithLoading("جاري سحب وتصدير لائحة مجموعات المنشدين...") {
                                 val html = HtmlReportHelper.generateHymnsGroupsHtml(
@@ -2295,7 +2303,7 @@ fun ClassStudentsSubview(
                             }
                         }
                     }
-                    PullItem("🧹 الكناسة 📥") {
+                    PullListButton("🧹 الكناسة 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("لا توجد أسماء بالقسم لبناء جدول النظافة")) {
                             viewModel.runWithLoading("جاري سحب وتصدير جدول النظافة والكناسة...") {
                                 val html = HtmlReportHelper.generateCleaningGroupsHtml(
@@ -2309,7 +2317,7 @@ fun ClassStudentsSubview(
                             }
                         }
                     }
-                    PullItem("📝 سجل معلم الفرنسية 📥") {
+                    PullListButton("📝 سجل معلم الفرنسية 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً لسحب الورقة")) {
                             val frenchSub = viewModel.buildClassSubjects(activeSection.id, activeSection.level, allSubjectsForPull, allCustomForPull)
                                 .find { it.name.contains("فرنسية") || it.name.lowercase().contains("french") }
