@@ -3391,24 +3391,6 @@ fun BentoDashboard(
                                 .padding(14.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            // Name
-                            Column {
-                                Text(
-                                    text = uiT("الاسم الكامل للمعلم 📝"),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = com.example.ui.theme.BentoPrimaryDesc,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = if (currentUser?.displayName.isNullOrBlank()) "غير محدد" else currentUser?.displayName ?: "",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = com.example.ui.theme.BentoText
-                                )
-                            }
-                            
-                            HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
-
                             // Email
                             Column {
                                 Text(
