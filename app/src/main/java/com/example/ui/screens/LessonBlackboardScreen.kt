@@ -319,7 +319,7 @@ private fun AutoFitChalkText(text: String, modifier: Modifier) {
                     is BoardBlock.Table -> BoardTable(b.rows, size)
                     is BoardBlock.Fig -> BoardFigure(
                         name = b.name,
-                        maxHeight = (size * 7f).dp,
+                        maxHeight = minOf((size * 7f).dp, this@BoxWithConstraints.maxHeight * 0.35f),
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
                 }
