@@ -10225,7 +10225,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
         } else {
             mapOf(
                 "title" to "تسجيل دخول المعلم",
-                "welcome" to "مرحباً بك مجدداً! قم بتسجيل الدخول السريع لربط بياناتك، للرصد وإدارة درجات وتلاميذ أقسامك بأمان ونظام.",
+                "welcome" to "مرحباً بك مجدداً! قم بتسجيل الدخول السريع لربط بياناتك، للرصد وإدارة درجات وتلاميذ أقسامك.",
                 "google_sign_in" to "الدخول السريع بحساب Google 🚀",
                 "footer" to "جميع الحقوق محفوظة © المطور: المختار اليدالى 🇲🇷 2026",
                 "web_client_title" to "إعداد الدخول بحساب Google",
@@ -10503,7 +10503,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                 )
 
                 Text(
-                    text = tr["welcome"] ?: "مرحباً بك مجدداً! قم بتسجيل الدخول السريع لربط بياناتك، للرصد وإدارة درجات وتلاميذ أقسامك بأمان ونظام.",
+                    text = tr["welcome"] ?: "مرحباً بك مجدداً! قم بتسجيل الدخول السريع لربط بياناتك، للرصد وإدارة درجات وتلاميذ أقسامك.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
