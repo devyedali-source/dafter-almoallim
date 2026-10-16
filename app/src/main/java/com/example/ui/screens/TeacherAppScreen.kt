@@ -1746,6 +1746,14 @@ fun InnerTeacherAppScreenContent(
                                         // Confirm Dialog of Class deletion state
                                         var showDeleteClassConfirmDialog by remember { mutableStateOf(false) }
                                         var confirmDeleteCode by remember { mutableStateOf("") }
+                                        var showEditClassInfoDialog by remember { mutableStateOf(false) }
+                                        if (showEditClassInfoDialog) {
+                                            EditClassInfoDialog(
+                                                section = section,
+                                                viewModel = viewModel,
+                                                onDismiss = { showEditClassInfoDialog = false }
+                                            )
+                                        }
                                         if (showDeleteClassConfirmDialog) {
                                             AlertDialog(
                                                 onDismissRequest = { showDeleteClassConfirmDialog = false },
@@ -1917,6 +1925,15 @@ fun InnerTeacherAppScreenContent(
                                                             color = BentoPrimaryDesc
                                                         )
                                                     }
+                                                }
+                                                IconButton(
+                                                    onClick = { showEditClassInfoDialog = true }
+                                                ) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Edit,
+                                                        contentDescription = "تصحيح بيانات القسم",
+                                                        tint = BentoPrimary
+                                                    )
                                                 }
                                                 IconButton(
                                                     onClick = {
@@ -7515,7 +7532,11 @@ fun SubjectsTab(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        listOf("الإحصائيات 📊" to 2).forEach { (title, idx) ->
+                        val pendingInfoRequestsCount = viewModel.classInfoRequests.collectAsState().value.size
+                        listOf(
+                            "الإحصائيات 📊" to 2,
+                            (if (pendingInfoRequestsCount > 0) "طلبات التصحيح ✏️ ($pendingInfoRequestsCount)" else "طلبات التصحيح ✏️") to 5
+                        ).forEach { (title, idx) ->
                             val isSel = adminTab == idx
                             Box(
                                 modifier = Modifier
@@ -7544,6 +7565,12 @@ fun SubjectsTab(
             if (adminTab == 2) {
                 item {
                     AdminStatsTabContent(viewModel = viewModel)
+                }
+            }
+
+            if (adminTab == 5) {
+                item {
+                    AdminClassInfoRequestsTab(viewModel = viewModel)
                 }
             }
 
