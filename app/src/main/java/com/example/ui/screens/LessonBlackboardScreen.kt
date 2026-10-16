@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxSize
@@ -64,9 +65,8 @@ private val BoardFrame = Color(0xFF6B4A2B)
 private const val BOARD_DOTS = "................"
 
 /**
- * شاشة السبورة: خلفية سوداء وكتابة بيضاء غليظة بالطبشور. تظهر كل السبورة دفعة واحدة دون تمرير:
- * الترويسة، الدرس (ما يكتبه التلاميذ)، الإدماج (إن وجد)، والتطبيق. يصغَّر الخط تلقائياً ليتسع المحتوى.
- * لا تغيّر اتجاه الهاتف: في الوضع العمودي تُرتَّب الأقسام فوق بعضها، وفي الأفقي جنباً إلى جنب.
+ * شاشة السبورة: خلفية سوداء وكتابة بيضاء غليظة بالطبشور. الأقسام فوق بعضها: الترويسة، الدرس،
+ * الإدماج (إن وجد)، والتطبيق. الخط ثابت ومقروء وكل المعلومات ظاهرة، وإن طالت يمرّر المستخدم للأسفل.
  */
 @Composable
 fun LessonBlackboardScreen(
@@ -139,27 +139,19 @@ fun LessonBlackboardScreen(
                     .border(3.dp, BoardFrame, RoundedCornerShape(6.dp))
                     .padding(4.dp)
             ) {
-                val landscape = maxWidth > maxHeight
                 val sections: List<Triple<String?, String, Float>> = buildList {
                     add(Triple(null, headerText, 0.9f))
                     add(Triple(if (isFrench) "Leçon" else "الدرس", board.lesson, 2f))
                     if (board.hasIntegration) add(Triple(if (isFrench) "Intégration" else "الإدماج", board.integration, 1.1f))
                     add(Triple(if (isFrench) "Application" else "التطبيق", board.application, 1.3f))
                 }
-                if (landscape) {
-                    Row(Modifier.fillMaxSize()) {
-                        sections.forEachIndexed { i, (title, text, w) ->
-                            if (i > 0) BoardVDivider()
-                            BoardSection(title, text, Modifier.weight(w).fillMaxHeight())
-                        }
+                // كل السبورة في صفحة واحدة بخط ثابت مقروء؛ إن طال المحتوى يمرّر المستخدم للأسفل حتى تكتمل
+                Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                    sections.forEachIndexed { idx, (title, text, _) ->
+                        if (idx > 0) BoardHDivider()
+                        BoardSection(title, text, Modifier.fillMaxWidth())
                     }
-                } else {
-                    Column(Modifier.fillMaxSize()) {
-                        sections.forEachIndexed { i, (title, text, w) ->
-                            if (i > 0) BoardHDivider()
-                            BoardSection(title, text, Modifier.weight(w).fillMaxWidth())
-                        }
-                    }
+                    Spacer(Modifier.height(24.dp))
                 }
             }
           }
@@ -193,9 +185,9 @@ private fun BoardSection(title: String?, text: String, modifier: Modifier) {
             )
         }
         if (title == null) {
-            BoardHeader(text, Modifier.fillMaxWidth().weight(1f))
+            BoardHeader(text, Modifier.fillMaxWidth())
         } else {
-            AutoFitChalkText(text, Modifier.fillMaxWidth().weight(1f))
+            ChalkContent(text, Modifier.fillMaxWidth())
         }
     }
 }
@@ -211,12 +203,12 @@ private fun BoardHeader(text: String, modifier: Modifier) {
         Text(
             text = t,
             style = ChalkStyle,
-            fontSize = 14.sp,
-            lineHeight = 19.sp,
+            fontSize = 17.sp,
+            lineHeight = 24.sp,
             modifier = m
         )
     }
-    Column(modifier = modifier, verticalArrangement = Arrangement.SpaceEvenly) {
+    Column(modifier = modifier.padding(vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (lines.size >= 2) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 cell(lines[0], Modifier.weight(1f))
@@ -273,54 +265,28 @@ private fun parseBoardBlocks(text: String): List<BoardBlock> {
 }
 
 /**
- * يعرض محتوى القسم (نص وجداول ورسومات) ويصغّر الخط تدريجياً حتى يتسع كله في المساحة المتاحة دون تمرير.
+ * يعرض محتوى القسم (نص وجداول ورسومات) بخط ثابت مقروء دون تصغير ولا قصّ؛ التمرير للأسفل يتكفّل بالباقي.
  */
 @Composable
-private fun AutoFitChalkText(text: String, modifier: Modifier) {
-    BoxWithConstraints(modifier = modifier.clipToBounds()) {
-        val availPx = with(LocalDensity.current) { maxHeight.roundToPx() }
-        var size by remember(text, maxWidth, maxHeight) { mutableStateOf(26f) }
-        var ready by remember(text, maxWidth, maxHeight) { mutableStateOf(false) }
-        val blocks = remember(text) { parseBoardBlocks(text) }
-        // شبكة أمان: إن توقفت عملية ملاءمة الخط قبل الاكتمال لأي سبب، لا يبقى القسم فارغًا
-        LaunchedEffect(text, maxWidth, maxHeight) {
-            kotlinx.coroutines.delay(1500)
-            if (!ready) {
-                size = 7f
-                kotlinx.coroutines.delay(300)
-                ready = true
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(align = Alignment.Top, unbounded = true)
-                .onSizeChanged { s ->
-                    if (s.height > availPx && size > 7f) {
-                        val ratio = kotlin.math.sqrt(availPx.toFloat() / s.height.toFloat()) * 0.96f
-                        size = (size * ratio.coerceAtMost(0.95f)).coerceAtLeast(7f)
-                    } else {
-                        ready = true
-                    }
-                }
-                .drawWithContent { if (ready) drawContent() }
-        ) {
-            blocks.forEach { b ->
-                when (b) {
-                    is BoardBlock.Para -> Text(
-                        text = b.text,
-                        style = ChalkStyle,
-                        fontSize = size.sp,
-                        lineHeight = (size * 1.45f).sp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    is BoardBlock.Table -> BoardTable(b.rows, size)
-                    is BoardBlock.Fig -> BoardFigure(
-                        name = b.name,
-                        maxHeight = minOf((size * 7f).dp, this@BoxWithConstraints.maxHeight * 0.35f),
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                }
+private fun ChalkContent(text: String, modifier: Modifier) {
+    val blocks = remember(text) { parseBoardBlocks(text) }
+    val size = 20f
+    Column(modifier = modifier) {
+        blocks.forEach { b ->
+            when (b) {
+                is BoardBlock.Para -> Text(
+                    text = b.text,
+                    style = ChalkStyle,
+                    fontSize = size.sp,
+                    lineHeight = (size * 1.5f).sp,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)
+                )
+                is BoardBlock.Table -> BoardTable(b.rows, size)
+                is BoardBlock.Fig -> BoardFigure(
+                    name = b.name,
+                    maxHeight = 220.dp,
+                    modifier = Modifier.padding(vertical = 6.dp)
+                )
             }
         }
     }
@@ -344,7 +310,7 @@ private fun BoardTable(rows: List<List<String>>, size: Float) {
                         Text(
                             text = r.getOrElse(i) { "" },
                             style = ChalkStyle,
-                            fontSize = (size * 0.92f).sp,
+                            fontSize = (size * 0.85f).sp,
                             lineHeight = (size * 1.3f).sp,
                             textAlign = TextAlign.Center
                         )
