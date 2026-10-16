@@ -259,23 +259,6 @@ fun LessonProposalScreen(
                                 fontWeight = FontWeight.Black,
                                 color = InkDarkBlue
                             )
-                            val termNum = OfficialPlanningHierarchyAdapter.getTermForWeek(currentWeek)
-                            Text(
-                                text = uiTf("الفصل {0} ← الأسبوع {1} ← {2} ← {3}", getFaslArabicName(termNum), currentWeek, com.example.data.planning.canonical.OfficialAnnualPlanningRepository.mapMatiereToArabic(lesson.subject), domainText),
-                                fontSize = 11.sp,
-                                color = InkSoftBlue,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Text(
-                                text = uiTf("الدرس: {0}", lesson.title),
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = InkDarkBlue,
-                                maxLines = Int.MAX_VALUE,
-                                overflow = TextOverflow.Clip,
-                                softWrap = true
-                            )
                         }
                     }
 
@@ -313,28 +296,7 @@ fun LessonProposalScreen(
                             )
                         }
                     }
-                    if (classId != 0L) {
-                        OutlinedButton(
-                            onClick = {
-                                val newState = AnnualPlanningProgressManager.toggleLessonTaught(context, classId, lesson.id)
-                                isTaught = newState
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            border = BorderStroke(1.dp, if (isTaught) Color(0xFF2E7D32) else PaperBorderBlue),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = if (isTaught) Color(0xFFE8F5E9) else Color.Transparent,
-                                contentColor = if (isTaught) Color(0xFF1B5E20) else InkDarkBlue
-                            ),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
-                            modifier = Modifier.height(32.dp)
-                        ) {
-                            Text(
-                                text = if (isTaught) "✓ تم الإنجاز" else "تسجيل كمنجز",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    } else {
+                    if (classId == 0L) {
                         IconButton(
                             onClick = onBack,
                             modifier = Modifier.size(32.dp)
