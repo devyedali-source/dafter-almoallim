@@ -3648,51 +3648,6 @@ fun BentoDashboard(
                     )
                 }
             }
-            
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Display UID dynamically in a small pill, copy to clipboard when clicked
-                val currentUserState by viewModel.currentUser.collectAsState()
-                val contextVal = LocalContext.current
-                currentUserState?.uid?.let { uid ->
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xFFE8F5E9))
-                            .clickable {
-                                val clipboard = contextVal.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                                val clip = android.content.ClipData.newPlainText("UID", uid)
-                                clipboard.setPrimaryClip(clip)
-                                android.widget.Toast.makeText(contextVal, "تم نسخ معرف المعلم (UID)", android.widget.Toast.LENGTH_SHORT).show()
-                            }
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Text(
-                            text = "${AppLocalization.tr("teacher_id_prefix", "معرف: ", appLanguage)}${uid.take(5)}...",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1B5E20)
-                        )
-                    }
-                }
-                
-                IconButton(
-                    onClick = { showProfileDialog = true },
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(CircleShape)
-                        .background(com.example.ui.theme.BentoLightLavender)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "إعدادات الحساب ومعلوماتي",
-                        tint = com.example.ui.theme.BentoPrimary,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-            }
         }
 
         if (showStats) {
