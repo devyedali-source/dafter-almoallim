@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.utils.Text
-
 import com.example.ui.utils.uiT
 import com.example.ui.utils.uiTf
 
@@ -466,7 +464,7 @@ private fun AnnualPlanningScreenContent(
                                     navHistory.add(NavLevel.WEEKS)
                                 },
                                 onLockedTermSelected = { termNum ->
-                                    com.example.ui.utils.toastTr(
+                                    Toast.makeText(
                                         context,
                                         "لفتح هذا الفصل، اذهب إلى صفحة النتائج واضغط على زر اختيار الفصل، ومنها يمكنك تفعيل اشتراكك.",
                                         Toast.LENGTH_LONG
@@ -487,7 +485,7 @@ private fun AnnualPlanningScreenContent(
                                                         if (isUnlocked) {
                                                             showConcoursGuide = true
                                                         } else {
-                                                            com.example.ui.utils.toastTr(
+                                                            Toast.makeText(
                                                                 context,
                                                                 "لفتح هذه الصفحة، اذهب إلى صفحة النتائج واضغط على زر اختيار الفصل، ومنها يمكنك تفعيل اشتراكك.",
                                                                 Toast.LENGTH_LONG

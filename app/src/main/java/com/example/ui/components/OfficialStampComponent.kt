@@ -724,7 +724,7 @@ fun OfficialStampSettingsSection(
                                         showInReports = false
                                     )
                                     isEditingTeacher = true
-                                    com.example.ui.utils.toastTr(context, "تم مسح بيانات طابع المعلم.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "تم مسح بيانات طابع المعلم.", Toast.LENGTH_SHORT).show()
                                 },
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red),
@@ -816,7 +816,7 @@ fun OfficialStampSettingsSection(
                             Button(
                                 onClick = {
                                     if (inputTeacherName.trim().isBlank()) {
-                                        com.example.ui.utils.toastTr(context, "يرجى كتابة اسم صاحب الطابع", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "يرجى كتابة اسم صاحب الطابع", Toast.LENGTH_SHORT).show()
                                     } else {
                                         viewModel.updateTeacherStamp(
                                             name = inputTeacherName.trim(),
@@ -825,7 +825,7 @@ fun OfficialStampSettingsSection(
                                             showInReports = inputTeacherShowInReports
                                         )
                                         isEditingTeacher = false
-                                        com.example.ui.utils.toastTr(context, "تم تسجيل واعتماد ختم المعلم بنجاح! 💮", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "تم تسجيل واعتماد ختم المعلم بنجاح! 💮", Toast.LENGTH_SHORT).show()
                                     }
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = StampInkBlue),
@@ -981,7 +981,7 @@ fun OfficialStampSettingsSection(
                                         showInReports = false
                                     )
                                     isEditingPrincipal = true
-                                    com.example.ui.utils.toastTr(context, "تم مسح بيانات طابع المدير.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "تم مسح بيانات طابع المدير.", Toast.LENGTH_SHORT).show()
                                 },
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red),
@@ -1074,7 +1074,7 @@ fun OfficialStampSettingsSection(
                             Button(
                                 onClick = {
                                     if (inputPrincipalName.trim().isBlank()) {
-                                        com.example.ui.utils.toastTr(context, "يرجى كتابة اسم صاحب الطابع", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "يرجى كتابة اسم صاحب الطابع", Toast.LENGTH_SHORT).show()
                                     } else {
                                         viewModel.updatePrincipalStamp(
                                             name = inputPrincipalName.trim(),
@@ -1084,7 +1084,7 @@ fun OfficialStampSettingsSection(
                                             financialId = principalFinancialId
                                         )
                                         isEditingPrincipal = false
-                                        com.example.ui.utils.toastTr(context, "تم تسجيل واعتماد ختم المدير بنجاح! 💮", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "تم تسجيل واعتماد ختم المدير بنجاح! 💮", Toast.LENGTH_SHORT).show()
                                     }
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = StampInkBlue),

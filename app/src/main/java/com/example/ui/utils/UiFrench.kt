@@ -3,6 +3,10 @@ package com.example.ui.utils
 /** ترجمة فرنسية لعبارات الواجهة (المفتاح = النص العربي كما يظهر في الشاشة). */
 object UiFrench {
     private fun part0(): Map<String, String> = mapOf(
+        "سحب اللوائح" to "Exporter les listes",
+        "تنبيه" to "Attention",
+        "متابعة" to "Continuer",
+        "ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا." to "ℹ️ Attention : ces paramètres concernent uniquement les enseignants qui utilisent un système de résultats différent du système officiel du ministère. Si vous suivez le système officiel, ne modifiez rien ici.",
         "100% - تمت المزامنة بنجاح!" to "100% - Synchronisation réussie !",
         "15 دقيقة" to "15 minutes",
         "1️⃣ حدد نوع العرض والمشاركة:" to "1️⃣ Choisissez le type d'affichage et de partage :",
@@ -654,7 +658,6 @@ object UiFrench {
     )
     val map: Map<String, String> by lazy {
         val m = HashMap<String, String>()
-        m.putAll(UiFrenchExtra.map)
         m.putAll(part0())
         m.putAll(part1())
         m.putAll(part2())

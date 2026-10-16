@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.utils.Text
-
 import com.example.ui.utils.uiT
 import com.example.ui.utils.uiTf
 

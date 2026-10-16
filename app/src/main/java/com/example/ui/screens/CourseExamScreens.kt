@@ -19,7 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
-import com.example.ui.utils.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -292,9 +292,7 @@ private fun CourseExamRunner(
                                 modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = group.t, fontSize = 13.sp,
-                                    modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
-                                )
+                                Text(text = group.t, fontSize = 13.sp)
                                 Text(
                                     text = "${group.n}",
                                     fontSize = 13.sp,

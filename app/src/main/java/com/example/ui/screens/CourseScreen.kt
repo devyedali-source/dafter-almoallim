@@ -27,7 +27,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
-import com.example.ui.utils.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -1432,9 +1432,7 @@ private fun CourseSubscriptionDialog(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("المدّة"), fontSize = 14.sp, color = CourseMutedColor,
-                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
-                    )
+                    Text(text = uiT("المدّة"), fontSize = 14.sp, color = CourseMutedColor)
                     Text(
                         text = uiTf("{0} يومًا", CourseSubscriptionStore.SUBSCRIPTION_DAYS),
                         fontSize = 14.sp,
@@ -1445,9 +1443,7 @@ private fun CourseSubscriptionDialog(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("السعر"), fontSize = 14.sp, color = CourseMutedColor,
-                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
-                    )
+                    Text(text = uiT("السعر"), fontSize = 14.sp, color = CourseMutedColor)
                     Text(
                         text = CourseSubscriptionStore.SUBSCRIPTION_PRICE,
                         fontSize = 14.sp,
@@ -1459,9 +1455,7 @@ private fun CourseSubscriptionDialog(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("ينتهي في"), fontSize = 14.sp, color = CourseMutedColor,
-                        modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
-                    )
+                    Text(text = uiT("ينتهي في"), fontSize = 14.sp, color = CourseMutedColor)
                     Text(
                         text = expiryPreview,
                         fontSize = 14.sp,
@@ -1524,7 +1518,7 @@ private fun CourseSubscriptionDialog(
                         )
                         context.startActivity(intent)
                     } catch (e: Exception) {
-                        com.example.ui.utils.toastTr(
+                        android.widget.Toast.makeText(
                             context,
                             "لم نتمكن من فتح الواتساب، يرجى التأكد من توفر التطبيق على جهازك.",
                             android.widget.Toast.LENGTH_LONG

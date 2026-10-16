@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.utils.Text
-
 import com.example.ui.utils.uiT
 import com.example.ui.utils.uiTf
 
@@ -101,20 +99,9 @@ fun ClassTimetableSubview(
         "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
     )
     val hijriMonthName = hijriMonthNames.getOrNull(hijriMonth - 1) ?: "$hijriMonth"
-    val isFr = com.example.ui.utils.AppLocalization.lang == "fr"
-    val hijriMonthsFr = listOf(
-        "Mouharram", "Safar", "Rabi' al-awwal", "Rabi' ath-thani", "Joumada al-oula", "Joumada ath-thania",
-        "Rajab", "Cha'ban", "Ramadan", "Chawwal", "Dhou al-qi'da", "Dhou al-hijja"
-    )
-    val hijriArabicStr = if (isFr) "$hijriDay ${hijriMonthsFr.getOrNull(hijriMonth - 1) ?: hijriMonth} $hijriYear H"
-        else "$hijriDay $hijriMonthName $hijriYear هـ"
+    val hijriArabicStr = "$hijriDay $hijriMonthName $hijriYear هـ"
 
-    val gregorianArabicStr = remember(todayG, isFr) {
-        if (isFr) {
-            val m = listOf("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre")
-            val d = listOf("lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche")
-            return@remember "${d[todayG.dayOfWeek.value - 1]} ${todayG.dayOfMonth} ${m[todayG.monthValue - 1]} ${todayG.year}"
-        }
+    val gregorianArabicStr = remember(todayG) {
         val gDay = todayG.dayOfMonth
         val gMonth = todayG.monthValue
         val gYear = todayG.year
@@ -425,7 +412,7 @@ fun ClassTimetableSubview(
             item {
                 PeriodHeaderCard(
                     title = "الفترة الصباحية الأولى",
-                    timeRange = if (isFr) "08:00 → 10:00" else "08:00 ← 10:00",
+                    timeRange = "08:00 ← 10:00",
                     accentColor = Color(0xFF1B5E20)
                 )
             }
@@ -450,7 +437,7 @@ fun ClassTimetableSubview(
             item {
                 PeriodHeaderCard(
                     title = "الفترة الصباحية الثانية",
-                    timeRange = if (isFr) "Après la récréation → 12:00" else "بعد الاستراحة ← 12:00",
+                    timeRange = "بعد الاستراحة ← 12:00",
                     accentColor = Color(0xFFE65100)
                 )
             }
@@ -470,7 +457,7 @@ fun ClassTimetableSubview(
             item {
                 PeriodHeaderCard(
                     title = "الفترة المسائية",
-                    timeRange = if (isFr) "12:00 → 14:00" else "12:00 ← 14:00",
+                    timeRange = "12:00 ← 14:00",
                     accentColor = Color(0xFF006064)
                 )
             }

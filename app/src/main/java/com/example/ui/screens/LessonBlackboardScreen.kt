@@ -22,7 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.clipToBounds
-import com.example.ui.utils.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -113,9 +113,7 @@ fun LessonBlackboardScreen(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 52.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(hijriLine, style = ChalkStyle, fontSize = 13.sp,
-                    modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
-                )
+                Text(hijriLine, style = ChalkStyle, fontSize = 13.sp)
                 Text(gregLine, style = ChalkStyle, fontSize = 13.sp)
             }
             BoxWithConstraints(

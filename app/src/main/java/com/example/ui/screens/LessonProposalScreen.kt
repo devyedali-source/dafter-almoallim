@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.utils.Text
-
 import com.example.ui.utils.uiT
 import com.example.ui.utils.uiTf
 
@@ -406,9 +404,7 @@ fun LessonProposalScreen(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(text = prepHijri, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue,
-                                            modifier = Modifier.weight(1f, fill = false).padding(end = 6.dp)
-                                        )
+                                        Text(text = prepHijri, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue)
                                         Text(text = prepGreg, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = InkDarkBlue)
                                     }
 
