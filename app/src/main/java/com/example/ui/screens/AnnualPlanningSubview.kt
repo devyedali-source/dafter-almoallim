@@ -323,6 +323,7 @@ private fun AnnualPlanningScreenContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(
+                        modifier = Modifier.weight(1f).padding(end = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -345,7 +346,10 @@ private fun AnnualPlanningScreenContent(
                             text = uiT("التخطيط السنوي للمنهاج الرسمي"),
                             fontWeight = FontWeight.Black,
                             fontSize = 15.sp,
-                            color = BentoPrimary
+                            color = BentoPrimary,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f, fill = false)
                         )
                     }
 
@@ -368,7 +372,7 @@ private fun AnnualPlanningScreenContent(
                         com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, activeInstances)
                     }
 
-                    val countLabel = if (activeCount > 10) "تحضيراً" else "تحاضير"
+                    val countLabel = if (activeCount > 10) uiT("تحضيراً") else uiT("تحاضير")
                     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                         Surface(
                             shape = RoundedCornerShape(8.dp),
@@ -759,7 +763,7 @@ private fun TermsListScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             val termPreps = OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).count { it.fasl == termNum }
-                            val countLabel = if (termPreps > 10) "تحضيراً" else "تحاضير"
+                            val countLabel = if (termPreps > 10) uiT("تحضيراً") else uiT("تحاضير")
 
                             Text(
                                 text = "$termPreps $countLabel",
@@ -924,7 +928,7 @@ private fun WeeksListScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         if (weekPreps > 0) {
-                            val label = if (weekPreps > 10) "تحضيراً" else "تحاضير"
+                            val label = if (weekPreps > 10) uiT("تحضيراً") else uiT("تحاضير")
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
                                 color = Color(0xFFF1F5F9)
@@ -1231,7 +1235,7 @@ private fun SubjectsListScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            val countLabel = if (prepCount > 10) "تحضيراً" else "تحاضير"
+                            val countLabel = if (prepCount > 10) uiT("تحضيراً") else uiT("تحاضير")
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
                                 color = Color(0xFFF1F5F9)
@@ -1358,7 +1362,7 @@ private fun DomainsListScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            val countLabel = if (prepCount > 10) "تحضيراً" else "تحاضير"
+                            val countLabel = if (prepCount > 10) uiT("تحضيراً") else uiT("تحاضير")
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
                                 color = Color(0xFFE8F5E9)

@@ -484,6 +484,8 @@ object UiFrench {
         "محاكاة شاملة {0} · {1}" to "Simulation complète {0} · {1}",
         "محتوى سبورات: {0}" to "Contenu tableaux : {0}",
         "محتوى كتب: {0}" to "Contenu livres : {0}",
+        "تحضيراً" to "fiches",
+        "تحاضير" to "fiches",
         "محتوى هذه الدورة مأخوذ من البرنامج الرسمي لمسابقات المعلمين، وهو نفسه المحتوى الذي يُمتحن فيه التلاميذ المعلمون." to "Le contenu de ce cours est tiré du programme officiel des concours d'enseignants ; c'est le même contenu sur lequel sont examinés les enseignants candidats.",
         "مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى" to "Réservé aux nouveaux arrivants qui n'ont pas saisi les résultats des 1er et 2e trimestres",
         "مدير الأقسام" to "Gestionnaire des classes",
