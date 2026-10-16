@@ -81,9 +81,9 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
 
     private val prefs = application.getSharedPreferences("teacher_settings_prefs", android.content.Context.MODE_PRIVATE)
 
-    private val _appLanguage = MutableStateFlow(
-        (prefs.getString("app_language", "ar") ?: "ar").let { if (it == "fr") "fr" else "ar" }
-    ).also { com.example.ui.utils.AppLocalization.lang = it.value }
+    // زر تبديل اللغة محذوف: الواجهة عربية دائماً
+    private val _appLanguage = MutableStateFlow("ar")
+        .also { com.example.ui.utils.AppLocalization.lang = it.value }
     val appLanguage: StateFlow<String> = _appLanguage.asStateFlow()
 
     /** لغة واجهة التطبيق فقط ("ar" أو "fr")؛ لا تمسّ البيانات ولا ملفات PDF. */

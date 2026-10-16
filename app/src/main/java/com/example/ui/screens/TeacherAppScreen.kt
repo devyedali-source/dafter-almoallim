@@ -1060,32 +1060,6 @@ fun InnerTeacherAppScreenContent(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
                             )
 
-                            // 5. لغة الواجهة (العربية / Français) — للواجهة فقط
-                            NavigationDrawerItem(
-                                label = {
-                                    Text(
-                                        text = AppLocalization.tr("app_language", "لغة التطبيق 🌐", appLanguage) +
-                                            if (appLanguage == "fr") " : Français" else " : العربية",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 12.5.sp
-                                    )
-                                },
-                                selected = false,
-                                onClick = {
-                                    viewModel.setAppLanguage(if (appLanguage == "fr") "ar" else "fr")
-                                },
-                                icon = { Icon(Icons.Default.Language, contentDescription = null, tint = BentoPrimary) },
-                                badge = {
-                                    Text(
-                                        text = if (appLanguage == "fr") "عربي" else "Français",
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Black,
-                                        color = BentoPrimary
-                                    )
-                                },
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
-                            )
-
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 16.dp),
                                 color = BentoGrayOutline.copy(alpha = 0.5f)
