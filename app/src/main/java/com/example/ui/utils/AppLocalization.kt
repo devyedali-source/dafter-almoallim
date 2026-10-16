@@ -296,9 +296,16 @@ object AppLocalization {
 
     fun tr(key: String, fallback: String, lang: String): String {
         return if (lang == "fr") {
-            frMap[key] ?: fallback
+            frMap[key] ?: AutoTranslate.tr(fallback)
         } else {
             fallback
         }
     }
 }
+
+/** Toast بنص مترجَم تلقائياً في الوضع الفرنسي (يحلّ محل Toast.makeText). */
+fun toastTr(context: android.content.Context, text: CharSequence?, duration: Int): android.widget.Toast =
+    android.widget.Toast.makeText(context, AutoTranslate.tr(text?.toString() ?: ""), duration)
+
+fun toastTr(context: android.content.Context, resId: Int, duration: Int): android.widget.Toast =
+    android.widget.Toast.makeText(context, resId, duration)
