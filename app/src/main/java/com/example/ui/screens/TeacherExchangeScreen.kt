@@ -65,7 +65,9 @@ fun sendExchangeActivationWhatsApp(
     context: Context,
     postId: String,
     userId: String,
-    userEmail: String
+    userEmail: String,
+    wilaya: String = "",
+    moughataa: String = ""
 ) {
     if (postId.isBlank()) {
         Toast.makeText(context, "لم يكتمل نشر الإعلان بعد. انتظر لحظات ثم أعد المحاولة.", Toast.LENGTH_LONG).show()
@@ -84,13 +86,16 @@ fun sendExchangeActivationWhatsApp(
         db.collection("exchange_activation_requests").document(requestId).set(requestDoc)
 
         val adminPhone = "22237786585"
+        val whoLine = buildString {
+            append("أنا معلم")
+            if (moughataa.isNotBlank()) append(" بمقاطعة $moughataa")
+            if (wilaya.isNotBlank()) append(" ولاية $wilaya")
+        }
         val fullMessage = """
 السلام عليكم،
-أنا المعلم رقم الحساب: $userId
-أريد تفعيل طلب التبادل.
+$whoLine
+أريد تفعيل طلب إعلان تبادل.
 
-🔑 رقم الإعلان (كود الإعلان):
-$postId
 ---------------------------------
 رابط طلب التفعيل:
 https://diftar-almoaalim.web.app/exchange-approve/$requestId
@@ -108,6 +113,8 @@ fun PostActivationDialog(
     postId: String,
     userId: String,
     userEmail: String,
+    wilaya: String = "",
+    moughataa: String = "",
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -121,7 +128,9 @@ fun PostActivationDialog(
                         context = context,
                         postId = postId,
                         userId = userId,
-                        userEmail = userEmail
+                        userEmail = userEmail,
+                        wilaya = wilaya,
+                        moughataa = moughataa
                     )
                     onDismiss()
                 },
@@ -222,6 +231,8 @@ fun TeacherExchangeScreen(
                 postId = pendingActivationPostId!!,
                 userId = currentUser?.uid ?: "",
                 userEmail = currentUser?.email ?: "",
+                wilaya = targetPost?.currentWilaya ?: "",
+                moughataa = targetPost?.currentMoughataa ?: "",
                 onDismiss = { pendingActivationPostId = null }
             )
         }
@@ -1278,7 +1289,9 @@ fun ExchangeOfferCard(
                                     context = context,
                                     postId = post.id,
                                     userId = post.userId,
-                                    userEmail = post.authorEmail
+                                    userEmail = post.authorEmail,
+                                    wilaya = post.currentWilaya,
+                                    moughataa = post.currentMoughataa
                                 )
                             },
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),

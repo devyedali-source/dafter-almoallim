@@ -1401,14 +1401,11 @@ private fun CourseSubscriptionDialog(
     val activationLink = "https://diftar-almoaalim.web.app/course-activate/$requestId"
 
     val messageText = "السلام عليكم،\n" +
-        "أنا المستخدم رقم: $currentUidForRequest\n" +
+        "أنا مستخدم لتطبيق دفتر المعلم\n" +
         "أريد تفعيل دورة تحضير مسابقات المعلمين\n\n" +
         "التخصّص المطلوب: ${spec.title}\n" +
         "المدّة: ${CourseSubscriptionStore.SUBSCRIPTION_DAYS} يومًا\n" +
         "السعر: ${CourseSubscriptionStore.SUBSCRIPTION_PRICE}\n" +
-        "------------------------------------\n" +
-        "🔑 رقم طلب التفعيل:\n" +
-        "$requestId\n" +
         "------------------------------------\n" +
         "رابط طلب التفعيل:\n" +
         activationLink

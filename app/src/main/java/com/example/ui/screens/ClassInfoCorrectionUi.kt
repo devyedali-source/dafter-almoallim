@@ -351,14 +351,13 @@ private fun openClassInfoWhatsApp(
         val email = authUser?.email ?: ""
         val uid = authUser?.uid ?: ""
         val message = "السلام عليكم،\n" +
-            "أنا المعلم صاحب القسم رقم: ${section.id}\n" +
-            "أطلب تصحيح بيانات القسم: ${section.getFormattedName()}\n\n" +
+            "أنا معلم القسم: ${section.getFormattedName()}\nالسنة الدراسية: ${section.academicYear}\n" +
+            "أطلب تصحيح بيانات هذا القسم.\n\n" +
             "المدرسة الحالية: ${section.schoolName}\n" +
             "المدرسة الصحيحة: $newSchool\n" +
             "الولاية: $newWilaya — المقاطعة: $newMoughataa\n" +
-            "السبب: $reason\n\n" +
-            "🔑 رقم القسم الفريد:\n${section.id}" +
-            if (uid.isNotBlank()) "\n------------------------------------\nرابط مراجعة الطلب:\nhttps://diftar-almoaalim.web.app/activate-class-info/${uid}_${section.id}" else ""
+            "السبب: $reason" +
+            if (uid.isNotBlank()) "\n\n------------------------------------\nرابط مراجعة الطلب:\nhttps://diftar-almoaalim.web.app/activate-class-info/${uid}_${section.id}" else ""
         val url = "https://api.whatsapp.com/send?phone=22237786585&text=${android.net.Uri.encode(message)}"
         context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
     } catch (e: Exception) {
