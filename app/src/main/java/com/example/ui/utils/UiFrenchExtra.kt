@@ -3,6 +3,7 @@ package com.example.ui.utils
 /** ترجمات فرنسية إضافية للواجهة (تُدمج مع UiFrench.map؛ لا تُلغي ما فيه). */
 object UiFrenchExtra {
     private fun p0(): Map<String, String> = mapOf(
+        "سحب اللوائح" to "Exporter les listes",
         "معلم رئيسي عربي" to "Enseignant principal arabisant",
         "معلم رئيسي فرنسي" to "Enseignant principal francisant",
         "معلم رئيسي مزدوج" to "Enseignant principal bilingue",

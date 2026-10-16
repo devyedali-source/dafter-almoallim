@@ -58,6 +58,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -2236,6 +2237,103 @@ fun ClassStudentsSubview(
         return
     }
 
+    var showPullMenu by remember { mutableStateOf(false) }
+    val allSubjectsForPull by viewModel.subjects.collectAsState()
+    val allCustomForPull by viewModel.customizations.collectAsState()
+    if (showPullMenu) {
+        val pullClassName = activeSection.name.replace(" ", "_")
+        fun needStudents(msg: String): Boolean {
+            if (classStudents.isEmpty()) {
+                com.example.ui.utils.toastTr(context, msg, Toast.LENGTH_SHORT).show()
+                return true
+            }
+            return false
+        }
+        AlertDialog(
+            onDismissRequest = { showPullMenu = false },
+            title = { Text(uiT("سحب اللوائح"), fontWeight = FontWeight.Bold) },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.verticalScroll(rememberScrollState())
+                ) {
+                    @Composable
+                    fun PullItem(label: String, onClick: () -> Unit) {
+                        Button(
+                            onClick = { showPullMenu = false; onClick() },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
+                        ) { Text(uiT(label), fontWeight = FontWeight.Bold, maxLines = 1) }
+                    }
+                    PullItem("👥 لائحة الطلاب 📥") {
+                        if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً لسحب اللائحة")) {
+                            viewModel.runWithLoading("جاري سحب وتصدير لائحة تلاميذ القسم...") {
+                                val html = HtmlReportHelper.generateStudentDirectoryHtml(
+                                    context = context,
+                                    className = activeSection.name,
+                                    students = classStudents,
+                                    activeClass = activeSection,
+                                    viewModel = viewModel
+                                )
+                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_تلاميذ_قسم_$pullClassName.pdf")
+                            }
+                        }
+                    }
+                    PullItem("دفتر الغياب") { showAttendance = true }
+                    PullItem("دفتر المتابعة") { showCompetency = true }
+                    PullItem("🎤 المنشدين 📥") {
+                        if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً للتقسيم")) {
+                            viewModel.runWithLoading("جاري سحب وتصدير لائحة مجموعات المنشدين...") {
+                                val html = HtmlReportHelper.generateHymnsGroupsHtml(
+                                    context = context,
+                                    className = activeSection.name,
+                                    students = classStudents,
+                                    activeClass = activeSection,
+                                    viewModel = viewModel
+                                )
+                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_مجموعات_المنشدين_قسم_$pullClassName.pdf")
+                            }
+                        }
+                    }
+                    PullItem("🧹 الكناسة 📥") {
+                        if (!needStudents("لا توجد أسماء بالقسم لبناء جدول النظافة")) {
+                            viewModel.runWithLoading("جاري سحب وتصدير جدول النظافة والكناسة...") {
+                                val html = HtmlReportHelper.generateCleaningGroupsHtml(
+                                    context = context,
+                                    className = activeSection.name,
+                                    students = classStudents,
+                                    activeClass = activeSection,
+                                    viewModel = viewModel
+                                )
+                                HtmlReportHelper.shareHtmlAsPdf(context, html, "جدول_النظافة_والكناسة_قسم_$pullClassName.pdf")
+                            }
+                        }
+                    }
+                    PullItem("📝 إدراج الفرنسية 📥") {
+                        if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً لسحب الورقة")) {
+                            val frenchSub = viewModel.buildClassSubjects(activeSection.id, activeSection.level, allSubjectsForPull, allCustomForPull)
+                                .find { it.name.contains("فرنسية") || it.name.lowercase().contains("french") }
+                            val frenchMaxPoints = frenchSub?.maxPoints ?: 20
+                            viewModel.runWithLoading("جاري سحب وتصدير لائحة رصد الفرنسية...") {
+                                val html = HtmlReportHelper.generateFrenchGradesEntryHtml(
+                                    context = context,
+                                    className = activeSection.name,
+                                    students = classStudents,
+                                    activeClass = activeSection,
+                                    frenchMaxPoints = frenchMaxPoints,
+                                    viewModel = viewModel
+                                )
+                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_رصد_الفرنسية_قسم_$pullClassName.pdf")
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { showPullMenu = false }) { Text(uiT("إلغاء")) } }
+        )
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -2243,15 +2341,13 @@ fun ClassStudentsSubview(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(
-                    onClick = { showAttendance = true },
-                    modifier = Modifier.weight(1f)
-                ) { Text(uiT("دفتر الغياب")) }
-                OutlinedButton(
-                    onClick = { showCompetency = true },
-                    modifier = Modifier.weight(1f)
-                ) { Text(uiT("دفتر المتابعة")) }
+            OutlinedButton(
+                onClick = { showPullMenu = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(uiT("سحب اللوائح"), fontWeight = FontWeight.Bold)
             }
         }
 
@@ -9043,178 +9139,6 @@ fun EnhancedReportsTab(
                 AppLocalization.tr("select_term_prompt", "اختر الفصل الدراسي...", appLanguage)
             } else {
                 currentReportTermTuple?.second ?: ""
-            }
-
-            // General Class Lists quick access card (لائحة الطلاب، المنشدين، الكناسة، إدراج الفرنسية)
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
-                shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.15f))
-            ) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Text(
-                        text = AppLocalization.tr("general_class_lists", "📋 لوائح وقوائم القسم العامة (سحب فوري)", appLanguage),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            // 1. Students List
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(MaterialTheme.colorScheme.primary)
-                                    .clickable {
-                                        if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
-                                        } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً لسحب اللائحة", Toast.LENGTH_SHORT).show()
-                                        } else {
-                                            viewModel.runWithLoading("جاري سحب وتصدير لائحة تلاميذ القسم...") {
-                                                val html = HtmlReportHelper.generateStudentDirectoryHtml(
-                                                    context = context,
-                                                    className = activeClass.name,
-                                                    students = classStudents,
-                                                    activeClass = activeClass,
-                                                    viewModel = viewModel
-                                                )
-                                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_تلاميذ_قسم_${activeClass.name.replace(" ", "_")}.pdf")
-                                            }
-                                        }
-                                    }
-                                    .padding(vertical = 10.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = uiT("👥 لائحة الطلاب 📥"),
-                                    fontSize = 11.5.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-
-                            // 2. French Insertion Sheet
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(MaterialTheme.colorScheme.primary)
-                                    .clickable {
-                                        if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
-                                        } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً لسحب الورقة", Toast.LENGTH_SHORT).show()
-                                        } else {
-                                            val frenchSub = resolvedSubjects.find { it.name.contains("فرنسية") || it.name.lowercase().contains("french") }
-                                            val frenchMaxPoints = frenchSub?.maxPoints ?: 20
-                                            viewModel.runWithLoading("جاري سحب وتصدير لائحة رصد الفرنسية...") {
-                                                val html = HtmlReportHelper.generateFrenchGradesEntryHtml(
-                                                    context = context,
-                                                    className = activeClass.name,
-                                                    students = classStudents,
-                                                    activeClass = activeClass,
-                                                    frenchMaxPoints = frenchMaxPoints,
-                                                    viewModel = viewModel
-                                                )
-                                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_رصد_الفرنسية_قسم_${activeClass.name.replace(" ", "_")}.pdf")
-                                            }
-                                        }
-                                    }
-                                    .padding(vertical = 10.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = uiT("📝 إدراج الفرنسية 📥"),
-                                    fontSize = 11.5.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            // 3. Hymns/Singers List
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(MaterialTheme.colorScheme.primary)
-                                    .clickable {
-                                        if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
-                                        } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء تسجيل الطلاب للقسم أولاً للتقسيم", Toast.LENGTH_SHORT).show()
-                                        } else {
-                                            viewModel.runWithLoading("جاري سحب وتصدير لائحة مجموعات المنشدين...") {
-                                                val html = HtmlReportHelper.generateHymnsGroupsHtml(
-                                                    context = context,
-                                                    className = activeClass.name,
-                                                    students = classStudents,
-                                                    activeClass = activeClass,
-                                                    viewModel = viewModel
-                                                )
-                                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_مجموعات_المنشدين_قسم_${activeClass.name.replace(" ", "_")}.pdf")
-                                            }
-                                        }
-                                    }
-                                    .padding(vertical = 10.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = uiT("🎤 المنشدين 📥"),
-                                    fontSize = 11.5.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-
-                            // 4. Sweeping/Cleaning List
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(MaterialTheme.colorScheme.primary)
-                                    .clickable {
-                                        if (activeClass == null) {
-                                            com.example.ui.utils.toastTr(context, "الرجاء اختيار القسم أولاً من الأعلى", Toast.LENGTH_SHORT).show()
-                                        } else if (classStudents.isEmpty()) {
-                                            com.example.ui.utils.toastTr(context, "لا توجد أسماء بالقسم لبناء جدول النظافة", Toast.LENGTH_SHORT).show()
-                                        } else {
-                                            viewModel.runWithLoading("جاري سحب وتصدير جدول النظافة والكناسة...") {
-                                                val html = HtmlReportHelper.generateCleaningGroupsHtml(
-                                                    context = context,
-                                                    className = activeClass.name,
-                                                    students = classStudents,
-                                                    activeClass = activeClass,
-                                                    viewModel = viewModel
-                                                )
-                                                HtmlReportHelper.shareHtmlAsPdf(context, html, "جدول_النظافة_والكناسة_قسم_${activeClass.name.replace(" ", "_")}.pdf")
-                                            }
-                                        }
-                                    }
-                                    .padding(vertical = 10.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = uiT("🧹 الكناسة 📥"),
-                                    fontSize = 11.5.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-                        }
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
