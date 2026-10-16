@@ -1461,6 +1461,20 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    /** يدمج عدة صفحات HTML كاملة في ملف واحد، كل واحدة في صفحة مستقلة. */
+    fun combineHtmlPages(parts: List<String>): String {
+        if (parts.isEmpty()) return "<html><body></body></html>"
+        val head = parts.first().substringBefore("<body>")
+        val bodies = StringBuilder()
+        parts.forEachIndexed { i, h ->
+            val last = i == parts.lastIndex
+            bodies.append(if (last) "<div>" else "<div style=\"page-break-after: always; break-after: page;\">")
+            bodies.append(h.substringAfter("<body>").substringBeforeLast("</body>"))
+            bodies.append("</div>")
+        }
+        return "$head<body>$bodies</body></html>"
+    }
+
     // سجل النداء (الغياب) لشهر واحد
     fun generateAttendanceMonthHtml(
         context: Context,

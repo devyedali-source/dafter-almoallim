@@ -169,6 +169,24 @@ fun AttendanceScreen(
                         AssistChip(onClick = { monthView = y to m }, label = { Text(MONTH_NAMES[m] ?: "") })
                     }
                 }
+                Spacer(Modifier.height(8.dp))
+                val allCtx = LocalContext.current
+                OutlinedButton(
+                    onClick = {
+                        // كل أشهر السنة في ملف واحد، حتى لو لم يُسجَّل أي نداء (لتُملأ يدوياً)
+                        val parts = months.map { (m, y) ->
+                            val first = LocalDate.of(y, m, 1)
+                            val monthDays = (1..first.lengthOfMonth()).map { first.withDayOfMonth(it) }
+                                .filter { dayKey(it) in teachingDays }
+                            com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
+                                allCtx, section, students, classRecords, monthDays, "${MONTH_NAMES[m]} $y", viewModel
+                            )
+                        }
+                        val html = com.example.ui.HtmlReportHelper.combineHtmlPages(parts)
+                        com.example.ui.HtmlReportHelper.shareHtmlAsPdf(allCtx, html, "سجل_النداء_كل_الأشهر_${section.name.replace(" ", "_")}.pdf", isLandscape = true)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text(uiT("📥 سحب جميع الأشهر (PDF)")) }
                 Spacer(Modifier.height(14.dp))
 
                 Text(uiTf("سجلات الغياب ({0})", dates.size), fontWeight = FontWeight.Bold)
