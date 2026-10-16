@@ -1365,6 +1365,95 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    // الجدول الزمني الأسبوعي للقسم (الرسمي أو الشخصي) كملف PDF
+    fun generateTimetableHtml(
+        context: Context,
+        activeClass: ClassSection,
+        slots: List<com.example.data.planning.OfficialTimetableSlot>,
+        isPersonal: Boolean,
+        viewModel: TeacherViewModel? = null
+    ): String {
+        val teacherStampHtml = if (viewModel != null) getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
+        val principalStampHtml = if (viewModel != null) getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
+        val seal = getMauritanianSealImg(context)
+        val styles = getCommonStyles(
+            isLandscape = true,
+            isList = true,
+            schoolName = activeClass.schoolName,
+            fileTitle = "الجدول الزمني"
+        )
+        val days = com.example.data.planning.DayOfWeekAr.values().filter { d -> slots.any { it.day == d } }
+        val periods = listOf(
+            Triple(com.example.data.planning.TimetablePeriodType.MORNING_BEFORE_RECESS, "الفترة الصباحية الأولى", "08:00 - 10:00"),
+            Triple(com.example.data.planning.TimetablePeriodType.MORNING_AFTER_RECESS, "الفترة الصباحية الثانية", "بعد الاستراحة - 12:00"),
+            Triple(com.example.data.planning.TimetablePeriodType.AFTERNOON, "الفترة المسائية", "12:00 - 14:00")
+        )
+        fun esc(t: String) = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        fun slotText(x: com.example.data.planning.OfficialTimetableSlot): String {
+            val name = if (x.branch.isNotBlank() && x.branch != x.subject) "${x.subject} (${x.branch})" else x.subject
+            return "<div style=\"margin:2px 0;${if (x.isFrench) "direction:ltr;" else ""}\"><b>${esc(name)}</b> <span style=\"font-size:9px;\">— ${x.durationMinutes} د</span></div>"
+        }
+
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>الجدول الزمني</title>$styles")
+        html.append("<style>.tt td, .tt th { font-size: 11px !important; padding: 5px 4px !important; vertical-align: top; } .tt .pn { background: #EEF2FF; font-weight: bold; width: 110px; }</style>")
+        html.append("</head><body><div class=\"sheet-card\">")
+        html.append("""
+        <div class="header-section">
+            <div class="header-column right">
+                الجمهورية الإسلامية الموريتانية<br>
+                وزارة التربية وإصلاح النظام التعليمي<br>
+                الإدارة الجهوية للتربية: ${activeClass.wilaya.ifBlank { "غوركل" }}<br>
+                مفتشية مقاطعة: ${activeClass.moughataa.ifBlank { "لكصيبه 1" }}<br>
+                مدرسة: ${activeClass.schoolName.ifBlank { "الطلحايه 1" }}
+            </div>
+            <div class="header-column center">
+                $seal
+                <div class="header-title-main" style="margin-top: 6px;">الجدول الزمني الأسبوعي</div>
+            </div>
+            <div class="header-column left">
+                شرف - إخاء - عدالة<br>
+                السنة الدراسية: ${activeClass.academicYear.ifBlank { "2025 - 2026" }}<br>
+                القسم: ${getDisplayClassName(activeClass)}<br>
+                ${if (isPersonal) "جدول شخصي" else "الجدول الرسمي"}
+            </div>
+        </div>
+        """)
+        html.append("<table class=\"sheet-table tt\" style=\"table-layout: fixed;\"><thead><tr><th class=\"pn\">الفترة</th>")
+        days.forEach { html.append("<th>${it.arabicName}</th>") }
+        html.append("</tr></thead><tbody>")
+        periods.forEachIndexed { idx, (type, title, range) ->
+            html.append("<tr><td class=\"pn\">$title<br><span style=\"font-size:9px;font-weight:normal;\">$range</span></td>")
+            days.forEach { d ->
+                val list = slots.filter { it.day == d && it.periodType == type }.sortedBy { it.slotIndex }
+                html.append("<td>${if (list.isEmpty()) "&nbsp;" else list.joinToString("") { slotText(it) }}</td>")
+            }
+            html.append("</tr>")
+            if (idx == 0) {
+                html.append("<tr><td colspan=\"${days.size + 1}\" style=\"text-align:center;background:#FFF3E0;font-weight:bold;\">استراحة</td></tr>")
+            }
+        }
+        html.append("</tbody></table>")
+        html.append("""
+        <div class="sheet-footer-signals" style="margin-top: 14px; page-break-inside: avoid; break-inside: avoid;">
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المعلم</div>
+                <div style="height: 46px; display: flex; align-items: center; justify-content: center;">$teacherStampHtml</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المدير</div>
+                <div style="height: 46px; display: flex; align-items: center; justify-content: center;">$principalStampHtml</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 140px;">
+                <div style="font-weight: 800; font-size: 11px;">توقيع المفتش</div>
+                <div style="height: 46px;"></div>
+            </div>
+        </div>
+        </div></body></html>
+        """)
+        return html.toString()
+    }
+
     // سجل النداء (الغياب) لشهر واحد
     fun generateAttendanceMonthHtml(
         context: Context,

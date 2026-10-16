@@ -380,12 +380,25 @@ fun ClassTimetableSubview(
                         onClick = { editMode = !editMode },
                         modifier = Modifier.weight(1f)
                     ) { Text(if (editMode) "إنهاء التعديل" else "تعديل جدولي") }
-                    if (customSlots != null) {
-                        OutlinedButton(
-                            onClick = { showResetConfirm = true },
-                            modifier = Modifier.weight(1f)
-                        ) { Text(uiT("العودة للجدول الرسمي")) }
-                    }
+                    Button(
+                        onClick = {
+                            val all = customSlots ?: OfficialTimetableRepository.getTimetableForLevel(level)
+                            val html = com.example.ui.HtmlReportHelper.generateTimetableHtml(
+                                context, activeClass, all, customSlots != null, viewModel
+                            )
+                            com.example.ui.HtmlReportHelper.shareHtmlAsPdf(
+                                context, html, "الجدول_الزمني_${activeClass.name}.pdf", isLandscape = true
+                            )
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
+                    ) { Text(uiT("مشاركة PDF"), maxLines = 1) }
+                }
+                if (customSlots != null) {
+                    OutlinedButton(
+                        onClick = { showResetConfirm = true },
+                        modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
+                    ) { Text(uiT("العودة للجدول الرسمي")) }
                 }
                 if (editMode) {
                     Text(
