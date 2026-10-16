@@ -2259,6 +2259,77 @@ fun ClassStudentsSubview(
     }
 
     var showPullMenu by remember { mutableStateOf(false) }
+    // خيارات لائحة الطلاب قبل السحب
+    var showStudentListOptions by remember { mutableStateOf(false) }
+    var optNameMode by remember { mutableStateOf("both") }
+    var optSchoolId by remember { mutableStateOf(true) }
+    var optNationalId by remember { mutableStateOf(true) }
+    var optPhone1 by remember { mutableStateOf(true) }
+    var optPhone2 by remember { mutableStateOf(true) }
+    var optHealth by remember { mutableStateOf(true) }
+    if (showStudentListOptions) {
+        val optPdfName = activeSection.name.replace(" ", "_")
+        AlertDialog(
+            onDismissRequest = { showStudentListOptions = false },
+            title = { Text("ما الذي تريد إظهاره في اللائحة؟", fontWeight = FontWeight.Bold) },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    modifier = Modifier.verticalScroll(rememberScrollState())
+                ) {
+                    Text("الرقم (التسلسلي) يظهر دائماً. الاسم:", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    listOf("ar" to "الاسم بالعربية", "fr" to "الاسم بالفرنسية", "both" to "الاسم بالعربية والفرنسية معاً").forEach { (key, label) ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth().clickable { optNameMode = key },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(selected = optNameMode == key, onClick = { optNameMode = key })
+                            Text(label, fontSize = 14.sp)
+                        }
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Text("باقي الأعمدة:", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    Row(Modifier.fillMaxWidth().clickable { optNationalId = !optNationalId }, verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = optNationalId, onCheckedChange = { optNationalId = it }); Text("الرقم الوطني", fontSize = 14.sp)
+                    }
+                    Row(Modifier.fillMaxWidth().clickable { optSchoolId = !optSchoolId }, verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = optSchoolId, onCheckedChange = { optSchoolId = it }); Text("الرقم المدرسي", fontSize = 14.sp)
+                    }
+                    Row(Modifier.fillMaxWidth().clickable { optPhone1 = !optPhone1 }, verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = optPhone1, onCheckedChange = { optPhone1 = it }); Text("هاتف الوكيل 1", fontSize = 14.sp)
+                    }
+                    Row(Modifier.fillMaxWidth().clickable { optPhone2 = !optPhone2 }, verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = optPhone2, onCheckedChange = { optPhone2 = it }); Text("هاتف الوكيل 2", fontSize = 14.sp)
+                    }
+                    Row(Modifier.fillMaxWidth().clickable { optHealth = !optHealth }, verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = optHealth, onCheckedChange = { optHealth = it }); Text("الملاحظات الصحية", fontSize = 14.sp)
+                    }
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    showStudentListOptions = false
+                    viewModel.runWithLoading("جاري سحب وتصدير لائحة تلاميذ القسم...") {
+                        val html = HtmlReportHelper.generateStudentDirectoryHtml(
+                            context = context,
+                            className = activeSection.name,
+                            students = classStudents,
+                            activeClass = activeSection,
+                            viewModel = viewModel,
+                            nameMode = optNameMode,
+                            showSchoolId = optSchoolId,
+                            showNationalId = optNationalId,
+                            showPhone1 = optPhone1,
+                            showPhone2 = optPhone2,
+                            showHealth = optHealth
+                        )
+                        HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_تلاميذ_قسم_$optPdfName.pdf")
+                    }
+                }) { Text("سحب اللائحة") }
+            },
+            dismissButton = { TextButton(onClick = { showStudentListOptions = false }) { Text("إلغاء") } }
+        )
+    }
     val allSubjectsForPull by viewModel.subjects.collectAsState()
     val allCustomForPull by viewModel.customizations.collectAsState()
     if (showPullMenu) {
@@ -2281,16 +2352,7 @@ fun ClassStudentsSubview(
                 ) {
                     PullListButton("👥 لائحة الطلاب 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً لسحب اللائحة")) {
-                            viewModel.runWithLoading("جاري سحب وتصدير لائحة تلاميذ القسم...") {
-                                val html = HtmlReportHelper.generateStudentDirectoryHtml(
-                                    context = context,
-                                    className = activeSection.name,
-                                    students = classStudents,
-                                    activeClass = activeSection,
-                                    viewModel = viewModel
-                                )
-                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_تلاميذ_قسم_$pullClassName.pdf")
-                            }
+                            showStudentListOptions = true
                         }
                     }
                     PullListButton("دفتر الغياب", onDismiss = { showPullMenu = false }) { showAttendance = true }

@@ -1265,7 +1265,13 @@ object HtmlReportHelper {
         className: String,
         students: List<Student>,
         activeClass: ClassSection,
-        viewModel: TeacherViewModel? = null
+        viewModel: TeacherViewModel? = null,
+        nameMode: String = "both", // "ar" أو "fr" أو "both"
+        showSchoolId: Boolean = true,
+        showNationalId: Boolean = true,
+        showPhone1: Boolean = false,
+        showPhone2: Boolean = false,
+        showHealth: Boolean = true
     ): String {
         val teacherStampHtml = if (viewModel != null) getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
         val principalStampHtml = if (viewModel != null) getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
@@ -1306,34 +1312,38 @@ object HtmlReportHelper {
         <div class="sheet-title">اللائحة الرسمية لتلاميذ القسم</div>
         """)
         
-        html.append("""
-        <table class="sheet-table">
-            <thead>
-                <tr>
-                    <th style="width: 8%;">الرقم</th>
-                    <th style="width: 25%;">الاسم الكامل (عربي)</th>
-                    <th style="width: 25%;">الاسم بالفرنسية</th>
-                    <th style="width: 14%;">الرقم المدرسي</th>
-                    <th style="width: 14%;">الرقم الوطني</th>
-                    <th style="width: 14%;">الملاحظات الصحية</th>
-                </tr>
-            </thead>
-            <tbody>
-        """)
-        
-        sortedStudents.forEachIndexed { index, student ->
-            html.append("""
-                <tr class="${if (index % 2 == 1) "row-bg-accent" else ""}">
-                    <td>${index + 1}</td>
-                    <td style="text-align: right; font-weight: bold; padding-right: 6px;">${student.name}</td>
-                    <td style="text-align: left; padding-left: 6px;">${student.frenchName}</td>
-                    <td><span style="display: inline-block; min-width: 45px; text-align: center; ${if (student.schoolId.isBlank()) "border-bottom: 1px dotted #000000;" else ""}">${student.schoolId.ifBlank { "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" }}</span></td>
-                    <td>${student.nationalId}</td>
-                    <td>${student.healthNotes.ifBlank { "سليم" }}</td>
-                </tr>
-            """)
+        // الأعمدة حسب اختيار المستخدم قبل السحب
+        data class DirCol(val title: String, val weight: Int, val cell: (Student, Int) -> String)
+        val cols = mutableListOf<DirCol>()
+        cols.add(DirCol("الرقم", 6) { _, idx -> "${idx + 1}" })
+        if (nameMode == "ar" || nameMode == "both") {
+            cols.add(DirCol("الاسم الكامل (عربي)", 24) { st, _ ->
+                "<span style=\"display:block;text-align:right;font-weight:bold;padding-right:6px;\">${escCompHtml(st.name)}</span>"
+            })
         }
-        
+        if (nameMode == "fr" || nameMode == "both") {
+            cols.add(DirCol("الاسم بالفرنسية", 24) { st, _ ->
+                "<span style=\"display:block;text-align:left;padding-left:6px;\">${escCompHtml(st.frenchName)}</span>"
+            })
+        }
+        if (showSchoolId) cols.add(DirCol("الرقم المدرسي", 12) { st, _ ->
+            "<span style=\"display:inline-block;min-width:45px;text-align:center;${if (st.schoolId.isBlank()) "border-bottom:1px dotted #000000;" else ""}\">${escCompHtml(st.schoolId).ifBlank { "&nbsp;&nbsp;&nbsp;&nbsp;" }}</span>"
+        })
+        if (showNationalId) cols.add(DirCol("الرقم الوطني", 14) { st, _ -> escCompHtml(st.nationalId) })
+        if (showPhone1) cols.add(DirCol("هاتف الوكيل 1", 13) { st, _ -> escCompHtml(st.parentPhone1) })
+        if (showPhone2) cols.add(DirCol("هاتف الوكيل 2", 13) { st, _ -> escCompHtml(st.parentPhone2) })
+        if (showHealth) cols.add(DirCol("الملاحظات الصحية", 13) { st, _ -> escCompHtml(st.healthNotes.ifBlank { "سليم" }) })
+        val totalW = cols.sumOf { it.weight }.coerceAtLeast(1)
+
+        html.append("<table class=\"sheet-table\"><thead><tr>")
+        cols.forEach { c -> html.append("<th style=\"width: ${c.weight * 100 / totalW}%;\">${c.title}</th>") }
+        html.append("</tr></thead><tbody>")
+        sortedStudents.forEachIndexed { index, student ->
+            html.append("<tr class=\"${if (index % 2 == 1) "row-bg-accent" else ""}\">")
+            cols.forEach { c -> html.append("<td>${c.cell(student, index)}</td>") }
+            html.append("</tr>")
+        }
+
         html.append("""
             </tbody>
         </table>
