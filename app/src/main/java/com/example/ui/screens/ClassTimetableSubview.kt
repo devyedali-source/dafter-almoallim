@@ -129,8 +129,7 @@ fun ClassTimetableSubview(
     // جدول شخصي محلي (اختياري): إن وُجد يُعرض بدل الجدول الرسمي
     var customSlots by remember(activeClass.id) { mutableStateOf(CustomTimetableStore.load(context, activeClass.id)) }
     var editMode by remember { mutableStateOf(false) }
-    var editingSlot by remember { mutableStateOf<OfficialTimetableSlot?>(null) }
-    var addingPeriod by remember { mutableStateOf<TimetablePeriodType?>(null) }
+    var swapSource by remember { mutableStateOf<OfficialTimetableSlot?>(null) }
     var showResetConfirm by remember { mutableStateOf(false) }
 
     val daySlots = remember(level, selectedDay, customSlots) {
@@ -390,7 +389,7 @@ fun ClassTimetableSubview(
                 }
                 if (editMode) {
                     Text(
-                        uiT("تعديلك يُحفظ على هذا الجهاز فقط، ولا يغيّر الجدول الرسمي."),
+                        uiT("اضغط على أيقونة التبديل ⇅ بجانب الحصة لتبديل مكانها مع حصة أخرى. يُحفظ على هذا الجهاز فقط ولا يغيّر الجدول الرسمي."),
                         fontSize = 11.sp, color = BentoPrimaryDesc, modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -411,14 +410,8 @@ fun ClassTimetableSubview(
                 items(periodBeforeRecess, key = { it.id }) { slot ->
                     TimetableSlotCard(
                         slot = slot, editMode = editMode,
-                        onEdit = { editingSlot = slot },
-                        onDelete = { mutateTimetable { l -> l.filter { it.id != slot.id } } }
+                        onSwap = { swapSource = slot }
                     )
-                }
-            }
-            if (editMode) {
-                item {
-                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_BEFORE_RECESS }) { Text(uiT("＋ إضافة حصة")) }
                 }
             }
 
@@ -442,14 +435,8 @@ fun ClassTimetableSubview(
                 items(periodAfterRecess, key = { it.id }) { slot ->
                     TimetableSlotCard(
                         slot = slot, editMode = editMode,
-                        onEdit = { editingSlot = slot },
-                        onDelete = { mutateTimetable { l -> l.filter { it.id != slot.id } } }
+                        onSwap = { swapSource = slot }
                     )
-                }
-            }
-            if (editMode) {
-                item {
-                    TextButton(onClick = { addingPeriod = TimetablePeriodType.MORNING_AFTER_RECESS }) { Text(uiT("＋ إضافة حصة")) }
                 }
             }
 
@@ -486,14 +473,8 @@ fun ClassTimetableSubview(
                 items(periodAfternoon, key = { it.id }) { slot ->
                     TimetableSlotCard(
                         slot = slot, editMode = editMode,
-                        onEdit = { editingSlot = slot },
-                        onDelete = { mutateTimetable { l -> l.filter { it.id != slot.id } } }
+                        onSwap = { swapSource = slot }
                     )
-                }
-            }
-            if (editMode) {
-                item {
-                    TextButton(onClick = { addingPeriod = TimetablePeriodType.AFTERNOON }) { Text(uiT("＋ إضافة حصة")) }
                 }
             }
         }
@@ -516,77 +497,66 @@ fun ClassTimetableSubview(
         )
     }
 
-    val dialogSlot = editingSlot
-    val dialogPeriod = addingPeriod
-    if (dialogSlot != null || dialogPeriod != null) {
-        val subjectChoices = remember(level) {
-            OfficialTimetableRepository.getTimetableForLevel(level).map { it.subject }.distinct()
+    // تبديل مكان حصة بحصة أخرى من الجدول نفسه (لا إضافة ولا حذف ولا تغيير مادة)
+    val src = swapSource
+    if (src != null) {
+        val base = customSlots ?: OfficialTimetableRepository.getTimetableForLevel(level)
+        var targetDay by remember(src.id) { mutableStateOf(src.day) }
+        val days = remember(base) { DayOfWeekAr.values().filter { d -> base.any { it.day == d } } }
+        val candidates = remember(base, targetDay, src.id) {
+            base.filter { it.day == targetDay && it.id != src.id }
+                .sortedWith(compareBy({ it.periodType.ordinal }, { it.slotIndex }))
         }
-        var subject by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.subject ?: "") }
-        var branch by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.branch ?: "") }
-        var minutes by remember(dialogSlot, dialogPeriod) { mutableStateOf((dialogSlot?.durationMinutes ?: 30).toString()) }
-        var french by remember(dialogSlot, dialogPeriod) { mutableStateOf(dialogSlot?.isFrench ?: false) }
-        val close = { editingSlot = null; addingPeriod = null }
+        fun periodName(t: TimetablePeriodType) = when (t) {
+            TimetablePeriodType.MORNING_BEFORE_RECESS -> "الصباحية الأولى"
+            TimetablePeriodType.MORNING_AFTER_RECESS -> "الصباحية الثانية"
+            TimetablePeriodType.AFTERNOON -> "المسائية"
+        }
+        fun slotName(x: OfficialTimetableSlot) =
+            if (x.branch.isNotBlank() && x.branch != x.subject) "${x.subject} (${x.branch})" else x.subject
         AlertDialog(
-            onDismissRequest = close,
-            title = { Text(if (dialogSlot != null) "تعديل الحصة" else "إضافة حصة") },
+            onDismissRequest = { swapSource = null },
+            title = { Text(uiT("تبديل مكان الحصة")) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(slotName(src), fontWeight = FontWeight.Bold, color = BentoPrimary, fontSize = 14.sp)
+                    Text(uiT("اختر اليوم ثم الحصة التي تريد تبديل مكانها معها:"), fontSize = 12.sp, color = BentoPrimaryDesc)
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        items(subjectChoices) { sc ->
-                            AssistChip(onClick = { subject = sc; branch = ""; french = sc.contains("Fran", ignoreCase = true) }, label = { Text(sc, fontSize = 11.sp) })
+                        items(days) { d ->
+                            FilterChip(
+                                selected = d == targetDay,
+                                onClick = { targetDay = d },
+                                label = { Text(if (com.example.ui.utils.AppLocalization.lang == "fr") d.frenchName else d.arabicName, fontSize = 12.sp) }
+                            )
                         }
                     }
-                    OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text(uiT("المادة")) }, singleLine = true)
-                    val branchChoices = remember(subject, level) {
-                        (listOf(level) + (1..6).filter { it != level })
-                            .flatMap { OfficialTimetableRepository.getTimetableForLevel(it) }
-                            .filter { it.subject == subject && it.branch.isNotBlank() }
-                            .map { it.branch }.distinct()
-                    }
-                    if (branchChoices.isNotEmpty()) {
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            items(branchChoices) { bc ->
-                                AssistChip(onClick = { branch = bc }, label = { Text(bc, fontSize = 11.sp) })
+                    LazyColumn(Modifier.heightIn(max = 300.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        items(candidates, key = { it.id }) { c ->
+                            OutlinedCard(
+                                modifier = Modifier.fillMaxWidth().clickable {
+                                    mutateTimetable { l ->
+                                        l.map {
+                                            when (it.id) {
+                                                src.id -> it.copy(day = c.day, periodType = c.periodType, slotIndex = c.slotIndex)
+                                                c.id -> it.copy(day = src.day, periodType = src.periodType, slotIndex = src.slotIndex)
+                                                else -> it
+                                            }
+                                        }
+                                    }
+                                    swapSource = null
+                                }
+                            ) {
+                                Column(Modifier.padding(10.dp)) {
+                                    Text(slotName(c), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                    Text(uiT(periodName(c.periodType)), fontSize = 11.sp, color = BentoPrimaryDesc)
+                                }
                             }
                         }
-                    }
-                    OutlinedTextField(value = branch, onValueChange = { branch = it }, label = { Text(uiT("الفرع / النشاط")) }, singleLine = true)
-                    OutlinedTextField(
-                        value = minutes, onValueChange = { minutes = it.filter { c -> c.isDigit() }.take(3) },
-                        label = { Text(uiT("المدة بالدقائق")) }, singleLine = true
-                    )
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { french = !french }) {
-                        Checkbox(checked = french, onCheckedChange = { french = it })
-                        Text(uiT("حصة فرنسية"))
                     }
                 }
             },
-            confirmButton = {
-                TextButton(
-                    enabled = subject.isNotBlank(),
-                    onClick = {
-                        val dur = minutes.toIntOrNull()?.coerceIn(5, 240) ?: 30
-                        if (dialogSlot != null) {
-                            mutateTimetable { l ->
-                                l.map { if (it.id == dialogSlot.id) it.copy(subject = subject.trim(), branch = branch.trim(), durationMinutes = dur, isFrench = french) else it }
-                            }
-                        } else if (dialogPeriod != null) {
-                            mutateTimetable { l ->
-                                val next = (l.filter { it.day == selectedDay }.maxOfOrNull { it.slotIndex } ?: 0) + 1
-                                l + OfficialTimetableSlot(
-                                    id = "C_${selectedDay.code}_${System.currentTimeMillis()}",
-                                    level = level, day = selectedDay, periodType = dialogPeriod,
-                                    slotIndex = next, subject = subject.trim(), branch = branch.trim(),
-                                    durationMinutes = dur, isFrench = french
-                                )
-                            }
-                        }
-                        close()
-                    }
-                ) { Text(uiT("حفظ")) }
-            },
-            dismissButton = { TextButton(onClick = close) { Text(uiT("إلغاء")) } }
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { swapSource = null }) { Text(uiT("إلغاء")) } }
         )
     }
 
@@ -918,8 +888,7 @@ private fun RecessCard() {
 private fun TimetableSlotCard(
     slot: OfficialTimetableSlot,
     editMode: Boolean = false,
-    onEdit: () -> Unit = {},
-    onDelete: () -> Unit = {}
+    onSwap: () -> Unit = {}
 ) {
     val icon = remember(slot.subject, slot.branch) {
         val sub = slot.subject.lowercase()
@@ -1003,11 +972,8 @@ private fun TimetableSlotCard(
             }
 
             if (editMode) {
-                IconButton(onClick = onEdit, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Default.Edit, contentDescription = "تعديل", tint = BentoPrimary, modifier = Modifier.size(18.dp))
-                }
-                IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Default.Delete, contentDescription = "حذف", tint = Color(0xFFD32F2F), modifier = Modifier.size(18.dp))
+                IconButton(onClick = onSwap, modifier = Modifier.size(32.dp)) {
+                    Icon(Icons.Default.SwapVert, contentDescription = "تبديل المكان", tint = BentoPrimary, modifier = Modifier.size(20.dp))
                 }
             }
             Surface(
