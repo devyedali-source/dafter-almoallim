@@ -730,11 +730,8 @@ fun ClassInfoRequestLinkView(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             if (!isAdmin) {
-                Text(
-                    text = "🔒 هذه الصفحة مخصصة لمدير الأقسام فقط. سجّل الدخول بحساب المدير.",
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFC62828)
-                )
+                // غير المدير: لا تُعرض أي رسالة، تُغلق الصفحة فوراً
+                LaunchedEffect(Unit) { onClose() }
             } else if (doneMessage != null) {
                 Text(text = doneMessage ?: "", fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32), fontSize = 15.sp)
             } else if (loading) {

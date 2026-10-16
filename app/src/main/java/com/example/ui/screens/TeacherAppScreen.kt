@@ -822,7 +822,11 @@ fun InnerTeacherAppScreenContent(
                 if (uri.host == "diftar-almoaalim.web.app" && uri.path?.startsWith("/activate-class-info") == true) {
                     val infoKey = uri.lastPathSegment
                     if (!infoKey.isNullOrBlank()) {
-                        activeClassInfoRequestKey = infoKey
+                        // ننتظر تحميل المستخدم؛ وغير المدير يُرفض فتحه بصمت دون أي رسالة
+                        if (currentUser == null) return@LaunchedEffect
+                        if (currentUser?.email?.trim()?.lowercase() == "elyedalimoctar@gmail.com") {
+                            activeClassInfoRequestKey = infoKey
+                        }
                         onDeepLinkConsumed?.invoke()
                         return@LaunchedEffect
                     }
