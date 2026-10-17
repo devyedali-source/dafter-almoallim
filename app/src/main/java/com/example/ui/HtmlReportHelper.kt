@@ -1691,7 +1691,7 @@ object HtmlReportHelper {
             // ---------- الصفحة 2: جدول دعم المجموعات ----------
             html.append("<div class=\"sheet-card${if (isLast) "" else " pg"}\">")
             html.append(header("جدول دعم مجموعات التلاميذ الذين لم يمتلكوا بعض الكفايات في مادة $discLabel<br><span style=\"font-size:10px;font-weight:600;\">Tableau de soutien des groupes des élèves n'ayant pas acquis certaines CB</span>"))
-            html.append("<div style=\"font-size:10px;font-weight:700;margin:4px 0;\">أرقام أفراد المجموعات (من لم يمتلك الكفاية) حسب رقم التلميذ في اللائحة.</div>")
+            html.append("<div style=\"font-size:10px;font-weight:700;margin:4px 0;\">أفراد المجموعات (من لم يمتلك الكفاية) برقم التلميذ في اللائحة واسمه، مفصولين إلى بنات وأولاد.</div>")
             html.append("<table class=\"sheet-table cmp\" style=\"table-layout: auto;\"><thead><tr>")
             html.append("<th>الدعم المدرسي<br>Soutien scolaire</th><th>المجموعات<br>Groupes</th>")
             chunk.forEach { sp -> html.append("<th>المجال / Sphère<br>${escCompHtml(sp.label)}</th>") }
@@ -1701,10 +1701,17 @@ object HtmlReportHelper {
                 html.append("<tr style=\"height:44px;\"><td>${escCompHtml(note)}</td>")
                 html.append("<td style=\"font-weight:800;\">المجموعة التي لم تمتلك الكفاية $k<br>Le groupe n'ayant pas acquis la CB$k</td>")
                 chunk.forEach { sp ->
-                    val nums = sorted.mapIndexedNotNull { i, st ->
-                        if ((marks["${st.id}|${discipline.code}|${sp.code}|$k"] ?: 0) < 0) (i + 1).toString() else null
+                    // أعضاء المجموعة برقمهم واسمهم، مفصولين إلى بنات وأولاد (يسهّل اقتراح مجموعات الدعم)
+                    val members = sorted.mapIndexedNotNull { i, st ->
+                        if ((marks["${st.id}|${discipline.code}|${sp.code}|$k"] ?: 0) < 0) Triple(i + 1, st, compNameCell(st, discipline)) else null
                     }
-                    html.append("<td>${nums.joinToString(" - ")}</td>")
+                    fun line(label: String, list: List<Triple<Int, Student, String>>) =
+                        if (list.isEmpty()) "" else "<div style=\"text-align:right;margin-bottom:2px;\"><b>$label:</b> " +
+                            list.joinToString(" - ") { "${it.first} ${escCompHtml(it.third)}" } + "</div>"
+                    val girls = members.filter { it.second.gender == "أنثى" }
+                    val boys = members.filter { it.second.gender == "ذكر" }
+                    val others = members.filter { it.second.gender != "أنثى" && it.second.gender != "ذكر" }
+                    html.append("<td style=\"vertical-align:top;\">${line("بنات", girls)}${line("أولاد", boys)}${line("غير محدد", others)}</td>")
                 }
                 html.append("</tr>")
             }

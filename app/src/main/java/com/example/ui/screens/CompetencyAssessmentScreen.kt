@@ -237,7 +237,7 @@ fun CompetencyAssessmentScreen(
                         }
                     }
                 } else {
-                    Text(uiT("المجموعات تُحسب تلقائياً من الخانات المعلّمة بـ (−) وتظهر بأرقام التلاميذ."), fontSize = 11.sp, color = BentoPrimaryDesc)
+                    Text(uiT("المجموعات تُحسب تلقائياً من الخانات المعلّمة بـ (−) وتظهر بأرقام التلاميذ وأسمائهم، مفصولة إلى بنات وأولاد."), fontSize = 11.sp, color = BentoPrimaryDesc)
                     Spacer(Modifier.height(6.dp))
                     for (k in 1..3) {
                         Card(
@@ -247,13 +247,22 @@ fun CompetencyAssessmentScreen(
                             Column(Modifier.padding(10.dp)) {
                                 Text(uiTf("المجموعة التي لم تمتلك الكفاية {0}", k), fontWeight = FontWeight.Bold)
                                 chunk.forEach { sp ->
-                                    val nums = sorted.mapIndexedNotNull { i, st ->
-                                        if ((marks["${st.id}|${disc.code}|${sp.code}|$k"] ?: 0) < 0) (i + 1).toString() else null
+                                    val members = sorted.mapIndexedNotNull { i, st ->
+                                        if ((marks["${st.id}|${disc.code}|${sp.code}|$k"] ?: 0) < 0) Triple(i + 1, st.gender, st.name) else null
                                     }
-                                    Text(
-                                        "${sp.label}: " + (if (nums.isEmpty()) "—" else nums.joinToString(" - ")),
-                                        fontSize = 13.sp, modifier = Modifier.padding(top = 3.dp)
-                                    )
+                                    fun lineOf(label: String, list: List<Triple<Int, String, String>>) =
+                                        if (list.isEmpty()) "" else "$label: " + list.joinToString(" - ") { "${it.first} ${it.third}" }
+                                    val girlsLine = lineOf(uiT("بنات"), members.filter { it.second == "أنثى" })
+                                    val boysLine = lineOf(uiT("أولاد"), members.filter { it.second == "ذكر" })
+                                    val otherLine = lineOf(uiT("غير محدد"), members.filter { it.second != "أنثى" && it.second != "ذكر" })
+                                    Text("${sp.label}:", fontSize = 13.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 6.dp))
+                                    if (members.isEmpty()) {
+                                        Text("—", fontSize = 13.sp)
+                                    } else {
+                                        listOf(girlsLine, boysLine, otherLine).filter { it.isNotEmpty() }.forEach {
+                                            Text(it, fontSize = 13.sp, modifier = Modifier.padding(top = 2.dp))
+                                        }
+                                    }
                                 }
                                 val noteKey = "SUP|${disc.code}|$k"
                                 var text by remember(noteKey, notes[noteKey]) { mutableStateOf(notes[noteKey].orEmpty()) }
