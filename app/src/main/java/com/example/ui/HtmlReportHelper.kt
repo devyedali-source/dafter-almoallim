@@ -60,7 +60,7 @@ object HtmlReportHelper {
         return ctx as? android.app.Activity
     }
 
-    private fun getMauritanianSealImg(context: Context): String {
+    fun getMauritanianSealImg(context: Context): String {
         try {
             synchronized(this) {
                 if (cachedSealBase64 == null) {

@@ -129,10 +129,10 @@ object PrintDesign {
     }
 
     // ---------- رأسيات اللوائح (تُطبَّق على .header-section) ----------
-    fun listCss(): String {
-        if (header <= 0) return ""
+    fun listCss(design: Int = header): String {
+        if (design <= 0) return ""
         val base = ".header-section{position:relative;padding:8px 14px 14px;margin-bottom:6px;"
-        val css = when (header) {
+        val css = when (design) {
             1 -> "$base border:1.6px solid $B;box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 4.6px $B;background:${fourCorners(B, "1.4", 28, 2)};}"
             2 -> {
                 val tl = uri("<svg viewBox=\"0 0 84 58\"><path d=\"M0,0 H84 L0,58Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M0,0 H48 L0,30Z\" fill=\"$BL\" fill-opacity=\"0.55\"/></svg>")
@@ -159,10 +159,10 @@ object PrintDesign {
     }
 
     // ---------- إطارات الكشوف (تُطبَّق على بطاقات الكشوف) ----------
-    fun cardCss(): String {
-        if (card <= 0) return ""
+    fun cardCss(design: Int = card): String {
+        if (design <= 0) return ""
         val sel = ".report-card-container,.averages-card,.three-term-card"
-        val css = when (card) {
+        val css = when (design) {
             1 -> {
                 val tl = uri("<svg viewBox=\"0 0 130 70\" preserveAspectRatio=\"none\"><path d=\"M0,0 H130 C80,8 30,24 0,70Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M0,0 H84 C50,8 20,20 0,44Z\" fill=\"$BL\" fill-opacity=\"0.5\"/></svg>")
                 val br = uri("<svg viewBox=\"0 0 140 60\" preserveAspectRatio=\"none\"><path d=\"M140,60 H0 C60,52 120,36 140,0Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M140,60 H50 C90,54 125,44 140,28Z\" fill=\"$BL\" fill-opacity=\"0.5\"/></svg>")
