@@ -9660,6 +9660,45 @@ fun EnhancedReportsTab(
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_النتائج_التفصيلية_قسم_${activeClass.name}_الفصل_${termName}.pdf", isLandscape = true)
                         }
                     }
+                    13 -> {
+                        if (performanceList.isEmpty()) {
+                            Toast.makeText(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val html = HtmlReportHelper.generateReportCardsHtml(
+                                context = context,
+                                className = activeClass.name,
+                                performances = performanceList,
+                                subjects = resolvedSubjects,
+                                activeTermId = activeTermId,
+                                activeClass = activeClass,
+                                viewModel = viewModel,
+                                perPage = 3
+                            )
+                            val termName = when (activeTermId) {
+                                1 -> "الأول"
+                                2 -> "الثاني"
+                                4 -> "الأخير_فقط"
+                                else -> "الثالث"
+                            }
+                            HtmlReportHelper.shareHtmlAsPdf(context, html, "كشوف_درجات_قسم_${activeClass.name}_الفصل_${termName}_ثلاثة_في_الورقة.pdf", isLandscape = true)
+                        }
+                    }
+                    14 -> {
+                        if (classStudents.isEmpty()) {
+                            Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val html = HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
+                                context = context,
+                                className = activeClass.name,
+                                students = classStudents,
+                                subjects = resolvedSubjects,
+                                activeClass = activeClass,
+                                viewModel = viewModel,
+                                perPage = 3
+                            )
+                            HtmlReportHelper.shareHtmlAsPdf(context, html, "كشف_الدرجات_السنوي_قسم_${activeClass.name}_ثلاثة_في_الورقة.pdf", isLandscape = true)
+                        }
+                    }
                     12 -> {
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب الشهادات", Toast.LENGTH_SHORT).show()
@@ -9700,7 +9739,8 @@ fun EnhancedReportsTab(
                 1, 2 -> listOf(
                     ReportGroup("🖨️ كشوف", listOf(
                         10 to "كشف لكل ورقة 📄",
-                        1 to "كشفان في الورقة 🖨️"
+                        1 to "كشفان في الورقة 🖨️",
+                        13 to "ثلاثة كشوف في الورقة ✂️"
                     )),
                     ReportGroup("📊 لائحة النتائج التفصيلية", listOf(5 to "")),
                     ReportGroup("👤 كشف فردي", listOf(0 to ""))
@@ -9709,6 +9749,7 @@ fun EnhancedReportsTab(
                     ReportGroup("🖨️ كشوف", listOf(
                         10 to "كشف لكل ورقة 📄",
                         1 to "كشفان في الورقة 🖨️",
+                        13 to "ثلاثة كشوف في الورقة ✂️",
                         7 to "كشوف المعدلات السنوية 📑"
                     )),
                     ReportGroup("📊 لائحة النتائج التفصيلية", listOf(5 to "")),
@@ -9720,6 +9761,7 @@ fun EnhancedReportsTab(
                     ReportGroup("🖨️ كشوف", listOf(
                         11 to "كشف لكل ورقة 📄",
                         8 to "كشفان في الورقة 🖨️",
+                        14 to "ثلاثة كشوف في الورقة ✂️",
                         7 to "كشوف المعدلات السنوية 📑"
                     )),
                     ReportGroup("📊 لائحة النتائج التفصيلية", listOf(5 to "")),

@@ -130,69 +130,14 @@ object PrintDesign {
 
     // ---------- رأسيات اللوائح (تُطبَّق على .header-section) ----------
     fun listCss(design: Int = header): String {
-        if (design <= 0) return ""
-        val base = ".header-section{position:relative;padding:8px 14px 14px;margin-bottom:6px;"
-        val css = when (design) {
-            1 -> "$base border:1.6px solid $B;box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 4.6px $B;background:${fourCorners(B, "1.4", 28, 2)};}"
-            2 -> {
-                val tl = uri("<svg viewBox=\"0 0 84 58\"><path d=\"M0,0 H84 L0,58Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M0,0 H48 L0,30Z\" fill=\"$BL\" fill-opacity=\"0.55\"/></svg>")
-                val tr = uri("<svg viewBox=\"0 0 64 48\"><path d=\"M64,0 H0 L64,48Z\" fill=\"$BX\" stroke=\"$BL\"/></svg>")
-                val bl = uri("<svg viewBox=\"0 0 70 36\"><path d=\"M0,36 H70 L0,0Z\" fill=\"$BX\" stroke=\"$BL\"/></svg>")
-                val br = uri("<svg viewBox=\"0 0 70 32\"><path d=\"M70,32 H0 L70,0Z\" fill=\"$BX\" stroke=\"$BL\"/></svg>")
-                "$base border-bottom:1.3px solid $B;background:$tl left top/84px 58px no-repeat,$tr right top/64px 48px no-repeat,$bl left bottom/70px 36px no-repeat,$br right bottom/70px 32px no-repeat;}"
-            }
-            3 -> "$base padding-bottom:20px;background:linear-gradient($Y,$Y) left bottom 12px/100% 1.8px no-repeat,linear-gradient($GL,$GL) left bottom/100% 12px no-repeat,linear-gradient($G,$G) left bottom/100% 1.2px no-repeat,linear-gradient(#F6FAEF,#F6FAEF);}" +
-                ".header-section .header-column.center{border-left:1px solid $G;border-right:1px solid $G;}"
-            4 -> {
-                val tl = uri("<svg viewBox=\"0 0 150 52\" preserveAspectRatio=\"none\"><path d=\"M0,0 H150 C100,8 40,20 0,52Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M0,0 H110 C70,8 28,16 0,36Z\" fill=\"$BL\" fill-opacity=\"0.55\"/></svg>")
-                val br = uri("<svg viewBox=\"0 0 150 52\" preserveAspectRatio=\"none\"><path d=\"M150,52 H0 C50,44 110,32 150,0Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M150,52 H40 C80,46 120,38 150,20Z\" fill=\"$BL\" fill-opacity=\"0.55\"/></svg>")
-                val dm = uri("<svg viewBox=\"0 0 180 12\"><line x1=\"0\" y1=\"6\" x2=\"80\" y2=\"6\" stroke=\"$B\"/><line x1=\"100\" y1=\"6\" x2=\"180\" y2=\"6\" stroke=\"$B\"/><rect x=\"86\" y=\"2\" width=\"8\" height=\"8\" transform=\"rotate(45 90 6)\" fill=\"#fff\" stroke=\"$B\"/></svg>")
-                "$base padding-bottom:18px;background:$tl left top/150px 52px no-repeat,$br right bottom/150px 52px no-repeat,$dm center bottom 3px/180px 12px no-repeat;}"
-            }
-            else -> {
-                val lau = uri(laurelRing(Y))
-                "$base border:1.3px solid $Y;box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 4.6px $Y;background:${fourCorners(Y, "1.3", 28, 2)},linear-gradient(#FFFDF6,#FFFDF6);}" +
-                    ".header-section .header-column.center{background:$lau center top/84px 84px no-repeat;}"
-            }
-        }
-        return "<style>$css</style>"
+        if (design <= 0 || design >= PrintDesignArt.LIST.size) return ""
+        return "<style>${PrintDesignArt.LIST[design]}</style>"
     }
 
     // ---------- إطارات الكشوف (تُطبَّق على بطاقات الكشوف) ----------
     fun cardCss(design: Int = card): String {
-        if (design <= 0) return ""
-        val sel = ".report-card-container,.averages-card,.three-term-card"
-        val css = when (design) {
-            1 -> {
-                val tl = uri("<svg viewBox=\"0 0 130 70\" preserveAspectRatio=\"none\"><path d=\"M0,0 H130 C80,8 30,24 0,70Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M0,0 H84 C50,8 20,20 0,44Z\" fill=\"$BL\" fill-opacity=\"0.5\"/></svg>")
-                val br = uri("<svg viewBox=\"0 0 140 60\" preserveAspectRatio=\"none\"><path d=\"M140,60 H0 C60,52 120,36 140,0Z\" fill=\"$BX\" stroke=\"$BL\"/><path d=\"M140,60 H50 C90,54 125,44 140,28Z\" fill=\"$BL\" fill-opacity=\"0.5\"/></svg>")
-                "$sel{border:1px solid $BL !important;border-radius:0 !important;background:$tl left top/130px 70px no-repeat,$br right bottom/140px 60px no-repeat,#fff !important;}"
-            }
-            2 -> "$sel{border:1.6px solid $Y !important;border-radius:0 !important;box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 4.6px $Y !important;background:${fourCorners(Y, "1.6", 34, 2)},#fff !important;}"
-            3 -> {
-                val top = uri("<svg viewBox=\"0 0 200 26\" preserveAspectRatio=\"none\"><path d=\"M0,0 H200 V10 C140,26 60,26 0,8Z\" fill=\"$BX\" stroke=\"$BL\"/></svg>")
-                val bot = uri("<svg viewBox=\"0 0 200 26\" preserveAspectRatio=\"none\"><path d=\"M0,26 H200 V16 C140,0 60,0 0,18Z\" fill=\"$BX\" stroke=\"$BL\"/></svg>")
-                val book = uri("<svg viewBox=\"0 0 44 28\"><g fill=\"#fff\" stroke=\"$B\" stroke-width=\"1.2\"><path d=\"M2,3 C10,-1 18,1 22,5 V25 C18,21 10,19 2,25Z\"/><path d=\"M42,3 C34,-1 26,1 22,5 V25 C26,21 34,19 42,25Z\"/></g></svg>")
-                "$sel{border:1px solid $BL !important;border-radius:0 !important;background:$book left 6px top 4px/44px 28px no-repeat,$top left top/100% 26px no-repeat,$bot left bottom/100% 26px no-repeat,#fff !important;}"
-            }
-            4 -> {
-                val bot = uri("<svg viewBox=\"0 0 200 30\" preserveAspectRatio=\"none\"><path d=\"M0,30 H200 V12 C140,2 60,6 0,22Z\" fill=\"$GX\" stroke=\"$G\" stroke-width=\"0.8\"/></svg>")
-                val tl = uri("<svg viewBox=\"0 0 110 60\" preserveAspectRatio=\"none\"><path d=\"M0,0 H110 C60,8 20,24 0,60Z\" fill=\"#F6FAEF\" stroke=\"$GL\"/></svg>")
-                val cap = uri("<svg viewBox=\"0 0 60 56\"><g fill=\"#fff\" stroke=\"#444\" stroke-width=\"1.1\"><path d=\"M4,12 L28,3 L52,12 L28,21Z\"/><path d=\"M14,17 V28 C22,34 34,34 42,28 V17\"/><rect x=\"6\" y=\"36\" width=\"30\" height=\"6\"/><rect x=\"9\" y=\"42\" width=\"30\" height=\"6\"/></g><line x1=\"52\" y1=\"12\" x2=\"52\" y2=\"26\" stroke=\"$Y\" stroke-width=\"1.5\"/></svg>")
-                "$sel{border:1px solid $GL !important;border-radius:0 !important;background:$cap left 4px top 3px/50px 47px no-repeat,$tl left top/110px 60px no-repeat,$bot left bottom/100% 30px no-repeat,#fff !important;}"
-            }
-            5 -> {
-                val tl = uri("<svg viewBox=\"0 0 40 40\"><path d=\"M1,38 V13 Q1,1 13,1 H38\" fill=\"none\" stroke=\"$V\" stroke-width=\"2.4\"/></svg>")
-                val br = uri("<svg viewBox=\"0 0 40 40\"><path d=\"M39,2 V27 Q39,39 27,39 H2\" fill=\"none\" stroke=\"$V\" stroke-width=\"2.4\"/></svg>")
-                "$sel{border:1.8px solid #7F77DD !important;border-radius:12px !important;box-shadow:inset 0 0 0 5px #fff,inset 0 0 0 5.7px #AFA9EC !important;background:$tl left 2px top 2px/40px 40px no-repeat,$br right 2px bottom 2px/40px 40px no-repeat,#fff !important;}"
-            }
-            else -> {
-                val ll = uri(laurelSide(G, true))
-                val lr = uri(laurelSide(G, false))
-                "$sel{border:1.6px solid $G !important;border-radius:0 !important;box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 4.6px $Y !important;background:$ll left 2px center/22px 80px no-repeat,$lr right 2px center/22px 80px no-repeat,#fff !important;}"
-            }
-        }
-        return "<style>$css</style>"
+        if (design <= 0 || design >= PrintDesignArt.CARD.size) return ""
+        return "<style>${PrintDesignArt.CARD[design]}</style>"
     }
 
     // ---------- شهادات التفوق ----------

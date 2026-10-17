@@ -736,7 +736,8 @@ object HtmlReportHelper {
         activeClass: ClassSection,
         viewModel: TeacherViewModel,
         targetStudentId: Long? = null,
-        onePerPortraitPage: Boolean = false
+        onePerPortraitPage: Boolean = false,
+        perPage: Int = 2
     ): String {
         val sortedSubjects = subjects.sortedByOfficialOrder()
         val alphabeticalPerformances = performances.sortedBy { it.student.id }
@@ -1018,13 +1019,13 @@ object HtmlReportHelper {
         val scaleMax = if (isOutOfTen) 10 else 20
         
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف الدرجات</title>$styles$portraitSingleStyles${PrintDesign.cardCss()}</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف الدرجات</title>$styles$portraitSingleStyles${thirdCss(!onePerPortraitPage && perPage == 3, ".report-card-container")}${PrintDesign.cardCss()}</head><body>")
 
         val teacherStampHtml = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
         val principalStampHtml = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
  
         // Group into chunks of 2, each representing an A4 landscape page
-        val pages = sortedPerformances.chunked(if (onePerPortraitPage) 1 else 2)
+        val pages = sortedPerformances.chunked(if (onePerPortraitPage) 1 else perPage)
         
         pages.forEachIndexed { pageIndex, pagePerformances ->
             html.append("<div class=\"a4-page cards-page-layout\">")
@@ -1248,8 +1249,10 @@ object HtmlReportHelper {
                 """)
             }
             
-            if (!onePerPortraitPage && pagePerformances.size == 1) {
-                html.append("<div class=\"report-card-container\" style=\"visibility: hidden; border: none;\"></div>")
+            if (!onePerPortraitPage) {
+                repeat((perPage - pagePerformances.size).coerceAtLeast(0)) {
+                    html.append("<div class=\"report-card-container\" style=\"visibility: hidden; border: none;\"></div>")
+                }
             }
             
             html.append("</div>") // Close a4-page
@@ -1258,6 +1261,10 @@ object HtmlReportHelper {
         html.append("</body></html>")
         return html.toString()
     }
+
+    /** ثلاثة كشوف في الورقة الأفقية: نصغّر البطاقة بنسبة 0.68 لتصير كل بطاقة ثلث الورقة تقريباً (88مم × 195مم). */
+    private fun thirdCss(enabled: Boolean, sel: String): String =
+        if (!enabled) "" else "<style>$sel{zoom:0.68;width:129.4mm !important;height:286.8mm !important;max-height:286.8mm !important;}</style>"
 
     // 2. Class Student List (Excluding parent phones)
     fun generateStudentDirectoryHtml(
@@ -2925,7 +2932,8 @@ object HtmlReportHelper {
         activeClass: ClassSection,
         viewModel: TeacherViewModel,
         targetStudentId: Long? = null,
-        onePerPortraitPage: Boolean = false
+        onePerPortraitPage: Boolean = false,
+        perPage: Int = 2
     ): String {
         val sortedSubjects = subjects.sortedByOfficialOrder()
         val classStudents = students.filter { it.classId == activeClass.id }
@@ -3318,12 +3326,12 @@ object HtmlReportHelper {
             }
             </style>
         """ else ""
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشف النقاط السنوي</title>$styles$portraitSingleStyles${PrintDesign.cardCss()}</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشف النقاط السنوي</title>$styles$portraitSingleStyles${thirdCss(!onePerPortraitPage && perPage == 3, ".three-term-card")}${PrintDesign.cardCss()}</head><body>")
 
         val teacherStampHtml = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
         val principalStampHtml = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
 
-        val chunks = classStudentsSorted.chunked(if (onePerPortraitPage) 1 else 2)
+        val chunks = classStudentsSorted.chunked(if (onePerPortraitPage) 1 else perPage)
         chunks.forEachIndexed { pageIdx, pageStudents ->
             html.append("<div class=\"a4-landscape-page\">")
             pageStudents.forEachIndexed { cardIdx, student ->
@@ -3550,7 +3558,7 @@ object HtmlReportHelper {
             
             if (!onePerPortraitPage) {
                 // Fill remaining space if page has fewer than 2 cards to keep consistent height/width of A4 landscape
-                val emptyCards = 2 - pageStudents.size
+                val emptyCards = perPage - pageStudents.size
                 for (i in 0 until emptyCards) {
                     html.append("<div style=\"width: 49%; height: 198mm; visibility: hidden;\"></div>")
                 }
