@@ -1018,7 +1018,7 @@ object HtmlReportHelper {
         val scaleMax = if (isOutOfTen) 10 else 20
         
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف الدرجات</title>$styles$portraitSingleStyles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف الدرجات</title>$styles$portraitSingleStyles${PrintDesign.cardCss()}</head><body>")
 
         val teacherStampHtml = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
         val principalStampHtml = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
@@ -1285,7 +1285,7 @@ object HtmlReportHelper {
         )
         
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة التلاميذ</title>$styles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة التلاميذ</title>$styles${PrintDesign.listCss()}</head><body>")
         
         html.append("<div class=\"sheet-card\">")
         
@@ -1411,7 +1411,7 @@ object HtmlReportHelper {
         }
 
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>الجدول الزمني</title>$styles")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>الجدول الزمني</title>$styles${PrintDesign.listCss()}")
         html.append("<style>.tt td, .tt th { font-size: 11px !important; padding: 5px 4px !important; vertical-align: top; } .tt .pn { background: #EEF2FF; font-weight: bold; width: 110px; }</style>")
         html.append("</head><body><div class=\"sheet-card\">")
         html.append("""
@@ -1511,7 +1511,7 @@ object HtmlReportHelper {
         val expected = counted.size * 2
 
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>سجل النداء</title>$styles")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>سجل النداء</title>$styles${PrintDesign.listCss()}")
         html.append("<style>.att td, .att th { padding: 1px 0 !important; font-size: 8px !important; } .att .nm { text-align: right; padding-right: 4px !important; font-size: 9px !important; font-weight: bold; white-space: nowrap; }</style>")
         html.append("</head><body><div class=\"sheet-card\">")
         html.append("""
@@ -1646,7 +1646,7 @@ object HtmlReportHelper {
         """
 
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر متابعة القسم</title>$styles")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر متابعة القسم</title>$styles${PrintDesign.listCss()}")
         html.append("<style>.cmp td, .cmp th { padding: 2px 3px !important; font-size: 9px !important; } .cmp .nm { text-align: right; padding-right: 5px !important; font-weight: bold; white-space: nowrap; } .cmp .mk { font-size: 12px !important; font-weight: 900; } .cmp .lg { font-size: 8px; text-align: right; margin-top: 6px; line-height: 1.5; } .pg { page-break-after: always; break-after: page; } .pg:last-child { page-break-after: auto; break-after: auto; }</style>")
         if (sorted.size > 28) {
             // أقسام كبيرة: نضغط الصفوف والتوقيعات حتى لا تنزل التواقيع وحدها في صفحة فارغة
@@ -1885,7 +1885,7 @@ object HtmlReportHelper {
         }
 
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الأناشيد</title>$styles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الأناشيد</title>$styles${PrintDesign.listCss()}</head><body>")
         html.append("<div class=\"a4-page\"><div class=\"sheet-card\">")
         
         html.append("""
@@ -1988,7 +1988,7 @@ object HtmlReportHelper {
         }
 
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الكناسة والنظافة</title>$styles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الكناسة والنظافة</title>$styles${PrintDesign.listCss()}</head><body>")
         html.append("<div class=\"a4-page\"><div class=\"sheet-card\">")
         
         html.append("""
@@ -2115,7 +2115,7 @@ object HtmlReportHelper {
         val scaleMax = if (isOutOfTen) 10 else 20
         
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة النتائج للقسم</title>$styles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة النتائج للقسم</title>$styles${PrintDesign.listCss()}</head><body>")
         
         // Pre-calculate statistics for the entire section
         val failBoundValue = viewModel.getFailBoundForClass(activeClass.id, activeClass.level)
@@ -2384,7 +2384,7 @@ object HtmlReportHelper {
         )
         
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة نتائج امتحان التجاوز</title>$styles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة نتائج امتحان التجاوز</title>$styles${PrintDesign.listCss()}</head><body>")
         
         html.append("<div class=\"sheet-card\">")
         
@@ -2786,7 +2786,7 @@ object HtmlReportHelper {
         """.trimIndent()
 
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف المعدلات الإجمالية</title>$styles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف المعدلات الإجمالية</title>$styles${PrintDesign.cardCss()}</head><body>")
 
         val teacherStampHtml = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 42)
         val principalStampHtml = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 42)
@@ -3318,7 +3318,7 @@ object HtmlReportHelper {
             }
             </style>
         """ else ""
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشف النقاط السنوي</title>$styles$portraitSingleStyles</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشف النقاط السنوي</title>$styles$portraitSingleStyles${PrintDesign.cardCss()}</head><body>")
 
         val teacherStampHtml = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
         val principalStampHtml = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
@@ -3558,6 +3558,73 @@ object HtmlReportHelper {
             html.append("</div>") // Close a4-landscape-page
         }
 
+        html.append("</body></html>")
+        return html.toString()
+    }
+
+    /**
+     * شهادات تفوق وتكريم للتلاميذ الثلاثة الأوائل في القسم حسب المعدل السنوي.
+     * شهادة واحدة في كل صفحة أفقية. تُرجع "" إذا لا توجد معدلات مرصودة.
+     */
+    fun generateHonorCertificatesHtml(
+        context: Context,
+        activeClass: ClassSection,
+        students: List<Student>,
+        viewModel: TeacherViewModel
+    ): String {
+        val classStudents = students.filter { it.classId == activeClass.id }
+        val isOutOfTen = viewModel.isOutOfTen.value
+        val scaleFactor = if (isOutOfTen) 2.0 else 1.0
+        val scaleMax = if (isOutOfTen) 10 else 20
+        val isWeighted = viewModel.useFinalExamFormula.value
+
+        data class Row(val student: Student, val annual: Double)
+        val rows = classStudents.map { st ->
+            val a1 = viewModel.calculateStudentTermAverage(st.id, activeClass.id, 1)
+            val a2 = viewModel.calculateStudentTermAverage(st.id, activeClass.id, 2)
+            val a3 = viewModel.calculateStudentTermAverage(st.id, activeClass.id, 3)
+            val annual = if (isWeighted) (a1 * 1.0 + a2 * 2.0 + a3 * 3.0) / 6.0 else (a1 + a2 + a3) / 3.0
+            Row(st, annual)
+        }.filter { it.annual > 0.0 }.sortedByDescending { it.annual }
+        if (rows.isEmpty()) return ""
+
+        // الرتبة مع مراعاة التعادل (المتعادلان يأخذان الرتبة نفسها)
+        val ranks = IntArray(rows.size)
+        rows.forEachIndexed { i, r -> ranks[i] = if (i > 0 && r.annual == rows[i - 1].annual) ranks[i - 1] else i + 1 }
+        val top = rows.indices.take(3)
+
+        val design = PrintDesign.cert.coerceIn(1, PrintDesign.certNames.size)
+        val seal = getMauritanianSealImg(context)
+        val teacherStamp = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 58)
+        val principalStamp = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 58)
+        fun esc(t: String) = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        val rankWordM = listOf("الأول", "الثاني", "الثالث")
+        val rankWordF = listOf("الأولى", "الثانية", "الثالثة")
+
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>شهادات التفوق والتكريم</title>")
+        html.append(getCommonStyles(isLandscape = true))
+        html.append(PrintDesign.certificateCss(design))
+        html.append("</head><body>")
+        top.forEach { i ->
+            val r = rows[i]
+            val female = r.student.gender.contains("أنث") || r.student.gender.contains("بنت")
+            val who = if (female) "التلميذة" else "التلميذ"
+            val rk = ranks[i].coerceIn(1, 3)
+            val rankWord = if (female) rankWordF[rk - 1] else rankWordM[rk - 1]
+            val pron = if (female) "ها" else "ه"
+            val avg = formatCleanNumber(r.annual / scaleFactor)
+            html.append("<div class=\"cert\">")
+            html.append("<div class=\"top\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>وزارة التربية وإصلاح النظام التعليمي<br>الإدارة الجهوية للتربية: ${esc(activeClass.wilaya.ifBlank { "غوركل" })}<br>مفتشية مقاطعة: ${esc(activeClass.moughataa.ifBlank { "لكصيبه 1" })}<br>مدرسة: ${esc(activeClass.schoolName.ifBlank { "الطلحايه 1" })}</div>")
+            html.append("<div class=\"c\">$seal</div>")
+            html.append("<div class=\"l\">شرف - إخاء - عدالة<br>السنة الدراسية: ${esc(activeClass.academicYear.ifBlank { "2025 - 2026" })}<br>القسم: ${esc(getDisplayClassName(activeClass))}</div></div>")
+            html.append("<h1>شهادة تفوق وتكريم</h1><div class=\"sub\">Certificat d'excellence et d'honneur</div>")
+            html.append("<div class=\"give\">تمنح إدارة المدرسة هذه الشهادة إلى $who:</div>")
+            html.append("<div class=\"nm\">${esc(r.student.name)}</div>")
+            html.append("<div class=\"txt\">تقديراً لتفوّق$pron وجدّ$pron واجتهاد$pron، وحصول$pron على <span class=\"rk\">المرتبة $rankWord</span> في القسم ${esc(getDisplayClassName(activeClass))} بمعدل سنوي قدره <span class=\"rk\">$avg / $scaleMax</span> في السنة الدراسية ${esc(activeClass.academicYear.ifBlank { "2025 - 2026" })}.<br>متمنّين ل$pron دوام التوفيق والنجاح.</div>")
+            html.append("<div class=\"sigs\"><div>المعلم<br>$teacherStamp</div><div>مدير المدرسة<br>$principalStamp</div></div>")
+            html.append("</div>")
+        }
         html.append("</body></html>")
         return html.toString()
     }

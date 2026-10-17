@@ -1054,6 +1054,25 @@ fun InnerTeacherAppScreenContent(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
                             )
 
+                            // تصميم اللوائح والكشوف وشهادات التفوق
+                            var showPrintDesignFromDrawer by remember { mutableStateOf(false) }
+                            NavigationDrawerItem(
+                                label = {
+                                    Text(
+                                        text = uiT("تصميم اللوائح والكشوف 🎨"),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 12.5.sp
+                                    )
+                                },
+                                selected = false,
+                                onClick = { showPrintDesignFromDrawer = true },
+                                icon = { Icon(Icons.Default.Settings, contentDescription = null, tint = BentoPrimary) },
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
+                            )
+                            if (showPrintDesignFromDrawer) {
+                                PrintDesignDialog(onDismiss = { showPrintDesignFromDrawer = false })
+                            }
+
                             // 4. About App (حول التطبيق)
                             NavigationDrawerItem(
                                 label = {
@@ -8562,6 +8581,7 @@ fun EnhancedReportsTab(
     val veryGoodBoundT3 by viewModel.veryGoodBoundT3.collectAsState()
 
     var showSettingsDialog by remember { mutableStateOf(false) }
+    var showPrintDesignDialog by remember { mutableStateOf(false) }
     var settingsTermId by remember { mutableStateOf(if (activeTermId in 1..3) activeTermId else 3) }
 
     var reportMode by remember { mutableStateOf(-1) } // -1: لا شيء مختار بعد
@@ -8711,9 +8731,23 @@ fun EnhancedReportsTab(
                         tint = Color(0xFF153E90)
                     )
                 }
+                IconButton(
+                    onClick = { showPrintDesignDialog = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFFF3EFFF))
+                        .border(1.dp, Color(0xFF534AB7), RoundedCornerShape(10.dp))
+                ) {
+                    Text("🎨", fontSize = 20.sp)
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
+
+        if (showPrintDesignDialog) {
+            PrintDesignDialog(onDismiss = { showPrintDesignDialog = false })
+        }
 
         // Settings Dialog implementation
         if (showSettingsDialog) {
@@ -9626,6 +9660,23 @@ fun EnhancedReportsTab(
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_النتائج_التفصيلية_قسم_${activeClass.name}_الفصل_${termName}.pdf", isLandscape = true)
                         }
                     }
+                    12 -> {
+                        if (classStudents.isEmpty()) {
+                            Toast.makeText(context, "القسم فارغ لا يمكن سحب الشهادات", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val html = HtmlReportHelper.generateHonorCertificatesHtml(
+                                context = context,
+                                activeClass = activeClass,
+                                students = classStudents,
+                                viewModel = viewModel
+                            )
+                            if (html.isBlank()) {
+                                Toast.makeText(context, "لا توجد معدلات مرصودة بعد لاستخراج الشهادات", Toast.LENGTH_LONG).show()
+                            } else {
+                                HtmlReportHelper.shareHtmlAsPdf(context, html, "شهادات_التفوق_قسم_${activeClass.name}.pdf", isLandscape = true)
+                            }
+                        }
+                    }
                     6 -> {
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب المعدلات", Toast.LENGTH_SHORT).show()
@@ -9662,6 +9713,7 @@ fun EnhancedReportsTab(
                     )),
                     ReportGroup("📊 لائحة النتائج التفصيلية", listOf(5 to "")),
                     ReportGroup("🏆 لائحة المعدلات السنوية للسراج", listOf(6 to "")),
+                    ReportGroup("🎖️ شهادات التفوق والتكريم (الثلاثة الأوائل)", listOf(12 to "")),
                     ReportGroup("👤 كشف فردي", listOf(0 to ""))
                 )
                 else -> listOf(
@@ -9672,6 +9724,7 @@ fun EnhancedReportsTab(
                     )),
                     ReportGroup("📊 لائحة النتائج التفصيلية", listOf(5 to "")),
                     ReportGroup("🏆 لائحة المعدلات السنوية للسراج", listOf(6 to "")),
+                    ReportGroup("🎖️ شهادات التفوق والتكريم (الثلاثة الأوائل)", listOf(12 to "")),
                     ReportGroup("👤 كشف فردي", listOf(0 to ""))
                 )
             }

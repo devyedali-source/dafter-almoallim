@@ -43,6 +43,7 @@ class MainActivity : FragmentActivity() {
         com.google.firebase.FirebaseApp.initializeApp(this)
         // ساعة موثوقة تقاوم رجوع تاريخ الهاتف إلى الوراء؛ تُحدَّث بوقت الخادم كلما توفّر إنترنت
         com.example.data.security.TrustedClock.init(this)
+        com.example.ui.PrintDesign.load(this)
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
             try {
                 com.example.data.security.TrustedClock.syncWithServer()
