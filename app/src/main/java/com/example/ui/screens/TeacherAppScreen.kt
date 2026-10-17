@@ -1287,7 +1287,7 @@ fun InnerTeacherAppScreenContent(
                                 }
 
                                 Text(
-                                    text = AppLocalization.tr("app_footer_copyright", "دفتر المعلم - v2.5\nجميع الحقوق محفوظة © المطور: المختار اليدالي 2026", appLanguage),
+                                    text = AppLocalization.tr("app_footer_copyright", "دفتر المعلم - v2.5\nجميع الحقوق محفوظة © المطور: المختار اليدالي", appLanguage),
                                     fontSize = 10.sp,
                                     color = Color.Gray,
                                     textAlign = TextAlign.Center,
@@ -10405,7 +10405,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                 "title" to "Connexion de l'Enseignant",
                 "welcome" to "Bienvenue à nouveau ! Connectez-vous rapidement pour lier vos données, suivre et gérer les notes et les élèves de vos classes.",
                 "google_sign_in" to "Connexion rapide avec Google 🚀",
-                "footer" to "Tous droits réservés © Développeur : El Moctar Yedaly 🇲🇷 2026",
+                "footer" to "Tous droits réservés © Développeur : El Moctar Yedaly 🇲🇷",
                 "web_client_title" to "Configuration de la connexion Google",
                 "web_client_desc" to "Pour activer la connexion directe et rapide avec Google, veuillez lier l'application à votre Web Client ID Firebase (sous les paramètres Google Sign-In).\n\n💡 Comment l'obtenir ?\n1. Allez sur la console Firebase -> Authentication -> Sign-in method -> Google.\n2. Cliquez sur Modifier pour voir le 'Web client ID'.\n3. Copiez et collez-le ci-dessous pour le sauvegarder sur l'appareil.",
                 "web_client_label" to "Google Web Client ID",
@@ -10420,7 +10420,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                 "title" to "تسجيل دخول المعلم",
                 "welcome" to "مرحباً بك مجدداً! قم بتسجيل الدخول السريع لربط بياناتك، للرصد وإدارة درجات وتلاميذ أقسامك.",
                 "google_sign_in" to "الدخول السريع بحساب Google 🚀",
-                "footer" to "جميع الحقوق محفوظة © المطور: المختار اليدالى 🇲🇷 2026",
+                "footer" to "جميع الحقوق محفوظة © المطور: المختار اليدالى 🇲🇷",
                 "web_client_title" to "إعداد الدخول بحساب Google",
                 "web_client_desc" to "لتفعيل ميزة تسجيل الدخول المباشر والسريع بحساب جوجل، يجب ربط التطبيق بـ Web Client ID الخاص بك من لوحة تحكم Firebase (تحت إعدادات Google Sign-In).\n\n" +
                         "💡 كيف تحصل عليه؟\n" +
@@ -10896,7 +10896,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                 
                 // Footer details
                 Text(
-                    text = tr["footer"] ?: "جميع الحقوق محفوظة © المطور: المختار اليدالى 🇲🇷 2026",
+                    text = tr["footer"] ?: "جميع الحقوق محفوظة © المطور: المختار اليدالى 🇲🇷",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.9f),
@@ -11634,7 +11634,7 @@ fun StatCard(
 @Composable
 fun AppFooter(modifier: Modifier = Modifier, appLanguage: String = "ar") {
     Text(
-        text = AppLocalization.tr("footer", "جميع الحقوق محفوظة © المطور: المختار اليدالي 🇲🇷 2026", appLanguage),
+        text = AppLocalization.tr("footer", "جميع الحقوق محفوظة © المطور: المختار اليدالي 🇲🇷", appLanguage),
         fontSize = 11.sp,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),

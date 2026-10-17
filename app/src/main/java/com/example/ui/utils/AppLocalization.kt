@@ -25,7 +25,7 @@ object AppLocalization {
         "title" to "Connexion de l'Enseignant",
         "welcome" to "Bienvenue à nouveau ! Connectez-vous rapidement pour lier vos données, suivre et gérer les notes et les élèves de vos classes en toute sécurité.",
         "google_sign_in" to "Connexion rapide avec Google 🚀",
-        "footer" to "Tous droits réservés © Développeur : El Moctar Yedaly 🇲🇷 2026",
+        "footer" to "Tous droits réservés © Développeur : El Moctar Yedaly 🇲🇷",
         
         // Navigation & TopBar
         "app_title" to "Mon Application Scolaire 🏫",
@@ -239,7 +239,7 @@ object AppLocalization {
         "no_links_desc" to "Aucun lien utile ni référence n'a encore été ajouté par l'administration.",
 
         // Extra Dashboard & Common Elements
-        "app_footer_copyright" to "Cahier de l'Enseignant - v2.5\nTous droits réservés © Développeur : El Mokhtar Yedaly 2026",
+        "app_footer_copyright" to "Cahier de l'Enseignant - v2.5\nTous droits réservés © Développeur : El Mokhtar Yedaly",
         "teacher_id_prefix" to "ID : ",
         "total_registered_students" to "Total des élèves inscrits",
         "male_count_label" to "Garçons",
