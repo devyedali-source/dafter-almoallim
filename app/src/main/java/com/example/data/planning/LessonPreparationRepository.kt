@@ -572,6 +572,40 @@ object LessonPreparationRepository {
         }
     }
 
+    /**
+     * اقتراحات الدعم/العلاج لكفاية معيّنة (K1..K3) في مادة ومجالات معيّنة من مستوى معيّن،
+     * مأخوذة من قسم «علاج» في أوراق التحضير (مقترح تربوي مساعد وليست نصا وزاريا حرفيا). بلا تكرار.
+     */
+    fun getRemediationSuggestions(
+        context: Context,
+        level: Int,
+        matiereCode: String,
+        sphereCodes: Set<String>,
+        k: Int,
+        limit: Int = 40
+    ): List<String> {
+        initialize(context)
+        synchronized(this) {
+            val prefix = "${level}AP|"
+            val out = LinkedHashSet<String>()
+            for (prep in rawPrepItemsCache.values) {
+                val o = prep.official
+                if (!o.lesson_unit_id.startsWith(prefix)) continue
+                val mat = if (o.matiere == "TIC") "ART" else o.matiere
+                if (mat != matiereCode) continue
+                if (o.domaine !in sphereCodes) continue
+                val pk = o.competence?.filter { it.isDigit() }?.toIntOrNull() ?: continue
+                if (pk != k) continue
+                prep.evaluation?.remediation?.forEach { r ->
+                    val t = r.trim()
+                    if (t.isNotBlank()) out.add(t)
+                }
+                if (out.size >= limit) break
+            }
+            return out.toList()
+        }
+    }
+
     fun getRawPreparation(preparationId: String): PreparationItem? {
         return rawPrepItemsCache[preparationId]
     }

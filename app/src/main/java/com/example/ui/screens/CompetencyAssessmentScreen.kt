@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -275,6 +276,55 @@ fun CompetencyAssessmentScreen(
                                     label = { Text(uiT("الدعم المدرسي")) },
                                     modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
                                 )
+                                var showSuggestions by remember(noteKey) { mutableStateOf(false) }
+                                TextButton(onClick = { showSuggestions = true }) {
+                                    Text(uiT("💡 اقتراحات الدعم"))
+                                }
+                                if (showSuggestions) {
+                                    val suggestions = remember(section.level, disc.code, k, chunkIdx) {
+                                        try {
+                                            LessonPreparationRepository.getRemediationSuggestions(
+                                                ctx, section.level, disc.code, chunk.map { it.code }.toSet(), k
+                                            )
+                                        } catch (e: Exception) { emptyList() }
+                                    }
+                                    AlertDialog(
+                                        onDismissRequest = { showSuggestions = false },
+                                        title = { Text(uiTf("اقتراحات الدعم للكفاية {0}", k), fontWeight = FontWeight.Bold) },
+                                        text = {
+                                            Column {
+                                                Text(
+                                                    uiT("مقترح تربوي مساعد: أنشطة علاج من أوراق التحضير، ليست نصاً وزارياً حرفياً. اختر ما يناسب أو اكتب اقتراحك."),
+                                                    fontSize = 11.sp, color = BentoPrimaryDesc
+                                                )
+                                                Spacer(Modifier.height(6.dp))
+                                                if (suggestions.isEmpty()) {
+                                                    Text(uiT("لا توجد اقتراحات لهذه الكفاية. اكتب اقتراحك في الخانة."), fontSize = 13.sp)
+                                                } else {
+                                                    LazyColumn(Modifier.heightIn(max = 380.dp)) {
+                                                        items(suggestions.size) { idx ->
+                                                            val sug = suggestions[idx]
+                                                            Card(
+                                                                modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp).clickable {
+                                                                    val merged = if (text.isBlank()) sug else text + "\n" + sug
+                                                                    text = merged
+                                                                    viewModel.saveCompetencyEntry(section.id, 0L, noteKey, 0, merged)
+                                                                    showSuggestions = false
+                                                                },
+                                                                colors = CardDefaults.cardColors(containerColor = Color(0xFFF3F4F6))
+                                                            ) {
+                                                                Text(sug, fontSize = 13.sp, modifier = Modifier.padding(8.dp))
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        confirmButton = {
+                                            TextButton(onClick = { showSuggestions = false }) { Text(uiT("إغلاق")) }
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
