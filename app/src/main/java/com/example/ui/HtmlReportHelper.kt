@@ -1019,7 +1019,7 @@ object HtmlReportHelper {
         val scaleMax = if (isOutOfTen) 10 else 20
         
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف الدرجات</title>$styles$portraitSingleStyles${thirdCss(!onePerPortraitPage && perPage == 3, ".report-card-container")}${PrintDesign.cardCss()}</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف الدرجات</title>$styles$portraitSingleStyles${thirdCss(!onePerPortraitPage && perPage == 3, 0)}${PrintDesign.cardCss()}</head><body>")
 
         val teacherStampHtml = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
         val principalStampHtml = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
@@ -1262,9 +1262,28 @@ object HtmlReportHelper {
         return html.toString()
     }
 
-    /** ثلاثة كشوف في الورقة الأفقية: نصغّر البطاقة بنسبة 0.68 لتصير كل بطاقة ثلث الورقة تقريباً (88مم × 195مم). */
-    private fun thirdCss(enabled: Boolean, sel: String): String =
-        if (!enabled) "" else "<style>$sel{zoom:0.68;width:129.4mm !important;height:286.8mm !important;max-height:286.8mm !important;}</style>"
+    /**
+     * ثلاثة كشوف في الورقة الأفقية: نصغّر البطاقة بنسبة 0.68 لتصير بعرض ثلث الورقة (88مم) وبطول 195مم،
+     * ثم نوزّع المحتوى: الجدول والمعلومات حتى ثلثي البطاقة، والثلث الأخير للتوقيعات والطابع والختم.
+     * kind: 0 كشف الفصل، 1 كشف النقاط السنوي (ثلاثة فصول).
+     */
+    private fun thirdCss(enabled: Boolean, kind: Int): String {
+        if (!enabled) return ""
+        val css = if (kind == 0) """
+            .report-card-container{zoom:0.68;width:129.4mm !important;height:286.8mm !important;max-height:286.8mm !important;}
+            .report-card-container .content-split{flex:0 0 auto;height:150mm;}
+            .report-card-container .grades-section,.report-card-container .remarks-section{height:100%;}
+            .report-card-container .grades-table{height:100%;}
+            .report-card-container .footer-signature-block{margin-top:auto;height:80mm;align-items:flex-start;padding-top:10mm;}
+            .report-card-container .footer-stamp-slot{height:48mm;}
+        """ else """
+            .three-term-card{zoom:0.68;width:129.4mm !important;height:286.8mm !important;max-height:286.8mm !important;}
+            .three-term-card .compact-table{height:140mm;}
+            .three-term-card .signatures-block{margin-top:auto;height:80mm;padding-top:10mm;}
+            .three-term-card .signature-stamp-slot{height:48mm;}
+        """
+        return "<style>$css</style>"
+    }
 
     // 2. Class Student List (Excluding parent phones)
     fun generateStudentDirectoryHtml(
@@ -3326,7 +3345,7 @@ object HtmlReportHelper {
             }
             </style>
         """ else ""
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشف النقاط السنوي</title>$styles$portraitSingleStyles${thirdCss(!onePerPortraitPage && perPage == 3, ".three-term-card")}${PrintDesign.cardCss()}</head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشف النقاط السنوي</title>$styles$portraitSingleStyles${thirdCss(!onePerPortraitPage && perPage == 3, 1)}${PrintDesign.cardCss()}</head><body>")
 
         val teacherStampHtml = getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
         val principalStampHtml = getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = if (onePerPortraitPage) 64 else 46)
