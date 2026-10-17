@@ -10690,16 +10690,40 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                 )
 
                 // صورة تعريفية بالتطبيق أعلى زر الدخول
-                androidx.compose.foundation.Image(
-                    painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.img_login_promo),
-                    contentDescription = null,
-                    contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+                // الصور التعريفية تتبدّل تلقائياً بالتتابع مع انتقال ناعم
+                val promoImages = remember {
+                    listOf(
+                        com.example.R.drawable.img_login_promo,
+                        com.example.R.drawable.img_login_promo_2,
+                        com.example.R.drawable.img_login_promo_3,
+                        com.example.R.drawable.img_login_promo_4
+                    )
+                }
+                var promoIndex by remember { mutableStateOf(0) }
+                LaunchedEffect(Unit) {
+                    while (true) {
+                        delay(2000)
+                        promoIndex = (promoIndex + 1) % promoImages.size
+                    }
+                }
+                androidx.compose.animation.Crossfade(
+                    targetState = promoIndex,
+                    animationSpec = androidx.compose.animation.core.tween(500),
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1080f / 720f)
                         .clip(RoundedCornerShape(16.dp))
-                        .border(1.dp, Color(0xFF1B5E20).copy(alpha = 0.25f), RoundedCornerShape(16.dp))
-                )
+                        .background(Color.White)
+                        .border(1.dp, Color(0xFF1B5E20).copy(alpha = 0.25f), RoundedCornerShape(16.dp)),
+                    label = "loginPromo"
+                ) { idx ->
+                    androidx.compose.foundation.Image(
+                        painter = androidx.compose.ui.res.painterResource(id = promoImages[idx]),
+                        contentDescription = null,
+                        contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(4.dp))
 
