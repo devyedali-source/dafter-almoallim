@@ -3346,6 +3346,10 @@ private fun DetailItem(icon: androidx.compose.ui.graphics.vector.ImageVector, la
 
 
 
+/** نص الإشراف على التطبيق، يظهر في واجهة الدخول وواجهة اختيار السنة الدراسية. */
+private const val APP_SUPERVISION_TEXT =
+    "تَطْبِيقُ دَفْتَرِ الْمُعَلِّمِ مِنْ إِشْرَافِ مَجْمُوعَةٍ مِنْ مُفَتِّشِي التَّعْلِيمِ الْأَسَاسِيِّ، وَمُكَوِّنِي مَدَارِسِ تَكْوِينِ الْمُعَلِّمِينَ، وَالْمُهَنْدِسِينَ، لِتَسْهِيلِ عَمَلِ الْمُعَلِّمِ."
+
 @Composable
 fun BentoDashboard(
     viewModel: TeacherViewModel,
@@ -3668,6 +3672,16 @@ fun BentoDashboard(
                 }
             }
         }
+
+        // نص الإشراف أسفل عنوان «دفتر المعلم»
+        Text(
+            text = APP_SUPERVISION_TEXT,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Bold,
+            color = com.example.ui.theme.BentoText.copy(alpha = 0.75f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+        )
 
         if (showStats) {
             StudentAndClassesStatsCard(
@@ -10671,6 +10685,16 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+
+                // 2. نص الإشراف أعلى عنوان تسجيل الدخول
+                Text(
+                    text = APP_SUPERVISION_TEXT,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF2E7D32),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
 
                 // 2. App Title
                 Text(
