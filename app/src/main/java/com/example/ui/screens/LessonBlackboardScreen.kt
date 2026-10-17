@@ -270,7 +270,13 @@ private fun parseBoardBlocks(text: String): List<BoardBlock> {
 @Composable
 private fun ChalkContent(text: String, modifier: Modifier) {
     val blocks = remember(text) { parseBoardBlocks(text) }
-    val size = 20f
+    // النصوص الطويلة (سور القرآن كاملة، جداول الضرب) تصغر درجة مناسبة ليظهر أكثرها دفعة واحدة؛ والنص كله يبقى كما هو
+    val size = when {
+        text.length > 1300 -> 14f
+        text.length > 900 -> 15f
+        text.length > 700 -> 17f
+        else -> 20f
+    }
     Column(modifier = modifier) {
         blocks.forEach { b ->
             when (b) {
