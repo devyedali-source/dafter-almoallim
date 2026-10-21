@@ -3650,11 +3650,11 @@ fun BentoDashboard(
                         .background(com.example.ui.theme.BentoSoftPurpleContainer),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
+                    androidx.compose.foundation.Image(
+                        painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.img_mauritania_emblem),
                         contentDescription = null,
-                        tint = com.example.ui.theme.BentoSecondary,
-                        modifier = Modifier.size(22.dp)
+                        contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
                 Column(
@@ -10720,7 +10720,8 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                         com.example.R.drawable.img_login_promo,
                         com.example.R.drawable.img_login_promo_2,
                         com.example.R.drawable.img_login_promo_3,
-                        com.example.R.drawable.img_login_promo_4
+                        com.example.R.drawable.img_login_promo_4,
+                        com.example.R.drawable.img_login_promo_5
                     )
                 }
                 var promoIndex by remember { mutableStateOf(0) }
