@@ -121,7 +121,7 @@ object CoverDesign {
     }
 
     /** يبني الغلاف كشريحة HTML تُدرج داخل <body> (مع أنماطها)، بحجم صفحة واحدة. */
-    fun body(context: Context, section: ClassSection, title: String, info: CoverInfo, design: Int): String {
+    fun body(context: Context, section: ClassSection, title: String, info: CoverInfo, design: Int, stampHtml: String = ""): String {
         val seal = HtmlReportHelper.getMauritanianSealImg(context)
             .replace("width: 76px; height: 76px", "width: 34mm; height: 34mm")
         val cls = HtmlReportHelper.getDisplayClassName(section)
@@ -139,6 +139,7 @@ object CoverDesign {
                 <div>رقم الهاتف: ${v(info.phone)}</div>
               </div>
               ${photoHtml(info, 34, if (design == 1) GREEN else GOLD)}
+              ${if (stampHtml.isBlank()) "" else "<div style=\"flex:0 0 auto\">$stampHtml</div>"}
             </div>"""
         val inner = if (design == 3) {
             """
@@ -171,10 +172,10 @@ object CoverDesign {
     }
 
     /** صفحة كاملة للمعاينة داخل الواجهة. */
-    fun previewHtml(context: Context, section: ClassSection, title: String, info: CoverInfo, design: Int): String =
+    fun previewHtml(context: Context, section: ClassSection, title: String, info: CoverInfo, design: Int, stampHtml: String = ""): String =
         "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=1062\">" +
             "<style>body{margin:0;width:${W_MM}mm;background:#fff}</style></head><body>" +
-            body(context, section, title, info, design).replace("page-break-after:always;break-after:page;", "") +
+            body(context, section, title, info, design, stampHtml).replace("page-break-after:always;break-after:page;", "") +
             "</body></html>"
 
     /** يدرج الغلاف في أول ملف HTML مُجمَّع (قبل أول صفحة). */

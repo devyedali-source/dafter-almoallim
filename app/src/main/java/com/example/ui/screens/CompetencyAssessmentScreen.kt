@@ -83,6 +83,7 @@ fun CompetencyAssessmentScreen(
 
     coverJob?.let { job ->
         CoverDialog(
+            viewModel = viewModel,
             section = section,
             bookTitle = "دفتر المتابعة",
             onDismiss = { coverJob = null },

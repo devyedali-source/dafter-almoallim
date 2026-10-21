@@ -57,9 +57,9 @@ private fun loadPhotoB64(ctx: Context, uri: Uri): String? = try {
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-private fun CoverPreview(section: ClassSection, title: String, info: CoverInfo, design: Int) {
+private fun CoverPreview(section: ClassSection, title: String, info: CoverInfo, design: Int, stampHtml: String) {
     val context = LocalContext.current
-    val html = remember(section, title, info, design) { CoverDesign.previewHtml(context, section, title, info, design) }
+    val html = remember(section, title, info, design, stampHtml) { CoverDesign.previewHtml(context, section, title, info, design, stampHtml) }
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val heightDp = maxWidth * (CoverDesign.H_MM.toFloat() / CoverDesign.W_MM.toFloat())
         AndroidView(
@@ -88,6 +88,7 @@ private fun CoverPreview(section: ClassSection, title: String, info: CoverInfo, 
  */
 @Composable
 fun CoverDialog(
+    viewModel: com.example.ui.TeacherViewModel,
     section: ClassSection,
     bookTitle: String,
     onDismiss: () -> Unit,
@@ -110,6 +111,10 @@ fun CoverDialog(
         }
     }
     val info = CoverInfo(teacher, finance, phone, photo)
+    // طابع المعلم كما في إعدادات الطابع (يظهر فقط إن كان مفعّلاً في الإعدادات)
+    val stampHtml = remember(section.schoolName) {
+        com.example.ui.HtmlReportHelper.getTeacherStampHtml(viewModel, section.schoolName, 110)
+    }
 
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Card(
@@ -175,7 +180,7 @@ fun CoverDialog(
                                     Text(uiT(n), fontSize = 13.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal)
                                 }
                                 Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)).background(Color.White)) {
-                                    CoverPreview(section, bookTitle, info, i)
+                                    CoverPreview(section, bookTitle, info, i, stampHtml)
                                     Box(Modifier.matchParentSize().clickable { design = i })
                                 }
                             }
@@ -185,7 +190,7 @@ fun CoverDialog(
                         TextButton(onClick = { step = 0 }) { Text(uiT("رجوع")) }
                         Button(onClick = {
                             CoverDesign.lastInfo = info
-                            onResult(CoverDesign.body(context, section, bookTitle, info, design))
+                            onResult(CoverDesign.body(context, section, bookTitle, info, design, stampHtml))
                         }) { Text(uiT("اعتماد الغلاف وسحب الدفتر")) }
                     }
                 }

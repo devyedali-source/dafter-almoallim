@@ -249,6 +249,7 @@ fun AttendanceScreen(
 
     coverJob?.let { job ->
         CoverDialog(
+            viewModel = viewModel,
             section = section,
             bookTitle = "سجل النداء",
             onDismiss = { coverJob = null },
