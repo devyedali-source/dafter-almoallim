@@ -110,6 +110,8 @@ fun AttendanceScreen(
     var monthView by remember { mutableStateOf<Pair<Int, Int>?>(null) }
     var showDaysDialog by remember { mutableStateOf(false) }
     var dateToDelete by remember { mutableStateOf<String?>(null) }
+    var withCover by remember { mutableStateOf(false) }
+    var coverJob by remember { mutableStateOf<((String?) -> Unit)?>(null) }
 
     BackHandler {
         when {
@@ -171,22 +173,44 @@ fun AttendanceScreen(
                 }
                 Spacer(Modifier.height(8.dp))
                 val allCtx = LocalContext.current
-                OutlinedButton(
-                    onClick = {
+                val runExport: (List<Student>, List<com.example.data.models.AttendanceRecord>, String) -> Unit = { st, rc, fname ->
+                    val build: (String?) -> Unit = { cover ->
                         // كل أشهر السنة في ملف واحد، حتى لو لم يُسجَّل أي نداء (لتُملأ يدوياً)
                         val parts = months.map { (m, y) ->
                             val first = LocalDate.of(y, m, 1)
                             val monthDays = (1..first.lengthOfMonth()).map { first.withDayOfMonth(it) }
                                 .filter { dayKey(it) in teachingDays }
                             com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
-                                allCtx, section, students, classRecords, monthDays, "${MONTH_NAMES[m]} $y", viewModel
+                                allCtx, section, st, rc, monthDays, "${MONTH_NAMES[m]} $y", viewModel
                             )
                         }
-                        val html = com.example.ui.HtmlReportHelper.combineHtmlPages(parts)
-                        com.example.ui.HtmlReportHelper.shareHtmlAsPdf(allCtx, html, "سجل_النداء_كل_الأشهر_${section.name.replace(" ", "_")}.pdf", isLandscape = true)
+                        var html = com.example.ui.HtmlReportHelper.combineHtmlPages(parts)
+                        if (cover != null) html = com.example.ui.CoverDesign.insert(html, cover)
+                        com.example.ui.HtmlReportHelper.shareHtmlAsPdf(allCtx, html, fname, isLandscape = true)
+                    }
+                    if (withCover) coverJob = build else build(null)
+                }
+                Row(
+                    Modifier.fillMaxWidth().clickable { withCover = !withCover },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(checked = withCover, onCheckedChange = { withCover = it })
+                    Text(uiT("إضافة غلاف (صفحة أولى) في أول الدفتر"), fontSize = 14.sp)
+                }
+                OutlinedButton(
+                    onClick = {
+                        runExport(students, classRecords, "سجل_النداء_كل_الأشهر_${section.name.replace(" ", "_")}.pdf")
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) { Text(uiT("📥 سحب جميع الأشهر (PDF)")) }
+                Spacer(Modifier.height(6.dp))
+                OutlinedButton(
+                    onClick = {
+                        val blank = (1..60).map { Student(id = -it.toLong(), name = "", classId = section.id) }
+                        runExport(blank, emptyList(), "سجل_النداء_فارغ_${section.name.replace(" ", "_")}.pdf")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text(uiT("📥 سحب دفتر فارغ (60 سطراً)")) }
                 Spacer(Modifier.height(14.dp))
 
                 Text(uiTf("سجلات الغياب ({0})", dates.size), fontWeight = FontWeight.Bold)
@@ -223,6 +247,14 @@ fun AttendanceScreen(
         }
     }
 
+    coverJob?.let { job ->
+        CoverDialog(
+            section = section,
+            bookTitle = "سجل النداء",
+            onDismiss = { coverJob = null },
+            onResult = { c -> coverJob = null; job(c) }
+        )
+    }
     if (showDaysDialog) {
         var selected by remember { mutableStateOf(teachingDays) }
         AlertDialog(
