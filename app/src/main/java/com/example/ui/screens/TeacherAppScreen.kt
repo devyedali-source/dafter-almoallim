@@ -3645,7 +3645,7 @@ fun BentoDashboard(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(44.dp)
+                        .size(32.dp)
                         .clip(CircleShape)
                         .background(com.example.ui.theme.BentoSoftPurpleContainer),
                     contentAlignment = Alignment.Center
