@@ -79,14 +79,14 @@ object CoverDesign {
         """
         val theme = when (d) {
             0 -> """
-        .cv{background:linear-gradient(180deg,$CREAM,#fff 60%,$CREAM);border:3mm solid $GREEN;outline:1mm solid $GOLD;outline-offset:-5mm;padding:7mm 5mm}
+        .cv{background:linear-gradient(180deg,$CREAM,#fff 60%,$CREAM);border:3mm solid $GREEN;outline:1mm solid $GOLD;outline-offset:-5mm;padding:7mm 5mm;display:flex;flex-direction:column;justify-content:space-around}
         .cv .school{background:#fff;border:0.6mm solid $GOLD;border-radius:3mm;margin:2mm auto;width:92%}
         .cv .ttl{background:$DARK;color:$CREAM;border:1mm solid $GOLD;border-radius:8mm;box-shadow:0 0 0 1.2mm $DARK}
         .cv .me{background:#fff;border:0.6mm solid $GOLD;border-radius:4mm}
         .cv .fl.a{right:10mm}.cv .fl.b{left:10mm}
         """
             1 -> """
-        .cv{background:#fff;padding:16mm 8mm 16mm}
+        .cv{background:#fff;padding:16mm 8mm 16mm;display:flex;flex-direction:column;justify-content:space-around}
         .cv:before{content:"";position:absolute;top:0;left:0;right:0;height:11mm;background:linear-gradient(180deg,$RED 0 3.5mm,$GREEN 3.5mm 11mm)}
         .cv:after{content:"";position:absolute;bottom:0;left:0;right:0;height:11mm;background:linear-gradient(0deg,$RED 0 3.5mm,$GREEN 3.5mm 11mm)}
         .cv .school{background:#F1F8F3;border-right:1.6mm solid $GREEN;border-left:1.6mm solid $RED;margin:2mm auto;width:92%}
@@ -96,7 +96,7 @@ object CoverDesign {
         .cv .top{margin-top:4mm}
         """
             2 -> """
-        .cv{background:#fffefb;border:0.5mm solid $GOLD;padding:9mm 7mm;outline:0.5mm solid $GOLD;outline-offset:-3.2mm}
+        .cv{background:#fffefb;border:0.5mm solid $GOLD;padding:9mm 7mm;outline:0.5mm solid $GOLD;outline-offset:-3.2mm;display:flex;flex-direction:column;justify-content:space-around}
         .cv .corner{position:absolute;width:16mm;height:16mm;border:0 solid $GREEN}
         .cv .c1{top:6mm;right:6mm;border-top-width:1.2mm;border-right-width:1.2mm}
         .cv .c2{top:6mm;left:6mm;border-top-width:1.2mm;border-left-width:1.2mm}
@@ -158,10 +158,9 @@ object CoverDesign {
         } else {
             """
             ${if (design == 2) "<div class=\"corner c1\"></div><div class=\"corner c2\"></div><div class=\"corner c3\"></div><div class=\"corner c4\"></div>" else ""}
-            <div class="fl a">${flagSvg(30)}</div><div class="fl b">${flagSvg(30)}</div>
             <div class="top">
               <div class="tr">الجمهورية الإسلامية الموريتانية<br>وزارة التربية وإصلاح النظام التعليمي</div>
-              <div class="tc">$seal</div>
+              <div class="tc">${if (design == 0 || design == 1) "<div style=\"display:flex;align-items:center;justify-content:center;gap:5mm\">${flagSvg(24)}$seal${flagSvg(24)}</div>" else seal}</div>
               <div class="tl">شرف - إخاء - عدالة</div>
             </div>
             <div class="school">$rows</div>
