@@ -112,6 +112,7 @@ fun AttendanceScreen(
     var dateToDelete by remember { mutableStateOf<String?>(null) }
     val closedMonthsAll by viewModel.closedAttendanceMonths.collectAsState()
     var withCover by remember { mutableStateOf(false) }
+    var withFrench by remember { mutableStateOf(false) }
     var coverJob by remember { mutableStateOf<((String?) -> Unit)?>(null) }
 
     BackHandler {
@@ -183,7 +184,7 @@ fun AttendanceScreen(
                                 .filter { dayKey(it) in teachingDays }
                             com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
                                 allCtx, section, st, rc, monthDays, "${MONTH_NAMES[m]} $y", viewModel,
-                                viewModel.attendanceMonthKey(section.id, y, m) in closedMonthsAll
+                                viewModel.attendanceMonthKey(section.id, y, m) in closedMonthsAll, withFrench
                             )
                         }
                         var html = com.example.ui.HtmlReportHelper.combineHtmlPages(parts)
@@ -198,6 +199,13 @@ fun AttendanceScreen(
                 ) {
                     Checkbox(checked = withCover, onCheckedChange = { withCover = it })
                     Text(uiT("إضافة غلاف (صفحة أولى) في أول الدفتر"), fontSize = 14.sp)
+                }
+                Row(
+                    Modifier.fillMaxWidth().clickable { withFrench = !withFrench },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(checked = withFrench, onCheckedChange = { withFrench = it })
+                    Text(uiT("سحب الاسم بالفرنسية مع العربية (سطر ثانٍ تحت الاسم العربي)"), fontSize = 14.sp)
                 }
                 OutlinedButton(
                     onClick = {
@@ -445,6 +453,7 @@ private fun AttendanceMonthPage(
     month: Int,
     onBack: () -> Unit
 ) {
+    var monthFrench by remember { mutableStateOf(false) }
     val closedMonths by viewModel.closedAttendanceMonths.collectAsState()
     val monthClosed = viewModel.attendanceMonthKey(section.id, year, month) in closedMonths
     val first = LocalDate.of(year, month, 1)
@@ -465,7 +474,7 @@ private fun AttendanceMonthPage(
                 onClick = {
                     val label = "${MONTH_NAMES[month]} $year"
                     val html = com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
-                        ctx, section, students, records, days, label, viewModel, monthClosed
+                        ctx, section, students, records, days, label, viewModel, monthClosed, monthFrench
                     )
                     com.example.ui.HtmlReportHelper.shareHtmlAsPdf(ctx, html, "سجل_النداء_${MONTH_NAMES[month]}_$year.pdf", isLandscape = true)
                 },
@@ -483,7 +492,13 @@ private fun AttendanceMonthPage(
         ) {
             Text(uiT(if (monthClosed) "✔ الشهر منتهٍ — اضغط لإعادة فتحه" else "تسجيل انتهاء الشهر (لتظهر الإحصائيات)"))
         }
-        Spacer(Modifier.height(4.dp))
+        Row(
+            Modifier.fillMaxWidth().clickable { monthFrench = !monthFrench },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(checked = monthFrench, onCheckedChange = { monthFrench = it })
+            Text(uiT("سحب الاسم بالفرنسية مع العربية (سطر ثانٍ تحت الاسم العربي)"), fontSize = 13.sp)
+        }
         Text(uiT("ص = الحصة الصباحية ، م = الحصة المسائية ، ✗ = غائب"), fontSize = 11.sp, color = BentoPrimaryDesc)
         Spacer(Modifier.height(6.dp))
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {

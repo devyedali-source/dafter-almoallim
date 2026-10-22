@@ -1520,7 +1520,8 @@ object HtmlReportHelper {
         days: List<java.time.LocalDate>,
         monthLabel: String,
         viewModel: TeacherViewModel? = null,
-        monthClosed: Boolean = false
+        monthClosed: Boolean = false,
+        withFrench: Boolean = false
     ): String {
         val teacherStampHtml = if (viewModel != null) getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
         val principalStampHtml = if (viewModel != null) getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
@@ -1570,7 +1571,7 @@ object HtmlReportHelper {
         html.append("</tr></thead><tbody>")
         sorted.forEachIndexed { index, st ->
             var abs = 0
-            html.append("<tr class=\"${if (index % 2 == 1) "row-bg-accent" else ""}\"><td>${index + 1}</td><td class=\"nm\">${st.name}</td>")
+            html.append("<tr class=\"${if (index % 2 == 1) "row-bg-accent" else ""}\"><td>${index + 1}</td><td class=\"nm\">${nameTwoLinesIf(st, withFrench)}</td>")
             days.forEach { d ->
                 val r = byKey[st.id to d.toString()]
                 val inCount = d.toString() in recordedDates
@@ -1624,7 +1625,8 @@ object HtmlReportHelper {
         discipline: com.example.data.planning.LessonPreparationRepository.CompDiscipline,
         marks: Map<String, Int>,
         notes: Map<String, String>,
-        viewModel: TeacherViewModel? = null
+        viewModel: TeacherViewModel? = null,
+        withFrench: Boolean = false
     ): String {
         val teacherStampHtml = if (viewModel != null) getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
         val principalStampHtml = if (viewModel != null) getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
@@ -1700,7 +1702,7 @@ object HtmlReportHelper {
             chunk.forEach { _ -> for (k in 1..3) html.append("<th>الكفاية $k<br>CB$k</th>") }
             html.append("</tr></thead><tbody>")
             sorted.forEachIndexed { i, st ->
-                html.append("<tr class=\"${if (i % 2 == 1) "row-bg-accent" else ""}\"><td>${i + 1}</td><td class=\"nm\">${escCompHtml(compNameCell(st, discipline))}</td>")
+                html.append("<tr class=\"${if (i % 2 == 1) "row-bg-accent" else ""}\"><td>${i + 1}</td><td class=\"nm\">${if (withFrench) nameTwoLines(st) else escCompHtml(compNameCell(st, discipline))}</td>")
                 chunk.forEach { sp ->
                     for (k in 1..3) {
                         val v = marks["${st.id}|${discipline.code}|${sp.code}|$k"] ?: 0
@@ -1752,6 +1754,15 @@ object HtmlReportHelper {
     }
 
     /** في دفتر متابعة الفرنسية: الاسم بالعربية ثم « - » ثم الاسم بالفرنسية (إن وُجد). */
+    private fun nameTwoLinesIf(st: Student, withFrench: Boolean): String = if (withFrench) nameTwoLines(st) else st.name
+
+    /** الاسم بالعربية في السطر الأول ويليه الاسم بالفرنسية في السطر الثاني داخل الخانة نفسها. */
+    private fun nameTwoLines(st: Student): String {
+        val fr = st.frenchName.trim()
+        return escCompHtml(st.name) +
+            if (fr.isBlank()) "" else "<div style=\"direction:ltr;text-align:right;font-weight:normal;\">${escCompHtml(fr)}</div>"
+    }
+
     private fun compNameCell(
         st: Student,
         discipline: com.example.data.planning.LessonPreparationRepository.CompDiscipline
@@ -1770,12 +1781,13 @@ object HtmlReportHelper {
         disciplines: List<com.example.data.planning.LessonPreparationRepository.CompDiscipline>,
         marks: Map<String, Int>,
         notes: Map<String, String>,
-        viewModel: TeacherViewModel? = null
+        viewModel: TeacherViewModel? = null,
+        withFrench: Boolean = false
     ): String {
         var head = ""
         val bodies = StringBuilder()
         disciplines.forEachIndexed { i, d ->
-            val h = generateCompetencyHtml(context, activeClass, students, d, marks, notes, viewModel)
+            val h = generateCompetencyHtml(context, activeClass, students, d, marks, notes, viewModel, withFrench)
             if (i == 0) head = h.substringBefore("<body>")
             bodies.append("<div style=\"page-break-after: always; break-after: page;\">")
             bodies.append(h.substringAfter("<body>").substringBeforeLast("</body>"))

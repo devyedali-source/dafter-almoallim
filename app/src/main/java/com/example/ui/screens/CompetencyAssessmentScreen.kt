@@ -62,6 +62,7 @@ fun CompetencyAssessmentScreen(
     var chunkIdx by remember { mutableStateOf(0) }
     var tab by remember { mutableStateOf(0) } // 0 = دفتر المتابعة ، 1 = جدول الدعم
     var withCover by remember { mutableStateOf(false) }
+    var withFrench by remember { mutableStateOf(false) }
     var coverJob by remember { mutableStateOf<((String?) -> Unit)?>(null) }
     // يسحب الدفتر، وإن فُعّل الغلاف تُفتح واجهة الغلاف أولاً ثم يُدرج في أول الملف
     val runExport: (String, () -> String) -> Unit = { fname, makeHtml ->
@@ -117,6 +118,10 @@ fun CompetencyAssessmentScreen(
                         onClick = { withCover = !withCover }
                     )
                     DropdownMenuItem(
+                        text = { Text(uiT(if (withFrench) "☑ الاسم بالفرنسية تحت العربي" else "☐ الاسم بالفرنسية تحت العربي")) },
+                        onClick = { withFrench = !withFrench }
+                    )
+                    DropdownMenuItem(
                         text = { Text(uiT("سحب لائحة المادة")) },
                         enabled = disc0 != null,
                         onClick = {
@@ -124,7 +129,7 @@ fun CompetencyAssessmentScreen(
                             if (disc0 != null) {
                                 runExport("دفتر_المتابعة_${disc0.label}.pdf") {
                                     com.example.ui.HtmlReportHelper.generateCompetencyHtml(
-                                        ctx, section, exportStudents, disc0, marks, notes, viewModel
+                                        ctx, section, exportStudents, disc0, marks, notes, viewModel, withFrench
                                     )
                                 }
                             }
@@ -137,7 +142,7 @@ fun CompetencyAssessmentScreen(
                             exportMenu = false
                             runExport("دفتر_المتابعة_جميع_المواد_${section.name}.pdf") {
                                 com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
-                                    ctx, section, exportStudents, catalog, marks, notes, viewModel
+                                    ctx, section, exportStudents, catalog, marks, notes, viewModel, withFrench
                                 )
                             }
                         }
@@ -150,7 +155,7 @@ fun CompetencyAssessmentScreen(
                             val blank = (1..60).map { Student(id = -it.toLong(), name = "", classId = section.id) }
                             runExport("دفتر_المتابعة_فارغ_جميع_المواد.pdf") {
                                 com.example.ui.HtmlReportHelper.generateCompetencyAllHtml(
-                                    ctx, section, blank, catalog, emptyMap(), emptyMap(), viewModel
+                                    ctx, section, blank, catalog, emptyMap(), emptyMap(), viewModel, withFrench
                                 )
                             }
                         }
