@@ -206,6 +206,13 @@ object CoverDesign {
     /** يدرج الغلاف في أول ملف HTML مُجمَّع (قبل أول صفحة). */
     fun insert(html: String, coverBody: String): String {
         val m = Regex("<body[^>]*>").find(html) ?: return html
-        return html.substring(0, m.range.last + 1) + coverBody + html.substring(m.range.last + 1)
+        // الغلاف ليس ضمن ترقيم الصفحات: يبدأ الترقيم من 1 بعده، ولا يظهر تذييل في صفحة الغلاف
+        // (يُحذف «من N» لأن العدد الكلي يشمل الغلاف)
+        val hasFooter = html.contains("counter(pages)")
+        val numbering = "<style>@page :first { counter-reset: page 0; " +
+            "@bottom-left { content: none; } @bottom-center { content: none; } @bottom-right { content: none; } }" +
+            (if (hasFooter) "@page { @bottom-left { content: \"صفحة \" counter(page); font-family: 'Cairo', sans-serif; font-size: 8pt; } }" else "") +
+            "</style>"
+        return html.substring(0, m.range.last + 1) + numbering + coverBody + html.substring(m.range.last + 1)
     }
 }
