@@ -96,10 +96,11 @@ fun CoverDialog(
 ) {
     val context = LocalContext.current
     var step by remember { mutableStateOf(0) }
-    var teacher by remember { mutableStateOf(CoverDesign.lastInfo.teacher) }
-    var finance by remember { mutableStateOf(CoverDesign.lastInfo.finance) }
-    var phone by remember { mutableStateOf(CoverDesign.lastInfo.phone) }
-    var photo by remember { mutableStateOf(CoverDesign.lastInfo.photoB64) }
+    val saved = remember { CoverDesign.load(context) }
+    var teacher by remember { mutableStateOf(saved.teacher) }
+    var finance by remember { mutableStateOf(saved.finance) }
+    var phone by remember { mutableStateOf(saved.phone) }
+    var photo by remember { mutableStateOf(saved.photoB64) }
     var design by remember { mutableStateOf(0) }
     var photoError by remember { mutableStateOf(false) }
 
@@ -189,7 +190,7 @@ fun CoverDialog(
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         TextButton(onClick = { step = 0 }) { Text(uiT("رجوع")) }
                         Button(onClick = {
-                            CoverDesign.lastInfo = info
+                            CoverDesign.save(context, info)
                             onResult(CoverDesign.body(context, section, bookTitle, info, design, stampHtml))
                         }) { Text(uiT("اعتماد الغلاف وسحب الدفتر")) }
                     }

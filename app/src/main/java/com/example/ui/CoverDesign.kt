@@ -23,8 +23,34 @@ object CoverDesign {
         "العصري بشريط جانبي"
     )
 
-    /** آخر بيانات أُدخلت في هذه الجلسة فقط (لا تُحفظ على الجهاز). */
+    /** آخر بيانات أُدخلت؛ تُحفظ على الجهاز وتُستعمل في دفتر الغياب ودفتر المتابعة معاً. */
     var lastInfo: CoverInfo = CoverInfo()
+
+    private const val PREFS = "cover_info_prefs"
+
+    fun load(context: android.content.Context): CoverInfo {
+        try {
+            val p = context.getSharedPreferences(PREFS, android.content.Context.MODE_PRIVATE)
+            if (p.contains("teacher") || p.contains("photo")) {
+                lastInfo = CoverInfo(
+                    teacher = p.getString("teacher", "") ?: "",
+                    finance = p.getString("finance", "") ?: "",
+                    phone = p.getString("phone", "") ?: "",
+                    photoB64 = p.getString("photo", null)
+                )
+            }
+        } catch (_: Exception) {}
+        return lastInfo
+    }
+
+    fun save(context: android.content.Context, info: CoverInfo) {
+        lastInfo = info
+        try {
+            context.getSharedPreferences(PREFS, android.content.Context.MODE_PRIVATE).edit()
+                .putString("teacher", info.teacher).putString("finance", info.finance)
+                .putString("phone", info.phone).putString("photo", info.photoB64).apply()
+        } catch (_: Exception) {}
+    }
 
     /** أبعاد صفحة الغلاف بالملّيمتر (داخل هوامش الصفحة الأفقية). */
     const val W_MM = 281

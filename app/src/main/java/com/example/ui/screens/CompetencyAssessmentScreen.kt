@@ -114,14 +114,6 @@ fun CompetencyAssessmentScreen(
                 ) { Text(uiT("سحب لوائح المتابعة (PDF) ▾"), maxLines = 1) }
                 DropdownMenu(expanded = exportMenu, onDismissRequest = { exportMenu = false }) {
                     DropdownMenuItem(
-                        text = { Text(uiT(if (withCover) "☑ إضافة غلاف في أول الدفتر" else "☐ إضافة غلاف في أول الدفتر")) },
-                        onClick = { withCover = !withCover }
-                    )
-                    DropdownMenuItem(
-                        text = { Text(uiT(if (withFrench) "☑ الاسم بالفرنسية تحت العربي" else "☐ الاسم بالفرنسية تحت العربي")) },
-                        onClick = { withFrench = !withFrench }
-                    )
-                    DropdownMenuItem(
                         text = { Text(uiT("سحب لائحة المادة")) },
                         enabled = disc0 != null,
                         onClick = {
@@ -161,6 +153,21 @@ fun CompetencyAssessmentScreen(
                         }
                     )
                 }
+            }
+
+            Row(
+                Modifier.fillMaxWidth().clickable { withCover = !withCover },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(checked = withCover, onCheckedChange = { withCover = it })
+                Text(uiT("إضافة غلاف (صفحة أولى) في أول الدفتر"), fontSize = 14.sp)
+            }
+            Row(
+                Modifier.fillMaxWidth().clickable { withFrench = !withFrench },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(checked = withFrench, onCheckedChange = { withFrench = it })
+                Text(uiT("سحب الاسم بالفرنسية مع العربية (سطر ثانٍ تحت الاسم العربي)"), fontSize = 14.sp)
             }
 
             if (catalog.isEmpty()) {
