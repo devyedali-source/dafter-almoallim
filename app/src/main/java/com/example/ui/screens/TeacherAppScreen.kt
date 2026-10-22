@@ -918,11 +918,12 @@ fun InnerTeacherAppScreenContent(
                                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                                     ) {
                                         Image(
-                                            painter = painterResource(id = com.example.R.drawable.teacher_logo),
+                                            painter = painterResource(id = com.example.R.drawable.img_mauritania_emblem),
                                             contentDescription = "شعار التطبيق",
                                             modifier = Modifier
                                                 .size(52.dp)
                                                 .clip(CircleShape)
+                                                .background(Color.White)
                                                 .border(2.dp, Color.White, CircleShape),
                                             contentScale = ContentScale.Crop
                                         )
