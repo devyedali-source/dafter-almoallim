@@ -513,6 +513,25 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         prefs.edit().putString("teaching_days", days.joinToString(",")).apply()
     }
 
+    /**
+     * الأشهر التي سجّل المعلم انتهاءها في دفتر الغياب (مفتاحها «رقم القسم|yyyy-MM»).
+     * إحصائيات الشهر (الحضور المتوقع/غياب الشهر/الحضور الفعلي) لا تظهر إلا بعد تسجيل انتهاء الشهر.
+     */
+    private val _closedAttendanceMonths = MutableStateFlow(
+        (prefs.getString("attendance_closed_months", "") ?: "").split(",").filter { it.isNotBlank() }.toSet()
+    )
+    val closedAttendanceMonths: StateFlow<Set<String>> = _closedAttendanceMonths.asStateFlow()
+
+    fun attendanceMonthKey(classId: Long, year: Int, month: Int): String =
+        "$classId|%04d-%02d".format(year, month)
+
+    fun setAttendanceMonthClosed(classId: Long, year: Int, month: Int, closed: Boolean) {
+        val key = attendanceMonthKey(classId, year, month)
+        val next = if (closed) _closedAttendanceMonths.value + key else _closedAttendanceMonths.value - key
+        _closedAttendanceMonths.value = next
+        prefs.edit().putString("attendance_closed_months", next.joinToString(",")).apply()
+    }
+
     /** يحفظ سجل غياب يوم كامل لقسم: لكل تلميذ (صباحاً، مساءً) غائب أم لا */
     fun saveAttendanceDay(classId: Long, date: String, absences: Map<Long, Pair<Boolean, Boolean>>) {
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {

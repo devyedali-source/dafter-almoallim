@@ -1519,7 +1519,8 @@ object HtmlReportHelper {
         records: List<com.example.data.models.AttendanceRecord>,
         days: List<java.time.LocalDate>,
         monthLabel: String,
-        viewModel: TeacherViewModel? = null
+        viewModel: TeacherViewModel? = null,
+        monthClosed: Boolean = false
     ): String {
         val teacherStampHtml = if (viewModel != null) getTeacherStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
         val principalStampHtml = if (viewModel != null) getPrincipalStampHtml(viewModel, activeClass.schoolName, sizePx = 46) else ""
@@ -1580,8 +1581,8 @@ object HtmlReportHelper {
             }
             val actual = expected - abs
             fun pct(n: Int) = if (expected > 0) Math.round(n * 100f / expected) else 0
-            if (expected == 0) {
-                // لائحة فارغة (لا نداء مسجّل): تُترك الإحصائيات فارغة ليكتبها المعلم يدوياً
+            if (expected == 0 || !monthClosed) {
+                // الشهر لم يُسجَّل انتهاؤه (أو لا نداء مسجّل): تُترك الإحصائيات فارغة حتى يسجّل المعلم انتهاء الشهر فتُحسب تلقائياً
                 html.append("<td>&nbsp;<br>&nbsp;</td><td>&nbsp;<br>&nbsp;</td><td>&nbsp;<br>&nbsp;</td></tr>")
             } else {
                 html.append("<td>$expected<br>100%</td><td>$abs<br>${pct(abs)}%</td><td>$actual<br>${pct(actual)}%</td></tr>")

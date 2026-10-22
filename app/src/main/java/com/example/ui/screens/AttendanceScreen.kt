@@ -110,6 +110,7 @@ fun AttendanceScreen(
     var monthView by remember { mutableStateOf<Pair<Int, Int>?>(null) }
     var showDaysDialog by remember { mutableStateOf(false) }
     var dateToDelete by remember { mutableStateOf<String?>(null) }
+    val closedMonthsAll by viewModel.closedAttendanceMonths.collectAsState()
     var withCover by remember { mutableStateOf(false) }
     var coverJob by remember { mutableStateOf<((String?) -> Unit)?>(null) }
 
@@ -181,7 +182,8 @@ fun AttendanceScreen(
                             val monthDays = (1..first.lengthOfMonth()).map { first.withDayOfMonth(it) }
                                 .filter { dayKey(it) in teachingDays }
                             com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
-                                allCtx, section, st, rc, monthDays, "${MONTH_NAMES[m]} $y", viewModel
+                                allCtx, section, st, rc, monthDays, "${MONTH_NAMES[m]} $y", viewModel,
+                                viewModel.attendanceMonthKey(section.id, y, m) in closedMonthsAll
                             )
                         }
                         var html = com.example.ui.HtmlReportHelper.combineHtmlPages(parts)
@@ -443,6 +445,8 @@ private fun AttendanceMonthPage(
     month: Int,
     onBack: () -> Unit
 ) {
+    val closedMonths by viewModel.closedAttendanceMonths.collectAsState()
+    val monthClosed = viewModel.attendanceMonthKey(section.id, year, month) in closedMonths
     val first = LocalDate.of(year, month, 1)
     val days = remember(year, month, teachingDays) {
         (1..first.lengthOfMonth()).map { first.withDayOfMonth(it) }.filter { dayKey(it) in teachingDays }
@@ -461,7 +465,7 @@ private fun AttendanceMonthPage(
                 onClick = {
                     val label = "${MONTH_NAMES[month]} $year"
                     val html = com.example.ui.HtmlReportHelper.generateAttendanceMonthHtml(
-                        ctx, section, students, records, days, label, viewModel
+                        ctx, section, students, records, days, label, viewModel, monthClosed
                     )
                     com.example.ui.HtmlReportHelper.shareHtmlAsPdf(ctx, html, "سجل_النداء_${MONTH_NAMES[month]}_$year.pdf", isLandscape = true)
                 },
@@ -473,6 +477,13 @@ private fun AttendanceMonthPage(
             Text(uiT("لا توجد أيام تدريس في هذا الشهر. غيّر «أيام التدريس»."), color = BentoPrimaryDesc)
             return@Column
         }
+        OutlinedButton(
+            onClick = { viewModel.setAttendanceMonthClosed(section.id, year, month, !monthClosed) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(uiT(if (monthClosed) "✔ الشهر منتهٍ — اضغط لإعادة فتحه" else "تسجيل انتهاء الشهر (لتظهر الإحصائيات)"))
+        }
+        Spacer(Modifier.height(4.dp))
         Text(uiT("ص = الحصة الصباحية ، م = الحصة المسائية ، ✗ = غائب"), fontSize = 11.sp, color = BentoPrimaryDesc)
         Spacer(Modifier.height(6.dp))
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
@@ -542,12 +553,14 @@ private fun AttendanceMonthPage(
                             }
                             students.forEach { st ->
                                 Box(Modifier.width(statW).height(rowH).border(0.5.dp, Color.Gray), contentAlignment = Alignment.Center) {
-                                    val n = calc(st)
-                                    val pct = if (expected > 0) Math.round(n * 100f / expected) else 0
-                                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                                        Text("$n", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                                        Box(Modifier.width(1.dp).height(16.dp).background(Color.Gray))
-                                        Text("$pct%", fontSize = 10.sp, color = BentoPrimaryDesc, maxLines = 1)
+                                    if (monthClosed) {
+                                        val n = calc(st)
+                                        val pct = if (expected > 0) Math.round(n * 100f / expected) else 0
+                                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                                            Text("$n", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                            Box(Modifier.width(1.dp).height(16.dp).background(Color.Gray))
+                                            Text("$pct%", fontSize = 10.sp, color = BentoPrimaryDesc, maxLines = 1)
+                                        }
                                     }
                                 }
                             }
