@@ -264,11 +264,12 @@ fun CustomTopAppBar(
 
             // App Logo Image at the start of the AppBar
             Image(
-                painter = painterResource(id = com.example.R.drawable.teacher_logo),
+                painter = painterResource(id = com.example.R.drawable.img_mauritania_emblem),
                 contentDescription = "شعار التطبيق",
                 modifier = Modifier
                     .size(32.dp)
                     .clip(CircleShape)
+                    .background(Color.White)
                     .border(1.dp, Color.White.copy(alpha = 0.5f), CircleShape),
                 contentScale = ContentScale.Crop
             )
