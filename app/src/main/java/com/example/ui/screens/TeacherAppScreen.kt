@@ -3658,7 +3658,20 @@ fun BentoDashboard(
                         modifier = Modifier.size(22.dp)
                     )
                 }
-                // شعار الدولة أمام كلمة «دفتر المعلم» بنفس حجم أيقونة الوجه
+                Column(
+                    modifier = Modifier.weight(1f, fill = false)
+                ) {
+                    val currentUserState by viewModel.currentUser.collectAsState()
+                    Text(
+                        text = "دفتر المعلم",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = com.example.ui.theme.BentoText,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                // شعار الدولة بعد كلمة «دفتر المعلم» بنفس حجم أيقونة الوجه
                 Box(
                     modifier = Modifier
                         .size(32.dp)
@@ -3671,19 +3684,6 @@ fun BentoDashboard(
                         contentDescription = null,
                         contentScale = androidx.compose.ui.layout.ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
-                    )
-                }
-                Column(
-                    modifier = Modifier.weight(1f, fill = false)
-                ) {
-                    val currentUserState by viewModel.currentUser.collectAsState()
-                    Text(
-                        text = "دفتر المعلم",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = com.example.ui.theme.BentoText,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
