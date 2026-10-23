@@ -101,6 +101,8 @@ dependencies {
   implementation(platform(libs.androidx.compose.bom))
   implementation(platform(libs.firebase.bom))
   implementation(libs.androidx.biometric)
+  // قراءة لائحة التلاميذ من ملف PDF (نص مطبوع) دون إنترنت
+  implementation("com.tom-roush:pdfbox-android:2.0.27.0")
   // implementation(libs.accompanist.permissions)
   implementation(libs.androidx.activity.compose)
   // implementation(libs.androidx.camera.camera2)

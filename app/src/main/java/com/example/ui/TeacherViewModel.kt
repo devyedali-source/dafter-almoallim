@@ -3755,6 +3755,36 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    /** إضافة عدة تلاميذ دفعة واحدة (استيراد لائحة)؛ كل تلميذ بمعرّف فريد. */
+    fun addStudents(classId: Long, items: List<Pair<com.example.ui.utils.ImportedStudent, String>>, onDone: (Int) -> Unit = {}) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            var n = 0
+            val base = System.currentTimeMillis()
+            items.forEachIndexed { i, (it0, gender) ->
+                if (it0.name.isBlank()) return@forEachIndexed
+                try {
+                    repository.insertStudent(
+                        Student(
+                            id = base + i,
+                            name = it0.name.trim(),
+                            classId = classId,
+                            frenchName = it0.frenchName.trim(),
+                            schoolId = it0.schoolId.trim(),
+                            nationalId = it0.nationalId.trim(),
+                            parentPhone1 = it0.phone1.trim(),
+                            parentPhone2 = it0.phone2.trim(),
+                            gender = gender
+                        )
+                    )
+                    n++
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { onDone(n) }
+        }
+    }
+
     fun addStudent(name: String, classId: Long, gender: String = "ذكر") {
         if (name.isBlank()) return
         val id = System.currentTimeMillis()
