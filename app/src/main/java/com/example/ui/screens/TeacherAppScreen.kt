@@ -2473,6 +2473,7 @@ fun ClassStudentsSubview(
         )
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -2497,37 +2498,7 @@ fun ClassStudentsSubview(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Smaller Add Student Card
-                Card(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable { showAddStudentDialog = true }
-                        .border(1.2.dp, BentoPrimary.copy(alpha = 0.5f), RoundedCornerShape(14.dp)),
-                    colors = CardDefaults.cardColors(containerColor = BentoLightLavender.copy(alpha = 0.3f)),
-                    shape = RoundedCornerShape(14.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            tint = BentoPrimary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = uiT("تسجيل طالب جديد"),
-                            fontWeight = FontWeight.Bold,
-                            color = BentoPrimary,
-                            fontSize = 12.5.sp
-                        )
-                    }
-                }
+                Spacer(modifier = Modifier.weight(1f))
 
                 // Small Search Button next to it
                 IconButton(
@@ -2734,6 +2705,20 @@ fun ClassStudentsSubview(
         item {
             AppFooter()
         }
+        item { Spacer(modifier = Modifier.height(80.dp)) }
+    }
+
+        androidx.compose.material3.ExtendedFloatingActionButton(
+            onClick = { showAddStudentDialog = true },
+            containerColor = BentoPrimary,
+            contentColor = Color.White,
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(24.dp),
+            icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل طالب جديد", modifier = Modifier.size(24.dp)) },
+            text = { Text(uiT("طالب جديد"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
+        )
     }
 
     // Deletion Confirmation dialog
