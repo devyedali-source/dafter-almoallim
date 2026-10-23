@@ -1198,6 +1198,15 @@ fun InnerTeacherAppScreenContent(
                                         fontWeight = FontWeight.SemiBold,
                                         color = Color(0xFF33691E)
                                     )
+                                    val driveProblem by viewModel.driveSyncProblem.collectAsState()
+                                    driveProblem?.let {
+                                        Text(
+                                            text = it,
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = Color(0xFFB26A00)
+                                        )
+                                    }
 
                                     if (connectedDevices.isNotEmpty()) {
                                         HorizontalDivider(color = Color(0xFF2E7D32).copy(alpha = 0.2f))

@@ -34,8 +34,17 @@ class DriveBackupWorker(
             )
 
             when (backupResult) {
-                is BackupResult.Success -> Result.success()
-                is BackupResult.Error -> Result.retry()
+                is BackupResult.Success -> {
+                    if (backupResult.uploaded) prefs.edit().remove("drive_fail_since").remove("drive_fail_msg").apply()
+                    Result.success()
+                }
+                is BackupResult.Error -> {
+                    if (!backupResult.errorMessage.contains("لا يوجد اتصال")) {
+                        if (prefs.getLong("drive_fail_since", 0L) == 0L) prefs.edit().putLong("drive_fail_since", now).apply()
+                        prefs.edit().putString("drive_fail_msg", backupResult.errorMessage.take(200)).apply()
+                    }
+                    Result.retry()
+                }
             }
         } catch (e: Exception) {
             Result.retry()
