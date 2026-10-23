@@ -2540,7 +2540,7 @@ fun ClassStudentsSubview(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text(uiT("📄 استيراد لائحة التلاميذ من ملف PDF"), fontWeight = FontWeight.Bold, fontSize = 12.5.sp)
+                Text(uiT("📄 استيراد لائحة التلاميذ من ملف (PDF / Excel / CSV)"), fontWeight = FontWeight.Bold, fontSize = 12.5.sp)
             }
         }
 

@@ -16,7 +16,8 @@ data class ImportedStudent(
     val schoolId: String = "",
     val nationalId: String = "",
     val phone1: String = "",
-    val phone2: String = ""
+    val phone2: String = "",
+    val gender: String = ""
 )
 
 /**

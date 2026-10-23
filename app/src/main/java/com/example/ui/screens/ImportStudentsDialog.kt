@@ -25,7 +25,7 @@ import com.example.data.models.ClassSection
 import com.example.data.models.Student
 import com.example.ui.TeacherViewModel
 import com.example.ui.utils.ImportedStudent
-import com.example.ui.utils.StudentPdfImporter
+import com.example.ui.utils.StudentFileImporter
 import com.example.ui.utils.uiT
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +35,13 @@ private class ImportRow(val s: ImportedStudent, checked: Boolean, gender: String
     var checked by mutableStateOf(checked)
     var gender by mutableStateOf(gender)
     var name by mutableStateOf(name)
+}
+
+private fun genderOf(g: String): String {
+    val n = g.trim().lowercase()
+    val female = n == "f" || n.startsWith("fem") || n.startsWith("أنث") || n.startsWith("انث") ||
+        n.startsWith("بنت") || n == "ف" || n == "أ"
+    return if (female) "أنثى" else "ذكر"
 }
 
 private fun normName(s: String) = s.replace(Regex("\\s+"), "").replace("أ", "ا").replace("إ", "ا").replace("آ", "ا")
@@ -60,14 +67,14 @@ fun ImportStudentsDialog(
         error = null
         scope.launch {
             try {
-                val list = withContext(Dispatchers.IO) { StudentPdfImporter.read(context, uri) }
+                val list = withContext(Dispatchers.IO) { StudentFileImporter.read(context, uri) }
                 if (list.isEmpty()) {
-                    error = "لم أجد تلاميذ في هذا الملف. تأكد أنه لائحة التلاميذ التي يسحبها التطبيق (PDF نصي وليس صورة)."
+                    error = "لم أجد تلاميذ في هذا الملف. تأكد أنه PDF نصي من لائحة التطبيق، أو Excel/CSV فيه عمود للاسم."
                     rows = emptyList()
                 } else {
                     rows = list.map {
                         val dup = normName(it.name) in existingNames
-                        ImportRow(it, !dup, "ذكر", it.name, dup)
+                        ImportRow(it, !dup, genderOf(it.gender), it.name, dup)
                     }
                 }
             } catch (e: Throwable) {
@@ -87,13 +94,13 @@ fun ImportStudentsDialog(
             color = Color.White
         ) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(uiT("استيراد لائحة التلاميذ من PDF"), fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                Text(uiT("استيراد لائحة التلاميذ من ملف"), fontWeight = FontWeight.Bold, fontSize = 17.sp)
                 Text(uiT("القسم: ${section.name}"), fontSize = 12.sp, color = Color.Gray)
                 Button(
-                    onClick = { picker.launch(arrayOf("application/pdf")) },
+                    onClick = { picker.launch(arrayOf("*/*")) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !loading
-                ) { Text(uiT(if (rows.isEmpty()) "اختيار ملف اللائحة (PDF)" else "اختيار ملف آخر")) }
+                ) { Text(uiT(if (rows.isEmpty()) "اختيار ملف اللائحة (PDF أو Excel أو CSV)" else "اختيار ملف آخر")) }
 
                 if (loading) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
