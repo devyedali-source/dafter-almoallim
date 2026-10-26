@@ -2,6 +2,9 @@ package com.example.ui.screens
 
 import com.example.ui.utils.uiT
 import com.example.ui.utils.uiTf
+import com.example.ui.utils.BiText
+import com.example.ui.utils.BiTextA
+import com.example.ui.utils.BiFr
 
 import com.example.ui.utils.PdfGenerator
 import com.example.ui.utils.AppLocalization
@@ -447,11 +450,7 @@ fun TeacherAppScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
-                                    Text(
-                                        text = uiT("إلغاء الخروج"),
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.error
-                                    )
+                                    BiTextA(ar = uiT("إلغاء الخروج"), fr = BiFr.of("إلغاء الخروج"), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.error)
                                 }
                             }
                         }
@@ -573,13 +572,7 @@ fun UnifiedSyncProgressDialog(
                 } else {
                     if (syncSuccess) {
                         Text("🟢", fontSize = 44.sp)
-                        Text(
-                            text = uiT("100% - تمت المزامنة بنجاح!"),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
-                            color = Color(0xFF1B5E20),
-                            textAlign = TextAlign.Center
-                        )
+                        BiText(ar = uiT("100% - تمت المزامنة بنجاح!"), fr = BiFr.of("100% - تمت المزامنة بنجاح!"), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color(0xFF1B5E20), center = true)
                     } else {
                         Text("❌", fontSize = 44.sp)
                         Text(
@@ -596,7 +589,7 @@ fun UnifiedSyncProgressDialog(
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(uiT("إغلاق"), fontWeight = FontWeight.Bold, color = Color.White)
+                        BiTextA(ar = uiT("إغلاق"), fr = BiFr.of("إغلاق"), fontWeight = FontWeight.Bold, color = Color.White)
                     }
                 }
             }
@@ -722,11 +715,7 @@ fun InnerTeacherAppScreenContent(
                 AlertDialog(
                     onDismissRequest = { viewModel.clearLogoutConflictMessage() },
                     title = {
-                        Text(
-                            text = uiT("تعذّر حفظ نسختك ⚠️"),
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFFD32F2F)
-                        )
+                        BiTextA(ar = uiT("تعذّر حفظ نسختك ⚠️"), fr = BiFr.of("تعذّر حفظ نسختك ⚠️"), fontWeight = FontWeight.Bold, color = Color(0xFFD32F2F))
                     },
                     text = {
                         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -749,18 +738,14 @@ fun InnerTeacherAppScreenContent(
                                 viewModel.signOutTeacher()
                             }
                         ) {
-                            Text(
-                                text = uiT("خروج على كل حال"),
-                                color = Color(0xFFD32F2F),
-                                fontWeight = FontWeight.Bold
-                            )
+                            BiTextA(ar = uiT("خروج على كل حال"), fr = BiFr.of("خروج على كل حال"), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold)
                         }
                     },
                     dismissButton = {
                         TextButton(
                             onClick = { viewModel.clearLogoutConflictMessage() }
                         ) {
-                            Text(text = uiT("إلغاء"), fontWeight = FontWeight.Bold)
+                            BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), fontWeight = FontWeight.Bold)
                         }
                     }
                 )
@@ -928,12 +913,7 @@ fun InnerTeacherAppScreenContent(
                                             contentScale = ContentScale.Crop
                                         )
                                         Column {
-                                            Text(
-                                                text = uiT("تطبيقي المدرسي 🏫"),
-                                                fontWeight = FontWeight.Black,
-                                                fontSize = 16.sp,
-                                                color = Color.White
-                                            )
+                                            BiText(ar = uiT("تطبيقي المدرسي 🏫"), fr = BiFr.of("تطبيقي المدرسي 🏫"), fontWeight = FontWeight.Black, fontSize = 16.sp, color = Color.White)
                                             Text(
                                                 text = currentUser?.displayName?.ifBlank { "المعلم المحترم" } ?: "المعلم المحترم",
                                                 fontWeight = FontWeight.Bold,
@@ -1191,19 +1171,9 @@ fun InnerTeacherAppScreenContent(
                                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                                     ) {
                                         Text("☁️", fontSize = 16.sp)
-                                        Text(
-                                            text = uiT("مزامنة Google Drive المباشرة"),
-                                            fontWeight = FontWeight.ExtraBold,
-                                            fontSize = 11.5.sp,
-                                            color = Color(0xFF1B5E20)
-                                        )
+                                        BiText(ar = uiT("مزامنة Google Drive المباشرة"), fr = BiFr.of("مزامنة Google Drive المباشرة"), fontWeight = FontWeight.ExtraBold, fontSize = 11.5.sp, color = Color(0xFF1B5E20))
                                     }
-                                    Text(
-                                        text = uiTf("آخر مزامنة: {0}", formattedDriveTimeStr),
-                                        fontSize = 10.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = Color(0xFF33691E)
-                                    )
+                                    BiText(ar = uiTf("آخر مزامنة: {0}", formattedDriveTimeStr), fr = BiFr.f("آخر مزامنة: {0}", formattedDriveTimeStr), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF33691E))
                                     val driveProblem by viewModel.driveSyncProblem.collectAsState()
                                     driveProblem?.let {
                                         Text(
@@ -1216,12 +1186,7 @@ fun InnerTeacherAppScreenContent(
 
                                     if (connectedDevices.isNotEmpty()) {
                                         HorizontalDivider(color = Color(0xFF2E7D32).copy(alpha = 0.2f))
-                                        Text(
-                                            text = uiT("الأجهزة المتصلة بهذا الحساب:"),
-                                            fontSize = 10.sp,
-                                            fontWeight = FontWeight.ExtraBold,
-                                            color = Color(0xFF1B5E20)
-                                        )
+                                        BiText(ar = uiT("الأجهزة المتصلة بهذا الحساب:"), fr = BiFr.of("الأجهزة المتصلة بهذا الحساب:"), fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, color = Color(0xFF1B5E20))
                                         connectedDevices.forEach { dev ->
                                             val isThisDevice = dev.first == thisDeviceId
                                             val shownName = if (dev.second.isBlank()) "جهاز غير معروف" else dev.second
@@ -1299,7 +1264,7 @@ fun InnerTeacherAppScreenContent(
                                     ) {
                                         Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.size(18.dp))
                                         Spacer(modifier = Modifier.width(8.dp))
-                                        Text(uiT("تسجيل الدخول 🔑"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                        BiText(ar = uiT("تسجيل الدخول 🔑"), fr = BiFr.of("تسجيل الدخول 🔑"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                                     }
                                 }
 
@@ -1326,15 +1291,10 @@ fun InnerTeacherAppScreenContent(
                     ) {
                         Text("🔒", fontSize = 48.sp)
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            uiT("هذه الصفحة مخصصة لمدير الأقسام فقط."),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center
-                        )
+                        BiText(ar = uiT("هذه الصفحة مخصصة لمدير الأقسام فقط."), fr = BiFr.of("هذه الصفحة مخصصة لمدير الأقسام فقط."), fontWeight = FontWeight.Bold, fontSize = 16.sp, center = true)
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(onClick = { activeCourseActivationRequestId = null }) {
-                            Text(uiT("إغلاق والعودة"))
+                            BiTextA(ar = uiT("إغلاق والعودة"), fr = BiFr.of("إغلاق والعودة"))
                         }
                     }
                 } else {
@@ -1362,18 +1322,13 @@ fun InnerTeacherAppScreenContent(
                     ) {
                         Text("🔒", fontSize = 48.sp)
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            uiT("هذه الصفحة مخصصة لمدير الأقسام فقط."),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center
-                        )
+                        BiText(ar = uiT("هذه الصفحة مخصصة لمدير الأقسام فقط."), fr = BiFr.of("هذه الصفحة مخصصة لمدير الأقسام فقط."), fontWeight = FontWeight.Bold, fontSize = 16.sp, center = true)
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(onClick = {
                             activeActivationRequestId = null
                             activeExchangeApprovalRequestId = null
                         }) {
-                            Text(uiT("إغلاق والعودة"))
+                            BiTextA(ar = uiT("إغلاق والعودة"), fr = BiFr.of("إغلاق والعودة"))
                         }
                     }
                 } else if (activeActivationRequestId != null) {
@@ -1828,10 +1783,10 @@ fun InnerTeacherAppScreenContent(
                                         if (showDeleteClassConfirmDialog) {
                                             AlertDialog(
                                                 onDismissRequest = { showDeleteClassConfirmDialog = false },
-                                                title = { Text(uiT("تأكيد حذف القسم ⚠️"), fontWeight = FontWeight.Bold) },
+                                                title = { BiTextA(ar = uiT("تأكيد حذف القسم ⚠️"), fr = BiFr.of("تأكيد حذف القسم ⚠️"), fontWeight = FontWeight.Bold) },
                                                 text = {
                                                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                                        Text(uiTf("هل أنت متأكد من حذف هذا القسم الدراسي ({0}) بالكامل؟ سيؤدي ذلك أيضاً إلى حذف جميع بيانات الطلاب المرتبطين ودرجاتهم من هذا الجهاز بشكل نهائي ولا يمكن التراجع عنها!", section.name))
+                                                        BiTextA(ar = uiTf("هل أنت متأكد من حذف هذا القسم الدراسي ({0}) بالكامل؟ سيؤدي ذلك أيضاً إلى حذف جميع بيانات الطلاب المرتبطين ودرجاتهم من هذا الجهاز بشكل نهائي ولا يمكن التراجع عنها!", section.name), fr = BiFr.f("هل أنت متأكد من حذف هذا القسم الدراسي ({0}) بالكامل؟ سيؤدي ذلك أيضاً إلى حذف جميع بيانات الطلاب المرتبطين ودرجاتهم من هذا الجهاز بشكل نهائي ولا يمكن التراجع عنها!", section.name))
                                                         Spacer(modifier = Modifier.height(4.dp))
                                                         Text(
                                                             text = uiT("ادخل الرقم 9999 لحذف القسم فى الخانة:"),
@@ -1842,7 +1797,7 @@ fun InnerTeacherAppScreenContent(
                                                         OutlinedTextField(
                                                             value = confirmDeleteCode,
                                                             onValueChange = { confirmDeleteCode = it },
-                                                            placeholder = { Text(uiT("أدخل 9999 هنا")) },
+                                                            placeholder = { BiTextA(ar = uiT("أدخل 9999 هنا"), fr = BiFr.of("أدخل 9999 هنا")) },
                                                             singleLine = true,
                                                             modifier = Modifier.fillMaxWidth(),
                                                             keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number)
@@ -1859,13 +1814,13 @@ fun InnerTeacherAppScreenContent(
                                                                 showDeleteClassConfirmDialog = false
                                                             }
                                                         ) {
-                                                            Text(uiT("نعم، احذف القسم"), color = Color.Red, fontWeight = FontWeight.Bold)
+                                                            BiTextA(ar = uiT("نعم، احذف القسم"), fr = BiFr.of("نعم، احذف القسم"), color = Color.Red, fontWeight = FontWeight.Bold)
                                                         }
                                                     }
                                                 },
                                                 dismissButton = {
                                                     TextButton(onClick = { showDeleteClassConfirmDialog = false }) {
-                                                        Text(uiT("إلغاء"))
+                                                        BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"))
                                                     }
                                                 }
                                             )
@@ -1927,12 +1882,7 @@ fun InnerTeacherAppScreenContent(
                                                                         .padding(horizontal = 6.dp, vertical = 2.dp),
                                                                     contentAlignment = Alignment.Center
                                                                 ) {
-                                                                    Text(
-                                                                        text = uiT("✅ موثّق"),
-                                                                        color = Color(0xFF2E7D32),
-                                                                        fontSize = 9.sp,
-                                                                        fontWeight = FontWeight.Bold
-                                                                    )
+                                                                    BiText(ar = uiT("✅ موثّق"), fr = BiFr.of("✅ موثّق"), color = Color(0xFF2E7D32), fontSize = 9.sp, fontWeight = FontWeight.Bold)
                                                                 }
                                                             } else {
                                                                 Box(
@@ -2361,13 +2311,13 @@ fun ClassStudentsSubview(
         val optPdfName = activeSection.name.replace(" ", "_")
         AlertDialog(
             onDismissRequest = { showStudentListOptions = false },
-            title = { Text("ما الذي تريد إظهاره في اللائحة؟", fontWeight = FontWeight.Bold) },
+            title = { BiTextA(ar = "ما الذي تريد إظهاره في اللائحة؟", fr = BiFr.of("ما الذي تريد إظهاره في اللائحة؟"), fontWeight = FontWeight.Bold) },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                     modifier = Modifier.verticalScroll(rememberScrollState())
                 ) {
-                    Text("الرقم (التسلسلي) يظهر دائماً. الاسم:", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    BiText(ar = "الرقم (التسلسلي) يظهر دائماً. الاسم:", fr = BiFr.of("الرقم (التسلسلي) يظهر دائماً. الاسم:"), fontWeight = FontWeight.Bold, fontSize = 13.sp)
                     listOf("ar" to "الاسم بالعربية", "fr" to "الاسم بالفرنسية", "both" to "الاسم بالعربية والفرنسية معاً").forEach { (key, label) ->
                         Row(
                             modifier = Modifier.fillMaxWidth().clickable { optNameMode = key },
@@ -2378,21 +2328,21 @@ fun ClassStudentsSubview(
                         }
                     }
                     Spacer(Modifier.height(6.dp))
-                    Text("باقي الأعمدة:", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    BiText(ar = "باقي الأعمدة:", fr = BiFr.of("باقي الأعمدة:"), fontWeight = FontWeight.Bold, fontSize = 13.sp)
                     Row(Modifier.fillMaxWidth().clickable { optNationalId = !optNationalId }, verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = optNationalId, onCheckedChange = { optNationalId = it }); Text("الرقم الوطني", fontSize = 14.sp)
+                        Checkbox(checked = optNationalId, onCheckedChange = { optNationalId = it }); BiText(ar = "الرقم الوطني", fr = BiFr.of("الرقم الوطني"), fontSize = 14.sp)
                     }
                     Row(Modifier.fillMaxWidth().clickable { optSchoolId = !optSchoolId }, verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = optSchoolId, onCheckedChange = { optSchoolId = it }); Text("الرقم المدرسي", fontSize = 14.sp)
+                        Checkbox(checked = optSchoolId, onCheckedChange = { optSchoolId = it }); BiText(ar = "الرقم المدرسي", fr = BiFr.of("الرقم المدرسي"), fontSize = 14.sp)
                     }
                     Row(Modifier.fillMaxWidth().clickable { optPhone1 = !optPhone1 }, verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = optPhone1, onCheckedChange = { optPhone1 = it }); Text("هاتف الوكيل 1", fontSize = 14.sp)
+                        Checkbox(checked = optPhone1, onCheckedChange = { optPhone1 = it }); BiText(ar = "هاتف الوكيل 1", fr = BiFr.of("هاتف الوكيل 1"), fontSize = 14.sp)
                     }
                     Row(Modifier.fillMaxWidth().clickable { optPhone2 = !optPhone2 }, verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = optPhone2, onCheckedChange = { optPhone2 = it }); Text("هاتف الوكيل 2", fontSize = 14.sp)
+                        Checkbox(checked = optPhone2, onCheckedChange = { optPhone2 = it }); BiText(ar = "هاتف الوكيل 2", fr = BiFr.of("هاتف الوكيل 2"), fontSize = 14.sp)
                     }
                     Row(Modifier.fillMaxWidth().clickable { optHealth = !optHealth }, verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = optHealth, onCheckedChange = { optHealth = it }); Text("الملاحظات الصحية", fontSize = 14.sp)
+                        Checkbox(checked = optHealth, onCheckedChange = { optHealth = it }); BiText(ar = "الملاحظات الصحية", fr = BiFr.of("الملاحظات الصحية"), fontSize = 14.sp)
                     }
                 }
             },
@@ -2415,9 +2365,9 @@ fun ClassStudentsSubview(
                         )
                         HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_تلاميذ_قسم_$optPdfName.pdf")
                     }
-                }) { Text("سحب اللائحة") }
+                }) { BiTextA(ar = "سحب اللائحة", fr = BiFr.of("سحب اللائحة")) }
             },
-            dismissButton = { TextButton(onClick = { showStudentListOptions = false }) { Text("إلغاء") } }
+            dismissButton = { TextButton(onClick = { showStudentListOptions = false }) { BiTextA(ar = "إلغاء", fr = BiFr.of("إلغاء")) } }
         )
     }
     val allSubjectsForPull by viewModel.subjects.collectAsState()
@@ -2434,7 +2384,7 @@ fun ClassStudentsSubview(
         }
         AlertDialog(
             onDismissRequest = { showPullMenu = false },
-            title = { Text(uiT("سحب اللوائح"), fontWeight = FontWeight.Bold) },
+            title = { BiTextA(ar = uiT("سحب اللوائح"), fr = BiFr.of("سحب اللوائح"), fontWeight = FontWeight.Bold) },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -2496,7 +2446,7 @@ fun ClassStudentsSubview(
                 }
             },
             confirmButton = {},
-            dismissButton = { TextButton(onClick = { showPullMenu = false }) { Text(uiT("إلغاء")) } }
+            dismissButton = { TextButton(onClick = { showPullMenu = false }) { BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء")) } }
         )
     }
 
@@ -2514,7 +2464,7 @@ fun ClassStudentsSubview(
             ) {
                 Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
-                Text(uiT("سحب اللوائح"), fontWeight = FontWeight.Bold)
+                BiTextA(ar = uiT("سحب اللوائح"), fr = BiFr.of("سحب اللوائح"), fontWeight = FontWeight.Bold)
             }
         }
 
@@ -2561,7 +2511,7 @@ fun ClassStudentsSubview(
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("student_search_input"),
-                    placeholder = { Text(uiT("ابحث عن تلميذ بالاسم أو الرقم المدرسي..."), color = BentoPrimaryDesc) },
+                    placeholder = { BiTextA(ar = uiT("ابحث عن تلميذ بالاسم أو الرقم المدرسي..."), fr = BiFr.of("ابحث عن تلميذ بالاسم أو الرقم المدرسي..."), color = BentoPrimaryDesc) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
@@ -2639,7 +2589,7 @@ fun ClassStudentsSubview(
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8E24AA))
                     ) {
-                        Text(uiT("🧪 ملء القسم ببيانات تجريبية"), color = Color.White, fontWeight = FontWeight.Bold)
+                        BiTextA(ar = uiT("🧪 ملء القسم ببيانات تجريبية"), fr = BiFr.of("🧪 ملء القسم ببيانات تجريبية"), color = Color.White, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -2713,7 +2663,7 @@ fun ClassStudentsSubview(
                                 modifier = Modifier.size(14.dp)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text(uiT("عرض"), fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                            BiText(ar = uiT("عرض"), fr = BiFr.of("عرض"), fontWeight = FontWeight.Bold, fontSize = 11.sp)
                         }
                     }
                 }
@@ -2734,7 +2684,7 @@ fun ClassStudentsSubview(
                 .align(Alignment.BottomEnd)
                 .padding(24.dp),
             icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل طالب جديد", modifier = Modifier.size(24.dp)) },
-            text = { Text(uiT("طالب جديد"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
+            text = { BiText(ar = uiT("طالب جديد"), fr = BiFr.of("طالب جديد"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
         )
     }
 
@@ -2743,8 +2693,8 @@ fun ClassStudentsSubview(
         val student = studentToDelete!!
         AlertDialog(
             onDismissRequest = { studentToDelete = null },
-            title = { Text(uiT("تأكيد حذف التلميذ ⚠️"), fontWeight = FontWeight.Bold) },
-            text = { Text(uiTf("هل أنت متأكد من حذف التلميذ ({0}) نهائياً من هذا القسم؟ سيتم حذف جميع درجاته بشكل كامل ولا يمكن استرجاع البيانات!", student.name)) },
+            title = { BiTextA(ar = uiT("تأكيد حذف التلميذ ⚠️"), fr = BiFr.of("تأكيد حذف التلميذ ⚠️"), fontWeight = FontWeight.Bold) },
+            text = { BiTextA(ar = uiTf("هل أنت متأكد من حذف التلميذ ({0}) نهائياً من هذا القسم؟ سيتم حذف جميع درجاته بشكل كامل ولا يمكن استرجاع البيانات!", student.name), fr = BiFr.f("هل أنت متأكد من حذف التلميذ ({0}) نهائياً من هذا القسم؟ سيتم حذف جميع درجاته بشكل كامل ولا يمكن استرجاع البيانات!", student.name)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -2755,12 +2705,12 @@ fun ClassStudentsSubview(
                         }
                     }
                 ) {
-                    Text(uiT("نعم، احذف الطالب"), color = Color.Red, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("نعم، احذف الطالب"), fr = BiFr.of("نعم، احذف الطالب"), color = Color.Red, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { studentToDelete = null }) {
-                    Text(uiT("إلغاء"))
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"))
                 }
             }
         )
@@ -2793,12 +2743,7 @@ fun ClassStudentsSubview(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                text = uiT("بطاقة التلميذ 👤"),
-                                fontWeight = FontWeight.Black,
-                                fontSize = 16.sp,
-                                color = BentoText
-                            )
+                            BiText(ar = uiT("بطاقة التلميذ 👤"), fr = BiFr.of("بطاقة التلميذ 👤"), fontWeight = FontWeight.Black, fontSize = 16.sp, color = BentoText)
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -2819,7 +2764,7 @@ fun ClassStudentsSubview(
                                 ) {
                                     Icon(Icons.Default.Edit, contentDescription = "تعديل", modifier = Modifier.size(14.dp))
                                     Spacer(modifier = Modifier.width(4.dp))
-                                    Text(uiT("تعديل"), fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                                    BiText(ar = uiT("تعديل"), fr = BiFr.of("تعديل"), fontWeight = FontWeight.Bold, fontSize = 11.sp)
                                 }
 
                                 IconButton(
@@ -2907,7 +2852,7 @@ fun ClassStudentsSubview(
                             ) {
                                 Icon(Icons.Default.Delete, contentDescription = "حذف", modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(4.dp))
-                                Text(uiT("حذف"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                BiText(ar = uiT("حذف"), fr = BiFr.of("حذف"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                             }
 
                             Button(
@@ -2916,7 +2861,7 @@ fun ClassStudentsSubview(
                                 modifier = Modifier.weight(0.65f),
                                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                             ) {
-                                Text(uiT("رجوع للائحة الطلاب ↩️"), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 12.sp)
+                                BiText(ar = uiT("رجوع للائحة الطلاب ↩️"), fr = BiFr.of("رجوع للائحة الطلاب ↩️"), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 12.sp)
                             }
                         }
                     }
@@ -2968,7 +2913,7 @@ fun ClassStudentsSubview(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Icon(Icons.Default.EditCalendar, contentDescription = null, tint = BentoPrimary)
-                            Text(uiT("تعديل معلومات الطالب ✏️"), fontWeight = FontWeight.Bold, color = BentoText)
+                            BiTextA(ar = uiT("تعديل معلومات الطالب ✏️"), fr = BiFr.of("تعديل معلومات الطالب ✏️"), fontWeight = FontWeight.Bold, color = BentoText)
                         }
                         IconButton(onClick = { editingStudent = null }) {
                             Icon(Icons.Default.Close, contentDescription = null, tint = BentoPrimaryDesc)
@@ -2988,7 +2933,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = editName,
                             onValueChange = { editName = it },
-                            label = { Text(uiT("الاسم الكامل")) },
+                            label = { BiTextA(ar = uiT("الاسم الكامل"), fr = BiFr.of("الاسم الكامل")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -2997,7 +2942,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = editFrenchName,
                             onValueChange = { editFrenchName = it },
-                            label = { Text(uiT("الاسم بالفرنسية")) },
+                            label = { BiTextA(ar = uiT("الاسم بالفرنسية"), fr = BiFr.of("الاسم بالفرنسية")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -3012,7 +2957,7 @@ fun ClassStudentsSubview(
                                 onValueChange = { input ->
                                     editSchoolId = input
                                 },
-                                label = { Text(uiT("الرقم المدرسي")) },
+                                label = { BiTextA(ar = uiT("الرقم المدرسي"), fr = BiFr.of("الرقم المدرسي")) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(12.dp),
@@ -3023,7 +2968,7 @@ fun ClassStudentsSubview(
                                 onValueChange = { input ->
                                     editNationalId = input
                                 },
-                                label = { Text(uiT("الرقم الوطني")) },
+                                label = { BiTextA(ar = uiT("الرقم الوطني"), fr = BiFr.of("الرقم الوطني")) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(12.dp),
@@ -3036,7 +2981,7 @@ fun ClassStudentsSubview(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            Text(uiT("الجنس:"), fontWeight = FontWeight.Bold, color = BentoText, fontSize = 13.sp)
+                            BiText(ar = uiT("الجنس:"), fr = BiFr.of("الجنس:"), fontWeight = FontWeight.Bold, color = BentoText, fontSize = 13.sp)
                             Row(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(12.dp))
@@ -3067,7 +3012,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = editParentPhone1,
                             onValueChange = { editParentPhone1 = it },
-                            label = { Text(uiT("هاتف ولي الأمر الأول")) },
+                            label = { BiTextA(ar = uiT("هاتف ولي الأمر الأول"), fr = BiFr.of("هاتف ولي الأمر الأول")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -3076,7 +3021,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = editParentPhone2,
                             onValueChange = { editParentPhone2 = it },
-                            label = { Text(uiT("هاتف ولي الأمر الثاني")) },
+                            label = { BiTextA(ar = uiT("هاتف ولي الأمر الثاني"), fr = BiFr.of("هاتف ولي الأمر الثاني")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -3085,7 +3030,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = editHealthNotes,
                             onValueChange = { editHealthNotes = it },
-                            label = { Text(uiT("ملاحظات صحية")) },
+                            label = { BiTextA(ar = uiT("ملاحظات صحية"), fr = BiFr.of("ملاحظات صحية")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp)
                         )
@@ -3116,7 +3061,7 @@ fun ClassStudentsSubview(
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                     ) {
-                        Text(uiT("حفظ التعديلات"), fontWeight = FontWeight.Bold, color = Color.White)
+                        BiTextA(ar = uiT("حفظ التعديلات"), fr = BiFr.of("حفظ التعديلات"), fontWeight = FontWeight.Bold, color = Color.White)
                     }
                 }
             }
@@ -3190,7 +3135,7 @@ fun ClassStudentsSubview(
                                 disabledContainerColor = BentoGrayOutline.copy(alpha = 0.5f)
                             )
                         ) {
-                            Text(uiT("حفظ"), fontWeight = FontWeight.Bold, color = Color.White)
+                            BiTextA(ar = uiT("حفظ"), fr = BiFr.of("حفظ"), fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
 
@@ -3207,7 +3152,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = studentName,
                             onValueChange = { studentName = it },
-                            label = { Text(uiT("الاسم الكامل للتلميذ (بالعربية)")) },
+                            label = { BiTextA(ar = uiT("الاسم الكامل للتلميذ (بالعربية)"), fr = BiFr.of("الاسم الكامل للتلميذ (بالعربية)")) },
                             modifier = Modifier.fillMaxWidth().testTag("add_student_name_input"),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -3216,7 +3161,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = studentFrenchName,
                             onValueChange = { studentFrenchName = it },
-                            label = { Text(uiT("الاسم بالفرنسية (اختياري)")) },
+                            label = { BiTextA(ar = uiT("الاسم بالفرنسية (اختياري)"), fr = BiFr.of("الاسم بالفرنسية (اختياري)")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -3231,7 +3176,7 @@ fun ClassStudentsSubview(
                                 onValueChange = { input ->
                                     studentSchoolId = input
                                 },
-                                label = { Text(uiT("الرقم المدرسي")) },
+                                label = { BiTextA(ar = uiT("الرقم المدرسي"), fr = BiFr.of("الرقم المدرسي")) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(12.dp),
@@ -3242,7 +3187,7 @@ fun ClassStudentsSubview(
                                 onValueChange = { input ->
                                     studentNationalId = input
                                 },
-                                label = { Text(uiT("الرقم الوطني")) },
+                                label = { BiTextA(ar = uiT("الرقم الوطني"), fr = BiFr.of("الرقم الوطني")) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(12.dp),
@@ -3256,7 +3201,7 @@ fun ClassStudentsSubview(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            Text(uiT("الجنس:"), fontWeight = FontWeight.Bold, color = BentoText, fontSize = 13.sp)
+                            BiText(ar = uiT("الجنس:"), fr = BiFr.of("الجنس:"), fontWeight = FontWeight.Bold, color = BentoText, fontSize = 13.sp)
                             Row(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(12.dp))
@@ -3287,7 +3232,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = studentParentPhone1,
                             onValueChange = { studentParentPhone1 = it },
-                            label = { Text(uiT("هاتف ولي الأمر الأول")) },
+                            label = { BiTextA(ar = uiT("هاتف ولي الأمر الأول"), fr = BiFr.of("هاتف ولي الأمر الأول")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true,
@@ -3297,7 +3242,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = studentParentPhone2,
                             onValueChange = { studentParentPhone2 = it },
-                            label = { Text(uiT("هاتف ولي الأمر الثاني (اختياري)")) },
+                            label = { BiTextA(ar = uiT("هاتف ولي الأمر الثاني (اختياري)"), fr = BiFr.of("هاتف ولي الأمر الثاني (اختياري)")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true,
@@ -3307,7 +3252,7 @@ fun ClassStudentsSubview(
                         OutlinedTextField(
                             value = studentHealthNotes,
                             onValueChange = { studentHealthNotes = it },
-                            label = { Text(uiT("ملاحظات صحية أو صعوبات تعلم (اختياري)")) },
+                            label = { BiTextA(ar = uiT("ملاحظات صحية أو صعوبات تعلم (اختياري)"), fr = BiFr.of("ملاحظات صحية أو صعوبات تعلم (اختياري)")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp)
                         )
@@ -3331,7 +3276,7 @@ fun ClassStudentsSubview(
                                 disabledContainerColor = BentoGrayOutline.copy(alpha = 0.5f)
                             )
                         ) {
-                            Text(uiT("حفظ وتسجيل الطالب"), fontWeight = FontWeight.Bold, color = Color.White)
+                            BiTextA(ar = uiT("حفظ وتسجيل الطالب"), fr = BiFr.of("حفظ وتسجيل الطالب"), fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                 }
@@ -3511,7 +3456,7 @@ fun BentoDashboard(
                     ) {
                         Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, tint = Color.White)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(uiT("تسجيل الخروج من الحساب"), color = Color.White, fontWeight = FontWeight.Bold)
+                        BiTextA(ar = uiT("تسجيل الخروج من الحساب"), fr = BiFr.of("تسجيل الخروج من الحساب"), color = Color.White, fontWeight = FontWeight.Bold)
                     }
 
                     // Delete Account Button
@@ -3526,13 +3471,13 @@ fun BentoDashboard(
                     ) {
                         Icon(Icons.Default.Delete, contentDescription = null, tint = Color(0xFFD32F2F))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(uiT("حذف الحساب نهائياً ⚠️"), fontWeight = FontWeight.Bold)
+                        BiTextA(ar = uiT("حذف الحساب نهائياً ⚠️"), fr = BiFr.of("حذف الحساب نهائياً ⚠️"), fontWeight = FontWeight.Bold)
                     }
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showProfileDialog = false }) {
-                    Text(uiT("إغلاق"), fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إغلاق"), fr = BiFr.of("إغلاق"), fontWeight = FontWeight.Bold)
                 }
             }
         )
@@ -3548,22 +3493,14 @@ fun BentoDashboard(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(Icons.Default.Warning, contentDescription = null, tint = Color(0xFFD32F2F))
-                    Text(
-                        text = uiT("تحذير أمني هام جداً! ⚠️"),
-                        fontWeight = FontWeight.Black,
-                        color = Color(0xFFD32F2F)
-                    )
+                    BiTextA(ar = uiT("تحذير أمني هام جداً! ⚠️"), fr = BiFr.of("تحذير أمني هام جداً! ⚠️"), fontWeight = FontWeight.Black, color = Color(0xFFD32F2F))
                 }
             },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(
-                        text = uiT("هل أنت متأكد تماماً من رغبتك في حذف حسابك الدراسي بالكامل؟"),
-                        fontWeight = FontWeight.Bold,
-                        color = com.example.ui.theme.BentoText
-                    )
+                    BiTextA(ar = uiT("هل أنت متأكد تماماً من رغبتك في حذف حسابك الدراسي بالكامل؟"), fr = BiFr.of("هل أنت متأكد تماماً من رغبتك في حذف حسابك الدراسي بالكامل؟"), fontWeight = FontWeight.Bold, color = com.example.ui.theme.BentoText)
                     
                     Card(
                         colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE)),
@@ -3574,38 +3511,12 @@ fun BentoDashboard(
                             modifier = Modifier.padding(12.dp),
                             verticalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            Text(
-                                text = uiT("ما يترتب على حذف الحساب 🔴:"),
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFC62828),
-                                fontSize = 13.sp
-                            )
-                            Text(
-                                text = uiT("• سيتم حذف كافة الأقسام الدراسية المسجلة باسمك."),
-                                fontSize = 12.sp,
-                                color = Color(0xFFD32F2F)
-                            )
-                            Text(
-                                text = uiT("• سيتم مسح جميع الطلاب المسجلين ودرجاتهم وتفاصيلهم."),
-                                fontSize = 12.sp,
-                                color = Color(0xFFD32F2F)
-                            )
-                            Text(
-                                text = uiT("• سيتم حذف أقسامك وحالة تفعيلها وإعلاناتك من الخادم نهائياً."),
-                                fontSize = 12.sp,
-                                color = Color(0xFFD32F2F)
-                            )
-                            Text(
-                                text = uiT("• سيتم مسح الذاكرة المحلية والملفات من هذا الهاتف بالكامل."),
-                                fontSize = 12.sp,
-                                color = Color(0xFFD32F2F)
-                            )
-                            Text(
-                                text = uiT("• لن تتمكن من استرجاع أي بيانات أو تراجع عن هذا الإجراء أبداً."),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp,
-                                color = Color(0xFFC62828)
-                            )
+                            BiText(ar = uiT("ما يترتب على حذف الحساب 🔴:"), fr = BiFr.of("ما يترتب على حذف الحساب 🔴:"), fontWeight = FontWeight.Bold, color = Color(0xFFC62828), fontSize = 13.sp)
+                            BiText(ar = uiT("• سيتم حذف كافة الأقسام الدراسية المسجلة باسمك."), fr = BiFr.of("• سيتم حذف كافة الأقسام الدراسية المسجلة باسمك."), fontSize = 12.sp, color = Color(0xFFD32F2F))
+                            BiText(ar = uiT("• سيتم مسح جميع الطلاب المسجلين ودرجاتهم وتفاصيلهم."), fr = BiFr.of("• سيتم مسح جميع الطلاب المسجلين ودرجاتهم وتفاصيلهم."), fontSize = 12.sp, color = Color(0xFFD32F2F))
+                            BiText(ar = uiT("• سيتم حذف أقسامك وحالة تفعيلها وإعلاناتك من الخادم نهائياً."), fr = BiFr.of("• سيتم حذف أقسامك وحالة تفعيلها وإعلاناتك من الخادم نهائياً."), fontSize = 12.sp, color = Color(0xFFD32F2F))
+                            BiText(ar = uiT("• سيتم مسح الذاكرة المحلية والملفات من هذا الهاتف بالكامل."), fr = BiFr.of("• سيتم مسح الذاكرة المحلية والملفات من هذا الهاتف بالكامل."), fontSize = 12.sp, color = Color(0xFFD32F2F))
+                            BiText(ar = uiT("• لن تتمكن من استرجاع أي بيانات أو تراجع عن هذا الإجراء أبداً."), fr = BiFr.of("• لن تتمكن من استرجاع أي بيانات أو تراجع عن هذا الإجراء أبداً."), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color(0xFFC62828))
                         }
                     }
                     
@@ -3627,12 +3538,12 @@ fun BentoDashboard(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
                 ) {
-                    Text(uiT("نعم، احذف حسابي وبياناتي نهائياً"), color = Color.White, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("نعم، احذف حسابي وبياناتي نهائياً"), fr = BiFr.of("نعم، احذف حسابي وبياناتي نهائياً"), color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteAccountConfirmDialog = false }) {
-                    Text(uiT("إلغاء والتراجع"), fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إلغاء والتراجع"), fr = BiFr.of("إلغاء والتراجع"), fontWeight = FontWeight.Bold)
                 }
             }
         )
@@ -4197,11 +4108,7 @@ fun CreateClassDialog(
         AlertDialog(
             onDismissRequest = { showDuplicateConfirmDialog = false },
             title = {
-                Text(
-                    text = uiT("تنبيه: قسم مكرر ⚠️"),
-                    fontWeight = FontWeight.Bold,
-                    color = BentoText
-                )
+                BiTextA(ar = uiT("تنبيه: قسم مكرر ⚠️"), fr = BiFr.of("تنبيه: قسم مكرر ⚠️"), fontWeight = FontWeight.Bold, color = BentoText)
             },
             text = {
                 Text(
@@ -4228,14 +4135,14 @@ fun CreateClassDialog(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                 ) {
-                    Text(uiT("نعم"), color = Color.White, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("نعم"), fr = BiFr.of("نعم"), color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 OutlinedButton(
                     onClick = { showDuplicateConfirmDialog = false }
                 ) {
-                    Text(uiT("إلغاء"), fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), fontWeight = FontWeight.Bold)
                 }
             }
         )
@@ -4333,7 +4240,7 @@ fun CreateClassDialog(
                     OutlinedTextField(
                         value = schoolName,
                         onValueChange = { schoolName = it },
-                        label = { Text(uiT("إسم المدرسة")) },
+                        label = { BiTextA(ar = uiT("إسم المدرسة"), fr = BiFr.of("إسم المدرسة")) },
                         placeholder = { Text("مثال: مدرسة الجمهورية - École de la République", fontSize = 12.sp) },
                         supportingText = { Text("الاسم بالعربية - الاسم بالفرنسية", fontSize = 11.sp) },
                         modifier = Modifier.fillMaxWidth().testTag("dialog_school_name_input"),
@@ -4343,12 +4250,7 @@ fun CreateClassDialog(
 
                     if (existingSchools.isNotEmpty()) {
                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                text = uiT("💡 المدارس المسجلة لديك (اضغط للاختيار السريع):"),
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = BentoPrimaryDesc
-                            )
+                            BiText(ar = uiT("💡 المدارس المسجلة لديك (اضغط للاختيار السريع):"), fr = BiFr.of("💡 المدارس المسجلة لديك (اضغط للاختيار السريع):"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
                             LazyRow(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                                 contentPadding = PaddingValues(vertical = 2.dp)
@@ -4442,7 +4344,7 @@ fun CreateClassDialog(
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "إنشاء القسم", modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(uiT("إنشاء القسم الدراسي الجديد"), fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إنشاء القسم الدراسي الجديد"), fr = BiFr.of("إنشاء القسم الدراسي الجديد"), fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -5118,18 +5020,8 @@ fun GradesEntryTab(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = uiT("شريط تقدم رصد المادة للقسم 📊"),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.secondary
-                                )
-                                Text(
-                                    text = uiTf("تم رصد {0} من {1} طالب ({2}%)", activeProgressCompleted, activeProgressTotal, (activeProgressPercent * 100).toInt()),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = MaterialTheme.colorScheme.secondary
-                                )
+                                BiText(ar = uiT("شريط تقدم رصد المادة للقسم 📊"), fr = BiFr.of("شريط تقدم رصد المادة للقسم 📊"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondary)
+                                BiText(ar = uiTf("تم رصد {0} من {1} طالب ({2}%)", activeProgressCompleted, activeProgressTotal, (activeProgressPercent * 100).toInt()), fr = BiFr.f("تم رصد {0} من {1} طالب ({2}%)", activeProgressCompleted, activeProgressTotal, (activeProgressPercent * 100).toInt()), fontSize = 11.sp, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.secondary)
                             }
                             Spacer(modifier = Modifier.height(6.dp))
                             LinearProgressIndicator(
@@ -5451,18 +5343,8 @@ fun GradesEntryTab(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(
-                                        text = uiT("شريط تقدم رصد الطالب للمواد 📊"),
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.secondary
-                                    )
-                                    Text(
-                                        text = uiTf("تم رصد {0} من {1} مادة ({2}%)", activeProgressCompleted, activeProgressTotal, (activeProgressPercent * 100).toInt()),
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Black,
-                                        color = MaterialTheme.colorScheme.secondary
-                                    )
+                                    BiText(ar = uiT("شريط تقدم رصد الطالب للمواد 📊"), fr = BiFr.of("شريط تقدم رصد الطالب للمواد 📊"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondary)
+                                    BiText(ar = uiTf("تم رصد {0} من {1} مادة ({2}%)", activeProgressCompleted, activeProgressTotal, (activeProgressPercent * 100).toInt()), fr = BiFr.f("تم رصد {0} من {1} مادة ({2}%)", activeProgressCompleted, activeProgressTotal, (activeProgressPercent * 100).toInt()), fontSize = 11.sp, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.secondary)
                                 }
                                 Spacer(modifier = Modifier.height(6.dp))
                                 LinearProgressIndicator(
@@ -5499,23 +5381,13 @@ fun GradesEntryTab(
                                             Row(verticalAlignment = Alignment.CenterVertically) {
                                                 Text("⭐", fontSize = 15.sp)
                                                 Spacer(modifier = Modifier.width(6.dp))
-                                                Text(
-                                                    text = uiT("معدلات الفصول السابقة (تُجلب تلقائياً أو تُدخل يدوياً)"),
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 13.sp,
-                                                    color = MaterialTheme.colorScheme.primary
-                                                )
+                                                BiText(ar = uiT("معدلات الفصول السابقة (تُجلب تلقائياً أو تُدخل يدوياً)"), fr = BiFr.of("معدلات الفصول السابقة (تُجلب تلقائياً أو تُدخل يدوياً)"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.primary)
                                             }
                                             val hasT1 = activeStudent != null && viewModel.hasSubjectGradesForTerm(activeStudent.id, 1)
                                             val hasT2 = activeStudent != null && viewModel.hasSubjectGradesForTerm(activeStudent.id, 2)
                                             if (hasT1 || hasT2) {
                                                 Spacer(modifier = Modifier.height(4.dp))
-                                                Text(
-                                                    text = uiT("✨ ملاحظة: المعدلات المحسوبة من درجات فصولك السابقة بالتطبيق تم اعتمادها تلقائياً لتوحيد النتائج."),
-                                                    fontSize = 10.5.sp,
-                                                    color = Color(0xFF2E7D32),
-                                                    fontWeight = FontWeight.Medium
-                                                )
+                                                BiText(ar = uiT("✨ ملاحظة: المعدلات المحسوبة من درجات فصولك السابقة بالتطبيق تم اعتمادها تلقائياً لتوحيد النتائج."), fr = BiFr.of("✨ ملاحظة: المعدلات المحسوبة من درجات فصولك السابقة بالتطبيق تم اعتمادها تلقائياً لتوحيد النتائج."), fontSize = 10.5.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Medium)
                                             }
                                             Spacer(modifier = Modifier.height(8.dp))
                                             Row(
@@ -6166,12 +6038,7 @@ fun GradesEntryTab(
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(24.dp)
                     )
-                    Text(
-                        text = uiT("سحب الكشوف والتقارير 📋"),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    BiText(ar = uiT("سحب الكشوف والتقارير 📋"), fr = BiFr.of("سحب الكشوف والتقارير 📋"), fontWeight = FontWeight.Bold, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
                 }
             },
             text = {
@@ -6196,7 +6063,7 @@ fun GradesEntryTab(
 
                     // Option 1: سحب كشوف درجات القسم
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(uiT("🗒️ كشوف درجات طلاب القسم للفصل المحدد (كشفين بالصفحة)"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
+                        BiText(ar = uiT("🗒️ كشوف درجات طلاب القسم للفصل المحدد (كشفين بالصفحة)"), fr = BiFr.of("🗒️ كشوف درجات طلاب القسم للفصل المحدد (كشفين بالصفحة)"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
                         Button(
                             onClick = {
                                 if (performanceList.isEmpty()) {
@@ -6228,13 +6095,13 @@ fun GradesEntryTab(
                         ) {
                             Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp), tint = Color.White)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(uiT("📥 سحب ومشاركة كشوف الدرجات (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
+                            BiText(ar = uiT("📥 سحب ومشاركة كشوف الدرجات (PDF)"), fr = BiFr.of("📥 سحب ومشاركة كشوف الدرجات (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
                         }
                     }
 
                     // Option 2: سحب لائحة نتائج القسم التفصيلية
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(uiT("📊 لائحة النتائج وجدول علامات الفصل التفصيلي للقسم"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
+                        BiText(ar = uiT("📊 لائحة النتائج وجدول علامات الفصل التفصيلي للقسم"), fr = BiFr.of("📊 لائحة النتائج وجدول علامات الفصل التفصيلي للقسم"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
                         Button(
                             onClick = {
                                 if (performanceList.isEmpty()) {
@@ -6266,7 +6133,7 @@ fun GradesEntryTab(
                         ) {
                             Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp), tint = Color.White)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(uiT("📥 سحب ومشاركة كشف النتائج التفصيلي (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
+                            BiText(ar = uiT("📥 سحب ومشاركة كشف النتائج التفصيلي (PDF)"), fr = BiFr.of("📥 سحب ومشاركة كشف النتائج التفصيلي (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
                         }
                     }
 
@@ -6315,7 +6182,7 @@ fun GradesEntryTab(
 
                         // 2. سحب كشوف الدرجات للمعدلات و الرتبه
                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(uiT("📑 كشف درجات المعدلات والرتبة السنوية فقط (3 بالورقة عمودياً)"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
+                            BiText(ar = uiT("📑 كشف درجات المعدلات والرتبة السنوية فقط (3 بالورقة عمودياً)"), fr = BiFr.of("📑 كشف درجات المعدلات والرتبة السنوية فقط (3 بالورقة عمودياً)"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
                             Button(
                                 onClick = {
                                     if (classStudents.isEmpty()) {
@@ -6339,13 +6206,13 @@ fun GradesEntryTab(
                             ) {
                                 Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp), tint = Color.White)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(uiT("📥 سحب ومشاركة كشوف المعدلات السنوية (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
+                                BiText(ar = uiT("📥 سحب ومشاركة كشوف المعدلات السنوية (PDF)"), fr = BiFr.of("📥 سحب ومشاركة كشوف المعدلات السنوية (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
                             }
                         }
 
                         // 3. سحب كشوف الدرجات للمواد فى جميع الفصول مع المعدل العام و الرتبه
                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(uiT("📊 كشوف نقاط المواد في جميع الفصول مع المعدل العام والرتبة السنوية (كشفان بالصفحة)"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
+                            BiText(ar = uiT("📊 كشوف نقاط المواد في جميع الفصول مع المعدل العام والرتبة السنوية (كشفان بالصفحة)"), fr = BiFr.of("📊 كشوف نقاط المواد في جميع الفصول مع المعدل العام والرتبة السنوية (كشفان بالصفحة)"), fontWeight = FontWeight.Bold, fontSize = 11.sp, color = BentoText)
                             Button(
                                 onClick = {
                                     if (classStudents.isEmpty()) {
@@ -6370,7 +6237,7 @@ fun GradesEntryTab(
                             ) {
                                 Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp), tint = Color.White)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(uiT("📥 سحب ومشاركة كشوف النقاط السنوية (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
+                                BiText(ar = uiT("📥 سحب ومشاركة كشوف النقاط السنوية (PDF)"), fr = BiFr.of("📥 سحب ومشاركة كشوف النقاط السنوية (PDF)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)
                             }
                         }
                     }
@@ -6378,7 +6245,7 @@ fun GradesEntryTab(
             },
             confirmButton = {
                 TextButton(onClick = { showPullOptionsDialog = false }) {
-                    Text(uiT("إغلاق"), fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إغلاق"), fr = BiFr.of("إغلاق"), fontWeight = FontWeight.Bold)
                 }
             },
             shape = RoundedCornerShape(24.dp)
@@ -6475,7 +6342,7 @@ fun ReportsTab(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(uiT("المجموعة والصف"), fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
+                BiText(ar = uiT("المجموعة والصف"), fr = BiFr.of("المجموعة والصف"), fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
                 Text(
                     text = activeClass?.name ?: "الرجاء اختيار مجموعة معينة...",
                     fontWeight = FontWeight.Bold,
@@ -6542,13 +6409,7 @@ fun ReportsTab(
                 border = BorderStroke(1.5.dp, Color(0xFF2E7D32))
             ) {
                 Column(modifier = Modifier.padding(10.dp)) {
-                    Text(
-                        text = uiT("فصول السنة العادية 🟢"),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B5E20),
-                        modifier = Modifier.padding(bottom = 6.dp)
-                    )
+                    BiText(ar = uiT("فصول السنة العادية 🟢"), fr = BiFr.of("فصول السنة العادية 🟢"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20), modifier = Modifier.padding(bottom = 6.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -6621,23 +6482,12 @@ fun ReportsTab(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            Text(
-                                text = uiT("الفصل الأخير فقط ⭐"),
-                                color = if (isFinalSelected) Color.White else Color(0xFFC62828),
-                                fontWeight = FontWeight.Black,
-                                fontSize = 13.sp
-                            )
+                            BiText(ar = uiT("الفصل الأخير فقط ⭐"), fr = BiFr.of("الفصل الأخير فقط ⭐"), color = if (isFinalSelected) Color.White else Color(0xFFC62828), fontWeight = FontWeight.Black, fontSize = 13.sp)
                         }
                     }
 
                     // الرسالة الصغيرة أسفل خيار الفصل الأخير فقط في مستطيله الأحمر
-                    Text(
-                        text = uiT("💡 مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFC62828),
-                        modifier = Modifier.padding(top = 8.dp, start = 4.dp, end = 4.dp)
-                    )
+                    BiText(ar = uiT("💡 مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"), fr = BiFr.of("💡 مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFFC62828), modifier = Modifier.padding(top = 8.dp, start = 4.dp, end = 4.dp))
                 }
             }
         }
@@ -6668,12 +6518,7 @@ fun ReportsTab(
                         .padding(12.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = uiT("كشف درجات طالب فردي"),
-                        color = if (reportMode == 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
-                    )
+                    BiText(ar = uiT("كشف درجات طالب فردي"), fr = BiFr.of("كشف درجات طالب فردي"), color = if (reportMode == 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                 }
                 Box(
                     modifier = Modifier
@@ -6684,12 +6529,7 @@ fun ReportsTab(
                         .padding(12.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = uiT("التقرير التفصيلي العام"),
-                        color = if (reportMode == 1) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
-                    )
+                    BiText(ar = uiT("التقرير التفصيلي العام"), fr = BiFr.of("التقرير التفصيلي العام"), color = if (reportMode == 1) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                 }
             }
 
@@ -6707,7 +6547,7 @@ fun ReportsTab(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text(uiT("طالب كشف النقاط"), fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
+                        BiText(ar = uiT("طالب كشف النقاط"), fr = BiFr.of("طالب كشف النقاط"), fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
                         Text(
                             text = activeStudentPerf?.student?.name ?: "اختر طالباً...",
                             fontWeight = FontWeight.Bold,
@@ -6775,8 +6615,8 @@ fun ReportsTab(
                                     modifier = Modifier.weight(1.2f),
                                     horizontalAlignment = Alignment.Start
                                 ) {
-                                    Text(uiT("الجمهورية الإسلامية الموريتانية"), fontSize = 8.5.sp, fontWeight = FontWeight.Black, color = Color.Black)
-                                    Text(uiT("وزارة التربية وإصلاح النظام التعليمي"), fontSize = 7.5.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                                    BiText(ar = uiT("الجمهورية الإسلامية الموريتانية"), fr = BiFr.of("الجمهورية الإسلامية الموريتانية"), fontSize = 8.5.sp, fontWeight = FontWeight.Black, color = Color.Black)
+                                    BiText(ar = uiT("وزارة التربية وإصلاح النظام التعليمي"), fr = BiFr.of("وزارة التربية وإصلاح النظام التعليمي"), fontSize = 7.5.sp, color = Color.Black, fontWeight = FontWeight.Bold)
                                     Text("الإدارة الجهوية للتربية: ${activeClass.wilaya.ifBlank { "غوركل" }}", fontSize = 7.5.sp, color = Color.Black)
                                     Text("مفتشية مقاطعة: ${activeClass.moughataa.ifBlank { "لكصيبه 1" }}", fontSize = 7.5.sp, color = Color.Black)
                                     Text("مدرسة: ${activeClass.schoolName.ifBlank { "الطلحايه 1" }}", fontSize = 7.5.sp, color = Color.Black)
@@ -6811,9 +6651,9 @@ fun ReportsTab(
                                     modifier = Modifier.weight(1.0f),
                                     horizontalAlignment = Alignment.End
                                 ) {
-                                    Text(uiT("شرف - إخاء - عدالة"), fontSize = 8.5.sp, fontWeight = FontWeight.Black, color = Color.Black)
+                                    BiText(ar = uiT("شرف - إخاء - عدالة"), fr = BiFr.of("شرف - إخاء - عدالة"), fontSize = 8.5.sp, fontWeight = FontWeight.Black, color = Color.Black)
                                     Text("السنة الدراسية: ${activeClass.academicYear.ifBlank { "2025 - 2026" }}", fontSize = 7.5.sp, color = Color.Black)
-                                    Text(uiTf("القسم: {0}", HtmlReportHelper.getDisplayClassName(activeClass)), fontSize = 7.5.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                                    BiText(ar = uiTf("القسم: {0}", HtmlReportHelper.getDisplayClassName(activeClass)), fr = BiFr.f("القسم: {0}", HtmlReportHelper.getDisplayClassName(activeClass)), fontSize = 7.5.sp, color = Color.Black, fontWeight = FontWeight.Bold)
                                     Text("الفصل: ${when(activeTermId) { 1 -> "الأول" 2 -> "الثاني" else -> "الثالث" }}", fontSize = 7.5.sp, color = Color.Black)
                                 }
                             }
@@ -6825,28 +6665,13 @@ fun ReportsTab(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(
-                                    text = uiTf("الاسم الكامل: {0}", activeStudentPerf.student.name),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                )
-                                Text(
-                                    text = uiTf("رقم النداء: {0}", callNumber),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                )
+                                BiText(ar = uiTf("الاسم الكامل: {0}", activeStudentPerf.student.name), fr = BiFr.f("الاسم الكامل: {0}", activeStudentPerf.student.name), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                BiText(ar = uiTf("رقم النداء: {0}", callNumber), fr = BiFr.f("رقم النداء: {0}", callNumber), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                             }
                             Row(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text(
-                                    text = uiTf("الرقم المدرسي: {0}", activeStudentPerf.student.schoolId),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                )
+                                BiText(ar = uiTf("الرقم المدرسي: {0}", activeStudentPerf.student.schoolId), fr = BiFr.f("الرقم المدرسي: {0}", activeStudentPerf.student.schoolId), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -6871,7 +6696,7 @@ fun ReportsTab(
                                                 .padding(vertical = 4.dp, horizontal = 6.dp),
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            Text(uiT("المادة"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                            BiText(ar = uiT("المادة"), fr = BiFr.of("المادة"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                                         }
                                         Box(
                                             modifier = Modifier
@@ -6880,7 +6705,7 @@ fun ReportsTab(
                                                 .padding(vertical = 4.dp, horizontal = 6.dp),
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            Text(uiT("النقاط"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                            BiText(ar = uiT("النقاط"), fr = BiFr.of("النقاط"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                                         }
                                     }
 
@@ -6924,7 +6749,7 @@ fun ReportsTab(
                                                 .padding(vertical = 4.dp, horizontal = 6.dp),
                                             contentAlignment = Alignment.CenterStart
                                         ) {
-                                            Text(uiT("المجموع"), fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                            BiText(ar = uiT("المجموع"), fr = BiFr.of("المجموع"), fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                         }
                                         Box(
                                             modifier = Modifier
@@ -6948,7 +6773,7 @@ fun ReportsTab(
                                         // Exam 1 Avg
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("معدل الامتحان الأول"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("معدل الامتحان الأول"), fr = BiFr.of("معدل الامتحان الأول"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text("20 / ${HtmlReportHelper.formatCleanNumber(avg1)}", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -6957,7 +6782,7 @@ fun ReportsTab(
                                         // Exam 2 Avg
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("معدل الامتحان الثاني"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("معدل الامتحان الثاني"), fr = BiFr.of("معدل الامتحان الثاني"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text("20 / ${HtmlReportHelper.formatCleanNumber(avg2)}", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -6966,7 +6791,7 @@ fun ReportsTab(
                                         // Exam 3 Avg
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("معدل الامتحان الثالث"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("معدل الامتحان الثالث"), fr = BiFr.of("معدل الامتحان الثالث"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text("20 / ${HtmlReportHelper.formatCleanNumber(avg3)}", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -6975,7 +6800,7 @@ fun ReportsTab(
                                         // General Average (المعدل العام)
                                         Row(modifier = Modifier.fillMaxWidth().background(Color(0xFFE8F5E9))) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("المعدل العام"), fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("المعدل العام"), fr = BiFr.of("المعدل العام"), fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text("20 / ${HtmlReportHelper.formatCleanNumber(generalAverage)}", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -6984,7 +6809,7 @@ fun ReportsTab(
                                         // Final status
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("القرار أو الملاحظة"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("القرار أو الملاحظة"), fr = BiFr.of("القرار أو الملاحظة"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text(if (generalAverage >= 10.0) "ناجح" else "راسب", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -6993,7 +6818,7 @@ fun ReportsTab(
                                         // Rank (الرتبة)
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("الرتبة"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("الرتبة"), fr = BiFr.of("الرتبة"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text(if (generalRank > 0) "$generalRank" else "-", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -7006,7 +6831,7 @@ fun ReportsTab(
                                         // Average
                                         Row(modifier = Modifier.fillMaxWidth().background(Color(0xFFE8F5E9))) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("المعدل"), fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("المعدل"), fr = BiFr.of("المعدل"), fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text("20 / ${HtmlReportHelper.formatCleanNumber(avg)}", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -7015,7 +6840,7 @@ fun ReportsTab(
                                         // Final status
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("النتيجة النهائية"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("النتيجة النهائية"), fr = BiFr.of("النتيجة النهائية"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text(if (avg >= 10.0) "ناجح" else "راسب", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -7024,7 +6849,7 @@ fun ReportsTab(
                                         // Rank (الرتبة)
                                         Row(modifier = Modifier.fillMaxWidth()) {
                                             Box(modifier = Modifier.weight(2f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.CenterStart) {
-                                                Text(uiT("الرتبة"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
+                                                BiText(ar = uiT("الرتبة"), fr = BiFr.of("الرتبة"), fontSize = 10.sp, modifier = Modifier.padding(start = 4.dp), color = Color.Black)
                                             }
                                             Box(modifier = Modifier.weight(1f).border(0.5.dp, Color.Black).padding(vertical = 4.dp, horizontal = 6.dp), contentAlignment = Alignment.Center) {
                                                 Text(if (rank > 0) "$rank" else "-", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -7049,7 +6874,7 @@ fun ReportsTab(
                                             .padding(vertical = 4.dp, horizontal = 6.dp),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Text(uiT("الملاحظات"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        BiText(ar = uiT("الملاحظات"), fr = BiFr.of("الملاحظات"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                                     }
                                     // Value
                                     Box(
@@ -7079,8 +6904,8 @@ fun ReportsTab(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(uiT("المدير"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                Text(uiT("المعلم"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                BiText(ar = uiT("المدير"), fr = BiFr.of("المدير"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                BiText(ar = uiT("المعلم"), fr = BiFr.of("المعلم"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                             }
                         }
                     }
@@ -7113,7 +6938,7 @@ fun ReportsTab(
                                 ) {
                                     Icon(Icons.Default.ContentCopy, contentDescription = "نسخ")
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    Text(uiT("نسخ الكشف"), fontWeight = FontWeight.Bold)
+                                    BiTextA(ar = uiT("نسخ الكشف"), fr = BiFr.of("نسخ الكشف"), fontWeight = FontWeight.Bold)
                                 }
 
                                 Button(
@@ -7137,7 +6962,7 @@ fun ReportsTab(
                                 ) {
                                     Icon(Icons.Default.Share, contentDescription = "مشاركة")
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    Text(uiT("مشاركة الكشف"), fontWeight = FontWeight.Bold)
+                                    BiTextA(ar = uiT("مشاركة الكشف"), fr = BiFr.of("مشاركة الكشف"), fontWeight = FontWeight.Bold)
                                 }
                             }
                 }
@@ -7165,7 +6990,7 @@ fun ReportsTab(
                     ) {
                         Icon(Icons.Default.Share, contentDescription = "مشاركة")
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(uiT("مشاركة كشف تفصيلي"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        BiText(ar = uiT("مشاركة كشف تفصيلي"), fr = BiFr.of("مشاركة كشف تفصيلي"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                     }
 
                     Button(
@@ -7202,7 +7027,7 @@ fun ReportsTab(
                     ) {
                         Icon(Icons.Default.Assignment, contentDescription = "CSV Excel")
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(uiT("مشاركة كملف CSV"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        BiText(ar = uiT("مشاركة كملف CSV"), fr = BiFr.of("مشاركة كملف CSV"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                     }
                 }
 
@@ -7311,18 +7136,8 @@ fun ReportsTab(
                                     Column(horizontalAlignment = Alignment.End) {
                                         val totalMaxPoints = subjects.sumOf { it.maxPoints }
                                         val totalAchievedPoints = perf.gradesMap.values.sum()
-                                        Text(
-                                            text = uiTf("المجموع: {0} / {1}", HtmlReportHelper.formatCleanNumber(totalAchievedPoints), totalMaxPoints),
-                                            fontSize = 9.5.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                        Text(
-                                            text = uiTf("المعدل: {0}", HtmlReportHelper.formatCleanNumber(perf.averageScore)),
-                                            fontWeight = FontWeight.Black,
-                                            fontSize = 14.sp,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
+                                        BiText(ar = uiTf("المجموع: {0} / {1}", HtmlReportHelper.formatCleanNumber(totalAchievedPoints), totalMaxPoints), fr = BiFr.f("المجموع: {0} / {1}", HtmlReportHelper.formatCleanNumber(totalAchievedPoints), totalMaxPoints), fontSize = 9.5.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        BiText(ar = uiTf("المعدل: {0}", HtmlReportHelper.formatCleanNumber(perf.averageScore)), fr = BiFr.f("المعدل: {0}", HtmlReportHelper.formatCleanNumber(perf.averageScore)), fontWeight = FontWeight.Black, fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
                                     }
                                 }
                             }
@@ -7400,7 +7215,7 @@ fun SubjectsTab(
                 ) {
                     Icon(Icons.Default.ArrowBack, contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(uiT("العودة إلى بوابة تسجيل المعلمين 🏫"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    BiText(ar = uiT("العودة إلى بوابة تسجيل المعلمين 🏫"), fr = BiFr.of("العودة إلى بوابة تسجيل المعلمين 🏫"), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -7453,7 +7268,7 @@ fun SubjectsTab(
                             username = it
                             loginError = false
                         },
-                        label = { Text(uiT("اسم المستخدم")) },
+                        label = { BiTextA(ar = uiT("اسم المستخدم"), fr = BiFr.of("اسم المستخدم")) },
                         placeholder = { Text("") },
                         modifier = Modifier.fillMaxWidth().testTag("admin_login_username"),
                         shape = RoundedCornerShape(12.dp),
@@ -7469,7 +7284,7 @@ fun SubjectsTab(
                             password = it
                             loginError = false
                         },
-                        label = { Text(uiT("كلمة السر")) },
+                        label = { BiTextA(ar = uiT("كلمة السر"), fr = BiFr.of("كلمة السر")) },
                         modifier = Modifier.fillMaxWidth().testTag("admin_login_password"),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
@@ -7517,7 +7332,7 @@ fun SubjectsTab(
                             contentColor = Color.White
                         )
                     ) {
-                        Text(uiT("تسجيل الدخول الآمن"), fontWeight = FontWeight.Black)
+                        BiTextA(ar = uiT("تسجيل الدخول الآمن"), fr = BiFr.of("تسجيل الدخول الآمن"), fontWeight = FontWeight.Black)
                     }
                 }
             }
@@ -7587,7 +7402,7 @@ fun SubjectsTab(
                             contentColor = Color.Red
                         )
                     ) {
-                        Text(uiT("خروج"), fontWeight = FontWeight.Bold)
+                        BiTextA(ar = uiT("خروج"), fr = BiFr.of("خروج"), fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -7768,7 +7583,7 @@ fun PersonalClassSubjectsEditor(
         ) {
             Icon(Icons.Default.Add, contentDescription = null, tint = Color.White)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(uiT("إضافة مادة جديدة لهذا القسم فقط ➕"), fontWeight = FontWeight.Bold, color = Color.White)
+            BiTextA(ar = uiT("إضافة مادة جديدة لهذا القسم فقط ➕"), fr = BiFr.of("إضافة مادة جديدة لهذا القسم فقط ➕"), fontWeight = FontWeight.Bold, color = Color.White)
         }
         
         if (levelSubjects.isEmpty()) {
@@ -7961,12 +7776,7 @@ fun PersonalClassSubjectsEditor(
                             shape = RoundedCornerShape(20.dp)
                         ) {
                             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(
-                                    text = uiTf("مواد مخفية في هذا القسم ({0})", hiddenSubjects.size),
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.DarkGray,
-                                    fontSize = 14.sp
-                                )
+                                BiText(ar = uiTf("مواد مخفية في هذا القسم ({0})", hiddenSubjects.size), fr = BiFr.f("مواد مخفية في هذا القسم ({0})", hiddenSubjects.size), fontWeight = FontWeight.Bold, color = Color.DarkGray, fontSize = 14.sp)
                                 hiddenSubjects.forEach { hiddenSub ->
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
@@ -7979,7 +7789,7 @@ fun PersonalClassSubjectsEditor(
                                                 Toast.makeText(context, "تمت إعادة المادة إلى هذا القسم", Toast.LENGTH_SHORT).show()
                                             }
                                         }) {
-                                            Text(uiT("إرجاع"), color = BentoPrimary, fontWeight = FontWeight.Bold)
+                                            BiTextA(ar = uiT("إرجاع"), fr = BiFr.of("إرجاع"), color = BentoPrimary, fontWeight = FontWeight.Bold)
                                         }
                                     }
                                 }
@@ -7994,19 +7804,19 @@ fun PersonalClassSubjectsEditor(
     if (showAddSubjectDialog) {
         AlertDialog(
             onDismissRequest = { showAddSubjectDialog = false },
-            title = { Text(uiT("إضافة مادة جديدة لقسمك 📚"), fontWeight = FontWeight.Bold, color = BentoPrimary) },
+            title = { BiTextA(ar = uiT("إضافة مادة جديدة لقسمك 📚"), fr = BiFr.of("إضافة مادة جديدة لقسمك 📚"), fontWeight = FontWeight.Bold, color = BentoPrimary) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     OutlinedTextField(
                         value = newSubjectName,
                         onValueChange = { newSubjectName = it },
-                        label = { Text(uiT("اسم المادة")) },
+                        label = { BiTextA(ar = uiT("اسم المادة"), fr = BiFr.of("اسم المادة")) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = newSubjectMaxPoints,
                         onValueChange = { newSubjectMaxPoints = it },
-                        label = { Text(uiT("الدرجة القصوى (مثال: 20)")) },
+                        label = { BiTextA(ar = uiT("الدرجة القصوى (مثال: 20)"), fr = BiFr.of("الدرجة القصوى (مثال: 20)")) },
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                             keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
@@ -8039,12 +7849,12 @@ fun PersonalClassSubjectsEditor(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                 ) {
-                    Text(uiT("إضافة وحفظ"), color = Color.White, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إضافة وحفظ"), fr = BiFr.of("إضافة وحفظ"), color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showAddSubjectDialog = false }) {
-                    Text(uiT("إلغاء"), color = Color.Gray)
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), color = Color.Gray)
                 }
             },
             shape = RoundedCornerShape(24.dp)
@@ -8057,19 +7867,19 @@ fun PersonalClassSubjectsEditor(
         
         AlertDialog(
             onDismissRequest = { showEditDialog = null },
-            title = { Text(uiT("تعديل معلومات المادة ✏️"), fontWeight = FontWeight.Bold, color = BentoPrimary) },
+            title = { BiTextA(ar = uiT("تعديل معلومات المادة ✏️"), fr = BiFr.of("تعديل معلومات المادة ✏️"), fontWeight = FontWeight.Bold, color = BentoPrimary) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     OutlinedTextField(
                         value = editName,
                         onValueChange = { editName = it },
-                        label = { Text(uiT("اسم المادة")) },
+                        label = { BiTextA(ar = uiT("اسم المادة"), fr = BiFr.of("اسم المادة")) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = editMaxPoints,
                         onValueChange = { editMaxPoints = it },
-                        label = { Text(uiT("الدرجة القصوى")) },
+                        label = { BiTextA(ar = uiT("الدرجة القصوى"), fr = BiFr.of("الدرجة القصوى")) },
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                             keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
@@ -8149,12 +7959,12 @@ fun PersonalClassSubjectsEditor(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                 ) {
-                    Text(uiT("حفظ التعديلات"), color = Color.White, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("حفظ التعديلات"), fr = BiFr.of("حفظ التعديلات"), color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showEditDialog = null }) {
-                    Text(uiT("إلغاء"), color = Color.Gray)
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), color = Color.Gray)
                 }
             },
             shape = RoundedCornerShape(24.dp)
@@ -8166,12 +7976,12 @@ fun PersonalClassSubjectsEditor(
         val rIsPersonal = rSubject.classId != 0L
         AlertDialog(
             onDismissRequest = { rescaleSubject = null },
-            title = { Text(uiT("تنبيه: ستتحوّل الدرجات ⚠️"), fontWeight = FontWeight.Bold) },
+            title = { BiTextA(ar = uiT("تنبيه: ستتحوّل الدرجات ⚠️"), fr = BiFr.of("تنبيه: ستتحوّل الدرجات ⚠️"), fontWeight = FontWeight.Bold) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(uiTf("غيّرت الدرجة القصوى لمادة ({0}) من {1} إلى {2}.", rSubject.name, rescaleOldPoints, rescaleNewPoints))
-                    Text(uiTf("سيؤدي هذا إلى تحويل {0} درجة مرصودة لتلاميذ هذا القسم إلى السلم الجديد.", rescaleAffectedCount))
-                    Text(uiTf("يمكنك الرجوع لاحقاً بإعادة الدرجة القصوى إلى {0}، فتعود الدرجات كما كانت.", rescaleOldPoints))
+                    BiTextA(ar = uiTf("غيّرت الدرجة القصوى لمادة ({0}) من {1} إلى {2}.", rSubject.name, rescaleOldPoints, rescaleNewPoints), fr = BiFr.f("غيّرت الدرجة القصوى لمادة ({0}) من {1} إلى {2}.", rSubject.name, rescaleOldPoints, rescaleNewPoints))
+                    BiTextA(ar = uiTf("سيؤدي هذا إلى تحويل {0} درجة مرصودة لتلاميذ هذا القسم إلى السلم الجديد.", rescaleAffectedCount), fr = BiFr.f("سيؤدي هذا إلى تحويل {0} درجة مرصودة لتلاميذ هذا القسم إلى السلم الجديد.", rescaleAffectedCount))
+                    BiTextA(ar = uiTf("يمكنك الرجوع لاحقاً بإعادة الدرجة القصوى إلى {0}، فتعود الدرجات كما كانت.", rescaleOldPoints), fr = BiFr.f("يمكنك الرجوع لاحقاً بإعادة الدرجة القصوى إلى {0}، فتعود الدرجات كما كانت.", rescaleOldPoints))
                 }
             },
             confirmButton = {
@@ -8221,12 +8031,12 @@ fun PersonalClassSubjectsEditor(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                 ) {
-                    Text(uiT("متابعة التحويل"), color = Color.White, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("متابعة التحويل"), fr = BiFr.of("متابعة التحويل"), color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { rescaleSubject = null }) {
-                    Text(uiT("إلغاء"), color = Color.Gray)
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), color = Color.Gray)
                 }
             },
             shape = RoundedCornerShape(24.dp)
@@ -8237,12 +8047,12 @@ fun PersonalClassSubjectsEditor(
         val resSubject = resetSubject!!
         AlertDialog(
             onDismissRequest = { resetSubject = null },
-            title = { Text(uiT("تنبيه: ستتحوّل الدرجات ⚠️"), fontWeight = FontWeight.Bold) },
+            title = { BiTextA(ar = uiT("تنبيه: ستتحوّل الدرجات ⚠️"), fr = BiFr.of("تنبيه: ستتحوّل الدرجات ⚠️"), fontWeight = FontWeight.Bold) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(uiTf("ستعود مادة ({0}) إلى اسمها ودرجتها الافتراضية، فتتغير الدرجة القصوى من {1} إلى {2}.", resSubject.name, resetOldPoints, resetNewPoints))
-                    Text(uiTf("وسيتم تحويل {0} درجة مرصودة لتلاميذ هذا القسم إلى السلم الجديد حتى تبقى النتائج صحيحة.", resetAffectedCount))
-                    Text(uiTf("يمكنك الرجوع لاحقاً بتعديل المادة وإعادة الدرجة القصوى إلى {0}.", resetOldPoints))
+                    BiTextA(ar = uiTf("ستعود مادة ({0}) إلى اسمها ودرجتها الافتراضية، فتتغير الدرجة القصوى من {1} إلى {2}.", resSubject.name, resetOldPoints, resetNewPoints), fr = BiFr.f("ستعود مادة ({0}) إلى اسمها ودرجتها الافتراضية، فتتغير الدرجة القصوى من {1} إلى {2}.", resSubject.name, resetOldPoints, resetNewPoints))
+                    BiTextA(ar = uiTf("وسيتم تحويل {0} درجة مرصودة لتلاميذ هذا القسم إلى السلم الجديد حتى تبقى النتائج صحيحة.", resetAffectedCount), fr = BiFr.f("وسيتم تحويل {0} درجة مرصودة لتلاميذ هذا القسم إلى السلم الجديد حتى تبقى النتائج صحيحة.", resetAffectedCount))
+                    BiTextA(ar = uiTf("يمكنك الرجوع لاحقاً بتعديل المادة وإعادة الدرجة القصوى إلى {0}.", resetOldPoints), fr = BiFr.f("يمكنك الرجوع لاحقاً بتعديل المادة وإعادة الدرجة القصوى إلى {0}.", resetOldPoints))
                 }
             },
             confirmButton = {
@@ -8264,12 +8074,12 @@ fun PersonalClassSubjectsEditor(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                 ) {
-                    Text(uiT("متابعة الاستعادة"), color = Color.White, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("متابعة الاستعادة"), fr = BiFr.of("متابعة الاستعادة"), color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { resetSubject = null }) {
-                    Text(uiT("إلغاء"), color = Color.Gray)
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), color = Color.Gray)
                 }
             },
             shape = RoundedCornerShape(24.dp)
@@ -8283,10 +8093,10 @@ fun PersonalClassSubjectsEditor(
                 subjectToDeleteFor9999 = null
                 confirmDeleteSubjectCode = ""
             },
-            title = { Text(uiT("تأكيد حذف المادة ⚠️"), fontWeight = FontWeight.Bold) },
+            title = { BiTextA(ar = uiT("تأكيد حذف المادة ⚠️"), fr = BiFr.of("تأكيد حذف المادة ⚠️"), fontWeight = FontWeight.Bold) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(uiTf("هل أنت متأكد من حذف المادة ({0}) نهائياً؟ سيؤدي هذا الإجراء إلى حذف كافة الدرجات المسجلة للتلاميذ في هذه المادة بشكل كامل ونهائي ولا يمكن استرجاعها!", subject.name))
+                    BiTextA(ar = uiTf("هل أنت متأكد من حذف المادة ({0}) نهائياً؟ سيؤدي هذا الإجراء إلى حذف كافة الدرجات المسجلة للتلاميذ في هذه المادة بشكل كامل ونهائي ولا يمكن استرجاعها!", subject.name), fr = BiFr.f("هل أنت متأكد من حذف المادة ({0}) نهائياً؟ سيؤدي هذا الإجراء إلى حذف كافة الدرجات المسجلة للتلاميذ في هذه المادة بشكل كامل ونهائي ولا يمكن استرجاعها!", subject.name))
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = uiT("ادخل الرقم 9999 لحذف المادة في الخانة أدناه:"),
@@ -8297,7 +8107,7 @@ fun PersonalClassSubjectsEditor(
                     OutlinedTextField(
                         value = confirmDeleteSubjectCode,
                         onValueChange = { confirmDeleteSubjectCode = it },
-                        placeholder = { Text(uiT("أدخل 9999 هنا")) },
+                        placeholder = { BiTextA(ar = uiT("أدخل 9999 هنا"), fr = BiFr.of("أدخل 9999 هنا")) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
@@ -8323,7 +8133,7 @@ fun PersonalClassSubjectsEditor(
                             confirmDeleteSubjectCode = ""
                         }
                     ) {
-                        Text(uiT("نعم، احذف المادة"), color = Color.Red, fontWeight = FontWeight.Bold)
+                        BiTextA(ar = uiT("نعم، احذف المادة"), fr = BiFr.of("نعم، احذف المادة"), color = Color.Red, fontWeight = FontWeight.Bold)
                     }
                 }
             },
@@ -8334,7 +8144,7 @@ fun PersonalClassSubjectsEditor(
                         confirmDeleteSubjectCode = ""
                     }
                 ) {
-                    Text(uiT("إلغاء"))
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"))
                 }
             }
         )
@@ -8343,9 +8153,9 @@ fun PersonalClassSubjectsEditor(
     subjectToHideConfirm?.let { sub ->
         AlertDialog(
             onDismissRequest = { subjectToHideConfirm = null },
-            title = { Text(uiT("إخفاء المادة من هذا القسم"), fontWeight = FontWeight.Bold) },
+            title = { BiTextA(ar = uiT("إخفاء المادة من هذا القسم"), fr = BiFr.of("إخفاء المادة من هذا القسم"), fontWeight = FontWeight.Bold) },
             text = {
-                Text(uiTf("هذه المادة فيها {0} درجة مسجلة في هذا القسم. الإخفاء لا يحذف الدرجات، وتعود كما هي إذا أرجعت المادة.", subjectToHideCount))
+                BiTextA(ar = uiTf("هذه المادة فيها {0} درجة مسجلة في هذا القسم. الإخفاء لا يحذف الدرجات، وتعود كما هي إذا أرجعت المادة.", subjectToHideCount), fr = BiFr.f("هذه المادة فيها {0} درجة مسجلة في هذا القسم. الإخفاء لا يحذف الدرجات، وتعود كما هي إذا أرجعت المادة.", subjectToHideCount))
             },
             confirmButton = {
                 TextButton(onClick = {
@@ -8354,12 +8164,12 @@ fun PersonalClassSubjectsEditor(
                     }
                     subjectToHideConfirm = null
                 }) {
-                    Text(uiT("إخفاء"), color = Color.Red, fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إخفاء"), fr = BiFr.of("إخفاء"), color = Color.Red, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { subjectToHideConfirm = null }) {
-                    Text(uiT("إلغاء"))
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"))
                 }
             }
         )
@@ -8449,7 +8259,7 @@ fun <T> DialogSelection(
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        placeholder = { Text(uiT("بحث...")) },
+                        placeholder = { BiTextA(ar = uiT("بحث..."), fr = BiFr.of("بحث...")) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
@@ -8725,17 +8535,17 @@ fun EnhancedReportsTab(
     if (showSubjectsNotice) {
         AlertDialog(
             onDismissRequest = { showSubjectsNotice = false },
-            title = { Text(uiT("تنبيه"), fontWeight = FontWeight.ExtraBold) },
-            text = { Text(uiT("ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا.")) },
+            title = { BiTextA(ar = uiT("تنبيه"), fr = BiFr.of("تنبيه"), fontWeight = FontWeight.ExtraBold) },
+            text = { BiTextA(ar = uiT("ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا."), fr = BiFr.of("ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا.")) },
             confirmButton = {
                 Button(onClick = {
                     showSubjectsNotice = false
                     showSettingsDialog = false
                     showSubjectsManagerInsideSettings = true
-                }) { Text(uiT("متابعة")) }
+                }) { BiTextA(ar = uiT("متابعة"), fr = BiFr.of("متابعة")) }
             },
             dismissButton = {
-                TextButton(onClick = { showSubjectsNotice = false }) { Text(uiT("إلغاء")) }
+                TextButton(onClick = { showSubjectsNotice = false }) { BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء")) }
             }
         )
     }
@@ -8978,13 +8788,7 @@ fun EnhancedReportsTab(
                             }
 
                             // Sliding Ranges Title
-                            Text(
-                                text = uiT("تعديل مجالات التقييم والملاحظات لكل فصل 🎚️"),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
-                            )
+                            BiText(ar = uiT("تعديل مجالات التقييم والملاحظات لكل فصل 🎚️"), fr = BiFr.of("تعديل مجالات التقييم والملاحظات لكل فصل 🎚️"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 4.dp, bottom = 2.dp))
 
                             // Segmented row for term-specific remarks configuration
                             Row(
@@ -9123,19 +8927,13 @@ fun EnhancedReportsTab(
                                             .background(Color(0xFF00ACC1).copy(alpha = 0.15f))
                                             .padding(horizontal = 10.dp, vertical = 4.dp)
                                     ) {
-                                        Text(uiT("تلقائي"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF00ACC1))
+                                        BiText(ar = uiT("تلقائي"), fr = BiFr.of("تلقائي"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF00ACC1))
                                     }
                                 }
                             }
 
                             // Section: إعدادات الفصل الثالث والامتحان النهائي
-                            Text(
-                                text = uiT("إعدادات الفصل الثالث والامتحانات 📋"),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(top = 10.dp, bottom = 2.dp)
-                            )
+                            BiText(ar = uiT("إعدادات الفصل الثالث والامتحانات 📋"), fr = BiFr.of("إعدادات الفصل الثالث والامتحانات 📋"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 10.dp, bottom = 2.dp))
 
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
@@ -9218,7 +9016,7 @@ fun EnhancedReportsTab(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text(uiT("تم وحفظ الإعدادات"), fontWeight = FontWeight.Bold)
+                            BiTextA(ar = uiT("تم وحفظ الإعدادات"), fr = BiFr.of("تم وحفظ الإعدادات"), fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -9287,7 +9085,7 @@ fun EnhancedReportsTab(
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0F4396))
                         ) {
-                            Text(uiT("إغلاق والعودة"), fontWeight = FontWeight.Bold, color = Color.White)
+                            BiTextA(ar = uiT("إغلاق والعودة"), fr = BiFr.of("إغلاق والعودة"), fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                 }
@@ -9507,17 +9305,8 @@ fun EnhancedReportsTab(
                 ) {
                     Text("👆", fontSize = 24.sp)
                     Column {
-                        Text(
-                            text = uiT("الرجاء تحديد الفصل الدراسي أولاً"),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = uiT("اضغط على قائمة «الفصل الدراسي» أعلاه واختبر الفصل المطلوب لإظهار أزرار الكشوف والنتائج التفصيلية."),
-                            fontSize = 11.5.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        BiText(ar = uiT("الرجاء تحديد الفصل الدراسي أولاً"), fr = BiFr.of("الرجاء تحديد الفصل الدراسي أولاً"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.primary)
+                        BiText(ar = uiT("اضغط على قائمة «الفصل الدراسي» أعلاه واختبر الفصل المطلوب لإظهار أزرار الكشوف والنتائج التفصيلية."), fr = BiFr.of("اضغط على قائمة «الفصل الدراسي» أعلاه واختبر الفصل المطلوب لإظهار أزرار الكشوف والنتائج التفصيلية."), fontSize = 11.5.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -9593,12 +9382,7 @@ fun EnhancedReportsTab(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             Text("⚠️", fontSize = 18.sp)
-                            Text(
-                                text = uiT("تنبيه: الكشوف غير متاحة لعدم اكتمال النتائج!"),
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFC62828),
-                                fontSize = 13.sp
-                            )
+                            BiText(ar = uiT("تنبيه: الكشوف غير متاحة لعدم اكتمال النتائج!"), fr = BiFr.of("تنبيه: الكشوف غير متاحة لعدم اكتمال النتائج!"), fontWeight = FontWeight.Bold, color = Color(0xFFC62828), fontSize = 13.sp)
                         }
                         Spacer(modifier = Modifier.height(6.dp))
                         Column(
@@ -9608,12 +9392,7 @@ fun EnhancedReportsTab(
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             studentMissingItems.forEach { (student, missingType) ->
-                                Text(
-                                    text = uiTf("• الطالب «{0}» لم يدرج {1}", student.name, missingType),
-                                    fontSize = 11.5.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFB71C1C)
-                                )
+                                BiText(ar = uiTf("• الطالب «{0}» لم يدرج {1}", student.name, missingType), fr = BiFr.f("• الطالب «{0}» لم يدرج {1}", student.name, missingType), fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFFB71C1C))
                             }
                         }
                     }
@@ -9953,7 +9732,7 @@ fun EnhancedReportsTab(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text(uiT("طالب كشف النقاط"), fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
+                            BiText(ar = uiT("طالب كشف النقاط"), fr = BiFr.of("طالب كشف النقاط"), fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
                             Text(
                                 text = activeStudentPerf?.student?.name ?: "اختر طالباً...",
                                 fontWeight = FontWeight.Bold,
@@ -10986,12 +10765,7 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("🔑", fontSize = 20.sp)
-                    Text(
-                        text = uiT("استعادة كلمة المرور 🔐"),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = Color(0xFF1B5E20)
-                    )
+                    BiText(ar = uiT("استعادة كلمة المرور 🔐"), fr = BiFr.of("استعادة كلمة المرور 🔐"), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFF1B5E20))
                 }
             },
             text = {
@@ -10999,15 +10773,11 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = uiT("أدخل عنوان البريد الإلكتروني المسجل وسنقوم بإرسال رابط آمن لإعادة تعيين كلمة المرور الخاصة بك."),
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    BiText(ar = uiT("أدخل عنوان البريد الإلكتروني المسجل وسنقوم بإرسال رابط آمن لإعادة تعيين كلمة المرور الخاصة بك."), fr = BiFr.of("أدخل عنوان البريد الإلكتروني المسجل وسنقوم بإرسال رابط آمن لإعادة تعيين كلمة المرور الخاصة بك."), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     OutlinedTextField(
                         value = resetEmailInput,
                         onValueChange = { resetEmailInput = it },
-                        label = { Text(uiT("البريد الإلكتروني")) },
+                        label = { BiTextA(ar = uiT("البريد الإلكتروني"), fr = BiFr.of("البريد الإلكتروني")) },
                         placeholder = { Text("email@example.com") },
                         modifier = Modifier.fillMaxWidth().testTag("reset_email_input"),
                         shape = RoundedCornerShape(12.dp),
@@ -11047,12 +10817,12 @@ fun TeacherLoginSignupScreen(viewModel: TeacherViewModel) {
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text(uiT("إرسال الرابط"), fontWeight = FontWeight.Bold)
+                    BiTextA(ar = uiT("إرسال الرابط"), fr = BiFr.of("إرسال الرابط"), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showForgotPasswordDialog = false }) {
-                    Text(uiT("إلغاء"), color = Color.Gray)
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), color = Color.Gray)
                 }
             },
             shape = RoundedCornerShape(20.dp)
@@ -11222,7 +10992,7 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Icon(Icons.Default.Refresh, contentDescription = "تحديث", modifier = Modifier.size(16.dp))
-                        Text(uiT("تحديث 🔄"), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        BiText(ar = uiT("تحديث 🔄"), fr = BiFr.of("تحديث 🔄"), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -11367,11 +11137,7 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                     }
 
                     if (courseStatsError) {
-                        Text(
-                            text = uiT("تعذّر جلب إحصائيات الدورة من الخادم"),
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.error
-                        )
+                        BiText(ar = uiT("تعذّر جلب إحصائيات الدورة من الخادم"), fr = BiFr.of("تعذّر جلب إحصائيات الدورة من الخادم"), fontSize = 11.sp, color = MaterialTheme.colorScheme.error)
                     }
                 }
 
@@ -11403,12 +11169,7 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                     .clickable { selectedYearFilter = "الكل" }
                                     .padding(horizontal = 14.dp, vertical = 6.dp)
                             ) {
-                                Text(
-                                    text = uiT("كل السنوات الدراسية"),
-                                    color = if (isAllSelected) Color.White else BentoText,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                BiText(ar = uiT("كل السنوات الدراسية"), fr = BiFr.of("كل السنوات الدراسية"), color = if (isAllSelected) Color.White else BentoText, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                             }
                         }
 
@@ -11485,7 +11246,7 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                     .padding(12.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(uiT("المستخدمون المعلمون"), fontSize = 10.sp, color = BentoPrimaryDesc, fontWeight = FontWeight.Bold)
+                                BiText(ar = uiT("المستخدمون المعلمون"), fr = BiFr.of("المستخدمون المعلمون"), fontSize = 10.sp, color = BentoPrimaryDesc, fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text("$filteredTeachersCount", fontSize = 18.sp, fontWeight = FontWeight.Black, color = BentoText)
                             }
@@ -11499,19 +11260,14 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                     .padding(12.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(uiT("الأقسام المسجلة"), fontSize = 10.sp, color = BentoPrimaryDesc, fontWeight = FontWeight.Bold)
+                                BiText(ar = uiT("الأقسام المسجلة"), fr = BiFr.of("الأقسام المسجلة"), fontSize = 10.sp, color = BentoPrimaryDesc, fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text("$totalFilteredClasses", fontSize = 18.sp, fontWeight = FontWeight.Black, color = BentoText)
                             }
                         }
 
                         // Activated classes per term breakdown
-                        Text(
-                            text = uiT("🔓 عدد الأقسام المفعلة حسب الفصل الدراسي:"),
-                            fontSize = 11.5.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = BentoSecondary
-                        )
+                        BiText(ar = uiT("🔓 عدد الأقسام المفعلة حسب الفصل الدراسي:"), fr = BiFr.of("🔓 عدد الأقسام المفعلة حسب الفصل الدراسي:"), fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = BentoSecondary)
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -11526,9 +11282,9 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                     .padding(8.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(uiT("الفصل 1"), fontSize = 10.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
+                                BiText(ar = uiT("الفصل 1"), fr = BiFr.of("الفصل 1"), fontSize = 10.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(2.dp))
-                                Text(uiTf("{0} قسم", term1ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF2E7D32))
+                                BiText(ar = uiTf("{0} قسم", term1ActivatedFilteredClasses), fr = BiFr.f("{0} قسم", term1ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF2E7D32))
                             }
 
                             // Term 2
@@ -11540,9 +11296,9 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                     .padding(8.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(uiT("الفصل 2"), fontSize = 10.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
+                                BiText(ar = uiT("الفصل 2"), fr = BiFr.of("الفصل 2"), fontSize = 10.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(2.dp))
-                                Text(uiTf("{0} قسم", term2ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF2E7D32))
+                                BiText(ar = uiTf("{0} قسم", term2ActivatedFilteredClasses), fr = BiFr.f("{0} قسم", term2ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF2E7D32))
                             }
 
                             // Term 3
@@ -11554,9 +11310,9 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                     .padding(8.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(uiT("الفصل 3"), fontSize = 10.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
+                                BiText(ar = uiT("الفصل 3"), fr = BiFr.of("الفصل 3"), fontSize = 10.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(2.dp))
-                                Text(uiTf("{0} قسم", term3ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF2E7D32))
+                                BiText(ar = uiTf("{0} قسم", term3ActivatedFilteredClasses), fr = BiFr.f("{0} قسم", term3ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF2E7D32))
                             }
 
                             // Term 4 (Final Term Only)
@@ -11568,9 +11324,9 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                     .padding(8.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(uiT("الأخير فقط ⭐"), fontSize = 10.sp, color = Color(0xFFE65100), fontWeight = FontWeight.Bold)
+                                BiText(ar = uiT("الأخير فقط ⭐"), fr = BiFr.of("الأخير فقط ⭐"), fontSize = 10.sp, color = Color(0xFFE65100), fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(2.dp))
-                                Text(uiTf("{0} قسم", term4ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFFE65100))
+                                BiText(ar = uiTf("{0} قسم", term4ActivatedFilteredClasses), fr = BiFr.f("{0} قسم", term4ActivatedFilteredClasses), fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFFE65100))
                             }
                         }
                     }
@@ -11640,12 +11396,7 @@ fun AdminStatsTabContent(viewModel: TeacherViewModel) {
                                             .background(BentoSecondaryContainer, RoundedCornerShape(8.dp))
                                             .padding(horizontal = 10.dp, vertical = 4.dp)
                                     ) {
-                                        Text(
-                                            text = uiTf("{0} أقسام", entry.value),
-                                            fontSize = 11.sp,
-                                            fontWeight = FontWeight.Black,
-                                            color = BentoPrimary
-                                        )
+                                        BiText(ar = uiTf("{0} أقسام", entry.value), fr = BiFr.f("{0} أقسام", entry.value), fontSize = 11.sp, fontWeight = FontWeight.Black, color = BentoPrimary)
                                     }
                                 }
                                 if (index < classesByWilaya.size - 1) {
@@ -11988,10 +11739,10 @@ fun ActivationPromoDialog(
                         border = BorderStroke(1.dp, Color(0xFFFBC02D).copy(alpha = 0.5f))
                     ) {
                         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(uiT("💡 توضيح الفرق بين خياري الفصل الأخير:"), fontWeight = FontWeight.Bold, fontSize = 11.5.sp, color = Color(0xFFE65100))
-                            Text(uiT("• الفصل الثالث العادي: لرصد جميع مواد الفصل 3 بالاعتماد على نقاط الفصول السابقة لحساب المعدل السنوي."), fontSize = 10.5.sp, color = Color(0xFF37474F))
-                            Text(uiT("• الفصل الأخير فقط ⭐: لرصد مواد الفصل الأخير فقط مع إدخال معدلي ف1 وف2 مباشرة."), fontSize = 10.5.sp, color = Color(0xFF37474F))
-                            Text(uiT("• ملاحظة: لا يمكن تفعيل الخيارين معاً لنفس القسم في الفصل الأخير، وتفعيل أحدهما يلغي الآخر تلقائياً."), fontSize = 10.sp, color = Color(0xFFD84315), fontWeight = FontWeight.Medium)
+                            BiText(ar = uiT("💡 توضيح الفرق بين خياري الفصل الأخير:"), fr = BiFr.of("💡 توضيح الفرق بين خياري الفصل الأخير:"), fontWeight = FontWeight.Bold, fontSize = 11.5.sp, color = Color(0xFFE65100))
+                            BiText(ar = uiT("• الفصل الثالث العادي: لرصد جميع مواد الفصل 3 بالاعتماد على نقاط الفصول السابقة لحساب المعدل السنوي."), fr = BiFr.of("• الفصل الثالث العادي: لرصد جميع مواد الفصل 3 بالاعتماد على نقاط الفصول السابقة لحساب المعدل السنوي."), fontSize = 10.5.sp, color = Color(0xFF37474F))
+                            BiText(ar = uiT("• الفصل الأخير فقط ⭐: لرصد مواد الفصل الأخير فقط مع إدخال معدلي ف1 وف2 مباشرة."), fr = BiFr.of("• الفصل الأخير فقط ⭐: لرصد مواد الفصل الأخير فقط مع إدخال معدلي ف1 وف2 مباشرة."), fontSize = 10.5.sp, color = Color(0xFF37474F))
+                            BiText(ar = uiT("• ملاحظة: لا يمكن تفعيل الخيارين معاً لنفس القسم في الفصل الأخير، وتفعيل أحدهما يلغي الآخر تلقائياً."), fr = BiFr.of("• ملاحظة: لا يمكن تفعيل الخيارين معاً لنفس القسم في الفصل الأخير، وتفعيل أحدهما يلغي الآخر تلقائياً."), fontSize = 10.sp, color = Color(0xFFD84315), fontWeight = FontWeight.Medium)
                         }
                     }
                 } else {
@@ -12007,12 +11758,12 @@ fun ActivationPromoDialog(
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                                 Text("🏷️", fontSize = 16.sp)
-                                Text(uiT("أسعار تفعيل فصول القسم:"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = BentoPrimary)
+                                BiText(ar = uiT("أسعار تفعيل فصول القسم:"), fr = BiFr.of("أسعار تفعيل فصول القسم:"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = BentoPrimary)
                             }
-                            Text(uiT("• الفصل الأول: مجاني دائماً وبدون قفل 🎁"), fontSize = 12.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
-                            Text(uiT("• تفعيل الفصل الثاني: 190 أوقية جديدة"), fontSize = 12.sp, color = BentoText, fontWeight = FontWeight.Medium)
-                            Text(uiT("• تفعيل الفصل الثالث: 190 أوقية جديدة"), fontSize = 12.sp, color = BentoText, fontWeight = FontWeight.Medium)
-                            Text(uiT("• تفعيل جميع فصول السنة معاً: 350 أوقية جديدة"), fontSize = 12.5.sp, color = BentoPrimary, fontWeight = FontWeight.ExtraBold)
+                            BiText(ar = uiT("• الفصل الأول: مجاني دائماً وبدون قفل 🎁"), fr = BiFr.of("• الفصل الأول: مجاني دائماً وبدون قفل 🎁"), fontSize = 12.sp, color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
+                            BiText(ar = uiT("• تفعيل الفصل الثاني: 190 أوقية جديدة"), fr = BiFr.of("• تفعيل الفصل الثاني: 190 أوقية جديدة"), fontSize = 12.sp, color = BentoText, fontWeight = FontWeight.Medium)
+                            BiText(ar = uiT("• تفعيل الفصل الثالث: 190 أوقية جديدة"), fr = BiFr.of("• تفعيل الفصل الثالث: 190 أوقية جديدة"), fontSize = 12.sp, color = BentoText, fontWeight = FontWeight.Medium)
+                            BiText(ar = uiT("• تفعيل جميع فصول السنة معاً: 350 أوقية جديدة"), fr = BiFr.of("• تفعيل جميع فصول السنة معاً: 350 أوقية جديدة"), fontSize = 12.5.sp, color = BentoPrimary, fontWeight = FontWeight.ExtraBold)
                         }
                     }
                 }
@@ -12055,7 +11806,7 @@ fun ActivationPromoDialog(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(uiT("🔑 رقم القسم الفريد (الكود):"), fontSize = 10.sp, color = BentoPrimaryDesc, fontWeight = FontWeight.Bold)
+                                    BiText(ar = uiT("🔑 رقم القسم الفريد (الكود):"), fr = BiFr.of("🔑 رقم القسم الفريد (الكود):"), fontSize = 10.sp, color = BentoPrimaryDesc, fontWeight = FontWeight.Bold)
                                     Text(
                                         text = "$classId",
                                         fontSize = 14.sp,
@@ -12076,7 +11827,7 @@ fun ActivationPromoDialog(
                                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                                     ) {
                                         Icon(Icons.Default.ContentCopy, contentDescription = "نسخ", modifier = Modifier.size(14.dp), tint = BentoPrimary)
-                                        Text(uiT("نسخ الكود 📋"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                                        BiText(ar = uiT("نسخ الكود 📋"), fr = BiFr.of("نسخ الكود 📋"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                                     }
                                 }
                             }
@@ -12095,12 +11846,7 @@ fun ActivationPromoDialog(
                             modifier = Modifier.padding(10.dp),
                             verticalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            Text(
-                                text = uiT("اختر نوع الاشتراك:"),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp,
-                                color = BentoPrimary
-                            )
+                            BiText(ar = uiT("اختر نوع الاشتراك:"), fr = BiFr.of("اختر نوع الاشتراك:"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoPrimary)
 
                             // الخيار الأول
                             Surface(
@@ -12125,12 +11871,7 @@ fun ActivationPromoDialog(
                                         )
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    Text(
-                                        text = uiT("الفصل الثاني فقط (190 أوقية)"),
-                                        fontSize = 12.sp,
-                                        fontWeight = if (selectedPlan == "single") FontWeight.Bold else FontWeight.Medium,
-                                        color = if (selectedPlan == "single") BentoPrimary else BentoText
-                                    )
+                                    BiText(ar = uiT("الفصل الثاني فقط (190 أوقية)"), fr = BiFr.of("الفصل الثاني فقط (190 أوقية)"), fontSize = 12.sp, fontWeight = if (selectedPlan == "single") FontWeight.Bold else FontWeight.Medium, color = if (selectedPlan == "single") BentoPrimary else BentoText)
                                 }
                             }
 
@@ -12157,12 +11898,7 @@ fun ActivationPromoDialog(
                                         )
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    Text(
-                                        text = uiT("جميع فصول السنة - الثاني والثالث (350 أوقية)"),
-                                        fontSize = 12.sp,
-                                        fontWeight = if (selectedPlan == "full") FontWeight.Bold else FontWeight.Medium,
-                                        color = if (selectedPlan == "full") BentoPrimary else BentoText
-                                    )
+                                    BiText(ar = uiT("جميع فصول السنة - الثاني والثالث (350 أوقية)"), fr = BiFr.of("جميع فصول السنة - الثاني والثالث (350 أوقية)"), fontSize = 12.sp, fontWeight = if (selectedPlan == "full") FontWeight.Bold else FontWeight.Medium, color = if (selectedPlan == "full") BentoPrimary else BentoText)
                                 }
                             }
                         }
@@ -12214,12 +11950,12 @@ fun ActivationPromoDialog(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(uiT("تواصل على الواتساب"), fontWeight = FontWeight.Bold)
+                BiTextA(ar = uiT("تواصل على الواتساب"), fr = BiFr.of("تواصل على الواتساب"), fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(uiT("إلغاء"), color = Color.Gray)
+                BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), color = Color.Gray)
             }
         },
         shape = RoundedCornerShape(24.dp)
@@ -12271,18 +12007,8 @@ fun AboutAppScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = uiT("دفتر المعلم - Teacher Notebook"),
-                        fontWeight = FontWeight.Black,
-                        fontSize = 18.sp,
-                        color = BentoText
-                    )
-                    Text(
-                        text = uiT("الإصدار المطور (2026 - 2027)"),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
-                        color = BentoPrimary
-                    )
+                    BiText(ar = uiT("دفتر المعلم - Teacher Notebook"), fr = BiFr.of("دفتر المعلم - Teacher Notebook"), fontWeight = FontWeight.Black, fontSize = 18.sp, color = BentoText)
+                    BiText(ar = uiT("الإصدار المطور (2026 - 2027)"), fr = BiFr.of("الإصدار المطور (2026 - 2027)"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoPrimary)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = uiT("تطبيق ذكي وشامل مخصص للمعلمين لإدارة الأقسام المدرسية، رصد الدرجات، وحساب المعدلات والنتائج السنوية بدقة، مع حفظ تلقائي للبيانات في Google Drive وإمكانيات الطباعة المباشرة."),
@@ -12312,17 +12038,8 @@ fun AboutAppScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(
-                        text = uiT("📢 التواصل والقنوات الرسمية للتطبيق"),
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 14.sp,
-                        color = BentoText
-                    )
-                    Text(
-                        text = uiT("انضم إلى مجتمع المعلمين وتابع الإعلانات والتحديثات مباشرة:"),
-                        fontSize = 11.5.sp,
-                        color = BentoPrimaryDesc
-                    )
+                    BiText(ar = uiT("📢 التواصل والقنوات الرسمية للتطبيق"), fr = BiFr.of("📢 التواصل والقنوات الرسمية للتطبيق"), fontWeight = FontWeight.ExtraBold, fontSize = 14.sp, color = BentoText)
+                    BiText(ar = uiT("انضم إلى مجتمع المعلمين وتابع الإعلانات والتحديثات مباشرة:"), fr = BiFr.of("انضم إلى مجتمع المعلمين وتابع الإعلانات والتحديثات مباشرة:"), fontSize = 11.5.sp, color = BentoPrimaryDesc)
 
                     // WhatsApp Channel Button
                     Card(
@@ -12353,17 +12070,8 @@ fun AboutAppScreen(
                                 modifier = Modifier.size(32.dp)
                             )
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = uiT("قناة الواتساب الرسمية 💬"),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
-                                    color = Color(0xFF1B5E20)
-                                )
-                                Text(
-                                    text = uiT("اضغط للانضمام ومتابعة جديد التحديثات والإرشادات"),
-                                    fontSize = 10.5.sp,
-                                    color = Color(0xFF2E7D32)
-                                )
+                                BiText(ar = uiT("قناة الواتساب الرسمية 💬"), fr = BiFr.of("قناة الواتساب الرسمية 💬"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color(0xFF1B5E20))
+                                BiText(ar = uiT("اضغط للانضمام ومتابعة جديد التحديثات والإرشادات"), fr = BiFr.of("اضغط للانضمام ومتابعة جديد التحديثات والإرشادات"), fontSize = 10.5.sp, color = Color(0xFF2E7D32))
                             }
                             Icon(
                                 imageVector = Icons.Default.ArrowForward,
@@ -12403,17 +12111,8 @@ fun AboutAppScreen(
                                 modifier = Modifier.size(32.dp)
                             )
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = uiT("قناة التلغرام الرسمية ✈️"),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
-                                    color = Color(0xFF01579B)
-                                )
-                                Text(
-                                    text = uiT("اضغط للانضمام ومتابعة الإعلانات والملفات والتحديثات"),
-                                    fontSize = 10.5.sp,
-                                    color = Color(0xFF0288D1)
-                                )
+                                BiText(ar = uiT("قناة التلغرام الرسمية ✈️"), fr = BiFr.of("قناة التلغرام الرسمية ✈️"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color(0xFF01579B))
+                                BiText(ar = uiT("اضغط للانضمام ومتابعة الإعلانات والملفات والتحديثات"), fr = BiFr.of("اضغط للانضمام ومتابعة الإعلانات والملفات والتحديثات"), fontSize = 10.5.sp, color = Color(0xFF0288D1))
                             }
                             Icon(
                                 imageVector = Icons.Default.ArrowForward,
@@ -12453,17 +12152,8 @@ fun AboutAppScreen(
                                 modifier = Modifier.size(32.dp)
                             )
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = uiT("صفحة الفيسبوك الرسمية 👍"),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
-                                    color = Color(0xFF0D47A1)
-                                )
-                                Text(
-                                    text = uiT("اضغط للمتابعة والتواصل وطرح المقترحات والأسئلة"),
-                                    fontSize = 10.5.sp,
-                                    color = Color(0xFF1565C0)
-                                )
+                                BiText(ar = uiT("صفحة الفيسبوك الرسمية 👍"), fr = BiFr.of("صفحة الفيسبوك الرسمية 👍"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color(0xFF0D47A1))
+                                BiText(ar = uiT("اضغط للمتابعة والتواصل وطرح المقترحات والأسئلة"), fr = BiFr.of("اضغط للمتابعة والتواصل وطرح المقترحات والأسئلة"), fontSize = 10.5.sp, color = Color(0xFF1565C0))
                             }
                             Icon(
                                 imageVector = Icons.Default.ArrowForward,
@@ -12503,17 +12193,8 @@ fun AboutAppScreen(
                                 modifier = Modifier.size(32.dp)
                             )
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = uiT("قناة اليوتيوب الرسمية 🎥"),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
-                                    color = Color(0xFFB71C1C)
-                                )
-                                Text(
-                                    text = uiT("اضغط لمتابعة الشروحات والتحديثات والفيديوهات التوضيحية"),
-                                    fontSize = 10.5.sp,
-                                    color = Color(0xFFC62828)
-                                )
+                                BiText(ar = uiT("قناة اليوتيوب الرسمية 🎥"), fr = BiFr.of("قناة اليوتيوب الرسمية 🎥"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color(0xFFB71C1C))
+                                BiText(ar = uiT("اضغط لمتابعة الشروحات والتحديثات والفيديوهات التوضيحية"), fr = BiFr.of("اضغط لمتابعة الشروحات والتحديثات والفيديوهات التوضيحية"), fontSize = 10.5.sp, color = Color(0xFFC62828))
                             }
                             Icon(
                                 imageVector = Icons.Default.ArrowForward,
@@ -12556,12 +12237,7 @@ fun AboutAppScreen(
                                 }
                             }
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = uiT("موقع التطبيق الرسمي 🌐"),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
-                                    color = Color(0xFF4A148C)
-                                )
+                                BiText(ar = uiT("موقع التطبيق الرسمي 🌐"), fr = BiFr.of("موقع التطبيق الرسمي 🌐"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color(0xFF4A148C))
                                 Text(
                                     text = "https://diftar-almoaalim.web.app",
                                     fontSize = 10.5.sp,
@@ -12601,12 +12277,7 @@ fun SingleRequestActivationView(
         topBar = {
             androidx.compose.material3.TopAppBar(
                 title = {
-                    Text(
-                        text = uiT("طلب تفعيل ذكي 🔓"),
-                        fontWeight = FontWeight.Black,
-                        fontSize = 18.sp,
-                        color = Color.White
-                    )
+                    BiText(ar = uiT("طلب تفعيل ذكي 🔓"), fr = BiFr.of("طلب تفعيل ذكي 🔓"), fontWeight = FontWeight.Black, fontSize = 18.sp, color = Color.White)
                 },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
@@ -12682,7 +12353,7 @@ fun SingleRequestActivationView(
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text(uiT("العودة إلى التطبيق 🏠"), fontWeight = FontWeight.Black)
+                            BiTextA(ar = uiT("العودة إلى التطبيق 🏠"), fr = BiFr.of("العودة إلى التطبيق 🏠"), fontWeight = FontWeight.Black)
                         }
                     }
                 }
@@ -12721,7 +12392,7 @@ fun SingleRequestActivationView(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         CircularProgressIndicator(color = BentoSecondary)
-                        Text(uiT("جاري تحميل تفاصيل طلب التفعيل..."), color = BentoPrimaryDesc, fontSize = 14.sp)
+                        BiText(ar = uiT("جاري تحميل تفاصيل طلب التفعيل..."), fr = BiFr.of("جاري تحميل تفاصيل طلب التفعيل..."), color = BentoPrimaryDesc, fontSize = 14.sp)
                     }
                 } else if (errorMessage != null && requestData == null) {
                     Card(
@@ -12762,7 +12433,7 @@ fun SingleRequestActivationView(
                                     colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
-                                    Text(uiT("إعادة المحاولة 🔄"), fontWeight = FontWeight.Bold)
+                                    BiTextA(ar = uiT("إعادة المحاولة 🔄"), fr = BiFr.of("إعادة المحاولة 🔄"), fontWeight = FontWeight.Bold)
                                 }
                             }
                             Button(
@@ -12771,7 +12442,7 @@ fun SingleRequestActivationView(
                                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
-                                Text(uiT("إغلاق والعودة 🏠"), fontWeight = FontWeight.Bold)
+                                BiTextA(ar = uiT("إغلاق والعودة 🏠"), fr = BiFr.of("إغلاق والعودة 🏠"), fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -12816,23 +12487,23 @@ fun SingleRequestActivationView(
 
                             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                    Text(uiT("بريد المعلم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                    BiText(ar = uiT("بريد المعلم:"), fr = BiFr.of("بريد المعلم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                     Text(teacherEmail, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                 }
                                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                    Text(uiT("اسم القسم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                    BiText(ar = uiT("اسم القسم:"), fr = BiFr.of("اسم القسم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                     Text(className, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                 }
                                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                    Text(uiT("الفصل المطلوب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                    BiText(ar = uiT("الفصل المطلوب:"), fr = BiFr.of("الفصل المطلوب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                     Text(displayedTerm, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                 }
                                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                    Text(uiT("تاريخ الطلب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                    BiText(ar = uiT("تاريخ الطلب:"), fr = BiFr.of("تاريخ الطلب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                     Text(dateStr, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                 }
                                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                    Text(uiT("حالة الطلب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                    BiText(ar = uiT("حالة الطلب:"), fr = BiFr.of("حالة الطلب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                     val isPending = status == "pending"
                                     Box(
                                         modifier = Modifier
@@ -12928,7 +12599,7 @@ fun SingleRequestActivationView(
                                     } else {
                                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                             Icon(Icons.Default.CheckCircle, contentDescription = null, modifier = Modifier.size(18.dp))
-                                            Text(uiT("تفعيل الاشتراك الآن 🔓"), fontWeight = FontWeight.Black)
+                                            BiTextA(ar = uiT("تفعيل الاشتراك الآن 🔓"), fr = BiFr.of("تفعيل الاشتراك الآن 🔓"), fontWeight = FontWeight.Black)
                                         }
                                     }
                                 }
@@ -12939,7 +12610,7 @@ fun SingleRequestActivationView(
                                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
-                                    Text(uiT("تم التفعيل مسبقاً - إغلاق 🏠"), fontWeight = FontWeight.Bold)
+                                    BiTextA(ar = uiT("تم التفعيل مسبقاً - إغلاق 🏠"), fr = BiFr.of("تم التفعيل مسبقاً - إغلاق 🏠"), fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -12964,12 +12635,7 @@ fun NotificationsListScreen(
         topBar = {
             androidx.compose.material3.TopAppBar(
                 title = {
-                    Text(
-                        text = uiT("الإشعارات 🔔"),
-                        fontWeight = FontWeight.Black,
-                        fontSize = 18.sp,
-                        color = Color.White
-                    )
+                    BiText(ar = uiT("الإشعارات 🔔"), fr = BiFr.of("الإشعارات 🔔"), fontWeight = FontWeight.Black, fontSize = 18.sp, color = Color.White)
                 },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
@@ -12983,22 +12649,12 @@ fun NotificationsListScreen(
                 actions = {
                     if (notifications.any { !(it["read"] as? Boolean ?: false) }) {
                         TextButton(onClick = onMarkAllAsRead) {
-                            Text(
-                                text = uiT("تحديد الكل كمقروء"),
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
+                            BiText(ar = uiT("تحديد الكل كمقروء"), fr = BiFr.of("تحديد الكل كمقروء"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     }
                     if (notifications.isNotEmpty()) {
                         TextButton(onClick = onDeleteAll) {
-                            Text(
-                                text = uiT("مسح الكل"),
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
+                            BiText(ar = uiT("مسح الكل"), fr = BiFr.of("مسح الكل"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     }
                 },
@@ -13026,12 +12682,7 @@ fun NotificationsListScreen(
                         tint = Color.Gray,
                         modifier = Modifier.size(64.dp)
                     )
-                    Text(
-                        text = uiT("لا توجد إشعارات بعد"),
-                        fontWeight = FontWeight.Bold,
-                        color = BentoPrimaryDesc,
-                        fontSize = 16.sp
-                    )
+                    BiText(ar = uiT("لا توجد إشعارات بعد"), fr = BiFr.of("لا توجد إشعارات بعد"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 16.sp)
                 }
             }
         } else {
@@ -13154,12 +12805,7 @@ fun ExchangeRequestApprovalView(
         topBar = {
             androidx.compose.material3.TopAppBar(
                 title = {
-                    Text(
-                        text = uiT("طلب نشر إعلان تبادل 🤝"),
-                        fontWeight = FontWeight.Black,
-                        fontSize = 18.sp,
-                        color = Color.White
-                    )
+                    BiText(ar = uiT("طلب نشر إعلان تبادل 🤝"), fr = BiFr.of("طلب نشر إعلان تبادل 🤝"), fontWeight = FontWeight.Black, fontSize = 18.sp, color = Color.White)
                 },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
@@ -13235,7 +12881,7 @@ fun ExchangeRequestApprovalView(
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text(uiT("العودة إلى التطبيق 🏠"), fontWeight = FontWeight.Black)
+                            BiTextA(ar = uiT("العودة إلى التطبيق 🏠"), fr = BiFr.of("العودة إلى التطبيق 🏠"), fontWeight = FontWeight.Black)
                         }
                     }
                 }
@@ -13289,7 +12935,7 @@ fun ExchangeRequestApprovalView(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         CircularProgressIndicator(color = BentoSecondary)
-                        Text(uiT("جاري تحميل تفاصيل طلب الموافقة..."), color = BentoPrimaryDesc, fontSize = 14.sp)
+                        BiText(ar = uiT("جاري تحميل تفاصيل طلب الموافقة..."), fr = BiFr.of("جاري تحميل تفاصيل طلب الموافقة..."), color = BentoPrimaryDesc, fontSize = 14.sp)
                     }
                 } else if (errorMessage != null && postData == null) {
                     Card(
@@ -13330,7 +12976,7 @@ fun ExchangeRequestApprovalView(
                                     colors = ButtonDefaults.buttonColors(containerColor = BentoSecondary),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
-                                    Text(uiT("إعادة المحاولة 🔄"), fontWeight = FontWeight.Bold)
+                                    BiTextA(ar = uiT("إعادة المحاولة 🔄"), fr = BiFr.of("إعادة المحاولة 🔄"), fontWeight = FontWeight.Bold)
                                 }
                             }
                             Button(
@@ -13339,7 +12985,7 @@ fun ExchangeRequestApprovalView(
                                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
-                                Text(uiT("إغلاق والعودة 🏠"), fontWeight = FontWeight.Bold)
+                                BiTextA(ar = uiT("إغلاق والعودة 🏠"), fr = BiFr.of("إغلاق والعودة 🏠"), fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -13380,39 +13026,39 @@ fun ExchangeRequestApprovalView(
                             item {
                                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("اسم المعلم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("اسم المعلم:"), fr = BiFr.of("اسم المعلم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(authorName, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("بريد المعلم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("بريد المعلم:"), fr = BiFr.of("بريد المعلم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(authorEmail, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("نوع الإعلان:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("نوع الإعلان:"), fr = BiFr.of("نوع الإعلان:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(offerType, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("التخصص:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("التخصص:"), fr = BiFr.of("التخصص:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(specialty, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("الولاية الحالية:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("الولاية الحالية:"), fr = BiFr.of("الولاية الحالية:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(currentWilaya, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("المقاطعة الحالية:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("المقاطعة الحالية:"), fr = BiFr.of("المقاطعة الحالية:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(currentMoughataa, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("المدرسة:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("المدرسة:"), fr = BiFr.of("المدرسة:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(schoolName, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("الولايات المستهدفة:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("الولايات المستهدفة:"), fr = BiFr.of("الولايات المستهدفة:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         Text(targetWilayas, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
                                     }
                                     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                                        Text(uiT("حالة الطلب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        BiText(ar = uiT("حالة الطلب:"), fr = BiFr.of("حالة الطلب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                         val isPending = status == "pending"
                                         Box(
                                             modifier = Modifier
@@ -13501,7 +13147,7 @@ fun ExchangeRequestApprovalView(
                                         } else {
                                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                                 Icon(Icons.Default.CheckCircle, contentDescription = null, modifier = Modifier.size(18.dp))
-                                                Text(uiT("الموافقة على النشر للعامة ✅"), fontWeight = FontWeight.Black)
+                                                BiTextA(ar = uiT("الموافقة على النشر للعامة ✅"), fr = BiFr.of("الموافقة على النشر للعامة ✅"), fontWeight = FontWeight.Black)
                                             }
                                         }
                                     }
@@ -13512,7 +13158,7 @@ fun ExchangeRequestApprovalView(
                                         colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                                         shape = RoundedCornerShape(12.dp)
                                     ) {
-                                        Text(uiT("تم النشر مسبقاً - إغلاق 🏠"), fontWeight = FontWeight.Bold)
+                                        BiTextA(ar = uiT("تم النشر مسبقاً - إغلاق 🏠"), fr = BiFr.of("تم النشر مسبقاً - إغلاق 🏠"), fontWeight = FontWeight.Bold)
                                     }
                                 }
                             }
