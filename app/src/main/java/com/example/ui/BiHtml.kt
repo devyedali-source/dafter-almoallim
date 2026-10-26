@@ -157,6 +157,7 @@ object BiHtml {
     }
 
     fun translate(html: String): String {
+        if (!BiFr.enabled) return html
         if (html.contains(MARK)) return html
         var out = html
 
