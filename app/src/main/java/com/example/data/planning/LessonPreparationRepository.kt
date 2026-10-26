@@ -165,11 +165,13 @@ object LessonPreparationRepository {
             else -> OfficialAnnualPlanningRepository.mapMatiereToArabic(off.matiere)
         }
 
+        // الموضوع: عنوان النص/الدرس فقط (قصير)، لا الوصف الرسمي الطويل
+        val baseTopic = off.titre_court?.takeIf { it.isNotBlank() } ?: off.titre_officiel
         val finalTopic = if (off.partie > 1 || off.est_suite) {
-            if (isFrench) "${off.titre_officiel} (Suite)"
-            else "${off.titre_officiel} (تابع)"
+            if (isFrench) "$baseTopic (Suite)"
+            else "$baseTopic (تابع)"
         } else {
-            off.titre_officiel
+            baseTopic
         }
 
         val sessionText = if (isFrench) {
