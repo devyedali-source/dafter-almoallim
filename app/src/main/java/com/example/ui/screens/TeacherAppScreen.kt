@@ -4456,7 +4456,7 @@ fun MauritaniaDropdown(
     onValueChanged: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = label,
@@ -4468,12 +4468,12 @@ fun MauritaniaDropdown(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .heightIn(min = 48.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(BentoLightLavender)
                 .border(1.dp, BentoGrayOutline, RoundedCornerShape(12.dp))
                 .clickable { expanded = true }
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 12.dp, vertical = 6.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -4482,41 +4482,69 @@ fun MauritaniaDropdown(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = selectedValue,
+                    text = com.example.ui.utils.BiFr.geoLabel(selectedValue),
                     style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 12.5.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = BentoText
+                    color = BentoText,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
                 Icon(
-                    imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = null,
                     tint = BentoPrimary,
                     modifier = Modifier.size(20.dp)
                 )
             }
-            
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
+        }
+    }
+
+    // نافذة اختيار مضغوطة بارتفاع محدود وتمرير، بدل القائمة التي كانت تغطي الشاشة كلها
+    if (expanded) {
+        androidx.compose.ui.window.Dialog(onDismissRequest = { expanded = false }) {
+            Card(
                 modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth(0.85f)
+                    .fillMaxWidth()
+                    .heightIn(max = 460.dp),
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                options.forEach { option ->
-                    DropdownMenuItem(
-                        text = { 
-                            Text(
-                                text = option, 
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium,
-                                color = BentoText
-                            ) 
-                        },
-                        onClick = {
-                            onValueChanged(option)
-                            expanded = false
-                        }
+                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                    Text(
+                        text = label,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        color = BentoPrimary,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
+                    HorizontalDivider(color = BentoGrayOutline.copy(alpha = 0.6f))
+                    androidx.compose.foundation.lazy.LazyColumn {
+                        items(options.size) { i ->
+                            val option = options[i]
+                            val isSel = option == selectedValue
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(if (isSel) BentoLightLavender else Color.Transparent)
+                                    .clickable {
+                                        onValueChanged(option)
+                                        expanded = false
+                                    }
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = com.example.ui.utils.BiFr.geoLabel(option),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = if (isSel) FontWeight.Bold else FontWeight.Medium,
+                                    color = if (isSel) BentoPrimary else BentoText,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -124,6 +124,39 @@ object BiFr {
         "قواعد النحو والصرف" to "Grammaire arabe"
     )
 
+
+    /** أسماء الولايات والمقاطعات بالفرنسية (حسب القائمة الرسمية). */
+    private val geo: Map<String, String> = mapOf(
+        "الحوض الشرقي" to "Hodh Ech Chargui", "الحوض الغربي" to "Hodh El Gharbi", "لعصابه" to "Assaba",
+        "كوركول" to "Gorgol", "لبراكنه" to "Brakna", "اترارزه" to "Trarza", "آدرار" to "Adrar",
+        "داخلت نواذيبو" to "Dakhlet Nouadhibou", "تكانت" to "Tagant", "كيدي ماغا" to "Guidimagha",
+        "تيرس زمور" to "Tiris Zemmour", "إنشيري" to "Inchiri",
+        "نواكشوط الشمالية" to "Nouakchott-Nord", "نواكشوط الغربية" to "Nouakchott-Ouest", "نواكشوط الجنوبية" to "Nouakchott-Sud",
+        "النعمة" to "Néma", "تمبدغة" to "Timbédra", "آمرج" to "Amourj", "باسكنو" to "Bassikounou", "جكني" to "Djigueni",
+        "ولاته" to "Oualata", "عدل بكرو" to "Adel Bagrou", "انبيكت لحواش" to "N'Beiket Lehwach",
+        "لعيون" to "Aïoun", "الطينطان" to "Tintane", "كوبني" to "Koubenni", "تامشكط" to "Tamchekett", "اطويل" to "Touil",
+        "كيفه" to "Kiffa", "كرو" to "Guerou", "كنكوصة" to "Kankossa", "بومديد" to "Boumdeid", "باركيول" to "Barkéol",
+        "كيهيدي" to "Kaédi", "مونغل" to "Monguel", "مقامة" to "Maghama", "إمبود" to "M'Bout", "لكصيبة" to "Lexeiba",
+        "ألاك" to "Aleg", "بوكى" to "Boghé", "بابابى" to "Bababé", "مبان" to "M'Bagne", "مقطع لحجار" to "Magta Lahjar", "مال" to "Male",
+        "روصو" to "Rosso", "بوتلميت" to "Boutilimit", "المذرذرة" to "Méderdra", "واد الناقة" to "Ouad Naga",
+        "اركيز" to "R'Kiz", "كرمسين" to "Keur Macène", "انتيكان" to "Tékane",
+        "أطار" to "Atar", "شنقيط" to "Chinguetti", "وادان" to "Ouadane", "أوجفت" to "Aoujeft",
+        "نواذيبو" to "Nouadhibou", "الشامي" to "Chami",
+        "تجكجة" to "Tidjikja", "المجرية" to "Moudjéria", "تيشيت" to "Tichitt",
+        "سيلبابي" to "Sélibaby", "ولد ينجة" to "Ould Yengé", "غابو" to "Ghabou", "ومبو" to "Wompou",
+        "ازويرات" to "Zouérate", "فديرك" to "F'Déirick", "بير أم اكرين" to "Bir Moghrein",
+        "أكجوجت" to "Akjoujt", "بنشاب" to "Bénichab",
+        "دار النعيم" to "Dar Naïm", "تيارت" to "Teyarett", "توجنين" to "Toujounine",
+        "تفرغ زينة" to "Tevragh Zeina", "لكصر" to "Ksar", "السبخة" to "Sebkha",
+        "عرفات" to "Arafat", "الميناء" to "El Mina", "الرياض" to "Riyad"
+    )
+
+    /** «الحوض الشرقي - Hodh Ech Chargui»؛ وإن لم يوجد اسم فرنسي يبقى العربي وحده. */
+    fun geoLabel(ar: String): String {
+        val f = geo[ar.trim()] ?: return ar
+        return "$ar - $f"
+    }
+
     /** الترجمة الفرنسية لعبارة واجهة عربية، أو null إن لم تتوفر (فيظهر العربي وحده). */
     fun of(ar: String): String? {
         val k = norm(ar)
