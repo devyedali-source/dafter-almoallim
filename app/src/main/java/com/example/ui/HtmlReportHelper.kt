@@ -3759,7 +3759,7 @@ object HtmlReportHelper {
                         }, 1200)
                     }
                 }
-                webView.loadDataWithBaseURL("file:///android_res/", htmlContent, "text/html", "utf-8", null)
+                webView.loadDataWithBaseURL("file:///android_res/", com.example.ui.BiHtml.translate(htmlContent), "text/html", "utf-8", null)
             }
         }
     }
@@ -3929,7 +3929,7 @@ object HtmlReportHelper {
                     }, 1200)
                 }
             }
-            webView.loadDataWithBaseURL("file:///android_res/", htmlContent, "text/html", "utf-8", null)
+            webView.loadDataWithBaseURL("file:///android_res/", com.example.ui.BiHtml.translate(htmlContent), "text/html", "utf-8", null)
         }
     }
 }
