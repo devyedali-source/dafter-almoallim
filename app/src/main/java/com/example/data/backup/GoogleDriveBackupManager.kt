@@ -295,6 +295,7 @@ class GoogleDriveBackupManager(
         currentUserId: String? = null,
         currentUserEmail: String? = null,
         isLogout: Boolean = false,
+        force: Boolean = false,
         onProgress: ((Int, String) -> Unit)? = null
     ): BackupResult<Unit> = withContext(Dispatchers.IO) {
         if (!isNetworkAvailable()) {
@@ -391,7 +392,16 @@ class GoogleDriveBackupManager(
 
             val markerPrefs = context.getSharedPreferences("teacher_settings_prefs", Context.MODE_PRIVATE)
             val storedMarker = markerPrefs.getString("drive_backup_marker", null)
-            if (!storedMarker.isNullOrBlank() && !remoteMarker.isNullOrBlank() && storedMarker != remoteMarker) {
+            // الملف تغيّر منذ آخر مزامنة: هل رفعه هذا الجهاز نفسه (مثلاً رفع نجح لكن الاتصال انقطع قبل تسجيل العلامة)؟
+            val changedSinceLastSync = !storedMarker.isNullOrBlank() && !remoteMarker.isNullOrBlank() && storedMarker != remoteMarker
+            val remoteIsOurs = changedSinceLastSync && !force && try {
+                backupAdapter.fromJson(downloadBackupFileContent(authToken, fileId))?.deviceId == currentDeviceId()
+            } catch (e: GoogleDriveAuthException) {
+                throw e
+            } catch (e: Exception) {
+                false
+            }
+            if (changedSinceLastSync && !force && !remoteIsOurs) {
                 return BackupResult.Error(
                     "لم يتم رفع أي شيء حفاظا على بياناتك: جهاز آخر زامن هذا الحساب بعد آخر مزامنة على هذا الجهاز. افتح التطبيق على ذلك الجهاز، أو سجّل الخروج من أحد الجهازين، حتى لا يمحو جهاز عمل جهاز آخر."
                 )

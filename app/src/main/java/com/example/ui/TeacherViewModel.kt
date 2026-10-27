@@ -269,6 +269,30 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    private val _manualSyncConflict = MutableStateFlow(false)
+    val manualSyncConflict: StateFlow<Boolean> = _manualSyncConflict.asStateFlow()
+    fun clearManualSyncConflict() { _manualSyncConflict.value = false }
+
+    /** مزامنة يدوية من القائمة الجانبية. force = استبدال نسخة Drive بنسخة هذا الجهاز. */
+    fun manualDriveSync(force: Boolean = false, onResult: (String) -> Unit) {
+        _manualSyncConflict.value = false
+        performGoogleDriveBackup(force = force) { ok, msg ->
+            if (ok) {
+                onResult("✅ تمت المزامنة مع Drive")
+            } else if (msg.contains("جهاز آخر زامن هذا الحساب")) {
+                _manualSyncConflict.value = true
+            } else {
+                onResult("⚠️ $msg")
+            }
+        }
+    }
+
+    /** استرجاع نسخة Drive إلى هذا الجهاز (تستبدل بيانات هذا الجهاز). */
+    fun manualDriveRestore(onResult: (String) -> Unit) {
+        _manualSyncConflict.value = false
+        performGoogleDriveRestore { ok, msg -> onResult(if (ok) "✅ تم استرجاع نسخة Drive" else "⚠️ $msg") }
+    }
+
     private val _logoutConflictMessage = MutableStateFlow<String?>(null)
     val logoutConflictMessage: StateFlow<String?> = _logoutConflictMessage.asStateFlow()
 
@@ -276,7 +300,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         _logoutConflictMessage.value = null
     }
 
-    fun performGoogleDriveBackup(silent: Boolean = false, isLogout: Boolean = false, onResult: (Boolean, String) -> Unit) {
+    fun performGoogleDriveBackup(silent: Boolean = false, isLogout: Boolean = false, force: Boolean = false, onResult: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             if (!silent) {
                 _isBackupRestoreLoading.value = true
@@ -291,6 +315,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     currentUserId = curUser?.uid,
                     currentUserEmail = curUser?.email,
                     isLogout = isLogout,
+                    force = force,
                     onProgress = { percent, msg ->
                         _driveProgressPercent.value = percent
                         _driveProgressMessage.value = msg
