@@ -74,7 +74,16 @@ data class CourseSpecialization(
     val id: String,
     val title: String,
     val trackKey: String
-)
+) {
+    /** الاسم الفرنسي للتخصّص (يظهر تحت العربي). */
+    val titleFr: String
+        get() = when (id) {
+            "MAINAR" -> "Enseignant principal arabe"
+            "TEACHAR" -> "Enseignant arabe"
+            "MAINDU" -> "Enseignant principal bilingue"
+            else -> "Enseignant bilingue"
+        }
+}
 
 val COURSE_SPECIALIZATIONS = listOf(
     CourseSpecialization("MAINAR", "معلم رئيسي عربي", "ar"),
@@ -452,8 +461,9 @@ private fun CourseSpecializationList(onSelect: (CourseSpecialization) -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(modifier = Modifier.padding(end = 8.dp)) {
-                        Text(
-                            text = if (unlocked) spec.title else "🔒 ${spec.title}",
+                        BiText(
+                            ar = if (unlocked) spec.title else "🔒 ${spec.title}",
+                            fr = spec.titleFr,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -502,7 +512,7 @@ private fun CourseSubjectList(
     ) {
         CourseBackLink(text = "رجوع إلى التخصّصات", onClick = onBack)
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = spec.title, fontSize = 18.sp, fontWeight = FontWeight.Black)
+        BiText(ar = spec.title, fr = spec.titleFr, fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(4.dp))
         BiText(ar = uiT("اختر المادة"), fr = BiFr.of("اختر المادة"), fontSize = 13.sp, color = CourseMutedColor)
         Spacer(modifier = Modifier.height(14.dp))
