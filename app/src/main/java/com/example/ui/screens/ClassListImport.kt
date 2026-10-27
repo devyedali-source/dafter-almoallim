@@ -70,11 +70,6 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
                     "⚠️ لا توجد بيانات قسم داخل هذا الملف. أعد تصدير اللائحة من النسخة الجديدة للتطبيق ثم ارفعها.",
                     Toast.LENGTH_LONG
                 ).show()
-            } else if (targetClassId != null) {
-                // داخل قسم فارغ: تُسجَّل كل أسماء اللائحة مباشرة دون سؤال
-                viewModel.importStudentsToClass(targetClassId, result.students) { added, skipped ->
-                    Toast.makeText(context, "🎉 تم تسجيل $added تلميذًا في القسم" + if (skipped > 0) " (تُجووز $skipped مكرَّرًا)" else "", Toast.LENGTH_LONG).show()
-                }
             } else {
                 parsed = result
             }
@@ -96,10 +91,10 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
     parsed?.let { data ->
         AlertDialog(
             onDismissRequest = { parsed = null },
-            title = { Text(if (targetClassId != null) "إضافة اللائحة إلى هذا القسم" else "اختر القسم الذي تُضاف إليه اللائحة", fontWeight = FontWeight.Bold) },
+            title = { Text(if (targetClassId != null) "تأكيد تسجيل اللائحة" else "اختر القسم الذي تُضاف إليه اللائحة", fontWeight = FontWeight.Bold) },
             text = {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    Text("في الملف ${data.students.size} تلميذًا (${data.schoolName} - ${getLevelArabicName(data.level)} ${data.sectionName})", style = MaterialTheme.typography.bodySmall)
+                    Text(if (targetClassId != null) "عدد التلاميذ في اللائحة: ${data.students.size}" else "في الملف ${data.students.size} تلميذًا (${data.schoolName} - ${getLevelArabicName(data.level)} ${data.sectionName})", fontWeight = if (targetClassId != null) FontWeight.Bold else null, style = MaterialTheme.typography.bodyMedium)
                     Spacer(Modifier.height(6.dp))
                     Text(
                         data.students.take(4).joinToString("\n") { "• ${it.name}" } + if (data.students.size > 4) "\n..." else "",
@@ -133,7 +128,7 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
                         parsed = null
                         chosenId = targetClassId
                     }
-                ) { Text("إضافة إلى القسم", fontWeight = FontWeight.Bold) }
+                ) { Text(if (targetClassId != null) "تأكيد" else "إضافة إلى القسم", fontWeight = FontWeight.Bold) }
             },
             dismissButton = { TextButton(onClick = { parsed = null }) { Text("إلغاء") } }
         )
