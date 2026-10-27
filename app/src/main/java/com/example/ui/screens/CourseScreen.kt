@@ -1,6 +1,9 @@
 package com.example.ui.screens
 
 import com.example.ui.utils.uiT
+import com.example.ui.utils.BiFr
+import com.example.ui.utils.BiTextA
+import com.example.ui.utils.BiText
 import com.example.ui.utils.uiTf
 
 import androidx.compose.foundation.BorderStroke
@@ -86,8 +89,8 @@ private fun courseScoreOutOf20(correct: Int, total: Int): Int {
 
 @Composable
 private fun CourseBackLink(text: String, onClick: () -> Unit) {
-    Text(
-        text = "› $text",
+    BiText(
+        ar = "› $text",
         fontSize = 14.sp,
         fontWeight = FontWeight.Bold,
         color = CourseMutedColor,
@@ -215,7 +218,7 @@ fun CourseScreen() {
         ) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = uiT("جارٍ تحضير الدورة..."), fontSize = 14.sp)
+            BiText(ar = uiT("جارٍ تحضير الدورة..."), fr = BiFr.of("جارٍ تحضير الدورة..."), fontSize = 14.sp)
         }
         return
     }
@@ -226,12 +229,7 @@ fun CourseScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = uiT("تعذّر تحميل محتوى الدورة"),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = CourseBadColor
-            )
+            BiText(ar = uiT("تعذّر تحميل محتوى الدورة"), fr = BiFr.of("تعذّر تحميل محتوى الدورة"), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = CourseBadColor)
             Spacer(modifier = Modifier.height(12.dp))
             SelectionContainer {
                 Text(
@@ -322,12 +320,7 @@ fun CourseScreen() {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
             CourseBackLink(text = "رجوع إلى الدروس", onClick = { selectedLessonId = null })
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = uiT("تعذّر العثور على الدرس"),
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = CourseBadColor
-            )
+            BiText(ar = uiT("تعذّر العثور على الدرس"), fr = BiFr.of("تعذّر العثور على الدرس"), fontSize = 15.sp, fontWeight = FontWeight.Bold, color = CourseBadColor)
         }
         return
     }
@@ -393,13 +386,9 @@ private fun CourseSpecializationList(onSelect: (CourseSpecialization) -> Unit) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Text(text = uiT("اختر التخصّص"), fontSize = 18.sp, fontWeight = FontWeight.Black)
+        BiText(ar = uiT("اختر التخصّص"), fr = BiFr.of("اختر التخصّص"), fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = uiT("دورة تحضير مسابقات المعلمين"),
-            fontSize = 13.sp,
-            color = CourseMutedColor
-        )
+        BiText(ar = uiT("دورة تحضير مسابقات المعلمين"), fr = BiFr.of("دورة تحضير مسابقات المعلمين"), fontSize = 13.sp, color = CourseMutedColor)
         Spacer(modifier = Modifier.height(14.dp))
 
         Card(
@@ -411,12 +400,7 @@ private fun CourseSpecializationList(onSelect: (CourseSpecialization) -> Unit) {
                 modifier = Modifier.padding(14.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Text(
-                    text = uiT("📢 عن الدورة"),
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Black,
-                    color = CourseOkColor
-                )
+                BiText(ar = uiT("📢 عن الدورة"), fr = BiFr.of("📢 عن الدورة"), fontSize = 15.sp, fontWeight = FontWeight.Black, color = CourseOkColor)
                 Text(
                     text = uiT("محتوى هذه الدورة مأخوذ من البرنامج الرسمي لمسابقات المعلمين، وهو نفسه المحتوى الذي يُمتحن فيه التلاميذ المعلمون."),
                     fontSize = 13.5.sp,
@@ -479,27 +463,14 @@ private fun CourseSpecializationList(onSelect: (CourseSpecialization) -> Unit) {
                                 currentUid
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = uiTf("مفتوح · تبقّى {0} يومًا · ينتهي في {1}", daysLeft, expiryText),
-                                fontSize = 12.sp,
-                                color = if (expiringSoon) CourseWarnColor else CourseOkColor
-                            )
+                            BiText(ar = uiTf("مفتوح · تبقّى {0} يومًا · ينتهي في {1}", daysLeft, expiryText), fr = BiFr.f("مفتوح · تبقّى {0} يومًا · ينتهي في {1}", daysLeft, expiryText), fontSize = 12.sp, color = if (expiringSoon) CourseWarnColor else CourseOkColor)
                             if (expiringSoon) {
                                 Spacer(modifier = Modifier.height(2.dp))
-                                Text(
-                                    text = uiT("اشتراكك يقارب الانتهاء، جدّده قبل انقطاع المحتوى."),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = CourseWarnColor
-                                )
+                                BiText(ar = uiT("اشتراكك يقارب الانتهاء، جدّده قبل انقطاع المحتوى."), fr = BiFr.of("اشتراكك يقارب الانتهاء، جدّده قبل انقطاع المحتوى."), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = CourseWarnColor)
                             }
                         } else {
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = uiT("يحتاج تفعيلًا"),
-                                fontSize = 12.sp,
-                                color = CourseWarnColor
-                            )
+                            BiText(ar = uiT("يحتاج تفعيلًا"), fr = BiFr.of("يحتاج تفعيلًا"), fontSize = 12.sp, color = CourseWarnColor)
                         }
                     }
                     Text(text = "‹", fontSize = 18.sp, color = CourseMutedColor)
@@ -532,7 +503,7 @@ private fun CourseSubjectList(
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = spec.title, fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = uiT("اختر المادة"), fontSize = 13.sp, color = CourseMutedColor)
+        BiText(ar = uiT("اختر المادة"), fr = BiFr.of("اختر المادة"), fontSize = 13.sp, color = CourseMutedColor)
         Spacer(modifier = Modifier.height(14.dp))
 
         for (name in subjectNames) {
@@ -552,19 +523,11 @@ private fun CourseSubjectList(
                 Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
                     Text(text = name, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = uiTf("{0} درسًا · {1} امتحانًا", lessonsCount, examsCount) +
-                            (if (writingsCount > 0) " · $writingsCount موضوع إنتاج" else ""),
-                        fontSize = 13.sp,
-                        color = CourseMutedColor
-                    )
+                    BiText(ar = uiTf("{0} درسًا · {1} امتحانًا", lessonsCount, examsCount) +
+                            (if (writingsCount > 0) " · $writingsCount موضوع إنتاج" else ""), fr = BiFr.f("{0} درسًا · {1} امتحانًا", lessonsCount, examsCount) +
+                            (if (writingsCount > 0) " · $writingsCount موضوع إنتاج" else ""), fontSize = 13.sp, color = CourseMutedColor)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = uiTf("المنجَز: {0} من {1} ({2}٪)", passed, lessonsCount, percent),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (passed > 0) CourseOkColor else CourseMutedColor
-                    )
+                    BiText(ar = uiTf("المنجَز: {0} من {1} ({2}٪)", passed, lessonsCount, percent), fr = BiFr.f("المنجَز: {0} من {1} ({2}٪)", passed, lessonsCount, percent), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (passed > 0) CourseOkColor else CourseMutedColor)
                 }
             }
         }
@@ -573,38 +536,21 @@ private fun CourseSubjectList(
         if (showSimLock && !simUnlocked) {
             Card(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
                 Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = uiT("🔒 المحاكي مقفل"),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Black,
-                        color = CourseWarnColor
-                    )
+                    BiText(ar = uiT("🔒 المحاكي مقفل"), fr = BiFr.of("🔒 المحاكي مقفل"), fontSize = 15.sp, fontWeight = FontWeight.Black, color = CourseWarnColor)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = uiTf("يُفتح المحاكي بعد النجاح في {0} دروس من كل مادة.", CourseProgressStore.SIMULATOR_LESSONS_PER_SUBJECT),
-                        fontSize = 14.sp
-                    )
+                    BiText(ar = uiTf("يُفتح المحاكي بعد النجاح في {0} دروس من كل مادة.", CourseProgressStore.SIMULATOR_LESSONS_PER_SUBJECT), fr = BiFr.f("يُفتح المحاكي بعد النجاح في {0} دروس من كل مادة.", CourseProgressStore.SIMULATOR_LESSONS_PER_SUBJECT), fontSize = 14.sp)
                     Spacer(modifier = Modifier.height(6.dp))
                     for ((name, missing) in simMissing) {
-                        Text(
-                            text = uiTf("• {0}: تبقّى {1} درسًا", name, missing),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = CourseWarnColor
-                        )
+                        BiText(ar = uiTf("• {0}: تبقّى {1} درسًا", name, missing), fr = BiFr.f("• {0}: تبقّى {1} درسًا", name, missing), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = CourseWarnColor)
                     }
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = uiT("والدرس يُحسب منجَزًا إذا نلتَ في اختباره عشرة من عشرين فما فوق."),
-                        fontSize = 12.sp,
-                        color = CourseMutedColor
-                    )
+                    BiText(ar = uiT("والدرس يُحسب منجَزًا إذا نلتَ في اختباره عشرة من عشرين فما فوق."), fr = BiFr.of("والدرس يُحسب منجَزًا إذا نلتَ في اختباره عشرة من عشرين فما فوق."), fontSize = 12.sp, color = CourseMutedColor)
                     Spacer(modifier = Modifier.height(10.dp))
                     OutlinedButton(
                         onClick = { showSimLock = false },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = uiT("حسنًا"), fontSize = 14.sp)
+                        BiText(ar = uiT("حسنًا"), fr = BiFr.of("حسنًا"), fontSize = 14.sp)
                     }
                 }
             }
@@ -618,18 +564,9 @@ private fun CourseSubjectList(
                 }
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
-                Text(
-                    text = if (simUnlocked) "🎯 المحاكي الشامل" else "🔒 المحاكي الشامل",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Black,
-                    color = CourseWarnColor
-                )
+                BiText(ar = if (simUnlocked) "🎯 المحاكي الشامل" else "🔒 المحاكي الشامل", fontSize = 15.sp, fontWeight = FontWeight.Black, color = CourseWarnColor)
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = uiTf("كل المواد في امتحان واحد · {0} سؤالًا (20 من كل مادة) · 3 ساعات", subjectNames.size * 20),
-                    fontSize = 13.sp,
-                    color = CourseMutedColor
-                )
+                BiText(ar = uiTf("كل المواد في امتحان واحد · {0} سؤالًا (20 من كل مادة) · 3 ساعات", subjectNames.size * 20), fr = BiFr.f("كل المواد في امتحان واحد · {0} سؤالًا (20 من كل مادة) · 3 ساعات", subjectNames.size * 20), fontSize = 13.sp, color = CourseMutedColor)
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = if (simUnlocked) {
@@ -670,11 +607,7 @@ private fun CourseLessonList(
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = subjectName, fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = uiTf("{0} · {1} درسًا · المنجَز {2}", spec.title, lessons.size, passed),
-            fontSize = 13.sp,
-            color = CourseMutedColor
-        )
+        BiText(ar = uiTf("{0} · {1} درسًا · المنجَز {2}", spec.title, lessons.size, passed), fr = BiFr.f("{0} · {1} درسًا · المنجَز {2}", spec.title, lessons.size, passed), fontSize = 13.sp, color = CourseMutedColor)
         Spacer(modifier = Modifier.height(14.dp))
 
         Card(
@@ -714,12 +647,7 @@ private fun CourseLessonList(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = uiT("الإنتاج الكتابي"),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Black,
-                        color = CourseOkColor
-                    )
+                    BiText(ar = uiT("الإنتاج الكتابي"), fr = BiFr.of("الإنتاج الكتابي"), fontSize = 15.sp, fontWeight = FontWeight.Black, color = CourseOkColor)
                     Text(text = "‹", fontSize = 18.sp, color = CourseMutedColor)
                 }
             }
@@ -841,16 +769,11 @@ private fun CourseLessonDetail(
                 )
                 if (lesson.ref.isNotBlank()) {
                     Spacer(modifier = Modifier.height(2.dp))
-                    Text(text = uiTf("المرجع: {0}", lesson.ref), fontSize = 12.sp, color = CourseMutedColor)
+                    BiText(ar = uiTf("المرجع: {0}", lesson.ref), fr = BiFr.f("المرجع: {0}", lesson.ref), fontSize = 12.sp, color = CourseMutedColor)
                 }
                 if (score != null) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = uiTf("أفضل نقطة لك في هذا الدرس: {0}/20", score),
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (score >= 10) CourseOkColor else CourseWarnColor
-                    )
+                    BiText(ar = uiTf("أفضل نقطة لك في هذا الدرس: {0}/20", score), fr = BiFr.f("أفضل نقطة لك في هذا الدرس: {0}/20", score), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (score >= 10) CourseOkColor else CourseWarnColor)
                 }
 
                 if (lesson.st.isNotBlank()) {
@@ -888,11 +811,7 @@ private fun CourseLessonDetail(
                                 fontWeight = FontWeight.Bold
                             )
                             Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = uiTf("الجواب: {0}", example.answer),
-                                fontSize = 14.sp,
-                                color = CourseOkColor
-                            )
+                            BiText(ar = uiTf("الجواب: {0}", example.answer), fr = BiFr.f("الجواب: {0}", example.answer), fontSize = 14.sp, color = CourseOkColor)
                             if (example.explanation.isNotBlank()) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
@@ -917,7 +836,7 @@ private fun CourseLessonDetail(
             onClick = { onStartTest() },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = uiTf("اختبر نفسك ({0} سؤالًا)", lesson.qs.size), fontSize = 15.sp)
+            BiText(ar = uiTf("اختبر نفسك ({0} سؤالًا)", lesson.qs.size), fr = BiFr.f("اختبر نفسك ({0} سؤالًا)", lesson.qs.size), fontSize = 15.sp)
         }
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -973,7 +892,7 @@ private fun CourseLessonTest(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            Text(text = uiT("نتيجة اختبار الدرس"), fontSize = 18.sp, fontWeight = FontWeight.Black)
+            BiText(ar = uiT("نتيجة اختبار الدرس"), fr = BiFr.of("نتيجة اختبار الدرس"), fontSize = 18.sp, fontWeight = FontWeight.Black)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "${lesson.no}. ${lesson.title} · $subjectName",
@@ -998,11 +917,7 @@ private fun CourseLessonTest(
                         }
                     )
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = uiTf("إجابات صحيحة: {0} من {1}", correctCount, total),
-                        fontSize = 14.sp,
-                        color = CourseMutedColor
-                    )
+                    BiText(ar = uiTf("إجابات صحيحة: {0} من {1}", correctCount, total), fr = BiFr.f("إجابات صحيحة: {0} من {1}", correctCount, total), fontSize = 14.sp, color = CourseMutedColor)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
                         text = when {
@@ -1031,7 +946,7 @@ private fun CourseLessonTest(
                         onClick = { onGoToNextLesson() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = uiT("الدرس الموالي"), fontSize = 15.sp)
+                        BiText(ar = uiT("الدرس الموالي"), fr = BiFr.of("الدرس الموالي"), fontSize = 15.sp)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -1039,14 +954,14 @@ private fun CourseLessonTest(
                     onClick = { onExitToLesson() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = uiT("إعادة قراءة الدرس"), fontSize = 15.sp)
+                    BiText(ar = uiT("إعادة قراءة الدرس"), fr = BiFr.of("إعادة قراءة الدرس"), fontSize = 15.sp)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedButton(
                     onClick = { attempt++ },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = uiT("إعادة الامتحان"), fontSize = 15.sp)
+                    BiText(ar = uiT("إعادة الامتحان"), fr = BiFr.of("إعادة الامتحان"), fontSize = 15.sp)
                 }
             } else {
                 Card(modifier = Modifier.fillMaxWidth()) {
@@ -1062,14 +977,14 @@ private fun CourseLessonTest(
                     onClick = { onExitToLesson() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = uiT("إعادة قراءة الدرس"), fontSize = 15.sp)
+                    BiText(ar = uiT("إعادة قراءة الدرس"), fr = BiFr.of("إعادة قراءة الدرس"), fontSize = 15.sp)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedButton(
                     onClick = { attempt++ },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = uiT("إعادة الامتحان"), fontSize = 15.sp)
+                    BiText(ar = uiT("إعادة الامتحان"), fr = BiFr.of("إعادة الامتحان"), fontSize = 15.sp)
                 }
             }
 
@@ -1091,12 +1006,7 @@ private fun CourseLessonTest(
     ) {
         CourseBackLink(text = "الخروج من الاختبار", onClick = onExitToLesson)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = uiTf("السؤال {0} من {1}", index + 1, total),
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Bold,
-            color = CourseMutedColor
-        )
+        BiText(ar = uiTf("السؤال {0} من {1}", index + 1, total), fr = BiFr.f("السؤال {0} من {1}", index + 1, total), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = CourseMutedColor)
         Spacer(modifier = Modifier.height(10.dp))
 
         Card(modifier = Modifier.fillMaxWidth()) {
@@ -1155,24 +1065,14 @@ private fun CourseLessonTest(
         if (chosen != null) {
             Spacer(modifier = Modifier.height(12.dp))
             val isRight = chosen == question.k
-            Text(
-                text = if (isRight) "إجابة صحيحة ✅" else "إجابة خاطئة ❌",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Black,
-                color = if (isRight) CourseOkColor else CourseBadColor
-            )
+            BiText(ar = if (isRight) "إجابة صحيحة ✅" else "إجابة خاطئة ❌", fontSize = 15.sp, fontWeight = FontWeight.Black, color = if (isRight) CourseOkColor else CourseBadColor)
             if (chosen < question.f.size && question.f[chosen].isNotBlank()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(text = question.f[chosen], fontSize = 14.sp)
             }
             if (!isRight) {
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = uiTf("الصواب: {0}", question.c[question.k]),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = CourseOkColor
-                )
+                BiText(ar = uiTf("الصواب: {0}", question.c[question.k]), fr = BiFr.f("الصواب: {0}", question.c[question.k]), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = CourseOkColor)
             }
             if (question.e.isNotBlank()) {
                 Spacer(modifier = Modifier.height(6.dp))
@@ -1198,10 +1098,7 @@ private fun CourseLessonTest(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = if (index < total - 1) "السؤال الموالي" else "عرض النتيجة",
-                    fontSize = 15.sp
-                )
+                BiText(ar = if (index < total - 1) "السؤال الموالي" else "عرض النتيجة", fontSize = 15.sp)
             }
         }
 
@@ -1255,7 +1152,7 @@ fun CourseVerificationScreen() {
         ) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = uiT("جارٍ قراءة محتوى الدورة..."), fontSize = 14.sp)
+            BiText(ar = uiT("جارٍ قراءة محتوى الدورة..."), fr = BiFr.of("جارٍ قراءة محتوى الدورة..."), fontSize = 14.sp)
         }
         return
     }
@@ -1267,20 +1164,11 @@ fun CourseVerificationScreen() {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Text(
-            text = uiT("تحقّق مؤقّت من محتوى الدورة"),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Black
-        )
+        BiText(ar = uiT("تحقّق مؤقّت من محتوى الدورة"), fr = BiFr.of("تحقّق مؤقّت من محتوى الدورة"), fontSize = 18.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(12.dp))
 
         if (s == null || s.lessons == 0) {
-            Text(
-                text = uiT("فشلت قراءة الملف ❌"),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = CourseBadColor
-            )
+            BiText(ar = uiT("فشلت قراءة الملف ❌"), fr = BiFr.of("فشلت قراءة الملف ❌"), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = CourseBadColor)
         } else {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp)) {
@@ -1293,7 +1181,7 @@ fun CourseVerificationScreen() {
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = uiT("المسارات"), fontSize = 16.sp, fontWeight = FontWeight.Black)
+            BiText(ar = uiT("المسارات"), fr = BiFr.of("المسارات"), fontSize = 16.sp, fontWeight = FontWeight.Black)
             Spacer(modifier = Modifier.height(8.dp))
             for (track in tracks) {
                 Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
@@ -1413,7 +1301,7 @@ private fun CourseSubscriptionDialog(
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = {
-            Text(text = uiT("تفعيل الدورة"), fontWeight = FontWeight.Black, fontSize = 17.sp)
+            BiText(ar = uiT("تفعيل الدورة"), fr = BiFr.of("تفعيل الدورة"), fontWeight = FontWeight.Black, fontSize = 17.sp)
         },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -1429,18 +1317,14 @@ private fun CourseSubscriptionDialog(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("المدّة"), fontSize = 14.sp, color = CourseMutedColor)
-                    Text(
-                        text = uiTf("{0} يومًا", CourseSubscriptionStore.SUBSCRIPTION_DAYS),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    BiText(ar = uiT("المدّة"), fr = BiFr.of("المدّة"), fontSize = 14.sp, color = CourseMutedColor)
+                    BiText(ar = uiTf("{0} يومًا", CourseSubscriptionStore.SUBSCRIPTION_DAYS), fr = BiFr.f("{0} يومًا", CourseSubscriptionStore.SUBSCRIPTION_DAYS), fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("السعر"), fontSize = 14.sp, color = CourseMutedColor)
+                    BiText(ar = uiT("السعر"), fr = BiFr.of("السعر"), fontSize = 14.sp, color = CourseMutedColor)
                     Text(
                         text = CourseSubscriptionStore.SUBSCRIPTION_PRICE,
                         fontSize = 14.sp,
@@ -1452,7 +1336,7 @@ private fun CourseSubscriptionDialog(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = uiT("ينتهي في"), fontSize = 14.sp, color = CourseMutedColor)
+                    BiText(ar = uiT("ينتهي في"), fr = BiFr.of("ينتهي في"), fontSize = 14.sp, color = CourseMutedColor)
                     Text(
                         text = expiryPreview,
                         fontSize = 14.sp,
@@ -1468,18 +1352,9 @@ private fun CourseSubscriptionDialog(
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = uiT("كل تخصّص يُفعَّل وحده، وتفعيل هذا التخصّص لا يفتح التخصّصات الأخرى."),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = CourseWarnColor
-                )
+                BiText(ar = uiT("كل تخصّص يُفعَّل وحده، وتفعيل هذا التخصّص لا يفتح التخصّصات الأخرى."), fr = BiFr.of("كل تخصّص يُفعَّل وحده، وتفعيل هذا التخصّص لا يفتح التخصّصات الأخرى."), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = CourseWarnColor)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = uiT("بالضغط على الزرّ يُفتح الواتساب برسالة جاهزة إلى مدير الأقسام."),
-                    fontSize = 12.sp,
-                    color = CourseMutedColor
-                )
+                BiText(ar = uiT("بالضغط على الزرّ يُفتح الواتساب برسالة جاهزة إلى مدير الأقسام."), fr = BiFr.of("بالضغط على الزرّ يُفتح الواتساب برسالة جاهزة إلى مدير الأقسام."), fontSize = 12.sp, color = CourseMutedColor)
             }
         },
         confirmButton = {
@@ -1524,12 +1399,12 @@ private fun CourseSubscriptionDialog(
                     onDismiss()
                 }
             ) {
-                Text(text = uiT("إرسال طلب التفعيل"), fontWeight = FontWeight.Black)
+                BiTextA(ar = uiT("إرسال طلب التفعيل"), fr = BiFr.of("إرسال طلب التفعيل"), fontWeight = FontWeight.Black)
             }
         },
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
-                Text(text = uiT("إغلاق"))
+                BiTextA(ar = uiT("إغلاق"), fr = BiFr.of("إغلاق"))
             }
         }
     )

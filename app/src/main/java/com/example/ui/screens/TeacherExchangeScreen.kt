@@ -1,6 +1,9 @@
 package com.example.ui.screens
 
 import com.example.ui.utils.uiT
+import com.example.ui.utils.BiFr
+import com.example.ui.utils.BiTextA
+import com.example.ui.utils.BiText
 import com.example.ui.utils.uiTf
 
 import android.content.Context
@@ -141,13 +144,13 @@ fun PostActivationDialog(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text(uiT("💬 تواصل عبر واتساب الإدارة"), fontWeight = FontWeight.Bold, color = Color.White)
+                    BiTextA(ar = uiT("💬 تواصل عبر واتساب الإدارة"), fr = BiFr.of("💬 تواصل عبر واتساب الإدارة"), fontWeight = FontWeight.Bold, color = Color.White)
                 }
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(uiT("إغلاق"), color = Color.Gray, fontWeight = FontWeight.Bold)
+                BiTextA(ar = uiT("إغلاق"), fr = BiFr.of("إغلاق"), color = Color.Gray, fontWeight = FontWeight.Bold)
             }
         },
         title = {
@@ -156,12 +159,7 @@ fun PostActivationDialog(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text("📢", fontSize = 24.sp)
-                Text(
-                    text = uiT("تواصل مع الإدارة لنشر إعلانك"),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 17.sp,
-                    color = Color(0xFF1B5E20)
-                )
+                BiText(ar = uiT("تواصل مع الإدارة لنشر إعلانك"), fr = BiFr.of("تواصل مع الإدارة لنشر إعلانك"), fontWeight = FontWeight.Bold, fontSize = 17.sp, color = Color(0xFF1B5E20))
             }
         },
         text = {
@@ -173,25 +171,12 @@ fun PostActivationDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(
-                            text = uiT("🏷️ سعر نشر الإعلان: 200 أوقية جديدة"),
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 15.sp,
-                            color = Color(0xFFE65100)
-                        )
-                        Text(
-                            text = uiT("ملاحظة: تم حفظ إعلانك، ولن يظهر للعامة إلا بعد تفعيله من طرف مدير الأقسام."),
-                            fontSize = 12.sp,
-                            color = Color(0xFF5D4037)
-                        )
+                        BiText(ar = uiT("🏷️ سعر نشر الإعلان: 200 أوقية جديدة"), fr = BiFr.of("🏷️ سعر نشر الإعلان: 200 أوقية جديدة"), fontWeight = FontWeight.ExtraBold, fontSize = 15.sp, color = Color(0xFFE65100))
+                        BiText(ar = uiT("ملاحظة: تم حفظ إعلانك، ولن يظهر للعامة إلا بعد تفعيله من طرف مدير الأقسام."), fr = BiFr.of("ملاحظة: تم حفظ إعلانك، ولن يظهر للعامة إلا بعد تفعيله من طرف مدير الأقسام."), fontSize = 12.sp, color = Color(0xFF5D4037))
                     }
                 }
 
-                Text(
-                    text = uiTf("اضغط على الزر أدناه لإرسال طلب تفعيل الإعلان رقم (#{0}) مباشرة عبر واتساب الإدارة:", postId),
-                    fontSize = 13.sp,
-                    color = Color.DarkGray
-                )
+                BiText(ar = uiTf("اضغط على الزر أدناه لإرسال طلب تفعيل الإعلان رقم (#{0}) مباشرة عبر واتساب الإدارة:", postId), fr = BiFr.f("اضغط على الزر أدناه لإرسال طلب تفعيل الإعلان رقم (#{0}) مباشرة عبر واتساب الإدارة:", postId), fontSize = 13.sp, color = Color.DarkGray)
             }
         },
         shape = RoundedCornerShape(20.dp),
@@ -471,19 +456,19 @@ fun AllOffersSubview(
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Icon(Icons.Default.FilterList, contentDescription = null, tint = BentoPrimary, modifier = Modifier.size(20.dp))
-                        Text(uiT("تصفية وفلترة العروض"), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = BentoText)
+                        BiText(ar = uiT("تصفية وفلترة العروض"), fr = BiFr.of("تصفية وفلترة العروض"), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = BentoText)
                     }
 
                     // Specialty Filter Chips
                     Column {
-                        Text(uiT("التخصص:"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
+                        BiText(ar = uiT("التخصص:"), fr = BiFr.of("التخصص:"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
                         Spacer(modifier = Modifier.height(4.dp))
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             item {
                                 FilterChip(
                                     selected = selectedSpecialtyFilter == "الكل",
                                     onClick = { selectedSpecialtyFilter = "الكل" },
-                                    label = { Text(uiT("الكل"), fontSize = 11.sp) }
+                                    label = { BiText(ar = uiT("الكل"), fr = BiFr.of("الكل"), fontSize = 11.sp) }
                                 )
                             }
                             items(teacherSpecialties) { spec ->
@@ -498,14 +483,14 @@ fun AllOffersSubview(
 
                     // Offer Type Filter Chips
                     Column {
-                        Text(uiT("نوع العرض:"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
+                        BiText(ar = uiT("نوع العرض:"), fr = BiFr.of("نوع العرض:"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
                         Spacer(modifier = Modifier.height(4.dp))
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             item {
                                 FilterChip(
                                     selected = selectedOfferTypeFilter == "الكل",
                                     onClick = { selectedOfferTypeFilter = "الكل" },
-                                    label = { Text(uiT("الكل"), fontSize = 11.sp) }
+                                    label = { BiText(ar = uiT("الكل"), fr = BiFr.of("الكل"), fontSize = 11.sp) }
                                 )
                             }
                             items(offerTypes) { type ->
@@ -529,7 +514,7 @@ fun AllOffersSubview(
                                 value = selectedWilayaFilter,
                                 onValueChange = {},
                                 readOnly = true,
-                                label = { Text(uiT("الولاية الحالية أو المرغوبة"), fontSize = 11.sp) },
+                                label = { BiText(ar = uiT("الولاية الحالية أو المرغوبة"), fr = BiFr.of("الولاية الحالية أو المرغوبة"), fontSize = 11.sp) },
                                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWilaya) },
                                 modifier = Modifier
                                     .menuAnchor()
@@ -541,7 +526,7 @@ fun AllOffersSubview(
                                 onDismissRequest = { expandedWilaya = false }
                             ) {
                                 DropdownMenuItem(
-                                    text = { Text(uiT("جميع الولايات")) },
+                                    text = { BiTextA(ar = uiT("جميع الولايات"), fr = BiFr.of("جميع الولايات")) },
                                     onClick = {
                                         selectedWilayaFilter = "جميع الولايات"
                                         expandedWilaya = false
@@ -571,7 +556,7 @@ fun AllOffersSubview(
                                     value = selectedMoughataaFilter,
                                     onValueChange = {},
                                     readOnly = true,
-                                    label = { Text(uiTf("المقاطعة المحددة (داخل {0})", selectedWilayaFilter), fontSize = 11.sp) },
+                                    label = { BiText(ar = uiTf("المقاطعة المحددة (داخل {0})", selectedWilayaFilter), fr = BiFr.f("المقاطعة المحددة (داخل {0})", selectedWilayaFilter), fontSize = 11.sp) },
                                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedMoughataa) },
                                     modifier = Modifier
                                         .menuAnchor()
@@ -583,7 +568,7 @@ fun AllOffersSubview(
                                     onDismissRequest = { expandedMoughataa = false }
                                 ) {
                                     DropdownMenuItem(
-                                        text = { Text(uiT("جميع المقاطعات")) },
+                                        text = { BiTextA(ar = uiT("جميع المقاطعات"), fr = BiFr.of("جميع المقاطعات")) },
                                         onClick = {
                                             selectedMoughataaFilter = "جميع المقاطعات"
                                             expandedMoughataa = false
@@ -626,13 +611,7 @@ fun AllOffersSubview(
                                         horizontalArrangement = Arrangement.Center
                                     ) {
                                         Text("🚪 ", fontSize = 13.sp)
-                                        Text(
-                                            text = if (isInterMoughataaMode) "يريدون مغادرة المقاطعة" else "يريدون مغادرة الولاية",
-                                            fontSize = 11.5.sp,
-                                            fontWeight = if (isLeaving) FontWeight.Black else FontWeight.Bold,
-                                            color = if (isLeaving) Color(0xFFC62828) else BentoText,
-                                            maxLines = 1
-                                        )
+                                        BiText(ar = if (isInterMoughataaMode) "يريدون مغادرة المقاطعة" else "يريدون مغادرة الولاية", fontSize = 11.5.sp, fontWeight = if (isLeaving) FontWeight.Black else FontWeight.Bold, color = if (isLeaving) Color(0xFFC62828) else BentoText, maxLines = 1)
                                     }
                                 }
 
@@ -655,13 +634,7 @@ fun AllOffersSubview(
                                         horizontalArrangement = Arrangement.Center
                                     ) {
                                         Text("🎯 ", fontSize = 13.sp)
-                                        Text(
-                                            text = if (isInterMoughataaMode) "يريدون دخول المقاطعة" else "يريدون دخول الولاية",
-                                            fontSize = 11.5.sp,
-                                            fontWeight = if (isEntering) FontWeight.Black else FontWeight.Bold,
-                                            color = if (isEntering) BentoPrimary else BentoText,
-                                            maxLines = 1
-                                        )
+                                        BiText(ar = if (isInterMoughataaMode) "يريدون دخول المقاطعة" else "يريدون دخول الولاية", fontSize = 11.5.sp, fontWeight = if (isEntering) FontWeight.Black else FontWeight.Bold, color = if (isEntering) BentoPrimary else BentoText, maxLines = 1)
                                     }
                                 }
                             }
@@ -757,13 +730,7 @@ fun AllOffersSubview(
                     ) {
                         Text("🔍", fontSize = 42.sp)
                         if (hasMorePosts) {
-                            Text(
-                                uiT("لا توجد نتائج في المنشورات المعروضة — اضغط عرض المزيد للبحث في منشورات أقدم"),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = BentoText,
-                                textAlign = TextAlign.Center
-                            )
+                            BiText(ar = uiT("لا توجد نتائج في المنشورات المعروضة — اضغط عرض المزيد للبحث في منشورات أقدم"), fr = BiFr.of("لا توجد نتائج في المنشورات المعروضة — اضغط عرض المزيد للبحث في منشورات أقدم"), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = BentoText, center = true)
                             Button(
                                 onClick = {
                                     hasClickedLoadMore = true
@@ -773,11 +740,11 @@ fun AllOffersSubview(
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                             ) {
-                                Text(uiT("عرض المزيد ⬇️"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color.White)
+                                BiText(ar = uiT("عرض المزيد ⬇️"), fr = BiFr.of("عرض المزيد ⬇️"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color.White)
                             }
                         } else {
-                            Text(uiT("لا توجد عروض تبادل تطابق نتائج البحث"), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = BentoText)
-                            Text(uiT("حاول تغيير شروط الفلترة أو استخدم خيار استمارة الإعلان لإضافة عرضك الخاص."), fontSize = 12.sp, color = BentoPrimaryDesc, textAlign = TextAlign.Center)
+                            BiText(ar = uiT("لا توجد عروض تبادل تطابق نتائج البحث"), fr = BiFr.of("لا توجد عروض تبادل تطابق نتائج البحث"), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = BentoText)
+                            BiText(ar = uiT("حاول تغيير شروط الفلترة أو استخدم خيار استمارة الإعلان لإضافة عرضك الخاص."), fr = BiFr.of("حاول تغيير شروط الفلترة أو استخدم خيار استمارة الإعلان لإضافة عرضك الخاص."), fontSize = 12.sp, color = BentoPrimaryDesc, center = true)
                         }
                     }
                 }
@@ -799,12 +766,7 @@ fun AllOffersSubview(
                             .padding(vertical = 16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            uiT("لا توجد إعلانات أخرى"),
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Gray
-                        )
+                        BiText(ar = uiT("لا توجد إعلانات أخرى"), fr = BiFr.of("لا توجد إعلانات أخرى"), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
                     }
                 }
             }
@@ -825,7 +787,7 @@ fun AllOffersSubview(
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
                         ) {
-                            Text(uiT("عرض المزيد ⬇️"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color.White)
+                            BiText(ar = uiT("عرض المزيد ⬇️"), fr = BiFr.of("عرض المزيد ⬇️"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color.White)
                         }
                     }
                 }
@@ -919,17 +881,8 @@ fun TargetWilayaOffersSubview(
                             Text("📍", fontSize = 18.sp)
                         }
                         Column {
-                            Text(
-                                text = if (isInterMoughataaMode) "تحديد المقاطعة المستهدفة للتحويل (داخل الولاية)" else "تحديد الولاية المرغوب التحويل إليها",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = BentoText
-                            )
-                            Text(
-                                text = if (isInterMoughataaMode) "عرض المعلمين الراغبين في التحويل من وإلى هذه المقاطعة داخل نفس الولاية" else "عرض المعلمين الراغبين في الانتقال والتحويل إلى هذه الولاية",
-                                fontSize = 11.sp,
-                                color = BentoPrimaryDesc
-                            )
+                            BiText(ar = if (isInterMoughataaMode) "تحديد المقاطعة المستهدفة للتحويل (داخل الولاية)" else "تحديد الولاية المرغوب التحويل إليها", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = BentoText)
+                            BiText(ar = if (isInterMoughataaMode) "عرض المعلمين الراغبين في التحويل من وإلى هذه المقاطعة داخل نفس الولاية" else "عرض المعلمين الراغبين في الانتقال والتحويل إلى هذه الولاية", fontSize = 11.sp, color = BentoPrimaryDesc)
                         }
                     }
 
@@ -937,7 +890,7 @@ fun TargetWilayaOffersSubview(
 
                     // 1. Select Target Wilaya Dropdown
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(if (isInterMoughataaMode) "اختر الولاية أولاً:" else "اختر الولاية المستهدفة للتحويل:", fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                        BiText(ar = if (isInterMoughataaMode) "اختر الولاية أولاً:" else "اختر الولاية المستهدفة للتحويل:", fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                         ExposedDropdownMenuBox(
                             expanded = expandedTargetWilayaDropdown,
                             onExpandedChange = { expandedTargetWilayaDropdown = !expandedTargetWilayaDropdown }
@@ -946,7 +899,7 @@ fun TargetWilayaOffersSubview(
                                 value = "📍 $selectedTargetWilaya",
                                 onValueChange = {},
                                 readOnly = true,
-                                label = { Text(uiT("الولاية المطلوبة")) },
+                                label = { BiTextA(ar = uiT("الولاية المطلوبة"), fr = BiFr.of("الولاية المطلوبة")) },
                                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTargetWilayaDropdown) },
                                 modifier = Modifier
                                     .menuAnchor()
@@ -977,7 +930,7 @@ fun TargetWilayaOffersSubview(
                         // If Inter-Moughataa Mode: Dropdown for selecting Target Moughataa inside Wilaya
                         if (isInterMoughataaMode) {
                             val availableMoughataas = moughataasByWilaya[selectedTargetWilaya] ?: emptyList()
-                            Text(uiTf("اختر المقاطعة المستهدفة داخل {0}:", selectedTargetWilaya), fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                            BiText(ar = uiTf("اختر المقاطعة المستهدفة داخل {0}:", selectedTargetWilaya), fr = BiFr.f("اختر المقاطعة المستهدفة داخل {0}:", selectedTargetWilaya), fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                             ExposedDropdownMenuBox(
                                 expanded = expandedTargetMoughataaDropdown,
                                 onExpandedChange = { expandedTargetMoughataaDropdown = !expandedTargetMoughataaDropdown }
@@ -986,7 +939,7 @@ fun TargetWilayaOffersSubview(
                                     value = "🏛️ $selectedTargetMoughataa",
                                     onValueChange = {},
                                     readOnly = true,
-                                    label = { Text(uiT("المقاطعة المستهدفة")) },
+                                    label = { BiTextA(ar = uiT("المقاطعة المستهدفة"), fr = BiFr.of("المقاطعة المستهدفة")) },
                                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTargetMoughataaDropdown) },
                                     modifier = Modifier
                                         .menuAnchor()
@@ -1038,13 +991,7 @@ fun TargetWilayaOffersSubview(
                                     horizontalArrangement = Arrangement.Center
                                 ) {
                                     Text("🚪 ", fontSize = 13.sp)
-                                    Text(
-                                        text = if (isInterMoughataaMode) "يريدون مغادرة المقاطعة" else "يريدون مغادرة الولاية",
-                                        fontSize = 11.5.sp,
-                                        fontWeight = if (isLeaving) FontWeight.Black else FontWeight.Bold,
-                                        color = if (isLeaving) Color(0xFFC62828) else BentoText,
-                                        maxLines = 1
-                                    )
+                                    BiText(ar = if (isInterMoughataaMode) "يريدون مغادرة المقاطعة" else "يريدون مغادرة الولاية", fontSize = 11.5.sp, fontWeight = if (isLeaving) FontWeight.Black else FontWeight.Bold, color = if (isLeaving) Color(0xFFC62828) else BentoText, maxLines = 1)
                                 }
                             }
 
@@ -1067,13 +1014,7 @@ fun TargetWilayaOffersSubview(
                                     horizontalArrangement = Arrangement.Center
                                 ) {
                                     Text("🎯 ", fontSize = 13.sp)
-                                    Text(
-                                        text = if (isInterMoughataaMode) "يريدون دخول المقاطعة" else "يريدون دخول الولاية",
-                                        fontSize = 11.5.sp,
-                                        fontWeight = if (isEntering) FontWeight.Black else FontWeight.Bold,
-                                        color = if (isEntering) BentoPrimary else BentoText,
-                                        maxLines = 1
-                                    )
+                                    BiText(ar = if (isInterMoughataaMode) "يريدون دخول المقاطعة" else "يريدون دخول الولاية", fontSize = 11.5.sp, fontWeight = if (isEntering) FontWeight.Black else FontWeight.Bold, color = if (isEntering) BentoPrimary else BentoText, maxLines = 1)
                                 }
                             }
                         }
@@ -1081,14 +1022,14 @@ fun TargetWilayaOffersSubview(
 
                     // 2. Select Specialty Filter Chips
                     Column {
-                        Text(uiT("تصفية حسب تخصص المعلم:"), fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
+                        BiText(ar = uiT("تصفية حسب تخصص المعلم:"), fr = BiFr.of("تصفية حسب تخصص المعلم:"), fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
                         Spacer(modifier = Modifier.height(4.dp))
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             item {
                                 FilterChip(
                                     selected = selectedSpecialtyFilter == "الكل",
                                     onClick = { selectedSpecialtyFilter = "الكل" },
-                                    label = { Text(uiT("جميع التخصصات"), fontSize = 11.sp) }
+                                    label = { BiText(ar = uiT("جميع التخصصات"), fr = BiFr.of("جميع التخصصات"), fontSize = 11.sp) }
                                 )
                             }
                             items(teacherSpecialties) { spec ->
@@ -1115,12 +1056,7 @@ fun TargetWilayaOffersSubview(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = uiTf("عدد المعلمين الراغبين في التحويل إلى {0}: ({1})", selectedTargetWilaya, filteredPosts.size),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.5.sp,
-                    color = BentoPrimary
-                )
+                BiText(ar = uiTf("عدد المعلمين الراغبين في التحويل إلى {0}: ({1})", selectedTargetWilaya, filteredPosts.size), fr = BiFr.f("عدد المعلمين الراغبين في التحويل إلى {0}: ({1})", selectedTargetWilaya, filteredPosts.size), fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = BentoPrimary)
             }
         }
 
@@ -1142,19 +1078,8 @@ fun TargetWilayaOffersSubview(
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Text("🏜️", fontSize = 40.sp)
-                        Text(
-                            text = uiTf("لا يوجد معلمون يطلبون التحويل إلى {0} حالياً", selectedTargetWilaya),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = BentoText,
-                            textAlign = TextAlign.Center
-                        )
-                        Text(
-                            text = uiT("جرب اختيار ولاية أخرى أو تغيير تخصص المعلم للتأكد، أو قم بإضافة منشورك في استمارة الإعلان."),
-                            fontSize = 12.sp,
-                            color = BentoPrimaryDesc,
-                            textAlign = TextAlign.Center
-                        )
+                        BiText(ar = uiTf("لا يوجد معلمون يطلبون التحويل إلى {0} حالياً", selectedTargetWilaya), fr = BiFr.f("لا يوجد معلمون يطلبون التحويل إلى {0} حالياً", selectedTargetWilaya), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = BentoText, center = true)
+                        BiText(ar = uiT("جرب اختيار ولاية أخرى أو تغيير تخصص المعلم للتأكد، أو قم بإضافة منشورك في استمارة الإعلان."), fr = BiFr.of("جرب اختيار ولاية أخرى أو تغيير تخصص المعلم للتأكد، أو قم بإضافة منشورك في استمارة الإعلان."), fontSize = 12.sp, color = BentoPrimaryDesc, center = true)
                     }
                 }
             }
@@ -1270,18 +1195,9 @@ fun ExchangeOfferCard(
                         Column(modifier = Modifier.weight(1f)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text("⏳", fontSize = 14.sp)
-                                Text(
-                                    text = uiT("إعلان غير مفعل للعامة بعد"),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
-                                    color = Color(0xFFE65100)
-                                )
+                                BiText(ar = uiT("إعلان غير مفعل للعامة بعد"), fr = BiFr.of("إعلان غير مفعل للعامة بعد"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color(0xFFE65100))
                             }
-                            Text(
-                                text = uiT("سعر نشر الإعلان 200 أوقية جديدة. تواصل مع الإدارة لتفعيل المنشور."),
-                                fontSize = 11.sp,
-                                color = Color(0xFF5D4037)
-                            )
+                            BiText(ar = uiT("سعر نشر الإعلان 200 أوقية جديدة. تواصل مع الإدارة لتفعيل المنشور."), fr = BiFr.of("سعر نشر الإعلان 200 أوقية جديدة. تواصل مع الإدارة لتفعيل المنشور."), fontSize = 11.sp, color = Color(0xFF5D4037))
                         }
                         Button(
                             onClick = {
@@ -1299,7 +1215,7 @@ fun ExchangeOfferCard(
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier.height(32.dp)
                         ) {
-                            Text(uiT("تفعيل 💬"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                            BiText(ar = uiT("تفعيل 💬"), fr = BiFr.of("تفعيل 💬"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                 }
@@ -1329,12 +1245,7 @@ fun ExchangeOfferCard(
                         )
                     }
                     Column {
-                        Text(
-                            text = uiTf("التخصص: {0}", post.specialty),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.5.sp,
-                            color = BentoText
-                        )
+                        BiText(ar = uiTf("التخصص: {0}", post.specialty), fr = BiFr.f("التخصص: {0}", post.specialty), fontWeight = FontWeight.Bold, fontSize = 13.5.sp, color = BentoText)
                         if (post.isMoughataaTeacher || post.isSchoolPrincipal) {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -1347,14 +1258,7 @@ fun ExchangeOfferCard(
                                         shape = RoundedCornerShape(6.dp),
                                         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFFB74D))
                                     ) {
-                                        Text(
-                                            text = uiT("🏛️ معلم مقاطعي"),
-                                            fontSize = 9.5.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color(0xFFE65100),
-                                            maxLines = 1,
-                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                        )
+                                        BiText(ar = uiT("🏛️ معلم مقاطعي"), fr = BiFr.of("🏛️ معلم مقاطعي"), fontSize = 9.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE65100), maxLines = 1, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                                     }
                                 }
                                 if (post.isSchoolPrincipal) {
@@ -1363,14 +1267,7 @@ fun ExchangeOfferCard(
                                         shape = RoundedCornerShape(6.dp),
                                         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF80CBC4))
                                     ) {
-                                        Text(
-                                            text = uiT("🏫 مدير مدرسة"),
-                                            fontSize = 9.5.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color(0xFF00695C),
-                                            maxLines = 1,
-                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                        )
+                                        BiText(ar = uiT("🏫 مدير مدرسة"), fr = BiFr.of("🏫 مدير مدرسة"), fontSize = 9.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFF00695C), maxLines = 1, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
                                     }
                                 }
                             }
@@ -1393,7 +1290,7 @@ fun ExchangeOfferCard(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Text(badgeIcon, fontSize = 11.sp)
-                            Text(post.offerType, color = badgeText, fontSize = 10.5.sp, fontWeight = FontWeight.Black)
+                            BiText(ar = post.offerType, color = badgeText, fontSize = 10.5.sp, fontWeight = FontWeight.Black)
                         }
                     }
 
@@ -1422,7 +1319,7 @@ fun ExchangeOfferCard(
                                     horizontalArrangement = Arrangement.spacedBy(3.dp)
                                 ) {
                                     Text("⏳", fontSize = 9.5.sp)
-                                    Text(uiT("لم يُنشر للعامة بعد (بانتظار النت)"), color = Color(0xFFE65100), fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
+                                    BiText(ar = uiT("لم يُنشر للعامة بعد (بانتظار النت)"), fr = BiFr.of("لم يُنشر للعامة بعد (بانتظار النت)"), color = Color(0xFFE65100), fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -1452,8 +1349,9 @@ fun ExchangeOfferCard(
                             post.priceAmount.isNotBlank() -> "المقابل المالي: ${post.priceAmount} أوقية"
                             else -> "المقابل المالي: للنقاش في الخاص"
                         }
-                        Text(
-                            text = priceText,
+                        BiText(
+                            ar = priceText,
+                            fr = BiFr.of(priceText) ?: if (post.priceAmount.isNotBlank() && !post.isNegotiable) "Contrepartie financière : ${post.priceAmount} MRU" else null,
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.5.sp,
                             color = Color(0xFFE65100)
@@ -1466,11 +1364,12 @@ fun ExchangeOfferCard(
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Icon(Icons.Default.LocationOn, contentDescription = null, tint = BentoPrimary, modifier = Modifier.size(18.dp))
-                    Text(uiT("مكان العمل الحالي:"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoPrimary)
+                    BiText(ar = uiT("مكان العمل الحالي:"), fr = BiFr.of("مكان العمل الحالي:"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoPrimary)
                 }
-                Text(
-                    text = "الولاية: ${post.currentWilaya}  |  المقاطعة: ${post.currentMoughataa} ${if (post.currentCommune.isNotBlank()) " | البلدية: ${post.currentCommune}" else ""}",
+                BiText(
+                    ar = "الولاية: ${post.currentWilaya}  |  المقاطعة: ${post.currentMoughataa} ${if (post.currentCommune.isNotBlank()) " | البلدية: ${post.currentCommune}" else ""}",
                     fontSize = 12.sp,
+                    fr = "Wilaya : ${BiFr.geoFr(post.currentWilaya) ?: post.currentWilaya}  |  Moughataa : ${BiFr.geoFr(post.currentMoughataa) ?: post.currentMoughataa}${if (post.currentCommune.isNotBlank()) " | Commune : ${post.currentCommune}" else ""}",
                     color = BentoText,
                     fontWeight = FontWeight.Medium
                 )
@@ -1488,7 +1387,7 @@ fun ExchangeOfferCard(
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         Icon(Icons.Default.Explore, contentDescription = null, tint = BentoSecondary, modifier = Modifier.size(18.dp))
-                        Text(uiT("الولايات والمقاطعات المرغوب العمل بها:"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoSecondary)
+                        BiText(ar = uiT("الولايات والمقاطعات المرغوب العمل بها:"), fr = BiFr.of("الولايات والمقاطعات المرغوب العمل بها:"), fontWeight = FontWeight.Bold, fontSize = 12.sp, color = BentoSecondary)
                     }
 
                     val targetsList = post.targetWilayas.split(",").map { it.trim() }.filter { it.isNotBlank() }
@@ -1499,8 +1398,9 @@ fun ExchangeOfferCard(
                                 shape = RoundedCornerShape(8.dp),
                                 border = androidx.compose.foundation.BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.3f))
                             ) {
-                                Text(
-                                    text = "📍 $w",
+                                BiText(
+                                    ar = "📍 $w",
+                                    fr = BiFr.geoFr(w)?.let { "📍 $it" },
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = BentoPrimary,
@@ -1511,11 +1411,7 @@ fun ExchangeOfferCard(
                     }
 
                     if (post.targetMoughataas.isNotBlank()) {
-                        Text(
-                            text = uiTf("تفاصيل المقاطعات: {0}", post.targetMoughataas),
-                            fontSize = 11.sp,
-                            color = BentoPrimaryDesc
-                        )
+                        BiText(ar = uiTf("تفاصيل المقاطعات: {0}", post.targetMoughataas), fr = BiFr.f("تفاصيل المقاطعات: {0}", post.targetMoughataas), fontSize = 11.sp, color = BentoPrimaryDesc)
                     }
                 }
             }
@@ -1548,7 +1444,7 @@ fun ExchangeOfferCard(
                             ) {
                                 Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(14.dp))
                                 Spacer(modifier = Modifier.width(4.dp))
-                                Text(uiT("تعديل"), fontSize = 11.sp)
+                                BiText(ar = uiT("تعديل"), fr = BiFr.of("تعديل"), fontSize = 11.sp)
                             }
                         }
                         Button(
@@ -1559,7 +1455,7 @@ fun ExchangeOfferCard(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text(uiT("حذف"), color = Color.White, fontSize = 11.sp)
+                            BiText(ar = uiT("حذف"), fr = BiFr.of("حذف"), color = Color.White, fontSize = 11.sp)
                         }
                     }
                 } else if (post.whatsappPhone.isNotBlank()) {
@@ -1569,7 +1465,7 @@ fun ExchangeOfferCard(
                         shape = RoundedCornerShape(10.dp),
                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                     ) {
-                        Text(uiT("💬 تواصل عبر الواتساب"), color = Color.White, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                        BiText(ar = uiT("💬 تواصل عبر الواتساب"), fr = BiFr.of("💬 تواصل عبر الواتساب"), color = Color.White, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -1651,17 +1547,8 @@ fun ContactTeacherDialog(
                     Text("💬", fontSize = 18.sp)
                 }
                 Column {
-                    Text(
-                        text = uiT("التواصل مع المعلم"),
-                        fontWeight = FontWeight.Black,
-                        fontSize = 15.sp,
-                        color = BentoPrimary
-                    )
-                    Text(
-                        text = uiTf("التخصص: {0}", post.specialty),
-                        fontSize = 11.5.sp,
-                        color = BentoPrimaryDesc
-                    )
+                    BiText(ar = uiT("التواصل مع المعلم"), fr = BiFr.of("التواصل مع المعلم"), fontWeight = FontWeight.Black, fontSize = 15.sp, color = BentoPrimary)
+                    BiText(ar = uiTf("التخصص: {0}", post.specialty), fr = BiFr.f("التخصص: {0}", post.specialty), fontSize = 11.5.sp, color = BentoPrimaryDesc)
                 }
             }
         },
@@ -1688,12 +1575,7 @@ fun ContactTeacherDialog(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 Text("✅", fontSize = 14.sp)
-                                Text(
-                                    text = uiT("معلومات مكان عملك المسجلة حالياً:"),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 12.5.sp,
-                                    color = Color(0xFF1B5E20)
-                                )
+                                BiText(ar = uiT("معلومات مكان عملك المسجلة حالياً:"), fr = BiFr.of("معلومات مكان عملك المسجلة حالياً:"), fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color(0xFF1B5E20))
                             }
                             Text(
                                 text = "• التخصص: $userSpecialty\n• الموقع: ${if (!isIntraWilaya) "$userWilaya - " else ""}$userMoughataa (${userCommune.ifBlank { "غير محددة" }})\n• مكان العمل: $userWorkPlace\n• المدرسة: $userSchoolName",
@@ -1707,7 +1589,7 @@ fun ContactTeacherDialog(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 TextButton(onClick = { showEditForm = true }) {
-                                    Text(uiT("تعديل البيانات ✏️"), fontSize = 11.5.sp)
+                                    BiText(ar = uiT("تعديل البيانات ✏️"), fr = BiFr.of("تعديل البيانات ✏️"), fontSize = 11.5.sp)
                                 }
                                 Button(
                                     onClick = {
@@ -1723,7 +1605,7 @@ fun ContactTeacherDialog(
                                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25D366)),
                                     shape = RoundedCornerShape(10.dp)
                                 ) {
-                                    Text(uiT("موافقة والتواصل 🚀"), color = Color.White, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                                    BiText(ar = uiT("موافقة والتواصل 🚀"), fr = BiFr.of("موافقة والتواصل 🚀"), color = Color.White, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -1735,21 +1617,16 @@ fun ContactTeacherDialog(
                         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFAED581)),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = if (isIntraWilaya)
+                        BiText(ar = if (isIntraWilaya)
                                 "يرجى اكتمال معلومات مكان عملك الحالية (المقاطعة، البلدية، مكان العمل، واسم المدرسة) للتواصل عبر الواتساب."
                             else
-                                "يرجى اكتمال معلومات مكان عملك الحالية (الولاية، المقاطعة، البلدية، مكان العمل، واسم المدرسة) للتواصل عبر الواتساب.",
-                            fontSize = 11.5.sp,
-                            color = Color(0xFF33691E),
-                            modifier = Modifier.padding(10.dp)
-                        )
+                                "يرجى اكتمال معلومات مكان عملك الحالية (الولاية، المقاطعة، البلدية، مكان العمل، واسم المدرسة) للتواصل عبر الواتساب.", fontSize = 11.5.sp, color = Color(0xFF33691E), modifier = Modifier.padding(10.dp))
                     }
                 }
 
                 // 1. Specialty Dropdown
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(uiT("تخصص المعلم:"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                    BiText(ar = uiT("تخصص المعلم:"), fr = BiFr.of("تخصص المعلم:"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
                     ExposedDropdownMenuBox(
                         expanded = expandedSpecialtyDropdown,
                         onExpandedChange = { expandedSpecialtyDropdown = !expandedSpecialtyDropdown }
@@ -1757,7 +1634,7 @@ fun ContactTeacherDialog(
                         OutlinedTextField(
                             value = userSpecialty,
                             onValueChange = { userSpecialty = it },
-                            label = { Text(uiT("اختر أو اكتب تخصصك")) },
+                            label = { BiTextA(ar = uiT("اختر أو اكتب تخصصك"), fr = BiFr.of("اختر أو اكتب تخصصك")) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedSpecialtyDropdown) },
                             modifier = Modifier
                                 .menuAnchor()
@@ -1789,7 +1666,7 @@ fun ContactTeacherDialog(
                 // Wilaya Dropdown (If Inter-Wilaya)
                 if (!isIntraWilaya) {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(AppLocalization.tr("wilaya_label", "الولاية:", appLanguage), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                        BiText(ar = AppLocalization.tr("wilaya_label", "الولاية:", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("الولاية:"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
                         ExposedDropdownMenuBox(
                             expanded = expandedWilayaDropdown,
                             onExpandedChange = { expandedWilayaDropdown = !expandedWilayaDropdown }
@@ -1797,7 +1674,7 @@ fun ContactTeacherDialog(
                             OutlinedTextField(
                                 value = userWilaya,
                                 onValueChange = { userWilaya = it },
-                                label = { Text(uiT("اختر الولاية الحالية")) },
+                                label = { BiTextA(ar = uiT("اختر الولاية الحالية"), fr = BiFr.of("اختر الولاية الحالية")) },
                                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWilayaDropdown) },
                                 modifier = Modifier
                                     .menuAnchor()
@@ -1852,7 +1729,7 @@ fun ContactTeacherDialog(
                         OutlinedTextField(
                             value = userMoughataa,
                             onValueChange = { userMoughataa = it },
-                            label = { Text(uiT("اختر أو اكتب المقاطعة")) },
+                            label = { BiTextA(ar = uiT("اختر أو اكتب المقاطعة"), fr = BiFr.of("اختر أو اكتب المقاطعة")) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedMoughataaDropdown) },
                             modifier = Modifier
                                 .menuAnchor()
@@ -1883,11 +1760,11 @@ fun ContactTeacherDialog(
 
                 // Commune Field
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(AppLocalization.tr("commune_label", "البلدية:", appLanguage), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                    BiText(ar = AppLocalization.tr("commune_label", "البلدية:", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("البلدية:"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
                     OutlinedTextField(
                         value = userCommune,
                         onValueChange = { userCommune = it },
-                        placeholder = { Text(uiT("مثال: بلدية توجنين")) },
+                        placeholder = { BiTextA(ar = uiT("مثال: بلدية توجنين"), fr = BiFr.of("مثال: بلدية توجنين")) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
@@ -1900,11 +1777,11 @@ fun ContactTeacherDialog(
 
                 // Workplace Field
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(AppLocalization.tr("workplace_label", "مكان العمل:", appLanguage), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                    BiText(ar = AppLocalization.tr("workplace_label", "مكان العمل:", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("مكان العمل:"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
                     OutlinedTextField(
                         value = userWorkPlace,
                         onValueChange = { userWorkPlace = it },
-                        placeholder = { Text(uiT("مثال: تعليم ابتدائي / معلم")) },
+                        placeholder = { BiTextA(ar = uiT("مثال: تعليم ابتدائي / معلم"), fr = BiFr.of("مثال: تعليم ابتدائي / معلم")) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
@@ -1917,11 +1794,11 @@ fun ContactTeacherDialog(
 
                 // School Name Field
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(AppLocalization.tr("school_name_label", "اسم المدرسة:", appLanguage), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                    BiText(ar = AppLocalization.tr("school_name_label", "اسم المدرسة:", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("اسم المدرسة:"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
                     OutlinedTextField(
                         value = userSchoolName,
                         onValueChange = { userSchoolName = it },
-                        placeholder = { Text(uiT("مثال: مدرسة الطلحاية 1")) },
+                        placeholder = { BiTextA(ar = uiT("مثال: مدرسة الطلحاية 1"), fr = BiFr.of("مثال: مدرسة الطلحاية 1")) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
@@ -1968,12 +1845,12 @@ fun ContactTeacherDialog(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25D366)),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text(uiT("حفظ ومتابعة للواتساب 💬"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                BiText(ar = uiT("حفظ ومتابعة للواتساب 💬"), fr = BiFr.of("حفظ ومتابعة للواتساب 💬"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(uiT("إلغاء"), fontSize = 12.sp)
+                BiText(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"), fontSize = 12.sp)
             }
         }
     )
@@ -2048,21 +1925,11 @@ fun CreateExchangePostForm(
                     modifier = Modifier.padding(18.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text(
-                        text = if (existingPost == null) "استمارة إعلان التبادل 📝" else "تعديل إعلان التبادل ✏️",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Black,
-                        color = BentoPrimary
-                    )
+                    BiText(ar = if (existingPost == null) "استمارة إعلان التبادل 📝" else "تعديل إعلان التبادل ✏️", fontWeight = FontWeight.Black, color = BentoPrimary, fontSize = MaterialTheme.typography.titleMedium.fontSize)
 
                     // 1. Offer Type Selection
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(
-                            text = uiT("1️⃣ حدد نوع العرض والمشاركة:"),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            color = BentoText
-                        )
+                        BiText(ar = uiT("1️⃣ حدد نوع العرض والمشاركة:"), fr = BiFr.of("1️⃣ حدد نوع العرض والمشاركة:"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = BentoText)
                         offerTypes.forEach { type ->
                             val isSelected = offerType == type
                             Surface(
@@ -2096,12 +1963,7 @@ fun CreateExchangePostForm(
                                     modifier = Modifier.padding(12.dp),
                                     verticalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    Text(
-                                        text = uiT("💵 تحديد المقابل المالي (بالأوقية الموريتانية MRU):"),
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 12.5.sp,
-                                        color = Color(0xFFE65100)
-                                    )
+                                    BiText(ar = uiT("💵 تحديد المقابل المالي (بالأوقية الموريتانية MRU):"), fr = BiFr.of("💵 تحديد المقابل المالي (بالأوقية الموريتانية MRU):"), fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color(0xFFE65100))
 
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
@@ -2118,7 +1980,7 @@ fun CreateExchangePostForm(
                                                 selected = !isNegotiable,
                                                 onClick = { isNegotiable = false }
                                             )
-                                            Text(uiT("تحديد المبلغ 💰"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                                            BiText(ar = uiT("تحديد المبلغ 💰"), fr = BiFr.of("تحديد المبلغ 💰"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
                                         }
 
                                         Row(
@@ -2137,7 +1999,7 @@ fun CreateExchangePostForm(
                                                     priceAmount = ""
                                                 }
                                             )
-                                            Text(uiT("للنقاش في الخاص 💬"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                                            BiText(ar = uiT("للنقاش في الخاص 💬"), fr = BiFr.of("للنقاش في الخاص 💬"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = BentoText)
                                         }
                                     }
 
@@ -2145,9 +2007,9 @@ fun CreateExchangePostForm(
                                         OutlinedTextField(
                                             value = priceAmount,
                                             onValueChange = { priceAmount = it.filter { char -> char.isDigit() } },
-                                            label = { Text(uiT("المبلغ بالأوقية")) },
-                                            placeholder = { Text(uiT("مثال: 50000")) },
-                                            suffix = { Text(uiT("أوقية"), fontWeight = FontWeight.Bold, color = BentoPrimary) },
+                                            label = { BiTextA(ar = uiT("المبلغ بالأوقية"), fr = BiFr.of("المبلغ بالأوقية")) },
+                                            placeholder = { BiTextA(ar = uiT("مثال: 50000"), fr = BiFr.of("مثال: 50000")) },
+                                            suffix = { BiTextA(ar = uiT("أوقية"), fr = BiFr.of("أوقية"), fontWeight = FontWeight.Bold, color = BentoPrimary) },
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                             singleLine = true,
                                             modifier = Modifier.fillMaxWidth(),
@@ -2163,12 +2025,7 @@ fun CreateExchangePostForm(
 
                     // 2. Specialty Selection
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(
-                            text = uiT("2️⃣ تخصص المعلم / مقدم الخدمة:"),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            color = BentoText
-                        )
+                        BiText(ar = uiT("2️⃣ تخصص المعلم / مقدم الخدمة:"), fr = BiFr.of("2️⃣ تخصص المعلم / مقدم الخدمة:"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = BentoText)
                         var expandedSpec by remember { mutableStateOf(false) }
                         ExposedDropdownMenuBox(
                             expanded = expandedSpec,
@@ -2178,7 +2035,7 @@ fun CreateExchangePostForm(
                                 value = specialty,
                                 onValueChange = {},
                                 readOnly = true,
-                                label = { Text(uiT("اختر التخصص")) },
+                                label = { BiTextA(ar = uiT("اختر التخصص"), fr = BiFr.of("اختر التخصص")) },
                                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedSpec) },
                                 modifier = Modifier.menuAnchor().fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp)
@@ -2221,8 +2078,8 @@ fun CreateExchangePostForm(
                                     colors = CheckboxDefaults.colors(checkedColor = BentoPrimary)
                                 )
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(uiT("معلم مقاطعي 🏛️"), fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = BentoText)
-                                    Text(uiT("بعض المعلمين مقاطعيون ولا يتم التبادل إلا بينهم"), fontSize = 10.5.sp, color = BentoPrimaryDesc)
+                                    BiText(ar = uiT("معلم مقاطعي 🏛️"), fr = BiFr.of("معلم مقاطعي 🏛️"), fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                                    BiText(ar = uiT("بعض المعلمين مقاطعيون ولا يتم التبادل إلا بينهم"), fr = BiFr.of("بعض المعلمين مقاطعيون ولا يتم التبادل إلا بينهم"), fontSize = 10.5.sp, color = BentoPrimaryDesc)
                                 }
                             }
                         }
@@ -2246,8 +2103,8 @@ fun CreateExchangePostForm(
                                     colors = CheckboxDefaults.colors(checkedColor = Color(0xFF00897B))
                                 )
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(uiT("مدير مدرسة 🏫"), fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = BentoText)
-                                    Text(uiT("مدير مدرسة في الريف (ميزة تشجع غير المدراء للتبادل معك)"), fontSize = 10.5.sp, color = Color(0xFF00695C))
+                                    BiText(ar = uiT("مدير مدرسة 🏫"), fr = BiFr.of("مدير مدرسة 🏫"), fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = BentoText)
+                                    BiText(ar = uiT("مدير مدرسة في الريف (ميزة تشجع غير المدراء للتبادل معك)"), fr = BiFr.of("مدير مدرسة في الريف (ميزة تشجع غير المدراء للتبادل معك)"), fontSize = 10.5.sp, color = Color(0xFF00695C))
                                 }
                             }
                         }
@@ -2257,12 +2114,7 @@ fun CreateExchangePostForm(
 
                     // 3. Current Work Location
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Text(
-                            text = uiT("3️⃣ مكان العمل الحالي الكامل:"),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            color = BentoText
-                        )
+                        BiText(ar = uiT("3️⃣ مكان العمل الحالي الكامل:"), fr = BiFr.of("3️⃣ مكان العمل الحالي الكامل:"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = BentoText)
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -2279,7 +2131,7 @@ fun CreateExchangePostForm(
                                         value = currentWilaya,
                                         onValueChange = {},
                                         readOnly = true,
-                                        label = { Text(uiT("الولاية")) },
+                                        label = { BiTextA(ar = uiT("الولاية"), fr = BiFr.of("الولاية")) },
                                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedW) },
                                         modifier = Modifier.menuAnchor().fillMaxWidth(),
                                         shape = RoundedCornerShape(12.dp)
@@ -2313,7 +2165,7 @@ fun CreateExchangePostForm(
                                         value = currentMoughataa,
                                         onValueChange = {},
                                         readOnly = true,
-                                        label = { Text(uiT("المقاطعة")) },
+                                        label = { BiTextA(ar = uiT("المقاطعة"), fr = BiFr.of("المقاطعة")) },
                                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedM) },
                                         modifier = Modifier.menuAnchor().fillMaxWidth(),
                                         shape = RoundedCornerShape(12.dp)
@@ -2339,8 +2191,8 @@ fun CreateExchangePostForm(
                         OutlinedTextField(
                             value = currentCommune,
                             onValueChange = { currentCommune = it },
-                            label = { Text(uiT("البلدية التابعة لها")) },
-                            placeholder = { Text(uiT("مثال: بلدية كيفه")) },
+                            label = { BiTextA(ar = uiT("البلدية التابعة لها"), fr = BiFr.of("البلدية التابعة لها")) },
+                            placeholder = { BiTextA(ar = uiT("مثال: بلدية كيفه"), fr = BiFr.of("مثال: بلدية كيفه")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -2349,8 +2201,8 @@ fun CreateExchangePostForm(
                         OutlinedTextField(
                             value = currentWorkPlace,
                             onValueChange = { currentWorkPlace = it },
-                            label = { Text(uiT("مكان العمل / القرية / المنطقة")) },
-                            placeholder = { Text(uiT("مثال: منطقة ميساح")) },
+                            label = { BiTextA(ar = uiT("مكان العمل / القرية / المنطقة"), fr = BiFr.of("مكان العمل / القرية / المنطقة")) },
+                            placeholder = { BiTextA(ar = uiT("مثال: منطقة ميساح"), fr = BiFr.of("مثال: منطقة ميساح")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -2359,8 +2211,8 @@ fun CreateExchangePostForm(
                         OutlinedTextField(
                             value = schoolName,
                             onValueChange = { schoolName = it },
-                            label = { Text(uiT("اسم المدرسة")) },
-                            placeholder = { Text(uiT("مثال: مدرسة أبتكيرات")) },
+                            label = { BiTextA(ar = uiT("اسم المدرسة"), fr = BiFr.of("اسم المدرسة")) },
+                            placeholder = { BiTextA(ar = uiT("مثال: مدرسة أبتكيرات"), fr = BiFr.of("مثال: مدرسة أبتكيرات")) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true
@@ -2371,17 +2223,12 @@ fun CreateExchangePostForm(
 
                     // 4. Contact Info
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(
-                            text = uiT("4️⃣ معلومات التواصل مع المعلم:"),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            color = BentoText
-                        )
+                        BiText(ar = uiT("4️⃣ معلومات التواصل مع المعلم:"), fr = BiFr.of("4️⃣ معلومات التواصل مع المعلم:"), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = BentoText)
                         OutlinedTextField(
                             value = whatsappPhone,
                             onValueChange = { whatsappPhone = it },
-                            label = { Text(uiT("رقم الواتساب 💬")) },
-                            placeholder = { Text(uiT("مثال: 46123456")) },
+                            label = { BiTextA(ar = uiT("رقم الواتساب 💬"), fr = BiFr.of("رقم الواتساب 💬")) },
+                            placeholder = { BiTextA(ar = uiT("مثال: 46123456"), fr = BiFr.of("مثال: 46123456")) },
                             leadingIcon = { Text("222+", modifier = Modifier.padding(horizontal = 8.dp), fontWeight = FontWeight.Bold, color = BentoPrimary) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             modifier = Modifier.fillMaxWidth(),
@@ -2466,7 +2313,7 @@ fun CreateExchangePostForm(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                        Text(uiTf("المقاطعات المختارة للتحويل داخل {0}:", currentWilaya), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                                        BiText(ar = uiTf("المقاطعات المختارة للتحويل داخل {0}:", currentWilaya), fr = BiFr.f("المقاطعات المختارة للتحويل داخل {0}:", currentWilaya), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                                         Text(selectedTargetMoughataasInWilaya.joinToString(" ، "), fontSize = 11.5.sp, color = BentoText)
                                     }
                                 }
@@ -2529,7 +2376,7 @@ fun CreateExchangePostForm(
                                                             onClick = { showTargetMoughataaDialogForWilaya = w },
                                                             contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
                                                         ) {
-                                                            Text(uiT("المقاطعات"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                                                            BiText(ar = uiT("المقاطعات"), fr = BiFr.of("المقاطعات"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                                                         }
                                                     }
                                                 }
@@ -2546,7 +2393,7 @@ fun CreateExchangePostForm(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                        Text(uiT("الولايات والمقاطعات المختارة للتحويل:"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                                        BiText(ar = uiT("الولايات والمقاطعات المختارة للتحويل:"), fr = BiFr.of("الولايات والمقاطعات المختارة للتحويل:"), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                                         val summaryText = selectedTargetWilayas.joinToString(", ") { wilaya ->
                                             val mList = targetMoughataasMap[wilaya]
                                             if (mList.isNullOrEmpty() || mList.contains("الكل")) {
@@ -2649,12 +2496,7 @@ fun CreateExchangePostForm(
                         if (isSubmitting) {
                             CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         } else {
-                            Text(
-                                text = if (existingPost == null) "نشر إعلان التبادل الآن 🚀" else "حفظ التعديلات 💾",
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                fontSize = 14.sp
-                            )
+                            BiText(ar = if (existingPost == null) "نشر إعلان التبادل الآن 🚀" else "حفظ التعديلات 💾", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 14.sp)
                         }
                     }
                 }
@@ -2669,10 +2511,10 @@ fun CreateExchangePostForm(
 
         AlertDialog(
             onDismissRequest = { showTargetMoughataaDialogForWilaya = null },
-            title = { Text(uiTf("اختر مقاطعات ولاية {0} 📍", wilaya), fontWeight = FontWeight.Bold) },
+            title = { BiTextA(ar = uiTf("اختر مقاطعات ولاية {0} 📍", wilaya), fr = BiFr.f("اختر مقاطعات ولاية {0} 📍", wilaya), fontWeight = FontWeight.Bold) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(uiT("يمكنك تحديد كافة المقاطعات (الكل) أو تخصيص مقاطعات معينة:"), fontSize = 12.sp, color = BentoPrimaryDesc)
+                    BiText(ar = uiT("يمكنك تحديد كافة المقاطعات (الكل) أو تخصيص مقاطعات معينة:"), fr = BiFr.of("يمكنك تحديد كافة المقاطعات (الكل) أو تخصيص مقاطعات معينة:"), fontSize = 12.sp, color = BentoPrimaryDesc)
                     
                     // All Option
                     Row(
@@ -2682,7 +2524,7 @@ fun CreateExchangePostForm(
                             .clickable { currentSelections = listOf("الكل") }
                     ) {
                         RadioButton(selected = currentSelections.contains("الكل"), onClick = { currentSelections = listOf("الكل") })
-                        Text(uiTf("الكل - جميع المقاطعات التابعة لولاية {0}", wilaya), fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        BiText(ar = uiTf("الكل - جميع المقاطعات التابعة لولاية {0}", wilaya), fr = BiFr.f("الكل - جميع المقاطعات التابعة لولاية {0}", wilaya), fontWeight = FontWeight.Bold, fontSize = 12.sp)
                     }
 
                     HorizontalDivider(color = BentoGrayOutline)
@@ -2722,12 +2564,12 @@ fun CreateExchangePostForm(
                     targetMoughataasMap = targetMoughataasMap + (wilaya to currentSelections)
                     showTargetMoughataaDialogForWilaya = null
                 }) {
-                    Text(uiT("حفظ الاختيار"))
+                    BiTextA(ar = uiT("حفظ الاختيار"), fr = BiFr.of("حفظ الاختيار"))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showTargetMoughataaDialogForWilaya = null }) {
-                    Text(uiT("إلغاء"))
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"))
                 }
             }
         )
@@ -2770,8 +2612,8 @@ fun MyExchangePostsSubview(
     if (deletingPostId != null) {
         AlertDialog(
             onDismissRequest = { deletingPostId = null },
-            title = { Text(uiT("حذف إعلان التبادل ⚠️"), fontWeight = FontWeight.Bold) },
-            text = { Text(uiT("هل أنت متأكد من حذف هذا الإعلان نهائياً من المنصة؟")) },
+            title = { BiTextA(ar = uiT("حذف إعلان التبادل ⚠️"), fr = BiFr.of("حذف إعلان التبادل ⚠️"), fontWeight = FontWeight.Bold) },
+            text = { BiTextA(ar = uiT("هل أنت متأكد من حذف هذا الإعلان نهائياً من المنصة؟"), fr = BiFr.of("هل أنت متأكد من حذف هذا الإعلان نهائياً من المنصة؟")) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -2785,12 +2627,12 @@ fun MyExchangePostsSubview(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
                 ) {
-                    Text(uiT("نعم، احذف"), color = Color.White)
+                    BiTextA(ar = uiT("نعم، احذف"), fr = BiFr.of("نعم، احذف"), color = Color.White)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { deletingPostId = null }) {
-                    Text(uiT("إلغاء"))
+                    BiTextA(ar = uiT("إلغاء"), fr = BiFr.of("إلغاء"))
                 }
             }
         )
@@ -2802,12 +2644,7 @@ fun MyExchangePostsSubview(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
-            Text(
-                text = uiTf("الإعلانات التي قمت بنشرها على المنصة ({0}):", posts.size),
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = BentoText
-            )
+            BiText(ar = uiTf("الإعلانات التي قمت بنشرها على المنصة ({0}):", posts.size), fr = BiFr.f("الإعلانات التي قمت بنشرها على المنصة ({0}):", posts.size), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = BentoText)
         }
 
         if (posts.isEmpty()) {
@@ -2823,18 +2660,9 @@ fun MyExchangePostsSubview(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text(if (isLoggedIn) "📢" else "🔐", fontSize = 42.sp)
-                        Text(
-                            text = if (isLoggedIn) "لم تقم بنشر أي إعلان تبادل بعد" else "يرجى تسجيل الدخول",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
-                        )
-                        Text(
-                            text = if (isLoggedIn) "يمكنك الذهاب إلى تبويب \"استمارة الإعلان\" ونشر أول إعلان لك مجاناً ليصل لكافة المعلمين في موريتانيا."
-                            else "يرجى تسجيل الدخول بحسابك لعرض وإدارة منشوراتك الخاصة (التعديل والحذف).",
-                            fontSize = 12.sp,
-                            color = BentoPrimaryDesc,
-                            textAlign = TextAlign.Center
-                        )
+                        BiText(ar = if (isLoggedIn) "لم تقم بنشر أي إعلان تبادل بعد" else "يرجى تسجيل الدخول", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        BiText(ar = if (isLoggedIn) "يمكنك الذهاب إلى تبويب \"استمارة الإعلان\" ونشر أول إعلان لك مجاناً ليصل لكافة المعلمين في موريتانيا."
+                            else "يرجى تسجيل الدخول بحسابك لعرض وإدارة منشوراتك الخاصة (التعديل والحذف).", fontSize = 12.sp, color = BentoPrimaryDesc, center = true)
                     }
                 }
             }
