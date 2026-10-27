@@ -325,12 +325,13 @@ fun ClassTimetableSubview(
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .height(38.dp)
+                            .heightIn(min = 38.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(
                                 if (isSelected) BentoPrimary else Color.Transparent
                             )
-                            .clickable { selectedDay = day },
+                            .clickable { selectedDay = day }
+                            .padding(vertical = 5.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         com.example.ui.utils.BiText(
