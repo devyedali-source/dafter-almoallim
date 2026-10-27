@@ -35,7 +35,12 @@ jobs:
         run: |
           ./gradlew assembleRelease bundleRelease \
             -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=1g" \
-            --no-daemon --stacktrace
+            --no-daemon --stacktrace 2>&1 | tee build.log; exit ${PIPESTATUS[0]}
+
+      - name: Report compile errors
+        if: failure()
+        run: |
+          grep -E "^e: |error:|What went wrong" -A2 build.log | head -40 | while IFS= read -r l; do echo "::error::${l:0:400}"; done
 
       - name: List outputs
         run: find app/build/outputs -type f -name "*.apk" -o -name "*.aab"
