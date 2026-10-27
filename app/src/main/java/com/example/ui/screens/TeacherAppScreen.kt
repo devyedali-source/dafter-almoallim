@@ -4381,9 +4381,9 @@ fun CreateClassDialog(
 
                 // 3. Level selection row (1 to 6)
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = uiT("المستوى الدراسي من 1 إلى 6"),
-                        style = MaterialTheme.typography.bodySmall,
+                    BiText(
+                        ar = uiT("المستوى الدراسي من 1 إلى 6"),
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         color = BentoPrimaryDesc,
                         modifier = Modifier.padding(bottom = 4.dp)
@@ -4602,11 +4602,17 @@ fun AcademicYearSelectorDropdown(
 
     val currentDisplayLabel = options.find { it.first == normalizedSelected }?.second
         ?: "العام الدراسي ($normalizedSelected)"
+    fun yearFr(ar: String): String = when {
+        ar.startsWith("العام الدراسي الحالي") -> ar.replace("العام الدراسي الحالي", "Année scolaire en cours")
+        ar.startsWith("العام الدراسي السابق") -> ar.replace("العام الدراسي السابق", "Année scolaire précédente")
+        ar.startsWith("العام الدراسي") -> ar.replace("العام الدراسي", "Année scolaire")
+        else -> ar
+    }
 
     Column(modifier = Modifier.fillMaxWidth().testTag(testTag)) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
+        BiText(
+            ar = label,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             color = BentoPrimaryDesc,
             modifier = Modifier.padding(bottom = 4.dp)
@@ -4632,9 +4638,10 @@ fun AcademicYearSelectorDropdown(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("📅", fontSize = 16.sp)
-                    Text(
-                        text = currentDisplayLabel,
-                        style = MaterialTheme.typography.bodyMedium,
+                    BiText(
+                        ar = currentDisplayLabel,
+                        fr = yearFr(currentDisplayLabel),
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = BentoText
                     )
@@ -4662,8 +4669,9 @@ fun AcademicYearSelectorDropdown(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = displayTitle,
+                                BiText(
+                                    ar = displayTitle,
+                                    fr = yearFr(displayTitle),
                                     fontWeight = if (yearVal == normalizedSelected) FontWeight.Bold else FontWeight.Normal,
                                     color = if (yearVal == normalizedSelected) BentoPrimary else BentoText,
                                     fontSize = 13.sp
