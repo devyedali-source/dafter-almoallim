@@ -23,6 +23,8 @@ object BiHtml {
         "كشف الامتحان الثالث" to "Relevé du 3e examen",
         "كشف درجات الفصل الأخير" to "Relevé de notes du dernier trimestre",
         "(امتحان التجاوز)" to "(Examen de passage)",
+        "كشف النقاط السنوي" to "Relevé annuel des notes",
+        "كشف المعدلات الإجمالية" to "Relevé des moyennes générales",
         "لائحة التلاميذ" to "Liste des élèves",
         "الجدول الزمني الأسبوعي" to "Emploi du temps hebdomadaire",
         "سجل النداء" to "Registre d'appel",
@@ -56,7 +58,7 @@ object BiHtml {
     )
 
     private val headerColumn = Regex(
-        "(<div class=\"header-column (?:right|left)\"[^>]*>)(.*?)(</div>)",
+        "(<div class=\"(?:header-col(?:umn)? (?:right|left)|r|l)\"[^>]*>)(.*?)(</div>)",
         RegexOption.DOT_MATCHES_ALL
     )
     private val brTag = Regex("<br\\s*/?>", RegexOption.IGNORE_CASE)
@@ -195,6 +197,12 @@ object BiHtml {
         for ((ar, fr) in titles) {
             val re = Regex("(<div class=\"header-(?:title-main|subtitle)\"[^>]*>\\s*)" + Regex.escape(ar) + "(\\s*)(</div>)")
             out = re.replace(out) { m -> m.groupValues[1] + ar + "<span class=\"bi-fr\">" + fr + "</span>" + m.groupValues[2] + m.groupValues[3] }
+        }
+
+        // 2b) عناوين الكشوف السنوية (داخل <span> في وسط البطاقة)
+        for ((ar, fr) in titles) {
+            val re = Regex("(<span[^>]*>\\s*)" + Regex.escape(ar) + "(\\s*</span>)")
+            out = re.replace(out) { m -> m.groupValues[1] + ar + "<span class=\"bi-fr\">" + fr + "</span>" + m.groupValues[2] }
         }
 
         // 3) عبارات جداول الكشوف وتوقيعاتها (النص كاملاً داخل الخانة)
