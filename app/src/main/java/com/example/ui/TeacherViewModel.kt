@@ -4214,14 +4214,11 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         if (studentsInClass.isEmpty()) {
             builder.append("لا يوجد طلاب مسجلين في هذا القسم.\n")
         } else {
-            val sorted = studentsInClass.sortedBy { it.id }
-            val groups = List(5) { mutableListOf<Student>() }
-            sorted.forEachIndexed { i, s ->
-                groups[i % 5].add(s)
-            }
+            val split = com.example.ui.utils.CleaningGroups.split(studentsInClass, 5)
+            val groups = split.groups
             val days = listOf("يوم الاثنين 📅", "يوم الثلاثاء 📅", "يوم الأربعاء 📅", "يوم الخميس 📅", "يوم الجمعة 📅")
             groups.forEachIndexed { index, list ->
-                builder.append("\n📌 ${days[index]} (${list.size} طالب):\n")
+                builder.append("\n📌 ${days[index]} - ${split.labels[index]} (${list.size}):\n")
                 if (list.isEmpty()) {
                     builder.append("  - فارغ\n")
                 } else {
