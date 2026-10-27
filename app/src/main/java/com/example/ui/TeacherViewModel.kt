@@ -1131,6 +1131,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     synchronized(activeListeners) {
                         activeListeners.forEach { try { it.remove() } catch (e: Exception) {} }
                         activeListeners.clear()
+                        activationListener = null
                     }
                     
                     // Reset memory state flows immediately
@@ -1220,6 +1221,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
             synchronized(activeListeners) {
                 activeListeners.forEach { try { it.remove() } catch (e: Exception) {} }
                 activeListeners.clear()
+                activationListener = null
             }
             
             val db = FirebaseFirestore.getInstance()

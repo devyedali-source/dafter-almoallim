@@ -351,13 +351,22 @@ private fun openClassInfoWhatsApp(
         val authUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
         val email = authUser?.email ?: ""
         val uid = authUser?.uid ?: ""
+        val changes = StringBuilder()
+        if (newSchool.trim() != section.schoolName.trim()) {
+            changes.append("• اسم المدرسة:\n   القديم: ${section.schoolName}\n   الجديد: $newSchool\n")
+        }
+        if (newWilaya.trim() != section.wilaya.trim()) {
+            changes.append("• الولاية:\n   القديمة: ${section.wilaya.ifBlank { "غير محددة" }}\n   الجديدة: $newWilaya\n")
+        }
+        if (newMoughataa.trim() != section.moughataa.trim()) {
+            changes.append("• المقاطعة:\n   القديمة: ${section.moughataa.ifBlank { "غير محددة" }}\n   الجديدة: $newMoughataa\n")
+        }
         val message = "السلام عليكم،\n" +
-            "أنا معلم القسم: ${section.getFormattedName()}\nالسنة الدراسية: ${section.academicYear}\n" +
-            "أطلب تصحيح بيانات هذا القسم.\n\n" +
-            "المدرسة الحالية: ${section.schoolName}\n" +
-            "المدرسة الصحيحة: $newSchool\n" +
-            "الولاية: $newWilaya — المقاطعة: $newMoughataa\n" +
-            "السبب: $reason" +
+            "أنا معلم القسم: ${section.getFormattedName().replace(Regex("\\s*\\[.*?\\]"), "").trim()}\n" +
+            "السنة الدراسية: \u2066${section.academicYear}\u2069\n" +
+            "أطلب تصحيح بيانات هذا القسم:\n\n" +
+            changes +
+            "\nالسبب: $reason" +
             if (uid.isNotBlank()) "\n\n------------------------------------\nرابط مراجعة الطلب:\nhttps://diftar-almoaalim.web.app/activate-class-info/${uid}_${section.id}" else ""
         val url = "https://api.whatsapp.com/send?phone=22237786585&text=${android.net.Uri.encode(message)}"
         context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
