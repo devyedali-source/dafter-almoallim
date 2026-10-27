@@ -120,6 +120,7 @@ dependencies {
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   // implementation(libs.androidx.navigation.compose)
   implementation(libs.androidx.room.ktx)
+  implementation("com.tom-roush:pdfbox-android:2.0.27.0")
   implementation(libs.androidx.room.runtime)
   implementation("androidx.work:work-runtime-ktx:2.9.0")
   implementation("com.google.firebase:firebase-appcheck-playintegrity")

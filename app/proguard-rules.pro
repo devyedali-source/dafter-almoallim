@@ -89,3 +89,8 @@
 -keep class com.example.data.exams.** { *; }
 -keepclassmembers class com.example.data.exams.** { *; }
 
+
+# PDFBox (قراءة بيانات لائحة PDF)
+-dontwarn com.tom_roush.pdfbox.**
+-dontwarn com.gemalto.jp2.**
+-keep class com.tom_roush.pdfbox.** { *; }

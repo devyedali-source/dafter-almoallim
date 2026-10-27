@@ -1396,7 +1396,10 @@ object HtmlReportHelper {
         """)
         
         html.append("</div>") // Close sheet-card
-        
+
+        // بيانات دقيقة مخفية تسمح باستيراد القسم من هذا الملف (لمدير الأقسام)
+        html.append(com.example.ui.utils.ClassListPayload.toHtml(activeClass, students, showSchoolId || showNationalId, showPhone1 || showPhone2, showHealth))
+
         html.append("</body></html>")
         return html.toString()
     }

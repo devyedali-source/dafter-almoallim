@@ -2865,7 +2865,8 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         sectionName: String,
         wilaya: String = "",
         moughataa: String = "",
-        academicYear: String = ""
+        academicYear: String = "",
+        onCreatedId: ((Long) -> Unit)? = null
     ): Boolean {
         if (schoolName.isBlank() || sectionName.isBlank()) return false
         val finalAcademicYear = if (academicYear.isNotBlank()) academicYear else getAutomaticAcademicYear()
@@ -2925,6 +2926,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         
         // Open newly created class section immediately
         selectClass(id)
+        onCreatedId?.invoke(id)
         
         val uid = _currentUser.value?.uid ?: return true
         
@@ -3841,6 +3843,30 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                 e.printStackTrace()
             }
         }
+    }
+
+    /** استيراد قسم وتلاميذه من لائحة PDF (لمدير الأقسام). يعيد true إذا أُنشئ القسم. */
+    fun importClassList(data: com.example.ui.utils.ClassListPayload.Imported): Boolean {
+        return addClassSection(
+            schoolName = data.schoolName,
+            level = data.level,
+            sectionName = data.sectionName,
+            wilaya = data.wilaya,
+            moughataa = data.moughataa,
+            academicYear = data.academicYear,
+            onCreatedId = { classId ->
+                viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                    val base = System.currentTimeMillis() * 1000L
+                    data.students.forEachIndexed { i, st ->
+                        try {
+                            repository.insertStudent(st.copy(id = base + i, classId = classId))
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        )
     }
 
     fun addStudent(name: String, classId: Long, gender: String = "ذكر") {
