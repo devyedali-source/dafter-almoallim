@@ -146,6 +146,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     fun runWithLoading(message: String = "جاري العمل...", action: suspend () -> Unit) {
         viewModelScope.launch {
             showLoading(message)
+            kotlinx.coroutines.delay(50) // لحظة ليرسم التطبيق إشارة التحميل قبل بدء العمل الثقيل
             try {
                 action()
             } catch (e: Exception) {

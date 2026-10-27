@@ -9431,13 +9431,14 @@ fun EnhancedReportsTab(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            val executeReportShare: (Int) -> Unit = { mode ->
+            val executeReportShareInner: suspend (Int) -> Unit = { mode ->
                 when (mode) {
                     1 -> {
                         if (performanceList.isEmpty()) {
                             Toast.makeText(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateReportCardsHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateReportCardsHtml(
                                 context = context,
                                 className = activeClass.name,
                                 performances = performanceList,
@@ -9446,6 +9447,7 @@ fun EnhancedReportsTab(
                                 activeClass = activeClass,
                                 viewModel = viewModel
                             )
+                            }
                             val termName = when (activeTermId) {
                                 1 -> "الأول"
                                 2 -> "الثاني"
@@ -9459,7 +9461,8 @@ fun EnhancedReportsTab(
                         if (performanceList.isEmpty()) {
                             Toast.makeText(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateReportCardsHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateReportCardsHtml(
                                 context = context,
                                 className = activeClass.name,
                                 performances = performanceList,
@@ -9469,6 +9472,7 @@ fun EnhancedReportsTab(
                                 viewModel = viewModel,
                                 onePerPortraitPage = true
                             )
+                            }
                             val termName = when (activeTermId) {
                                 1 -> "الأول"
                                 2 -> "الثاني"
@@ -9482,7 +9486,8 @@ fun EnhancedReportsTab(
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
                                 context = context,
                                 className = activeClass.name,
                                 students = classStudents,
@@ -9490,6 +9495,7 @@ fun EnhancedReportsTab(
                                 activeClass = activeClass,
                                 viewModel = viewModel
                             )
+                            }
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "كشف_الدرجات_السنوي_قسم_${activeClass.name}.pdf", isLandscape = true)
                         }
                     }
@@ -9497,7 +9503,8 @@ fun EnhancedReportsTab(
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
                                 context = context,
                                 className = activeClass.name,
                                 students = classStudents,
@@ -9506,6 +9513,7 @@ fun EnhancedReportsTab(
                                 viewModel = viewModel,
                                 onePerPortraitPage = true
                             )
+                            }
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "كشف_الدرجات_السنوي_قسم_${activeClass.name}_ورقة_لكل_كشف.pdf", isLandscape = false)
                         }
                     }
@@ -9513,13 +9521,15 @@ fun EnhancedReportsTab(
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateAveragesOnlyReportCardsHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateAveragesOnlyReportCardsHtml(
                                 context = context,
                                 className = activeClass.name,
                                 students = classStudents,
                                 activeClass = activeClass,
                                 viewModel = viewModel
                             )
+                            }
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "كشوف_المعدلات_فقط_قسم_${activeClass.name}.pdf", isLandscape = false)
                         }
                     }
@@ -9527,7 +9537,8 @@ fun EnhancedReportsTab(
                         if (performanceList.isEmpty()) {
                             Toast.makeText(context, "الرجاء رصد درجات ومواد القسم للحصول على نتائج", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateDetailedTermLedgerHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateDetailedTermLedgerHtml(
                                 context = context,
                                 className = activeClass.name,
                                 performances = performanceList,
@@ -9536,6 +9547,7 @@ fun EnhancedReportsTab(
                                 activeClass = activeClass,
                                 viewModel = viewModel
                             )
+                            }
                             val termName = when (activeTermId) {
                                 1 -> "الأول"
                                 2 -> "الثاني"
@@ -9550,7 +9562,8 @@ fun EnhancedReportsTab(
                         if (performanceList.isEmpty()) {
                             Toast.makeText(context, "لا توجد علامات مرصودة بالقسم بعد للمشاركة", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateReportCardsHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateReportCardsHtml(
                                 context = context,
                                 className = activeClass.name,
                                 performances = performanceList,
@@ -9560,6 +9573,7 @@ fun EnhancedReportsTab(
                                 viewModel = viewModel,
                                 perPage = 3
                             )
+                            }
                             val termName = when (activeTermId) {
                                 1 -> "الأول"
                                 2 -> "الثاني"
@@ -9573,7 +9587,8 @@ fun EnhancedReportsTab(
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب الكشوف", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateThreeTermGradesReportCardsHtml(
                                 context = context,
                                 className = activeClass.name,
                                 students = classStudents,
@@ -9582,6 +9597,7 @@ fun EnhancedReportsTab(
                                 viewModel = viewModel,
                                 perPage = 3
                             )
+                            }
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "كشف_الدرجات_السنوي_قسم_${activeClass.name}_ثلاثة_في_الورقة.pdf", isLandscape = true)
                         }
                     }
@@ -9589,12 +9605,14 @@ fun EnhancedReportsTab(
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب الشهادات", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateHonorCertificatesHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateHonorCertificatesHtml(
                                 context = context,
                                 activeClass = activeClass,
                                 students = classStudents,
                                 viewModel = viewModel
                             )
+                            }
                             if (html.isBlank()) {
                                 Toast.makeText(context, "لا توجد معدلات مرصودة بعد لاستخراج الشهادات", Toast.LENGTH_LONG).show()
                             } else {
@@ -9606,16 +9624,25 @@ fun EnhancedReportsTab(
                         if (classStudents.isEmpty()) {
                             Toast.makeText(context, "القسم فارغ لا يمكن سحب المعدلات", Toast.LENGTH_SHORT).show()
                         } else {
-                            val html = HtmlReportHelper.generateAnnualAveragesHtml(
+                            val html = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+                                HtmlReportHelper.generateAnnualAveragesHtml(
                                 context = context,
                                 className = activeClass.name,
                                 students = classStudents,
                                 activeClass = activeClass,
                                 viewModel = viewModel
                             )
+                            }
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_المعدلات_السنوية_للسراج_قسم_${activeClass.name}.pdf", isLandscape = true)
                         }
                     }
+                }
+            }
+
+            val executeReportShare: (Int) -> Unit = { mode ->
+                viewModel.runWithLoading("جاري تجهيز الكشوف... قد يستغرق ذلك لحظات") {
+                    kotlinx.coroutines.delay(60)
+                    executeReportShareInner(mode)
                 }
             }
 
