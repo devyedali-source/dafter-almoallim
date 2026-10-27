@@ -3418,7 +3418,7 @@ private const val APP_SUPERVISION_TEXT =
     "تَطْبِيقُ دَفْتَرِ الْمُعَلِّمِ مِنْ إِشْرَافِ مَجْمُوعَةٍ مِنْ مُفَتِّشِي التَّعْلِيمِ الْأَسَاسِيِّ، وَمُكَوِّنِي مَدَارِسِ تَكْوِينِ الْمُعَلِّمِينَ، وَالْمُهَنْدِسِينَ، لِتَسْهِيلِ عَمَلِ الْمُعَلِّمِ."
 
 private const val APP_SUPERVISION_TEXT_FR =
-    "L'application Cahier de l'enseignant est supervisée par un groupe d'inspecteurs de l'enseignement fondamental, de formateurs des écoles de formation des enseignants et d'ingénieurs, afin de faciliter le travail de l'enseignant."
+    "L'application Cahier de l'enseignant est supervisée par un groupe d'inspecteurs de l'enseignement fondamental, de formateurs des ENI (écoles de formation des instituteurs) et d'ingénieurs, afin de faciliter le travail de l'enseignant."
 
 @Composable
 fun BentoDashboard(
