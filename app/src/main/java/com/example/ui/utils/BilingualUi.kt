@@ -69,7 +69,7 @@ object BiFr {
         "القائمة الجانبية للتطبيق" to "Menu de l'application",
         "الصفحة الرئيسية والأقسام" to "Accueil et classes",
         "تصميم اللوائح والكشوف" to "Design des listes et relevés",
-        "كتبي" to "Mes livres",
+        "كتبي" to "Koutoubi",
         "تسجيل الخروج" to "Se déconnecter",
         // الجدول الزمني
         "الجدول الزمني للقسم" to "Emploi du temps de la classe",
@@ -205,7 +205,13 @@ object BiFr {
         if (k.isEmpty()) return null
         // نص فيه حروف لاتينية أصلاً (مثل Français) لا يُترجم
         if (k.any { it in 'a'..'z' || it in 'A'..'Z' }) return null
-        return extra[k] ?: subjects[k] ?: UiFrench.map[ar] ?: UiFrench.map[k]
+        val direct = extra[k] ?: subjects[k] ?: UiFrench.map[ar] ?: UiFrench.map[k]
+        if (direct != null) return direct
+        // العبارة قد تنتهي برمز تعبيري (🏫 🎨 ...): نبحث بدونه
+        val bare = k.filter { it.isLetterOrDigit() || it.isWhitespace() || it in "()[]:،,.-/'؟?!" }
+            .trim().replace(Regex("\\s+"), " ")
+        if (bare.isEmpty() || bare == k) return null
+        return extra[bare] ?: subjects[bare] ?: UiFrench.map[bare]
     }
 
     /** نفس of لكن لنصوص فيها متغيرات {0} {1} ... */
