@@ -128,6 +128,8 @@ object BiHtml {
     }
 
     /** يُحوّل كل كلمة عربية في اسم المدرسة إلى حروف لاتينية، ويُبقي الأرقام والحروف اللاتينية كما هي. */
+    fun translitName(name: String): String = translit(name)
+
     private fun translit(name: String): String =
         name.trim().split(Regex("\\s+")).joinToString(" ") { translitWord(it) }
 

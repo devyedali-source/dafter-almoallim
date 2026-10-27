@@ -1549,9 +1549,9 @@ fun InnerTeacherAppScreenContent(
                                     3 -> "حول التطبيق ℹ️"
                                     4 -> "التشريع المدرسي ⚖️"
                                     5 -> "دورة تحضير مسابقات المعلمين 🎓"
-                                    else -> if (selectedYear == null) "دفتر المعلم - اختيار السنة الدراسية 📅" else "السنة الدراسية: $selectedYear 🏫"
+                                    else -> if (selectedYear == null) "دفتر المعلم - اختيار السنة الدراسية 📅" else "السنة الدراسية: \u2066$selectedYear\u2069 🏫"
                                 }
-                                val outerTitleFr = if (currentOuterTab == 0 && selectedYear != null) "Année scolaire : $selectedYear" else com.example.ui.utils.BiFr.of(outerTitleAr)
+                                val outerTitleFr = if (currentOuterTab == 0 && selectedYear != null) "Année scolaire" else com.example.ui.utils.BiFr.of(outerTitleAr)
                                 com.example.ui.utils.BiText(
                                     ar = outerTitleAr,
                                     fr = outerTitleFr,
@@ -1758,8 +1758,8 @@ fun InnerTeacherAppScreenContent(
                                                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                                                         ) {
                                                             com.example.ui.utils.BiText(
-                                                                ar = "العام الدراسي: $year",
-                                                                fr = "Année scolaire : $year",
+                                                                ar = "العام الدراسي: \u2066$year\u2069",
+                                                                fr = "Année scolaire",
                                                                 fontSize = 16.sp,
                                                                 frSize = 11.sp,
                                                                 fontWeight = FontWeight.Bold,
@@ -1843,7 +1843,7 @@ fun InnerTeacherAppScreenContent(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
-                                            text = uiTf("الأقسام المسجلة لعام {0} ({1})", selectedYear, yearClasses.size),
+                                            text = uiTf("الأقسام المسجلة لعام {0} ({1})", "\u2066$selectedYear\u2069", yearClasses.size),
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.Bold,
                                             color = BentoText
@@ -1955,9 +1955,10 @@ fun InnerTeacherAppScreenContent(
                                                         )
                                                     }
                                                     Column(modifier = Modifier.weight(1f)) {
-                                                        Text(
-                                                            text = section.getFormattedName(),
-                                                            style = MaterialTheme.typography.titleMedium,
+                                                        BiText(
+                                                            ar = section.getFormattedName().replace(Regex("\\s*\\[.*?\\]"), "").trim(),
+                                                            fr = BiFr.className(section.getFormattedName()),
+                                                            fontSize = 16.sp,
                                                             fontWeight = FontWeight.Bold,
                                                             color = BentoText
                                                         )
@@ -2167,17 +2168,19 @@ fun InnerTeacherAppScreenContent(
                                 Column(
                                     verticalArrangement = Arrangement.spacedBy(1.dp)
                                 ) {
-                                    Text(
-                                        text = activeClass.getFormattedName().replace(Regex("\\[.*?\\]"), "").trim(),
+                                    val clsAr = activeClass.getFormattedName().replace(Regex("\\[.*?\\]"), "").trim()
+                                    com.example.ui.utils.BiText(
+                                        ar = clsAr,
+                                        fr = com.example.ui.utils.BiFr.className(clsAr),
                                         fontWeight = FontWeight.Black,
                                         fontSize = 14.sp,
+                                        frSize = 10.sp,
                                         color = Color.White,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
+                                        maxLines = 1
                                     )
                                     com.example.ui.utils.BiText(
-                                        ar = "السنة الدراسية: ${activeClass.academicYear.ifBlank { "2025-2026" }} 🏫",
-                                        fr = "Année scolaire : ${activeClass.academicYear.ifBlank { "2025-2026" }}",
+                                        ar = "السنة الدراسية: \u2066${activeClass.academicYear.ifBlank { "2025-2026" }}\u2069 🏫",
+                                        fr = null,
                                         fontSize = 11.sp,
                                         frSize = 9.sp,
                                         fontWeight = FontWeight.Medium,
@@ -3801,9 +3804,9 @@ fun StudentAndClassesStatsCard(
                     )
                 }
                 Column {
-                    Text(
-                        text = AppLocalization.tr("total_registered_students", "الطلاب المسجلين كلياً", appLanguage),
-                        style = MaterialTheme.typography.labelMedium,
+                    BiText(
+                        ar = AppLocalization.tr("total_registered_students", "الطلاب المسجلين كلياً", appLanguage),
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = com.example.ui.theme.BentoPrimaryDesc
                     )
@@ -3811,9 +3814,9 @@ fun StudentAndClassesStatsCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("👦 $maleCount ${AppLocalization.tr("male_count_label", "ذكور", appLanguage)}", style = MaterialTheme.typography.bodyMedium, color = com.example.ui.theme.BentoPrimary, fontWeight = FontWeight.SemiBold)
+                        BiText(ar = "👦 $maleCount ${AppLocalization.tr("male_count_label", "ذكور", appLanguage)}", fr = "$maleCount Garçons", fontSize = 14.sp, color = com.example.ui.theme.BentoPrimary, fontWeight = FontWeight.SemiBold)
                         Text("•", style = MaterialTheme.typography.bodyMedium, color = com.example.ui.theme.BentoPrimaryDesc)
-                        Text("👧 $femaleCount ${AppLocalization.tr("female_count_label", "إناث", appLanguage)}", style = MaterialTheme.typography.bodyMedium, color = com.example.ui.theme.BentoSecondary, fontWeight = FontWeight.SemiBold)
+                        BiText(ar = "👧 $femaleCount ${AppLocalization.tr("female_count_label", "إناث", appLanguage)}", fr = "$femaleCount Filles", fontSize = 14.sp, color = com.example.ui.theme.BentoSecondary, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -3852,9 +3855,10 @@ fun StudentAndClassesStatsCard(
                             modifier = Modifier.size(18.dp)
                         )
                     }
-                    Text(
-                        text = "${classSections.size} ${AppLocalization.tr("sections_count_label", "أقسام", appLanguage)}",
-                        style = MaterialTheme.typography.labelMedium,
+                    BiText(
+                        ar = "${classSections.size} ${AppLocalization.tr("sections_count_label", "أقسام", appLanguage)}",
+                        fr = "${classSections.size} Classes",
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = com.example.ui.theme.BentoSecondary
                     )
@@ -3862,9 +3866,9 @@ fun StudentAndClassesStatsCard(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text(
-                        text = AppLocalization.tr("students_per_section_title", "عدد الطلاب لكل قسم:", appLanguage),
-                        style = MaterialTheme.typography.labelMedium,
+                    BiText(
+                        ar = AppLocalization.tr("students_per_section_title", "عدد الطلاب لكل قسم:", appLanguage),
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = com.example.ui.theme.BentoPrimaryDesc
                     )
@@ -3883,16 +3887,18 @@ fun StudentAndClassesStatsCard(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(
-                                        text = "• ${section.getFormattedName()}",
-                                        style = MaterialTheme.typography.bodyMedium,
+                                    BiText(
+                                        ar = "• ${section.getFormattedName().replace(Regex("\\s*\\[.*?\\]"), "").trim()}",
+                                        fr = BiFr.className(section.getFormattedName()),
+                                        fontSize = 14.sp,
                                         fontWeight = FontWeight.Medium,
                                         color = com.example.ui.theme.BentoText,
                                         modifier = Modifier.weight(1f)
                                     )
-                                    Text(
-                                        text = "$count ${if (count == 1) AppLocalization.tr("student_unit_singular", "طالب", appLanguage) else AppLocalization.tr("student_unit_plural", "طلاب", appLanguage)}",
-                                        style = MaterialTheme.typography.bodyMedium,
+                                    BiText(
+                                        ar = "$count ${if (count == 1) AppLocalization.tr("student_unit_singular", "طالب", appLanguage) else AppLocalization.tr("student_unit_plural", "طلاب", appLanguage)}",
+                                        fr = "$count ${if (count == 1) "élève" else "élèves"}",
+                                        fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = com.example.ui.theme.BentoSecondary
                                     )

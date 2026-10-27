@@ -70,6 +70,13 @@ object BiFr {
         "الصفحة الرئيسية والأقسام" to "Accueil et classes",
         "تصميم اللوائح والكشوف" to "Design des listes et relevés",
         "كتبي" to "Koutoubi",
+        "الطلاب المسجلين كلياً" to "Total des élèves inscrits",
+        "ذكور" to "Garçons",
+        "إناث" to "Filles",
+        "أقسام" to "Classes",
+        "عدد الطلاب لكل قسم:" to "Élèves par classe :",
+        "طالب" to "élève",
+        "طلاب" to "élèves",
         "المستوى الدراسي من 1 إلى 6" to "Niveau scolaire de 1 à 6",
         "رجوع إلى الدروس" to "Retour aux leçons",
         "رجوع إلى التخصّصات" to "Retour aux spécialités",
@@ -325,6 +332,13 @@ object BiFr {
             .trim().replace(Regex("\\s+"), " ")
         if (bare.isEmpty() || bare == k) return null
         return extra[bare] ?: subjects[bare] ?: UiFrench.map[bare]
+    }
+
+    /** اسم القسم بحروف لاتينية: «الطلحاية1 - س4 (4AP) [2026-2027]» ← «El Talhaya 1 - Cl. 4 (4AP)» (بدون تكرار السنة). */
+    fun className(ar: String): String {
+        var s = ar.replace(Regex("\\s*\\[.*?\\]"), "").trim()
+        s = s.replace(Regex("(?<![\\p{L}])س\\s*(\\d)"), "Cl. $1")
+        return com.example.ui.BiHtml.translitName(s)
     }
 
     /** نفس of لكن لنصوص فيها متغيرات {0} {1} ... */
