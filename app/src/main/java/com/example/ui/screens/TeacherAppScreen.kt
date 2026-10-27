@@ -5900,7 +5900,6 @@ fun GradesEntryTab(
                                                         fontSize = 10.5.sp,
                                                         fontWeight = FontWeight.Bold,
                                                         color = Color(0xFFC62828),
-                                                        lineHeight = 14.sp
                                                     )
                                                 }
                                             }
@@ -9276,7 +9275,6 @@ fun EnhancedReportsTab(
                                                         fontSize = 10.5.sp,
                                                         fontWeight = FontWeight.Bold,
                                                         color = Color(0xFFC62828),
-                                                        lineHeight = 14.sp
                                                     )
                                                 }
                                             }
