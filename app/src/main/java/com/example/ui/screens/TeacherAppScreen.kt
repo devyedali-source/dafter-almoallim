@@ -2742,13 +2742,15 @@ fun ClassStudentsSubview(
                                     fontSize = 14.sp
                                 )
                             }
-                            Text(
-                                text = "${classStudents.indexOf(student) + 1} - ${student.name}",
+                            BiText(
+                                ar = "${classStudents.indexOf(student) + 1} - ${student.name}",
+                                fr = student.frenchName.ifBlank { com.example.ui.BiHtml.translitName(student.name) },
                                 fontWeight = FontWeight.Bold,
                                 color = BentoText,
                                 fontSize = 13.5.sp,
+                                frSize = 11.sp,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                modifier = Modifier.weight(1f)
                             )
                         }
 
