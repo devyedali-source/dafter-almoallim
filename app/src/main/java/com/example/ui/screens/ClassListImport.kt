@@ -39,7 +39,7 @@ import kotlinx.coroutines.withContext
 
 /** زر «رفع لائحة PDF» لمدير الأقسام: يقرأ لائحة صدّرها التطبيق وينشئ القسم بتلاميذه بعد المراجعة. */
 @Composable
-fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modifier) {
+fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modifier, targetClassId: Long? = null) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var parsed by remember { mutableStateOf<ClassListPayload.Imported?>(null) }
@@ -86,12 +86,12 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
     )
 
     val classes by viewModel.classSections.collectAsState()
-    var chosenId by remember { mutableStateOf<Long?>(null) }
+    var chosenId by remember { mutableStateOf<Long?>(targetClassId) }
 
     parsed?.let { data ->
         AlertDialog(
             onDismissRequest = { parsed = null },
-            title = { Text("اختر القسم الذي تُضاف إليه اللائحة", fontWeight = FontWeight.Bold) },
+            title = { Text(if (targetClassId != null) "إضافة اللائحة إلى هذا القسم" else "اختر القسم الذي تُضاف إليه اللائحة", fontWeight = FontWeight.Bold) },
             text = {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Text("في الملف ${data.students.size} تلميذًا (${data.schoolName} - ${getLevelArabicName(data.level)} ${data.sectionName})", style = MaterialTheme.typography.bodySmall)
@@ -101,10 +101,10 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
                         style = MaterialTheme.typography.bodySmall
                     )
                     Spacer(Modifier.height(10.dp))
-                    if (classes.isEmpty()) {
+                    if (targetClassId == null && classes.isEmpty()) {
                         Text("لا توجد أقسام عندك. أنشئ القسم أولًا ثم أعد الرفع.", color = Color(0xFFD32F2F))
                     }
-                    classes.sortedBy { it.name }.forEach { c ->
+                    (if (targetClassId != null) emptyList() else classes.sortedBy { it.name }).forEach { c ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth().clickable { chosenId = c.id }
@@ -126,7 +126,7 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
                             Toast.makeText(context, "🎉 أُضيف $added تلميذًا" + if (skipped > 0) " وتُجووز $skipped مكرَّرًا" else "", Toast.LENGTH_LONG).show()
                         }
                         parsed = null
-                        chosenId = null
+                        chosenId = targetClassId
                     }
                 ) { Text("إضافة إلى القسم", fontWeight = FontWeight.Bold) }
             },

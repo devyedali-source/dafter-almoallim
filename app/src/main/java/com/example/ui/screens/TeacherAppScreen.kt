@@ -2083,15 +2083,6 @@ fun InnerTeacherAppScreenContent(
 
                         // Floating Action Button to create a class
                         if (currentOuterTab == 0) {
-                            val importAdminUser by viewModel.currentUser.collectAsState()
-                            if (importAdminUser?.email?.trim()?.lowercase() == "elyedalimoctar@gmail.com") {
-                                ClassListImportButton(
-                                    viewModel = viewModel,
-                                    modifier = Modifier
-                                        .align(Alignment.BottomStart)
-                                        .padding(24.dp)
-                                )
-                            }
                             androidx.compose.material3.ExtendedFloatingActionButton(
                                 onClick = { showCreateClassDialogOuter = true },
                                 containerColor = BentoPrimary,
@@ -2793,6 +2784,16 @@ fun ClassStudentsSubview(
         item { Spacer(modifier = Modifier.height(80.dp)) }
     }
 
+        val importAdminUser by viewModel.currentUser.collectAsState()
+        if (importAdminUser?.email?.trim()?.lowercase() == "elyedalimoctar@gmail.com") {
+            ClassListImportButton(
+                viewModel = viewModel,
+                targetClassId = activeSection.id,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(24.dp)
+            )
+        }
         androidx.compose.material3.ExtendedFloatingActionButton(
             onClick = { showAddStudentDialog = true },
             containerColor = BentoPrimary,
