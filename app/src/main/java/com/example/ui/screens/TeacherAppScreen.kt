@@ -4879,7 +4879,7 @@ fun GradesEntryTab(
                     ) {
                         Icon(Icons.Default.Save, contentDescription = "حفظ", modifier = Modifier.size(15.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(AppLocalization.tr("save_results_short", "حفظ النتائج 💾", appLanguage), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        BiText(ar = AppLocalization.tr("save_results_short", "حفظ النتائج 💾", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("حفظ النتائج 💾"), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                     }
 
                     Button(
@@ -4894,7 +4894,7 @@ fun GradesEntryTab(
                     ) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null, modifier = Modifier.size(14.dp))
                         Spacer(modifier = Modifier.width(2.dp))
-                        Text(AppLocalization.tr("back_modify_options", "رجوع ↩️", appLanguage), fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                        BiText(ar = AppLocalization.tr("back_modify_options", "رجوع ↩️", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("رجوع ↩️"), fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -5646,17 +5646,8 @@ fun GradesEntryTab(
             // STEP 1: CONFIGURATION & SELECTION VIEW
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = AppLocalization.tr("grades_entry_title", "رصد وإدخال درجات الطلاب 📝", appLanguage),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = AppLocalization.tr("grades_entry_subtitle", "يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات.", appLanguage),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            BiText(ar = AppLocalization.tr("grades_entry_title", "رصد وإدخال درجات الطلاب 📝", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("رصد وإدخال درجات الطلاب 📝"), fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+            BiText(ar = AppLocalization.tr("grades_entry_subtitle", "يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات.", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.bodySmall.fontSize)
             
             if (activeClass != null) {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -5682,12 +5673,7 @@ fun GradesEntryTab(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text("📈", fontSize = 16.sp)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = uiT("شريط تقدم تسجيل النتائج 📊"),
-                                    style = MaterialTheme.typography.titleSmall,
-                                    fontWeight = FontWeight.Black,
-                                    color = BentoText
-                                )
+                                BiText(ar = uiT("شريط تقدم تسجيل النتائج 📊"), fr = BiFr.of("شريط تقدم تسجيل النتائج 📊"), fontWeight = FontWeight.Black, color = BentoText, fontSize = MaterialTheme.typography.titleSmall.fontSize)
                             }
                             Text(
                                 text = "$progressPercent%",
@@ -5790,12 +5776,7 @@ fun GradesEntryTab(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.25f))
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = AppLocalization.tr("select_current_term", "الفصل الدراسي", appLanguage),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Black,
-                        color = BentoText
-                    )
+                    BiText(ar = AppLocalization.tr("select_current_term", "الفصل الدراسي", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("الفصل الدراسي"), fontWeight = FontWeight.Black, color = BentoText, fontSize = MaterialTheme.typography.titleSmall.fontSize)
                     Spacer(modifier = Modifier.height(8.dp))
                     Box(modifier = Modifier.fillMaxWidth()) {
                         OutlinedCard(
@@ -5828,8 +5809,8 @@ fun GradesEntryTab(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Text("📅", fontSize = 16.sp)
-                                    Text(
-                                        text = currentGradeTermDisplay,
+                                    BiText(
+                                        ar = currentGradeTermDisplay,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 14.sp,
                                         color = if (activeTermId == 4) Color(0xFFC62828) else Color(0xFF1B5E20)
@@ -5873,8 +5854,8 @@ fun GradesEntryTab(
                                                     horizontalArrangement = Arrangement.SpaceBetween,
                                                     verticalAlignment = Alignment.CenterVertically
                                                 ) {
-                                                    Text(
-                                                        text = displayName,
+                                                    BiText(
+                                                        ar = displayName,
                                                         fontWeight = if (activeTermId == termId) FontWeight.Black else FontWeight.Bold,
                                                         color = if (isTerm4) Color(0xFFC62828) else Color(0xFF1B5E20),
                                                         fontSize = 13.5.sp
@@ -5945,12 +5926,7 @@ fun GradesEntryTab(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.25f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = AppLocalization.tr("grading_method", "طريقة رصد العلامات 🛠️", appLanguage),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Black,
-                        color = BentoText
-                    )
+                    BiText(ar = AppLocalization.tr("grading_method", "طريقة رصد العلامات 🛠️", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("طريقة رصد العلامات 🛠️"), fontWeight = FontWeight.Black, color = BentoText, fontSize = MaterialTheme.typography.titleSmall.fontSize)
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         modifier = Modifier
@@ -5968,12 +5944,7 @@ fun GradesEntryTab(
                                 .padding(12.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = AppLocalization.tr("grade_by_subject", "رصد نتيجة مادة للقسم", appLanguage),
-                                color = if (entryMode == 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
+                            BiText(ar = AppLocalization.tr("grade_by_subject", "رصد نتيجة مادة للقسم", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("رصد نتيجة مادة للقسم"), color = if (entryMode == 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                         Box(
                             modifier = Modifier
@@ -5984,12 +5955,7 @@ fun GradesEntryTab(
                                 .padding(12.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = AppLocalization.tr("grade_by_student", "رصد مواد لطالب واحد", appLanguage),
-                                color = if (entryMode == 1) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
+                            BiText(ar = AppLocalization.tr("grade_by_student", "رصد مواد لطالب واحد", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("رصد مواد لطالب واحد"), color = if (entryMode == 1) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     }
                 }
@@ -6027,14 +5993,14 @@ fun GradesEntryTab(
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
-                                Text(
-                                    text = if (entryMode == 0) AppLocalization.tr("select_subject_prompt", "المادة الدراسية المطلوبة 📘", appLanguage) else AppLocalization.tr("select_student_prompt", "الطالب المستهدف 👨‍🎓", appLanguage),
+                                BiText(
+                                    ar = if (entryMode == 0) AppLocalization.tr("select_subject_prompt", "المادة الدراسية المطلوبة 📘", appLanguage) else AppLocalization.tr("select_student_prompt", "الطالب المستهدف 👨‍🎓", appLanguage),
                                     fontSize = 11.sp,
                                     color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.Bold
                                 )
-                                Text(
-                                    text = if (entryMode == 0) {
+                                BiText(
+                                    ar = if (entryMode == 0) {
                                         activeSubject?.name ?: AppLocalization.tr("choose_subject_ph", "اختر المادة الدراسية...", appLanguage)
                                     } else {
                                         activeStudent?.name ?: AppLocalization.tr("choose_student_ph", "اختر الطالب...", appLanguage)
@@ -6070,11 +6036,7 @@ fun GradesEntryTab(
                 ) {
                     Icon(Icons.Default.ArrowForward, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = AppLocalization.tr("start_grading_btn", "البدء في رصد الدرجات 🚀", appLanguage),
-                        fontWeight = FontWeight.Black,
-                        fontSize = 14.sp
-                    )
+                    BiText(ar = AppLocalization.tr("start_grading_btn", "البدء في رصد الدرجات 🚀", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("البدء في رصد الدرجات 🚀"), fontWeight = FontWeight.Black, fontSize = 14.sp)
                 }
             }
         }
@@ -6150,18 +6112,9 @@ fun GradesEntryTab(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    Text(
-                        text = uiTf("القسم: {0} | الفصل الدراسي: الفصل {1}", activeClass.name, activeTermId),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    BiText(ar = uiTf("القسم: {0} | الفصل الدراسي: الفصل {1}", activeClass.name, activeTermId), fr = BiFr.f("القسم: {0} | الفصل الدراسي: الفصل {1}", activeClass.name, activeTermId), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.bodyMedium.fontSize)
                     
-                    Text(
-                        text = uiT("تم رصد جميع النتائج بنجاح! اختر نوع الكشف الذي ترغب في طباعته أو تصديره بصيغة PDF:"),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-                    )
+                    BiText(ar = uiT("تم رصد جميع النتائج بنجاح! اختر نوع الكشف الذي ترغب في طباعته أو تصديره بصيغة PDF:"), fr = BiFr.of("تم رصد جميع النتائج بنجاح! اختر نوع الكشف الذي ترغب في طباعته أو تصديره بصيغة PDF:"), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f), fontSize = MaterialTheme.typography.bodySmall.fontSize)
 
                     // Option 1: سحب كشوف درجات القسم
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -6420,17 +6373,8 @@ fun ReportsTab(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = uiT("استخراج التقارير وسحب الكشوف 📊"),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Black,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text = uiT("شاهد كشوف درجات الطلاب مع احتساب المعدل والرتبة، أو اسحب اللائحة التفصيلية للقسم للفصل المحدد."),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        BiText(ar = uiT("استخراج التقارير وسحب الكشوف 📊"), fr = BiFr.of("استخراج التقارير وسحب الكشوف 📊"), fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary, fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+        BiText(ar = uiT("شاهد كشوف درجات الطلاب مع احتساب المعدل والرتبة، أو اسحب اللائحة التفصيلية للقسم للفصل المحدد."), fr = BiFr.of("شاهد كشوف درجات الطلاب مع احتساب المعدل والرتبة، أو اسحب اللائحة التفصيلية للقسم للفصل المحدد."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.bodySmall.fontSize)
         Spacer(modifier = Modifier.height(16.dp))
 
         // Class Selector
@@ -8348,7 +8292,7 @@ fun <T> DialogSelection(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    BiText(ar = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     IconButton(onClick = onDismiss, modifier = Modifier.size(24.dp)) {
                         Icon(Icons.Default.Close, contentDescription = "إغلاق")
                     }
@@ -8377,15 +8321,9 @@ fun <T> DialogSelection(
                 ) {
                     if (filteredItems.isEmpty()) {
                         item {
-                            Text(
-                                text = uiT("لا توجد نتائج مطابقة."),
-                                color = MaterialTheme.colorScheme.outline,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier
+                            BiText(ar = uiT("لا توجد نتائج مطابقة."), fr = BiFr.of("لا توجد نتائج مطابقة."), color = MaterialTheme.colorScheme.outline, modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(vertical = 24.dp),
-                                textAlign = TextAlign.Center
-                            )
+                                    .padding(vertical = 24.dp), fontSize = MaterialTheme.typography.bodyMedium.fontSize, center = true)
                         }
                     } else {
                         items(filteredItems) { item ->
@@ -8402,9 +8340,9 @@ fun <T> DialogSelection(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(
-                                        text = itemName(item),
-                                        style = MaterialTheme.typography.bodyLarge,
+                                    BiText(
+                                        ar = itemName(item),
+                                        fontSize = 16.sp,
                                         fontWeight = FontWeight.Medium,
                                         modifier = Modifier.weight(1f)
                                     )
