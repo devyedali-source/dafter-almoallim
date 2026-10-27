@@ -1921,9 +1921,10 @@ object HtmlReportHelper {
         val styles = getCommonStyles(isLandscape = false)
         
         // Group students into 5 lists
-        val split = com.example.ui.utils.CleaningGroups.split(sortedStudents, 5)
-        val groups = split.groups
-        val groupLabels = split.labels
+        val groups = List(5) { mutableListOf<Student>() }
+        sortedStudents.forEachIndexed { index, student ->
+            groups[index % 5].add(student)
+        }
 
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الأناشيد</title>$styles${PrintDesign.listCss()}</head><body>")
@@ -2023,10 +2024,9 @@ object HtmlReportHelper {
         val styles = getCommonStyles(isLandscape = false)
         
         // Group students into 5 lists
-        val groups = List(5) { mutableListOf<Student>() }
-        sortedStudents.forEachIndexed { index, student ->
-            groups[index % 5].add(student)
-        }
+        val split = com.example.ui.utils.CleaningGroups.split(sortedStudents, 5)
+        val groups = split.groups
+        val groupLabels = split.labels
 
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الكناسة والنظافة</title>$styles${PrintDesign.listCss()}</head><body>")
