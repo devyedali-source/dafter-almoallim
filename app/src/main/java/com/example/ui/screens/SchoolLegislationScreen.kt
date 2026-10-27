@@ -335,8 +335,7 @@ fun SchoolLegislationScreen(
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = BentoSecondary,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
+                                        maxLines = 1
                                     )
                                 }
                                 Icon(
