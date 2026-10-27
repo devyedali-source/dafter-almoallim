@@ -2326,7 +2326,7 @@ private fun PullListButton(label: String, onDismiss: () -> Unit, onClick: () -> 
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary)
     ) {
-        Text(uiT(label), fontWeight = FontWeight.Bold, maxLines = 1)
+        BiTextA(ar = uiT(label), fontWeight = FontWeight.Bold, color = Color.White, maxLines = 2, center = true)
     }
 }
 
