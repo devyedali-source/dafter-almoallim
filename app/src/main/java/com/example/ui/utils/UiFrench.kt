@@ -76,7 +76,7 @@ object UiFrench {
         "إنشاء قسم دراسي جديد" to "Créer une nouvelle classe",
         "إنشاء وتخصيص ختم وطابع المدرسة 🖋️" to "Créer et personnaliser le cachet de l'école 🖋️",
         "إنشاء وختم الطابع الرسمي" to "Créer et apposer le cachet officiel",
-        "ابحث عن تلميذ بالاسم أو الرقم المدرسي..." to "Rechercher un élève par nom ou numéro d'élève...",
+        "ابحث عن تلميذ بالاسم أو الرقم المدرسي..." to "Rechercher un élève par nom ou RIM...",
         "ابحث في المواد، الأبواب، أو النصوص... 🔍" to "Rechercher dans les articles, chapitres ou textes... 🔍",
         "اختبر نفسك ({0} سؤالًا)" to "Testez-vous ({0} questions)",
         "اختر أو اكتب المقاطعة" to "Choisissez ou saisissez la moughataa",
