@@ -8778,12 +8778,7 @@ fun EnhancedReportsTab(
                                 )
                             }
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = uiT("إعدادات القسم والملاحظات"),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
+                            BiText(ar = uiT("إعدادات القسم والملاحظات"), fr = BiFr.of("إعدادات القسم والملاحظات"), fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onBackground, fontSize = MaterialTheme.typography.titleMedium.fontSize)
                         }
 
                         HorizontalDivider(modifier = Modifier.padding(bottom = 16.dp))
@@ -8827,17 +8822,8 @@ fun EnhancedReportsTab(
                                         )
                                     }
                                     Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-                                            text = uiT("تعديل مواد القسم 📚"),
-                                            fontWeight = FontWeight.ExtraBold,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
-                                        Text(
-                                            text = uiT("إضافة، تعديل أو حذف المواد والدرجات القصوى ومعاملاتها مباشرة للأقسام."),
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
+                                        BiText(ar = uiT("تعديل مواد القسم 📚"), fr = BiFr.of("تعديل مواد القسم 📚"), fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary, fontSize = MaterialTheme.typography.bodyMedium.fontSize)
+                                        BiText(ar = uiT("إضافة، تعديل أو حذف المواد والدرجات القصوى ومعاملاتها مباشرة للأقسام."), fr = BiFr.of("إضافة، تعديل أو حذف المواد والدرجات القصوى ومعاملاتها مباشرة للأقسام."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.labelSmall.fontSize)
                                     }
                                     Icon(
                                         imageVector = Icons.Default.ArrowBack,
@@ -8870,17 +8856,8 @@ fun EnhancedReportsTab(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-                                            text = uiT("هل تريد الدرجات من 10؟"),
-                                            fontWeight = FontWeight.Bold,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        )
-                                        Text(
-                                            text = uiT("عند تفعيل هذا الخيار، سيتم عرض كشوف النقاط والمعدلات من 10 نقاط بدلاً من 20."),
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
+                                        BiText(ar = uiT("هل تريد الدرجات من 10؟"), fr = BiFr.of("هل تريد الدرجات من 10؟"), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, fontSize = MaterialTheme.typography.bodyMedium.fontSize)
+                                        BiText(ar = uiT("عند تفعيل هذا الخيار، سيتم عرض كشوف النقاط والمعدلات من 10 نقاط بدلاً من 20."), fr = BiFr.of("عند تفعيل هذا الخيار، سيتم عرض كشوف النقاط والمعدلات من 10 نقاط بدلاً من 20."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.labelSmall.fontSize)
                                     }
                                     Switch(
                                         checked = isOutOfTen,
@@ -9050,16 +9027,8 @@ fun EnhancedReportsTab(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Column(modifier = Modifier.weight(1f)) {
-                                            Text(
-                                                text = uiT("استخدام صيغة الامتحان النهائي"),
-                                                fontWeight = FontWeight.Bold,
-                                                style = MaterialTheme.typography.bodyMedium
-                                            )
-                                            Text(
-                                                text = uiT("في الامتحان الثالث، سيتم ضرب الامتحان الأول في 1، والثاني في 2، والثالث في 3."),
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
+                                            BiText(ar = uiT("استخدام صيغة الامتحان النهائي"), fr = BiFr.of("استخدام صيغة الامتحان النهائي"), fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.bodyMedium.fontSize)
+                                            BiText(ar = uiT("في الامتحان الثالث، سيتم ضرب الامتحان الأول في 1، والثاني في 2، والثالث في 3."), fr = BiFr.of("في الامتحان الثالث، سيتم ضرب الامتحان الأول في 1، والثاني في 2، والثالث في 3."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.labelSmall.fontSize)
                                         }
                                         Switch(
                                             checked = useFinalExamFormula,
@@ -9071,17 +9040,8 @@ fun EnhancedReportsTab(
 
                                     // Select note for failure in exam 1/2
                                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                        Text(
-                                            text = uiT("ملاحظة الرسوب في الامتحان الأول والثاني:"),
-                                            fontWeight = FontWeight.Bold,
-                                            style = MaterialTheme.typography.bodyMedium
-                                        )
-                                        Text(
-                                            text = uiT("اختر الملاحظة الافتراضية المناسبة للراسبين في الفترات الأولى والثانية قبل الامتحان النهائي."),
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier.padding(bottom = 4.dp)
-                                        )
+                                        BiText(ar = uiT("ملاحظة الرسوب في الامتحان الأول والثاني:"), fr = BiFr.of("ملاحظة الرسوب في الامتحان الأول والثاني:"), fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.bodyMedium.fontSize)
+                                        BiText(ar = uiT("اختر الملاحظة الافتراضية المناسبة للراسبين في الفترات الأولى والثانية قبل الامتحان النهائي."), fr = BiFr.of("اختر الملاحظة الافتراضية المناسبة للراسبين في الفترات الأولى والثانية قبل الامتحان النهائي."), color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp), fontSize = MaterialTheme.typography.labelSmall.fontSize)
                                         Row(
                                             modifier = Modifier.fillMaxWidth(),
                                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -9158,12 +9118,7 @@ fun EnhancedReportsTab(
                                 )
                             }
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = uiT("إنشاء وختم الطابع الرسمي"),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
+                            BiText(ar = uiT("إنشاء وختم الطابع الرسمي"), fr = BiFr.of("إنشاء وختم الطابع الرسمي"), fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onBackground, fontSize = MaterialTheme.typography.titleMedium.fontSize)
                         }
 
                         HorizontalDivider(modifier = Modifier.padding(bottom = 12.dp))
@@ -9889,12 +9844,7 @@ fun EnhancedReportsTab(
                                     modifier = Modifier.size(54.dp)
                                 )
                                 Spacer(modifier = Modifier.height(10.dp))
-                                Text(
-                                    text = uiT("كشف درجات الطالب جاهز للتحميل والمشاركة"),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
+                                BiText(ar = uiT("كشف درجات الطالب جاهز للتحميل والمشاركة"), fr = BiFr.of("كشف درجات الطالب جاهز للتحميل والمشاركة"), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.titleMedium.fontSize)
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
                                     text = uiT("اختر صورة الكشف المطلوبة ليتم تجهيزها كملف PDF عالي الجودة ومصمم بشكل رسمي، جاهز للمشاركة أو الحفظ."),
@@ -9914,11 +9864,11 @@ fun EnhancedReportsTab(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Column(horizontalAlignment = Alignment.Start) {
-                                        Text(uiT("اسم الطالب:"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                        BiText(ar = uiT("اسم الطالب:"), fr = BiFr.of("اسم الطالب:"), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), fontSize = MaterialTheme.typography.bodySmall.fontSize)
                                         Text(activeStudentPerf.student.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
                                     }
                                     Column(horizontalAlignment = Alignment.End) {
-                                        Text(uiT("المعدل الحالي:"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                        BiText(ar = uiT("المعدل الحالي:"), fr = BiFr.of("المعدل الحالي:"), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), fontSize = MaterialTheme.typography.bodySmall.fontSize)
                                         val displayAvg = if (activeTermId == 3 || activeTermId == 4) {
                                             viewModel.calculateStudentGeneralAverage(activeStudentPerf.student.id, activeClass.id)
                                         } else {
@@ -9935,11 +9885,11 @@ fun EnhancedReportsTab(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Column(horizontalAlignment = Alignment.Start) {
-                                        Text(uiT("الرقم المدرسي:"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                        BiText(ar = uiT("الرقم المدرسي:"), fr = BiFr.of("الرقم المدرسي:"), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), fontSize = MaterialTheme.typography.bodySmall.fontSize)
                                         Text(activeStudentPerf.student.schoolId.ifBlank { "غير مسجل" }, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                                     }
                                     Column(horizontalAlignment = Alignment.End) {
-                                        Text(uiT("الرتبة:"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                        BiText(ar = uiT("الرتبة:"), fr = BiFr.of("الرتبة:"), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), fontSize = MaterialTheme.typography.bodySmall.fontSize)
                                         val displayRank = if (activeTermId == 3 || activeTermId == 4) {
                                             viewModel.calculateStudentGeneralRank(activeStudentPerf.student.id, activeClass.id)
                                         } else {
@@ -9959,7 +9909,7 @@ fun EnhancedReportsTab(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Column(horizontalAlignment = Alignment.Start) {
-                                        Text(uiT("النتيجة:"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                        BiText(ar = uiT("النتيجة:"), fr = BiFr.of("النتيجة:"), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), fontSize = MaterialTheme.typography.bodySmall.fontSize)
                                         val displayAvg = if (activeTermId == 3 || activeTermId == 4) {
                                             viewModel.calculateStudentGeneralAverage(activeStudentPerf.student.id, activeClass.id)
                                         } else {
@@ -9971,7 +9921,7 @@ fun EnhancedReportsTab(
                                         Text(resultText, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = resultColor)
                                     }
                                     Column(horizontalAlignment = Alignment.End) {
-                                        Text(uiT("الملاحظة السلوكية:"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                                        BiText(ar = uiT("الملاحظة السلوكية:"), fr = BiFr.of("الملاحظة السلوكية:"), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), fontSize = MaterialTheme.typography.bodySmall.fontSize)
                                         Text(remarkText, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
                                     }
                                 }

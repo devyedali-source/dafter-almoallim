@@ -2,6 +2,9 @@ package com.example.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.example.ui.utils.BiFr
+import com.example.ui.utils.BiText
+import com.example.ui.utils.BiTextA
 import android.webkit.WebView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -69,9 +72,9 @@ fun PrintDesignDialog(onDismiss: () -> Unit) {
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
         ) {
             Column(modifier = Modifier.fillMaxSize().padding(12.dp)) {
-                Text("تصميم اللوائح والكشوف 🎨", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text(
-                    "اضغط على الشكل الذي يعجبك. التصميم يغيّر الزخرفة فقط ولا يغيّر أي معلومة. «الوضع الأصلي» هو التلقائي ويمكن الرجوع إليه في أي وقت.",
+                BiText(ar = "تصميم اللوائح والكشوف 🎨", fr = BiFr.of("تصميم اللوائح والكشوف 🎨"), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                BiText(
+                    ar = "اضغط على الشكل الذي يعجبك. التصميم يغيّر الزخرفة فقط ولا يغيّر أي معلومة. «الوضع الأصلي» هو التلقائي ويمكن الرجوع إليه في أي وقت.",
                     fontSize = 12.sp,
                     modifier = Modifier.padding(vertical = 6.dp)
                 )
@@ -96,7 +99,7 @@ fun PrintDesignDialog(onDismiss: () -> Unit) {
                         }
                     }
                 }
-                TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) { Text("تم") }
+                TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) { BiTextA(ar = "تم") }
             }
         }
     }
@@ -104,7 +107,7 @@ fun PrintDesignDialog(onDismiss: () -> Unit) {
 
 @Composable
 private fun SectionTitle(t: String) {
-    Text(t, fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(top = 8.dp))
+    BiText(ar = t, fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(top = 8.dp))
 }
 
 @Composable
@@ -120,7 +123,7 @@ private fun OptionCard(name: String, selected: Boolean, onPick: () -> Unit, prev
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             RadioButton(selected = selected, onClick = onPick)
-            Text(name, fontSize = 13.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal)
+            BiText(ar = name, fontSize = 13.sp, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal)
         }
         Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)).background(Color.White)) {
             preview()
