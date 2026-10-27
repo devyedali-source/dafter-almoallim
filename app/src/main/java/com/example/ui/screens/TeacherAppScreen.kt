@@ -1204,16 +1204,42 @@ fun InnerTeacherAppScreenContent(
                                         )
                                     }
 
+                                    val otherDevices = connectedDevices.filter { it.first != thisDeviceId }
+                                    var showSyncWarn by remember { mutableStateOf(false) }
+                                    val doManualSync = {
+                                        viewModel.manualDriveSync(force = true) { msg ->
+                                            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        }
+                                    }
                                     Button(
-                                        onClick = {
-                                            viewModel.manualDriveSync(force = true) { msg ->
-                                                Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-                                            }
-                                        },
+                                        onClick = { if (otherDevices.isNotEmpty()) showSyncWarn = true else doManualSync() },
                                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32)),
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
                                         BiTextA(ar = uiT("🔄 مزامنة الآن"), fr = BiFr.of("🔄 مزامنة الآن"), color = Color.White, fontWeight = FontWeight.Bold)
+                                    }
+                                    if (showSyncWarn) {
+                                        val names = otherDevices.joinToString("، ") { if (it.second.isBlank()) "جهاز غير معروف" else it.second }
+                                        AlertDialog(
+                                            onDismissRequest = { showSyncWarn = false },
+                                            title = { Text("تنبيه قبل المزامنة ⚠️", fontWeight = FontWeight.Bold) },
+                                            text = {
+                                                Text(
+                                                    "يوجد هاتف آخر على هذا الحساب: $names\n\n" +
+                                                    "ستُرفع الآن بيانات هذا الهاتف إلى Drive. وإذا قام الهاتف الآخر بالمزامنة بعد ذلك فستصله هذه البيانات وتحل محل بياناته.\n\n" +
+                                                    "تأكد أن هذا الهاتف هو الأحدث.",
+                                                    style = MaterialTheme.typography.bodyMedium
+                                                )
+                                            },
+                                            confirmButton = {
+                                                TextButton(onClick = { showSyncWarn = false; doManualSync() }) {
+                                                    Text("متابعة المزامنة", fontWeight = FontWeight.Bold)
+                                                }
+                                            },
+                                            dismissButton = {
+                                                TextButton(onClick = { showSyncWarn = false }) { Text("إلغاء") }
+                                            }
+                                        )
                                     }
 
                                     if (connectedDevices.isNotEmpty()) {
