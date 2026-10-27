@@ -5894,8 +5894,9 @@ fun GradesEntryTab(
                                                 }
                                                 if (isTerm4) {
                                                     Spacer(modifier = Modifier.height(2.dp))
-                                                    Text(
-                                                        text = uiT("مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"),
+                                                    BiText(
+                                                        ar = uiT("مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"),
+                                                        fr = BiFr.of("مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"),
                                                         fontSize = 10.5.sp,
                                                         fontWeight = FontWeight.Bold,
                                                         color = Color(0xFFC62828),
@@ -8275,18 +8276,18 @@ fun EmptyStateCard(title: String, description: String) {
                 modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
+            BiText(
+                ar = title,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                center = true
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
+            BiText(
+                ar = description,
+                fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+                center = true
             )
         }
     }
@@ -9164,9 +9165,10 @@ fun EnhancedReportsTab(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Section Header: كشوف الدرجات والنتائج التفصيلية
-            Text(
-                text = AppLocalization.tr("grade_slips_and_detailed_results", "كشوف الدرجات والنتائج التفصيلية", appLanguage),
-                style = MaterialTheme.typography.titleMedium,
+            BiText(
+                ar = AppLocalization.tr("grade_slips_and_detailed_results", "كشوف الدرجات والنتائج التفصيلية", appLanguage),
+                fr = BiFr.of("كشوف الدرجات والنتائج التفصيلية"),
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 6.dp)
@@ -9179,9 +9181,10 @@ fun EnhancedReportsTab(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.25f))
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = AppLocalization.tr("select_current_term", "الفصل الدراسي", appLanguage),
-                        style = MaterialTheme.typography.titleSmall,
+                    BiText(
+                        ar = AppLocalization.tr("select_current_term", "الفصل الدراسي", appLanguage),
+                        fr = BiFr.of("الفصل الدراسي"),
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Black,
                         color = BentoText
                     )
@@ -9209,8 +9212,9 @@ fun EnhancedReportsTab(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Text("📅", fontSize = 16.sp)
-                                    Text(
-                                        text = currentReportTermDisplay,
+                                    BiText(
+                                        ar = currentReportTermDisplay,
+                                        fr = BiFr.of(if (selectedReportTermId == null) "اختر الفصل الدراسي..." else currentReportTermDisplay),
                                         fontWeight = if (selectedReportTermId == null) FontWeight.Medium else FontWeight.Bold,
                                         fontSize = 14.sp,
                                         color = if (selectedReportTermId == null) MaterialTheme.colorScheme.onSurfaceVariant else if (selectedReportTermId == 4) Color(0xFFC62828) else Color(0xFF1B5E20)
@@ -9253,8 +9257,9 @@ fun EnhancedReportsTab(
                                                     horizontalArrangement = Arrangement.SpaceBetween,
                                                     verticalAlignment = Alignment.CenterVertically
                                                 ) {
-                                                    Text(
-                                                        text = displayName,
+                                                    BiText(
+                                                        ar = displayName,
+                                                        fr = BiFr.of(displayName),
                                                         fontWeight = if (selectedReportTermId == termId) FontWeight.Black else FontWeight.Bold,
                                                         color = if (isTerm4) Color(0xFFC62828) else Color(0xFF1B5E20),
                                                         fontSize = 13.5.sp
@@ -9265,8 +9270,9 @@ fun EnhancedReportsTab(
                                                 }
                                                 if (isTerm4) {
                                                     Spacer(modifier = Modifier.height(2.dp))
-                                                    Text(
-                                                        text = uiT("مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"),
+                                                    BiText(
+                                                        ar = uiT("مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"),
+                                                        fr = BiFr.of("مخصص للوافدين الجدد الذين لم يدرجو نتائج الفصل الأول والثانى"),
                                                         fontSize = 10.5.sp,
                                                         fontWeight = FontWeight.Bold,
                                                         color = Color(0xFFC62828),
@@ -9423,9 +9429,10 @@ fun EnhancedReportsTab(
             } else {
 
             // Mode Selectors - All options visible on screen
-            Text(
-                text = AppLocalization.tr("select_report_prompt", "اختر التقرير أو الكشف المطلوب 📋", appLanguage),
-                style = MaterialTheme.typography.bodyMedium,
+            BiText(
+                ar = AppLocalization.tr("select_report_prompt", "اختر التقرير أو الكشف المطلوب 📋", appLanguage),
+                fr = BiFr.of("اختر التقرير أو الكشف المطلوب 📋"),
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 6.dp, top = 4.dp),
                 color = MaterialTheme.colorScheme.onSurface
@@ -9726,8 +9733,10 @@ fun EnhancedReportsTab(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = group.title,
+                            BiText(
+                                ar = group.title,
+                                fr = BiFr.of(group.title),
+                                modifier = Modifier.weight(1f),
                                 color = if (isGroupActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp,
@@ -9748,8 +9757,9 @@ fun EnhancedReportsTab(
                             group.options.forEach { (idx, label) ->
                                 DropdownMenuItem(
                                     text = {
-                                        Text(
-                                            text = label,
+                                        BiText(
+                                            ar = label,
+                                            fr = BiFr.of(label),
                                             fontWeight = if (reportMode == idx) FontWeight.Bold else FontWeight.Normal,
                                             fontSize = 13.sp
                                         )
