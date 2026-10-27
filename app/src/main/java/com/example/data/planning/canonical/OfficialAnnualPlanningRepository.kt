@@ -15,13 +15,17 @@ object OfficialAnnualPlanningRepository {
         moshi.adapter(CanonicalAnnualPlan::class.java)
     }
 
-    private val cache = mutableMapOf<String, CanonicalAnnualPlan>()
+    private val cache = java.util.concurrent.ConcurrentHashMap<String, CanonicalAnnualPlan>()
 
     fun getLevelPlan(context: Context, levelCode: String): CanonicalAnnualPlan? {
         val normalizedCode = normalizeLevelCode(levelCode)
-        if (cache.containsKey(normalizedCode)) {
-            return cache[normalizedCode]
-        }
+        cache[normalizedCode]?.let { return it }
+        return loadPlan(context, normalizedCode)
+    }
+
+    @Synchronized
+    private fun loadPlan(context: Context, normalizedCode: String): CanonicalAnnualPlan? {
+        cache[normalizedCode]?.let { return it }
 
         val gzFileName = "planning/plan_annuel_${normalizedCode}_canonical.json.gz"
         val rawFileName = "planning/plan_annuel_${normalizedCode}_canonical.json"

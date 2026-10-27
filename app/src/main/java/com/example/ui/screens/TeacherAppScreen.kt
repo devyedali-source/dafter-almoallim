@@ -2158,6 +2158,13 @@ fun InnerTeacherAppScreenContent(
                     LaunchedEffect(activeClass.id, insideTab) {
                         com.example.data.state.LastPlaceStore.putInt(context, "inside_tab_${activeClass.id}", insideTab)
                     }
+                    // تحميل بيانات مستوى هذا القسم في الخلفية ليفتح التخطيط السنوي بسرعة
+                    LaunchedEffect(activeClass.level) {
+                        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                            val code = com.example.data.planning.canonical.OfficialAnnualPlanningRepository.getLevelCodeFromInt(activeClass.level)
+                            com.example.data.planning.LessonPreparationRepository.ensureLevel(context, code)
+                        }
+                    }
 
                 Scaffold(
                     topBar = {

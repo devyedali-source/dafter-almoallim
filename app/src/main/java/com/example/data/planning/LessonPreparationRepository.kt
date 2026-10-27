@@ -27,10 +27,10 @@ object LessonPreparationRepository {
         moshi.adapter(PreparationFileRoot::class.java)
     }
 
-    private val prepCache = mutableMapOf<PrepKey, LessonProposalData>()
-    private val rawPrepItemsCache = mutableMapOf<String, PreparationItem>()
-    private val prepsByLevelAndWeek = mutableMapOf<Pair<Int, Int>, MutableList<Pair<PreparationItem, LessonProposalData>>>()
-    private val levelInstancesCache = mutableMapOf<String, List<CanonicalLessonInstance>>()
+    private val prepCache = java.util.concurrent.ConcurrentHashMap<PrepKey, LessonProposalData>()
+    private val rawPrepItemsCache = java.util.concurrent.ConcurrentHashMap<String, PreparationItem>()
+    private val prepsByLevelAndWeek = java.util.concurrent.ConcurrentHashMap<Pair<Int, Int>, MutableList<Pair<PreparationItem, LessonProposalData>>>()
+    private val levelInstancesCache = java.util.concurrent.ConcurrentHashMap<String, List<CanonicalLessonInstance>>()
     private val loadedLevels = mutableSetOf<String>()
     private var isInitialized = false
 
@@ -124,6 +124,28 @@ object LessonPreparationRepository {
      * Initializes the repository by importing the new preparations JSON files for all levels (1AP-5AP)
      * and pre-populating the lesson preparation cache.
      */
+    /**
+     * يحمّل مستوى واحداً فقط (بدل المستويات الستة): أسرع بكثير عند فتح صفحة التخطيط السنوي.
+     * يمكن استدعاؤه من خيط خلفي مسبقاً ليكون المستوى جاهزاً قبل فتح الصفحة.
+     */
+    fun ensureLevel(context: Context, levelCode: String) {
+        val code = OfficialAnnualPlanningRepository.normalizeLevelCode(levelCode)
+        if (isInitialized || levelInstancesCache.containsKey(code)) return
+        synchronized(this) {
+            if (isInitialized || levelInstancesCache.containsKey(code)) return
+            try {
+                loadPreparationsForLevel(context, code)
+                val instancesForLevel = mutableListOf<CanonicalLessonInstance>()
+                for (week in 1..38) {
+                    instancesForLevel.addAll(OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, code, week))
+                }
+                levelInstancesCache[code] = instancesForLevel
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun initialize(context: Context) {
         if (isInitialized) return
         synchronized(this) {
@@ -131,6 +153,7 @@ object LessonPreparationRepository {
             try {
                 for (level in 1..6) {
                     val levelCode = OfficialAnnualPlanningRepository.getLevelCodeFromInt(level)
+                    if (levelInstancesCache.containsKey(levelCode)) continue
                     loadPreparationsForLevel(context, levelCode)
 
                     val instancesForLevel = mutableListOf<CanonicalLessonInstance>()
@@ -509,7 +532,7 @@ object LessonPreparationRepository {
         levelCode: String,
         inst: com.example.data.planning.canonical.CanonicalLessonInstance
     ): Pair<Boolean, Boolean> {
-        initialize(context)
+        ensureLevel(context, levelCode)
         val prep = findPrepFor(levelIntOf(levelCode), inst) ?: return Pair(false, false)
         val hasBook = !prep.livre?.pages.isNullOrEmpty()
         val t = prep.tableau
@@ -638,7 +661,7 @@ object LessonPreparationRepository {
      * matching against the 5 official new preparation JSON files with multi-tier resolution.
      */
     fun getPreparationForLesson(context: Context, lesson: AnnualLessonItem, selectedWeek: Int): LessonProposalData {
-        initialize(context)
+        ensureLevel(context, OfficialAnnualPlanningRepository.getLevelCodeFromInt(lesson.level))
 
         val level = lesson.level
         val week = selectedWeek
