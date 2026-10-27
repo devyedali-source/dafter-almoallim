@@ -38,9 +38,36 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.*
+import com.example.ui.utils.BiFr
+import com.example.ui.utils.BiText
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+
+/** ترجمة فرنسية غير رسمية للمواد (ملف assets/school_legislation_fr.json.gz). */
+class LegislationFr(
+    val articles: Map<String, String>,
+    val sections: Map<String, String>,
+    val docs: Map<String, String>
+) {
+    fun label(a: LegislationArticle): String = if (a.articleNumber == 1) "Article 1er" else "Article ${a.articleNumber}"
+    fun doc(ar: String?): String? = ar?.let { docs[it] }
+}
+
+fun loadLegislationFr(context: Context): LegislationFr? = try {
+    context.assets.open("school_legislation_fr.json.gz").use { base ->
+        java.util.zip.GZIPInputStream(base).use { gz ->
+            val root = JSONObject(gz.readBytes().toString(Charsets.UTF_8))
+            fun map(name: String): Map<String, String> {
+                val o = root.getJSONObject(name)
+                val m = HashMap<String, String>()
+                o.keys().forEach { k -> m[k] = o.getString(k) }
+                return m
+            }
+            LegislationFr(map("articles"), map("sections"), map("docs"))
+        }
+    }
+} catch (e: Exception) { null }
 
 data class LegislationArticle(
     val id: String,
@@ -69,6 +96,7 @@ fun SchoolLegislationScreen(
     val listState = rememberLazyListState()
 
     var articles by remember { mutableStateOf<List<LegislationArticle>>(emptyList()) }
+    var legFr by remember { mutableStateOf<LegislationFr?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
     // SharedPreferences setup for saved materials and last read
@@ -83,6 +111,7 @@ fun SchoolLegislationScreen(
     // Load static data from JSON files offline
     LaunchedEffect(Unit) {
         try {
+            legFr = loadLegislationFr(context)
             val loadedList = mutableListOf<LegislationArticle>()
 
             // Load verified school legislation JSON with fallback if the new file is not yet uploaded
@@ -123,7 +152,7 @@ fun SchoolLegislationScreen(
     var searchQuery by remember { mutableStateOf("") }
     var selectedTab by remember { mutableIntStateOf(0) } // 0: All, 1: Internal Regulation, 2: Decree, 3: Saved
 
-    val filteredArticles = remember(articles, searchQuery, selectedTab, savedArticleIds) {
+    val filteredArticles = remember(articles, searchQuery, selectedTab, savedArticleIds, legFr) {
         articles.filter { article ->
             val matchesTab = when (selectedTab) {
                 1 -> article.documentId == "internal_school_regulation"
@@ -139,7 +168,8 @@ fun SchoolLegislationScreen(
                 article.articleText.contains(searchQuery, ignoreCase = true) ||
                         article.section.contains(searchQuery, ignoreCase = true) ||
                         article.articleLabel.contains(searchQuery, ignoreCase = true) ||
-                        article.documentTitle.contains(searchQuery, ignoreCase = true)
+                        article.documentTitle.contains(searchQuery, ignoreCase = true) ||
+                        (legFr?.articles?.get(article.id)?.contains(searchQuery, ignoreCase = true) == true)
             }
 
             matchesTab && matchesSearch
@@ -161,7 +191,7 @@ fun SchoolLegislationScreen(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
-            placeholder = { Text(uiT("ابحث في المواد، الأبواب، أو النصوص... 🔍"), fontSize = 14.sp) },
+            placeholder = { BiText(ar = uiT("ابحث في المواد، الأبواب، أو النصوص... 🔍"), fontSize = 14.sp, maxLines = 1) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 10.dp),
@@ -224,10 +254,19 @@ fun SchoolLegislationScreen(
                     selected = selectedTab == index,
                     onClick = { selectedTab = index },
                     text = {
-                        Text(
-                            text = title,
+                        BiText(
+                            ar = title,
+                            fr = when (index) {
+                                0 -> "Tout"
+                                1 -> "Règlement intérieur"
+                                2 -> "Décret 2021-078"
+                                4 -> "Arrêté directeurs"
+                                else -> "Favoris"
+                            },
                             fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
-                            fontSize = 13.sp
+                            fontSize = 13.sp,
+                            frSize = 10.sp,
+                            center = true
                         )
                     }
                 )
@@ -284,14 +323,15 @@ fun SchoolLegislationScreen(
                             ) {
                                 Text("📖", fontSize = 20.sp)
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = uiT("تابع القراءة من حيث توقفت:"),
+                                    BiText(
+                                        ar = uiT("تابع القراءة من حيث توقفت:"),
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = BentoPrimary
                                     )
-                                    Text(
-                                        text = "${lastReadArticle.articleLabel}: ${lastReadArticle.section}",
+                                    BiText(
+                                        ar = "${lastReadArticle.articleLabel}: ${lastReadArticle.section}",
+                                        fr = legFr?.let { "${it.label(lastReadArticle)} : ${it.sections[lastReadArticle.section] ?: ""}" },
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = BentoSecondary,
@@ -330,18 +370,18 @@ fun SchoolLegislationScreen(
                                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                                 ) {
                                     Text("🇲🇷", fontSize = 20.sp)
-                                    Text(
-                                        text = uiT("التشريع المدرسي الموريتاني"),
+                                    BiText(
+                                        ar = uiT("التشريع المدرسي الموريتاني"),
                                         fontWeight = FontWeight.Black,
                                         fontSize = 14.sp,
                                         color = BentoSecondary
                                     )
                                 }
-                                Text(
-                                    text = uiT("دليل التشريعات والأنظمة الرسمية الصادرة عن وزارة التهذيب الوطني وإصلاح النظام التعليمي. يضم 131 مادة كاملة بدون إنترنت لتمكين المعلم من حقوقه وواجباته وتنظيم عمله اليومي."),
+                                BiText(
+                                    ar = uiT("دليل التشريعات والأنظمة الرسمية الصادرة عن وزارة التهذيب الوطني وإصلاح النظام التعليمي. يضم 155 مادة كاملة بدون إنترنت لتمكين المعلم من حقوقه وواجباته وتنظيم عمله اليومي."),
                                     fontSize = 11.5.sp,
-                                    color = BentoPrimaryDesc,
-                                    lineHeight = 16.sp
+                                    frSize = 10.5.sp,
+                                    color = BentoPrimaryDesc
                                 )
                             }
                         }
@@ -361,12 +401,13 @@ fun SchoolLegislationScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Text("🔍", fontSize = 36.sp)
-                                Text(
-                                    text = if (selectedTab == 3) "لا توجد مواد محفوظة بعد." else "لم يتم العثور على أي نتائج تطابق بحثك.",
+                                BiText(
+                                    ar = if (selectedTab == 3) "لا توجد مواد محفوظة بعد." else "لم يتم العثور على أي نتائج تطابق بحثك.",
+                                    fr = if (selectedTab == 3) "Aucun article enregistré pour le moment." else "Aucun résultat ne correspond à votre recherche.",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 13.sp,
                                     color = BentoPrimaryDesc,
-                                    textAlign = TextAlign.Center
+                                    center = true
                                 )
                             }
                         }
@@ -378,6 +419,7 @@ fun SchoolLegislationScreen(
 
                         ArticleCard(
                             article = article,
+                            legFr = legFr,
                             isExpanded = isExpanded,
                             isSaved = isSaved,
                             onToggleExpand = {
@@ -422,6 +464,13 @@ fun SchoolLegislationScreen(
                                     if (!article.decreeDate.isNullOrBlank()) {
                                         appendLine("تاريخ المرسوم: ${article.decreeDate}")
                                     }
+                                    val frTxt = legFr?.articles?.get(article.id)
+                                    if (BiFr.enabled && frTxt != null) {
+                                        appendLine()
+                                        appendLine("🇫🇷 ${legFr?.label(article)} — ${legFr?.doc(article.documentTitle) ?: ""}")
+                                        appendLine(legFr?.sections?.get(article.section) ?: "")
+                                        appendLine(frTxt)
+                                    }
                                     appendLine("تمت المشاركة من تطبيق «دفتر المعلم» للتعليم الأساسي")
                                 }
 
@@ -443,6 +492,7 @@ fun SchoolLegislationScreen(
 @Composable
 fun ArticleCard(
     article: LegislationArticle,
+    legFr: LegislationFr? = null,
     isExpanded: Boolean,
     isSaved: Boolean,
     onToggleExpand: () -> Unit,
@@ -481,20 +531,25 @@ fun ArticleCard(
                             .background(BentoSoftPurpleContainer)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
-                        Text(
-                            text = article.articleLabel,
+                        BiText(
+                            ar = article.articleLabel,
+                            fr = legFr?.label(article),
                             fontWeight = FontWeight.Black,
                             fontSize = 11.5.sp,
+                            frSize = 9.5.sp,
                             color = BentoPrimary
                         )
                     }
-                    Text(
-                        text = when (article.documentId) {
-                            "internal_school_regulation" -> "النظام الداخلي"
-                            "decision_2026_school_directors" -> "مقرر تعيين المديرين"
-                            else -> "المرسوم 2021-078"
-                        },
+                    val shortDoc = when (article.documentId) {
+                        "internal_school_regulation" -> "النظام الداخلي"
+                        "decision_2026_school_directors" -> "مقرر تعيين المديرين"
+                        else -> "المرسوم 2021-078"
+                    }
+                    BiText(
+                        ar = shortDoc,
+                        fr = legFr?.doc(shortDoc),
                         fontSize = 10.5.sp,
+                        frSize = 9.sp,
                         color = BentoPrimaryDesc,
                         fontWeight = FontWeight.Bold
                     )
@@ -516,24 +571,25 @@ fun ArticleCard(
             Spacer(modifier = Modifier.height(6.dp))
 
             // Section Info
-            Text(
-                text = article.section,
+            BiText(
+                ar = article.section,
+                fr = legFr?.sections?.get(article.section),
                 fontSize = 12.sp,
+                frSize = 10.5.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = BentoSecondary,
-                lineHeight = 16.sp
+                color = BentoSecondary
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             // Subtitle or Doc full Title
-            Text(
-                text = article.documentTitle,
+            BiText(
+                ar = article.documentTitle,
+                fr = legFr?.doc(article.documentTitle),
                 fontSize = 10.sp,
-                fontWeight = FontWeight.Normal,
+                frSize = 9.sp,
                 color = BentoPrimaryDesc,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                maxLines = 1
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -549,14 +605,28 @@ fun ArticleCard(
                     lineHeight = 18.sp,
                     textAlign = TextAlign.Justify
                 )
+                val frShort = legFr?.articles?.get(article.id)
+                if (BiFr.enabled && frShort != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = frShort,
+                        fontSize = 11.sp,
+                        color = BentoPrimaryDesc.copy(alpha = 0.85f),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        lineHeight = 16.sp,
+                        textAlign = TextAlign.Left
+                    )
+                }
                 Spacer(modifier = Modifier.height(6.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = uiT("اضغط لعرض المادة كاملة... 👇"),
+                    BiText(
+                        ar = uiT("اضغط لعرض المادة كاملة... 👇"),
+                        center = true,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         color = BentoPrimary
@@ -571,6 +641,20 @@ fun ArticleCard(
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Justify
                 )
+                val frFull = legFr?.articles?.get(article.id)
+                if (BiFr.enabled && frFull != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    HorizontalDivider(color = BentoGrayOutline.copy(alpha = 0.3f))
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = frFull,
+                        fontSize = 12.sp,
+                        color = BentoPrimaryDesc,
+                        lineHeight = 19.sp,
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 10.dp),
@@ -586,37 +670,38 @@ fun ArticleCard(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(uiT("🏛️ المصدر:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
-                        Text(article.source, fontSize = 10.sp, color = BentoPrimaryDesc)
+                        BiText(ar = uiT("🏛️ المصدر:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                        BiText(ar = article.source, fr = legFr?.doc(article.source), fontSize = 10.sp, color = BentoPrimaryDesc, modifier = Modifier.weight(1f))
                     }
 
                     if (article.sourcePage != null) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(uiT("📄 الصفحة:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                            BiText(ar = uiT("📄 الصفحة:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                             Text(article.sourcePage.toString(), fontSize = 10.sp, color = BentoPrimaryDesc)
                         }
                     }
 
                     if (!article.officialGazetteIssue.isNullOrBlank()) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(uiT("🗞️ العدد:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                            BiText(ar = uiT("🗞️ العدد:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                             Text(article.officialGazetteIssue, fontSize = 10.sp, color = BentoPrimaryDesc)
                         }
                     }
 
                     if (!article.decreeDate.isNullOrBlank()) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(uiT("📅 تاريخ المرسوم:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
-                            Text(article.decreeDate, fontSize = 10.sp, color = BentoPrimaryDesc)
+                            BiText(ar = uiT("📅 تاريخ المرسوم:"), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                            BiText(ar = article.decreeDate, fr = legFr?.doc(article.decreeDate), fontSize = 10.sp, color = BentoPrimaryDesc)
                         }
                     }
 
                     if (!article.sourceDetails.isNullOrBlank()) {
-                        Text(
-                            text = article.sourceDetails,
+                        BiText(
+                            ar = article.sourceDetails,
+                            fr = legFr?.doc(article.sourceDetails),
                             fontSize = 9.5.sp,
+                            frSize = 9.sp,
                             color = BentoPrimaryDesc.copy(alpha = 0.8f),
-                            lineHeight = 13.sp,
                             modifier = Modifier.padding(top = 2.dp)
                         )
                     }
@@ -640,7 +725,7 @@ fun ArticleCard(
                     ) {
                         Icon(Icons.Default.KeyboardArrowUp, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(uiT("طي المادة"), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        BiText(ar = uiT("طي المادة"), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                     }
 
                     Button(
@@ -655,7 +740,7 @@ fun ArticleCard(
                     ) {
                         Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(14.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(uiT("مشاركة المادة 🤝"), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        BiText(ar = uiT("مشاركة المادة 🤝"), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
