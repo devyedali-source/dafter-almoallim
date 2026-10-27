@@ -606,9 +606,9 @@ fun InnerTeacherAppScreenContent(
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val currentUser by viewModel.currentUser.collectAsState()
-    // مراقبة السحابة طوال فتح التطبيق: تفعيل الفصول ونتائج طلبات تصحيح بيانات القسم
+    // مراقب خفيف لنتائج طلبات تصحيح بيانات القسم (قراءة واحدة تقريباً عند كل فتح)
     LaunchedEffect(currentUser?.uid) {
-        if (currentUser?.uid != null) viewModel.startActivationListener()
+        if (currentUser?.uid != null) viewModel.startInfoResultListener()
     }
     val isSyncingCloudData by viewModel.isSyncingCloudData.collectAsState()
     val syncMessage by viewModel.syncMessage.collectAsState()
@@ -4752,6 +4752,12 @@ fun GradesEntryTab(
     }
     val activeClass = classSections.find { it.id == selectedClassId }
     val activeSubject = availableSubjects.find { it.id == selectedSubjectId }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopActivationListener()
+        }
+    }
 
 
     val classStudents = remember(students, selectedClassId) { students.filter { it.classId == selectedClassId }.sortedBy { it.id } }

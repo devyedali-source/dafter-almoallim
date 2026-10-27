@@ -793,6 +793,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     private val activeListeners = java.util.Collections.synchronizedList(mutableListOf<ListenerRegistration>())
     private val insertingSubjects = java.util.concurrent.ConcurrentHashMap<Pair<String, Int>, Long>()
     private var activationListener: ListenerRegistration? = null
+    private var infoResultListener: ListenerRegistration? = null
 
     @Volatile private var isSubjectsSynced = false
     @Volatile private var isCustomizationsSynced = false
@@ -1132,6 +1133,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                         activeListeners.forEach { try { it.remove() } catch (e: Exception) {} }
                         activeListeners.clear()
                         activationListener = null
+                        infoResultListener = null
                     }
                     
                     // Reset memory state flows immediately
@@ -1222,6 +1224,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                 activeListeners.forEach { try { it.remove() } catch (e: Exception) {} }
                 activeListeners.clear()
                 activationListener = null
+                infoResultListener = null
             }
             
             val db = FirebaseFirestore.getInstance()
@@ -1298,6 +1301,37 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private val activationNotifyMutex = kotlinx.coroutines.sync.Mutex()
+
+    /**
+     * مراقب خفيف: لا يقرأ إلا الأقسام التي فيها نتيجة طلب تصحيح من المدير (infoRequestResult)،
+     * فيكلّف قراءة واحدة تقريباً عند كل فتح بدل قراءة كل الأقسام.
+     */
+    fun startInfoResultListener() {
+        val uid = _currentUser.value?.uid ?: return
+        if (infoResultListener != null) return
+        try {
+            val listener = FirebaseFirestore.getInstance().collection("teachers").document(uid).collection("classes")
+                .whereGreaterThan("infoRequestResult.at", 0)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null || snapshot == null) return@addSnapshotListener
+                    @Suppress("UNCHECKED_CAST")
+                    val results: List<Pair<Long, Map<String, Any>>> = snapshot.documents.mapNotNull { d ->
+                        val cId = d.id.toLongOrNull() ?: return@mapNotNull null
+                        val res = d.get("infoRequestResult") as? Map<String, Any> ?: return@mapNotNull null
+                        cId to res
+                    }
+                    if (results.isNotEmpty()) {
+                        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                            applyClassInfoResults(uid, results)
+                        }
+                    }
+                }
+            infoResultListener = listener
+            synchronized(activeListeners) { activeListeners.add(listener) }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     fun startActivationListener() {
         val uid = _currentUser.value?.uid ?: return
