@@ -70,6 +70,11 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
                     "⚠️ لا توجد بيانات قسم داخل هذا الملف. أعد تصدير اللائحة من النسخة الجديدة للتطبيق ثم ارفعها.",
                     Toast.LENGTH_LONG
                 ).show()
+            } else if (targetClassId != null) {
+                // داخل قسم فارغ: تُسجَّل كل أسماء اللائحة مباشرة دون سؤال
+                viewModel.importStudentsToClass(targetClassId, result.students) { added, skipped ->
+                    Toast.makeText(context, "🎉 تم تسجيل $added تلميذًا في القسم" + if (skipped > 0) " (تُجووز $skipped مكرَّرًا)" else "", Toast.LENGTH_LONG).show()
+                }
             } else {
                 parsed = result
             }
