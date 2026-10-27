@@ -3,7 +3,15 @@ package com.example.ui.screens
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.RadioButton
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
@@ -77,31 +85,50 @@ fun ClassListImportButton(viewModel: TeacherViewModel, modifier: Modifier = Modi
         icon = {}
     )
 
+    val classes by viewModel.classSections.collectAsState()
+    var chosenId by remember { mutableStateOf<Long?>(null) }
+
     parsed?.let { data ->
         AlertDialog(
             onDismissRequest = { parsed = null },
-            title = { Text("مراجعة اللائحة قبل التسجيل", fontWeight = FontWeight.Bold) },
+            title = { Text("اختر القسم الذي تُضاف إليه اللائحة", fontWeight = FontWeight.Bold) },
             text = {
-                Column {
-                    Text("المدرسة: ${data.schoolName}", style = MaterialTheme.typography.bodyMedium)
-                    Text("المستوى: ${getLevelArabicName(data.level)}  |  القسم: ${data.sectionName}", style = MaterialTheme.typography.bodyMedium)
-                    Text("السنة: ${data.academicYear}", style = MaterialTheme.typography.bodyMedium)
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Text("في الملف ${data.students.size} تلميذًا (${data.schoolName} - ${getLevelArabicName(data.level)} ${data.sectionName})", style = MaterialTheme.typography.bodySmall)
                     Spacer(Modifier.height(6.dp))
-                    Text("عدد التلاميذ: ${data.students.size}", fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(4.dp))
                     Text(
-                        data.students.take(5).joinToString("\n") { "• ${it.name}" } +
-                            if (data.students.size > 5) "\n..." else "",
+                        data.students.take(4).joinToString("\n") { "• ${it.name}" } + if (data.students.size > 4) "\n..." else "",
                         style = MaterialTheme.typography.bodySmall
                     )
+                    Spacer(Modifier.height(10.dp))
+                    if (classes.isEmpty()) {
+                        Text("لا توجد أقسام عندك. أنشئ القسم أولًا ثم أعد الرفع.", color = Color(0xFFD32F2F))
+                    }
+                    classes.sortedBy { it.name }.forEach { c ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().clickable { chosenId = c.id }
+                        ) {
+                            RadioButton(selected = chosenId == c.id, onClick = { chosenId = c.id })
+                            Text(c.name, style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Text("الأسماء الموجودة في القسم أصلًا لا تُسجَّل مرتين.", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
                 }
             },
             confirmButton = {
-                TextButton(onClick = {
-                    val ok = viewModel.importClassList(data)
-                    parsed = null
-                    if (ok) Toast.makeText(context, "🎉 تم تسجيل القسم وتلاميذه", Toast.LENGTH_LONG).show()
-                }) { Text("تسجيل القسم", fontWeight = FontWeight.Bold) }
+                TextButton(
+                    enabled = chosenId != null,
+                    onClick = {
+                        val target = chosenId ?: return@TextButton
+                        viewModel.importStudentsToClass(target, data.students) { added, skipped ->
+                            Toast.makeText(context, "🎉 أُضيف $added تلميذًا" + if (skipped > 0) " وتُجووز $skipped مكرَّرًا" else "", Toast.LENGTH_LONG).show()
+                        }
+                        parsed = null
+                        chosenId = null
+                    }
+                ) { Text("إضافة إلى القسم", fontWeight = FontWeight.Bold) }
             },
             dismissButton = { TextButton(onClick = { parsed = null }) { Text("إلغاء") } }
         )

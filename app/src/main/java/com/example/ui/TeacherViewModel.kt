@@ -3845,28 +3845,34 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    /** استيراد قسم وتلاميذه من لائحة PDF (لمدير الأقسام). يعيد true إذا أُنشئ القسم. */
-    fun importClassList(data: com.example.ui.utils.ClassListPayload.Imported): Boolean {
-        return addClassSection(
-            schoolName = data.schoolName,
-            level = data.level,
-            sectionName = data.sectionName,
-            wilaya = data.wilaya,
-            moughataa = data.moughataa,
-            academicYear = data.academicYear,
-            onCreatedId = { classId ->
-                viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                    val base = System.currentTimeMillis() * 1000L
-                    data.students.forEachIndexed { i, st ->
-                        try {
-                            repository.insertStudent(st.copy(id = base + i, classId = classId))
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
+    /** يضيف تلاميذ لائحة PDF إلى قسم موجود، مع تجاوز المكرَّرين (بالاسم أو الرقم المدرسي). يعيد (المضافون، المتجاوزون). */
+    fun importStudentsToClass(classId: Long, incoming: List<Student>, onDone: (Int, Int) -> Unit) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            fun norm(x: String) = x.trim().replace(Regex("\\s+"), " ")
+            val existing = _students.value.filter { it.classId == classId }
+            val names = existing.map { norm(it.name) }.toMutableSet()
+            val ids = existing.map { it.schoolId.trim() }.filter { it.isNotBlank() }.toMutableSet()
+            val base = System.currentTimeMillis() * 1000L
+            var added = 0
+            var skipped = 0
+            incoming.forEach { st ->
+                val n = norm(st.name)
+                val sid = st.schoolId.trim()
+                if (n in names || (sid.isNotBlank() && sid in ids)) {
+                    skipped++
+                } else {
+                    try {
+                        repository.insertStudent(st.copy(id = base + added, classId = classId))
+                        names.add(n)
+                        if (sid.isNotBlank()) ids.add(sid)
+                        added++
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
             }
-        )
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { onDone(added, skipped) }
+        }
     }
 
     fun addStudent(name: String, classId: Long, gender: String = "ذكر") {
