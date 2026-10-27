@@ -91,6 +91,9 @@ object BiHtml {
 
     private fun translitWord(w0: String): String {
         knownWords[w0]?.let { return it }
+        // أرقام ملصقة بآخر الكلمة (الطلحاية1): تُحوَّل الحروف ثم يُضاف الرقم بعد مسافة
+        val tail = Regex("^(\\D+?)(\\d+)$").find(w0)
+        if (tail != null) return translitWord(tail.groupValues[1]) + " " + tail.groupValues[2]
         var w = w0
         var pre = ""
         if (w.startsWith("ال") && w.length > 3) { pre = "El "; w = w.substring(2) }
