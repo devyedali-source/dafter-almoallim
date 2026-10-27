@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -783,7 +784,7 @@ private fun CourseLessonDetail(
 
                 if (lesson.sum.isNotBlank()) {
                     CourseSectionTitle("الملخّص")
-                    Text(text = lesson.sum, fontSize = 14.sp, lineHeight = 22.sp)
+                    CourseSummaryText(lesson.sum)
                 }
 
                 if (lesson.obj.isNotEmpty()) {
@@ -1408,4 +1409,41 @@ private fun CourseSubscriptionDialog(
             }
         }
     )
+}
+
+
+/** نص الملخّص: الأسطر العادية نصّ، والسطر [[fig:اسم]] رسم على لوح داكن (من مكتبة رسومات السبورة). */
+@Composable
+private fun CourseSummaryText(text: String) {
+    val lines = text.split("\n")
+    var buf = StringBuilder()
+    val blocks = mutableListOf<Pair<Boolean, String>>() // (isFig, content)
+    for (ln in lines) {
+        val t = ln.trim()
+        if (t.startsWith("[[fig:") && t.endsWith("]]")) {
+            if (buf.isNotEmpty()) { blocks.add(false to buf.toString().trim('\n')); buf = StringBuilder() }
+            blocks.add(true to t.removePrefix("[[fig:").removeSuffix("]]").trim())
+        } else {
+            if (buf.isNotEmpty()) buf.append('\n')
+            buf.append(ln)
+        }
+    }
+    if (buf.isNotEmpty()) blocks.add(false to buf.toString().trim('\n'))
+    Column(modifier = Modifier.fillMaxWidth()) {
+        for ((isFig, content) in blocks) {
+            if (isFig) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .background(Color(0xFF203A30), RoundedCornerShape(12.dp))
+                        .padding(10.dp)
+                ) {
+                    BoardFigure(name = content, maxHeight = 230.dp)
+                }
+            } else if (content.isNotBlank()) {
+                Text(text = content, fontSize = 14.sp, lineHeight = 22.sp)
+            }
+        }
+    }
 }

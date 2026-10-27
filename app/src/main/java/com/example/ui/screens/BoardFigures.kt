@@ -31,6 +31,7 @@ class BoardFig(val w: Float, val h: Float, val items: List<JSONObject>)
 
 object BoardFigureStore {
     private var raw: JSONObject? = null
+    private var raw2: JSONObject? = null // رسومات دورة المسابقات
     private val cache = HashMap<String, BoardFig?>()
 
     @Synchronized
@@ -43,7 +44,14 @@ object BoardFigureStore {
                 null
             }
         }
-        val o = raw?.optJSONObject(name)
+        if (raw2 == null) {
+            raw2 = try {
+                context.assets.open("course_figures.json").bufferedReader(Charsets.UTF_8).use { JSONObject(it.readText()) }
+            } catch (e: Exception) {
+                null
+            }
+        }
+        val o = raw?.optJSONObject(name) ?: raw2?.optJSONObject(name)
         val fig = if (o == null) null else {
             val arr = o.getJSONArray("items")
             BoardFig(
