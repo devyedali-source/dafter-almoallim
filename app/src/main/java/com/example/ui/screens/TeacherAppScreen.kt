@@ -974,10 +974,45 @@ fun InnerTeacherAppScreenContent(
                                     fontSize = 14.sp,
                                     color = BentoPrimary
                                 )
+                                var pendingTranslate by remember { mutableStateOf<Boolean?>(null) }
                                 Switch(
                                     checked = BiFr.enabled,
-                                    onCheckedChange = { viewModel.setBilingual(it) }
+                                    onCheckedChange = { pendingTranslate = it }
                                 )
+                                pendingTranslate?.let { turnOn ->
+                                    AlertDialog(
+                                        onDismissRequest = { pendingTranslate = null },
+                                        title = {
+                                            Column {
+                                                Text(if (turnOn) "🌐 تفعيل الترجمة" else "🌐 إيقاف الترجمة", fontWeight = FontWeight.Bold)
+                                                Text(if (turnOn) "Activer la traduction" else "Désactiver la traduction", fontSize = 12.sp, color = Color.Gray)
+                                            }
+                                        },
+                                        text = {
+                                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                                Text(
+                                                    if (turnOn) "ستظهر الترجمة الفرنسية على الواجهات واللوائح والكشوف."
+                                                    else "ستختفي الترجمة الفرنسية من الواجهات واللوائح والكشوف.",
+                                                    style = MaterialTheme.typography.bodyMedium
+                                                )
+                                                Text(
+                                                    if (turnOn) "La traduction en français apparaîtra sur les écrans, les listes et les bulletins."
+                                                    else "La traduction en français disparaîtra des écrans, des listes et des bulletins.",
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = Color.Gray
+                                                )
+                                            }
+                                        },
+                                        confirmButton = {
+                                            TextButton(onClick = { viewModel.setBilingual(turnOn); pendingTranslate = null }) {
+                                                Text("موافق / OK", fontWeight = FontWeight.Bold)
+                                            }
+                                        },
+                                        dismissButton = {
+                                            TextButton(onClick = { pendingTranslate = null }) { Text("إلغاء / Annuler") }
+                                        }
+                                    )
+                                }
                             }
 
                             Spacer(modifier = Modifier.height(6.dp))
