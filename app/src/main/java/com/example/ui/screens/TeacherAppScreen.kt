@@ -2785,7 +2785,7 @@ fun ClassStudentsSubview(
     }
 
         val importAdminUser by viewModel.currentUser.collectAsState()
-        if (importAdminUser?.email?.trim()?.lowercase() == "elyedalimoctar@gmail.com") {
+        if (classStudents.isEmpty() && importAdminUser?.email?.trim()?.lowercase() == "elyedalimoctar@gmail.com") {
             ClassListImportButton(
                 viewModel = viewModel,
                 targetClassId = activeSection.id,
