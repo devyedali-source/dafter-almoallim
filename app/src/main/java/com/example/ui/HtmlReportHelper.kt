@@ -1952,6 +1952,7 @@ object HtmlReportHelper {
                 </div>
             </div>
             
+            ${com.example.ui.utils.ListIcons.hymn}
             <div class="sheet-title" style="margin-bottom: 20px;">توزيع طلاب القسم إلى خمس مجموعات للإنشاد</div>
             
             <div class="groups-grid">
@@ -2054,6 +2055,7 @@ object HtmlReportHelper {
                 </div>
             </div>
             
+            ${com.example.ui.utils.ListIcons.cleaning}
             <div class="sheet-title" style="margin-bottom: 20px;">توزيع الطلاب إلى خمس مجموعات نظافة دورية للتطوير الصحي والتربوي</div>
             
             <div class="groups-grid">
