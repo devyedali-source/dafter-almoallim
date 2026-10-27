@@ -710,35 +710,6 @@ fun InnerTeacherAppScreenContent(
                 }
             }
 
-            val manualConflict by viewModel.manualSyncConflict.collectAsState()
-            if (manualConflict) {
-                AlertDialog(
-                    onDismissRequest = { viewModel.clearManualSyncConflict() },
-                    title = { Text("نسخة Drive تختلف عن نسخة هذا الجهاز ⚠️", fontWeight = FontWeight.Bold) },
-                    text = {
-                        Text(
-                            "ملف Drive تغيّر بعد آخر مزامنة لهذا الجهاز. اختر ما تريد:\n\n" +
-                            "• رفع نسخة هذا الجهاز: تحل محل نسخة Drive.\n" +
-                            "• استرجاع نسخة Drive: تحل محل بيانات هذا الجهاز.",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            viewModel.manualDriveSync(force = true) { msg -> Toast.makeText(context, msg, Toast.LENGTH_LONG).show() }
-                        }) { Text("رفع نسخة هذا الجهاز", fontWeight = FontWeight.Bold) }
-                    },
-                    dismissButton = {
-                        Row {
-                            TextButton(onClick = {
-                                viewModel.manualDriveRestore { msg -> Toast.makeText(context, msg, Toast.LENGTH_LONG).show() }
-                            }) { Text("استرجاع نسخة Drive", color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold) }
-                            TextButton(onClick = { viewModel.clearManualSyncConflict() }) { Text("إلغاء") }
-                        }
-                    }
-                )
-            }
-
             val logoutConflict by viewModel.logoutConflictMessage.collectAsState()
             if (logoutConflict != null) {
                 AlertDialog(
@@ -1235,7 +1206,7 @@ fun InnerTeacherAppScreenContent(
 
                                     Button(
                                         onClick = {
-                                            viewModel.manualDriveSync { msg ->
+                                            viewModel.manualDriveSync(force = true) { msg ->
                                                 Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                                             }
                                         },
