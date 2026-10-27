@@ -71,7 +71,6 @@ object BiFr {
         "تصميم اللوائح والكشوف" to "Design des listes et relevés",
         "كتبي" to "Koutoubi",
         "المستوى الدراسي من 1 إلى 6" to "Niveau scolaire de 1 à 6",
-        "العام الدراسي" to "Année scolaire",
         "رجوع إلى الدروس" to "Retour aux leçons",
         "رجوع إلى التخصّصات" to "Retour aux spécialités",
         "رجوع إلى المواد" to "Retour aux matières",
