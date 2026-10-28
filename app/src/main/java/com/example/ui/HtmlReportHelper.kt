@@ -689,11 +689,15 @@ object HtmlReportHelper {
         """.trimIndent()
     }
 
+    /** تكبير الأختام في اللوائح والكشوف ×1.5 */
+    private const val STAMP_SCALE = 1.5f
+
     fun getTeacherStampHtml(viewModel: TeacherViewModel, schoolName: String, sizePx: Int = 54): String {
         if (!viewModel.showTeacherStampInReports.value) return ""
         val name = viewModel.teacherStampName.value.trim()
         val role = "المعلم"
         val shape = "rectangle"
+        val sizePx = (sizePx * STAMP_SCALE).toInt()
         return """
             <div style="display: flex; justify-content: center; align-items: center; transform: rotate(-2deg); opacity: 0.95;">
                 ${generateStampSvg(
@@ -713,6 +717,7 @@ object HtmlReportHelper {
         val role = "المدير"
         val shape = "circle"
         val financialId = viewModel.principalStampFinancialId.value
+        val sizePx = (sizePx * STAMP_SCALE).toInt()
         return """
             <div style="display: flex; justify-content: center; align-items: center; transform: rotate(1.5deg); opacity: 0.95;">
                 ${generateStampSvg(
@@ -1006,7 +1011,7 @@ object HtmlReportHelper {
                 justify-content: center !important;
             }
             .footer-stamp-slot svg {
-                max-height: 60px !important;
+                max-height: 90px !important;
                 max-width: 95% !important;
                 display: block !important;
                 margin: 0 auto !important;
@@ -3355,7 +3360,7 @@ object HtmlReportHelper {
                 justify-content: center !important;
             }
             .signature-stamp-slot svg {
-                max-height: 52px !important;
+                max-height: 78px !important;
                 max-width: 95% !important;
                 display: block !important;
                 margin: 0 auto !important;
