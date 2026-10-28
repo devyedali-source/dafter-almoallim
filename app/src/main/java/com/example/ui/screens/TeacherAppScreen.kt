@@ -1002,12 +1002,12 @@ fun InnerTeacherAppScreenContent(
                                         text = {
                                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                                 Text(
-                                                    if (turnOn) "ستظهر الترجمة على الواجهات فقط."
+                                                    if (turnOn) "ستظهر الترجمة على الواجهات."
                                                     else "ستختفي الترجمة من الواجهات.",
                                                     style = MaterialTheme.typography.bodyMedium
                                                 )
                                                 Text(
-                                                    if (turnOn) "La traduction apparaîtra uniquement sur les écrans."
+                                                    if (turnOn) "La traduction apparaîtra sur les écrans."
                                                     else "La traduction disparaîtra des écrans.",
                                                     style = MaterialTheme.typography.bodySmall,
                                                     color = Color.Gray
