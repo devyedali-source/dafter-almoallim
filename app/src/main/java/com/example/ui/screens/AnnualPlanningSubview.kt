@@ -390,8 +390,13 @@ private fun AnnualPlanningScreenContent(
                     val countLabel = if (activeCount > 10) uiT("تحضيراً") else uiT("تحاضير")
                     val stationHeader = stationOnly
                     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                      if (stationHeader) {
-                        StationBadge()
+                      val headerWeekIsExam = (currentLevel == NavLevel.SUBJECTS) && OfficialAnnualPlanningRepository.getWeekType(context, levelCode, selectedWeek ?: 1).let { cleanLabelExams(it) == "examen" }
+                      val headerExamProps = examProposalsCount(context, levelCode, selectedWeek ?: 1, headerWeekIsExam)
+                      if (headerWeekIsExam) {
+                        CountPill(ar = "$headerExamProps " + (if (headerExamProps > 10) "مقترحاً" else "مقترحات"), fr = "$headerExamProps propositions", bg = Color(0xFFFFEBEE), fg = Color(0xFFC62828))
+                      } else if (stationHeader) {
+                        val sit = stationSituations(levelCode, activeInstances)
+                        CountPill(ar = "$sit " + (if (sit > 10) "وضعية" else "وضعيات"), fr = "$sit situations", bg = Color(0xFFFFF3E0), fg = Color(0xFFE65100))
                       } else {
                         Surface(
                             shape = RoundedCornerShape(8.dp),
@@ -902,6 +907,14 @@ private fun WeeksListScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        val weekSituations = remember(weekInstances, levelCode) { stationSituations(levelCode, weekInstances) }
+                        val weekExamProps = examProposalsCount(context, levelCode, weekNumber, weekType == "examen")
+                        if (weekSituations > 0) {
+                            CountPill(ar = "$weekSituations " + (if (weekSituations > 10) "وضعية" else "وضعيات"), fr = if (weekSituations == 1) "$weekSituations situation" else "$weekSituations situations", bg = Color(0xFFFFF3E0), fg = Color(0xFFE65100))
+                        }
+                        if (weekExamProps > 0) {
+                            CountPill(ar = "$weekExamProps " + (if (weekExamProps > 10) "مقترحاً" else "مقترحات"), fr = if (weekExamProps == 1) "$weekExamProps proposition" else "$weekExamProps propositions", bg = Color(0xFFFFEBEE), fg = Color(0xFFC62828))
+                        }
                         if (weekPreps > 0) {
                             val label = if (weekPreps > 10) uiT("تحضيراً") else uiT("تحاضير")
                             Surface(
@@ -2355,6 +2368,40 @@ private fun StationBadge() {
     Surface(shape = RoundedCornerShape(8.dp), color = Color(0xFFFFF3E0)) {
         BiText(ar = "🟠 محطة: اقتراحات الإدماج والتقويم والعلاج", fr = "🟠 Station : propositions d'intégration, d'évaluation et de remédiation", modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE65100))
     }
+}
+
+/** عدد الوضعيات (مقترحات الإدماج + التقويم + العلاج) لبنود المحطة */
+private fun stationSituations(levelCode: String, insts: List<com.example.data.planning.canonical.CanonicalLessonInstance>): Int {
+    val lvl = levelCode.filter { it.isDigit() }.toIntOrNull() ?: return 0
+    return insts.filter { isStationInst(it) }.sumOf { i ->
+        try {
+            val item = AnnualLessonItem(
+                id = i.lesson_unit_id, level = lvl, week = i.semaine, weekEnd = i.semaine,
+                subject = i.matiere, domain = i.domaine, title = i.titre_officiel, competency = i.competence,
+                isFrench = isMatiereFrench(i.matiere)
+            )
+            val d = com.example.data.planning.LessonProposalRepository.getPedagogicalStationData(item, i.semaine)
+            d.integrationProposals.size + d.assessmentProposals.size + d.remediationProposals.size
+        } catch (e: Exception) { 0 }
+    }
+}
+
+@Composable
+private fun CountPill(ar: String, fr: String, bg: Color, fg: Color) {
+    Surface(shape = RoundedCornerShape(6.dp), color = bg) {
+        BiText(ar = ar, fr = fr, modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp), fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = fg)
+    }
+}
+
+@Composable
+private fun examProposalsCount(context: Context, levelCode: String, week: Int, enabled: Boolean): Int {
+    if (!enabled) return 0
+    val st = produceState(0, levelCode, week) {
+        value = withContext(Dispatchers.IO) {
+            try { com.example.data.exams.ExamsRepository.getProposalsCount(context, levelCode, week) } catch (e: Exception) { 0 }
+        }
+    }
+    return st.value
 }
 
 private fun frPreps(n: Int): String = if (n == 1) "$n préparation" else "$n préparations"
