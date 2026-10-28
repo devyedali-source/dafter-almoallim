@@ -1098,26 +1098,6 @@ fun InnerTeacherAppScreenContent(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
                             )
 
-                            // تصميم اللوائح والكشوف وشهادات التفوق
-                            var showPrintDesignFromDrawer by remember { mutableStateOf(false) }
-                            NavigationDrawerItem(
-                                label = {
-                                    com.example.ui.utils.BiText(
-                                        ar = "تصميم اللوائح والكشوف 🎨",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 12.5.sp,
-                                        frSize = 9.sp
-                                    )
-                                },
-                                selected = false,
-                                onClick = { showPrintDesignFromDrawer = true },
-                                icon = { Icon(Icons.Default.Settings, contentDescription = null, tint = BentoPrimary) },
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
-                            )
-                            if (showPrintDesignFromDrawer) {
-                                PrintDesignDialog(onDismiss = { showPrintDesignFromDrawer = false })
-                            }
-
                             // 4. About App (حول التطبيق)
                             NavigationDrawerItem(
                                 label = {
