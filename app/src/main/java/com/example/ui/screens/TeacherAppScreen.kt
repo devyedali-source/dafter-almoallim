@@ -6093,6 +6093,8 @@ fun GradesEntryTab(
             classId = classId,
             className = className,
             academicYear = academicYear,
+            wilaya = activeClass?.wilaya?.trim() ?: "",
+            moughataa = activeClass?.moughataa?.trim() ?: "",
             targetTermName = targetTermNameForActivation ?: "الفصل الثاني",
             isFinalTermOnlyFeatureEnabled = isFinalTermOnlyFeatureEnabled,
             onDismiss = { showActivationPromoDialog = false }
@@ -11675,6 +11677,8 @@ fun ActivationPromoDialog(
     classId: Long,
     className: String,
     academicYear: String,
+    wilaya: String = "",
+    moughataa: String = "",
     targetTermName: String? = null,
     isFinalTermOnlyFeatureEnabled: Boolean = false,
     onDismiss: () -> Unit
@@ -11956,6 +11960,8 @@ fun ActivationPromoDialog(
                             "status" to "pending",
                             "createdAt" to System.currentTimeMillis(),
                             "className" to className,
+                            "wilaya" to wilaya,
+                            "moughataa" to moughataa,
                             "termName" to (targetTermName ?: "الفصل الثاني"),
                             "email" to email
                         )
@@ -12485,6 +12491,8 @@ fun SingleRequestActivationView(
                 } else {
                     val className = requestData?.get("className") as? String ?: "غير محدد"
                     val teacherEmail = requestData?.get("email") as? String ?: "غير محدد"
+                    val reqWilaya = (requestData?.get("wilaya") as? String)?.trim().orEmpty()
+                    val reqMoughataa = (requestData?.get("moughataa") as? String)?.trim().orEmpty()
                     val requestedTerm = requestData?.get("termName") as? String ?: "غير محدد"
                     val requestIdParts = requestId.split("_")
                     val isFullYearRequest = (requestIdParts.size >= 2 && requestIdParts[requestIdParts.size - 2] == "23") ||
@@ -12529,6 +12537,18 @@ fun SingleRequestActivationView(
                                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                                     BiText(ar = uiT("اسم القسم:"), fr = BiFr.of("اسم القسم:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
                                     Text(className, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
+                                }
+                                if (reqWilaya.isNotBlank()) {
+                                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                                        BiText(ar = uiT("الولاية:"), fr = BiFr.of("الولاية:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        Text(reqWilaya, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
+                                    }
+                                }
+                                if (reqMoughataa.isNotBlank()) {
+                                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                                        BiText(ar = uiT("المقاطعة:"), fr = BiFr.of("المقاطعة:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
+                                        Text(reqMoughataa, fontWeight = FontWeight.Medium, color = BentoPrimary, fontSize = 14.sp)
+                                    }
                                 }
                                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                                     BiText(ar = uiT("الفصل المطلوب:"), fr = BiFr.of("الفصل المطلوب:"), fontWeight = FontWeight.Bold, color = BentoPrimaryDesc, fontSize = 14.sp)
