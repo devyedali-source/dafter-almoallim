@@ -390,7 +390,7 @@ private fun AnnualPlanningScreenContent(
                     val countLabel = if (activeCount > 10) uiT("تحضيراً") else uiT("تحاضير")
                     val stationHeader = stationOnly
                     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                      val headerWeekIsExam = (currentLevel == NavLevel.SUBJECTS) && OfficialAnnualPlanningRepository.getWeekType(context, levelCode, selectedWeek ?: 1).let { cleanLabelExams(it) == "examen" }
+                      val headerWeekIsExam = (currentLevel == NavLevel.SUBJECTS) && OfficialAnnualPlanningRepository.getWeekType(context, levelCode, selectedWeek ?: 1).let { cleanLabelExams(it) == "examen" || it == "accueil" }
                       val headerExamProps = examProposalsCount(context, levelCode, selectedWeek ?: 1, headerWeekIsExam)
                       if (headerWeekIsExam) {
                         CountPill(ar = "$headerExamProps " + (if (headerExamProps > 10) "مقترحاً" else "مقترحات"), fr = "$headerExamProps propositions", bg = Color(0xFFFFEBEE), fg = Color(0xFFC62828))
@@ -908,7 +908,7 @@ private fun WeeksListScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         val weekSituations = remember(weekInstances, levelCode) { stationSituations(levelCode, weekInstances) }
-                        val weekExamProps = examProposalsCount(context, levelCode, weekNumber, weekType == "examen")
+                        val weekExamProps = examProposalsCount(context, levelCode, weekNumber, weekType == "examen" || weekType == "accueil")
                         if (weekSituations > 0) {
                             CountPill(ar = situationsAr(weekSituations), fr = situationsFr(weekSituations), bg = Color(0xFFFFF3E0), fg = Color(0xFFE65100))
                         }
@@ -1025,7 +1025,7 @@ private fun SubjectsListScreen(
                             }
 
                             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                BiText(ar = uiTf("مقترحات امتحان الأسبوع {0}", selectedWeek), fr = "Propositions d'examen – semaine $selectedWeek", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                                BiText(ar = if (selectedWeek == 1) "تقويم تشخيصي من برنامج القسم السابق" else uiTf("مقترحات امتحان الأسبوع {0}", selectedWeek), fr = if (selectedWeek == 1) "Évaluation diagnostique (programme de la classe précédente)" else "Propositions d'examen – semaine $selectedWeek", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
                                 val subjectsCount = examSubjects.size
                                 val subjectsLabel = if (subjectsCount > 10) "مادة" else "مواد"
                                 Text(
