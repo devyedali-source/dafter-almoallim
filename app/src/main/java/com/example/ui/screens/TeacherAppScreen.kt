@@ -972,12 +972,19 @@ fun InnerTeacherAppScreenContent(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(
-                                    text = "🌐 Traduire",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
-                                    color = BentoPrimary
-                                )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "🌐 Traduire",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = BentoPrimary
+                                    )
+                                    Text(
+                                        text = "إذا كنت لا تفهم واجهة العربية اضغط للترجمة",
+                                        fontSize = 10.sp,
+                                        color = Color.Gray
+                                    )
+                                }
                                 var pendingTranslate by remember { mutableStateOf<Boolean?>(null) }
                                 Switch(
                                     checked = BiFr.enabled,
@@ -995,13 +1002,13 @@ fun InnerTeacherAppScreenContent(
                                         text = {
                                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                                 Text(
-                                                    if (turnOn) "ستظهر الترجمة الفرنسية على الواجهات واللوائح والكشوف."
-                                                    else "ستختفي الترجمة الفرنسية من الواجهات واللوائح والكشوف.",
+                                                    if (turnOn) "ستظهر الترجمة على الواجهات فقط."
+                                                    else "ستختفي الترجمة من الواجهات.",
                                                     style = MaterialTheme.typography.bodyMedium
                                                 )
                                                 Text(
-                                                    if (turnOn) "La traduction en français apparaîtra sur les écrans, les listes et les bulletins."
-                                                    else "La traduction en français disparaîtra des écrans, des listes et des bulletins.",
+                                                    if (turnOn) "La traduction apparaîtra uniquement sur les écrans."
+                                                    else "La traduction disparaîtra des écrans.",
                                                     style = MaterialTheme.typography.bodySmall,
                                                     color = Color.Gray
                                                 )
