@@ -1849,7 +1849,7 @@ private fun BookPagesViewer(
                         Icon(Icons.Default.Close, contentDescription = "إغلاق", tint = InkDarkBlue)
                     }
                     Text(
-                        text = if (isGuide) (if (isFrench) "Guide des leçons systémiques" else "دليل النسقية") else if (isFrench) "Pages du manuel" else "صفحات الكتاب",
+                        text = if (isGuide) (if (isFrench) "Guide – leçons scriptées" else "دليل النسقية") else if (isFrench) "Pages du manuel" else "صفحات الكتاب",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Black,
                         color = InkDarkBlue
