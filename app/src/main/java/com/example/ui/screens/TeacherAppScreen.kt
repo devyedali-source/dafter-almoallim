@@ -6084,7 +6084,8 @@ fun GradesEntryTab(
         val currentUser by viewModel.currentUser.collectAsState()
         val email = currentUser?.email ?: ""
         val classId = activeClass?.id ?: 0L
-        val className = activeClass?.getFormattedName() ?: ""
+        // اسم القسم بدون تكرار السنة الدراسية [2026-2027] (تُكتب في سطر مستقل)
+        val className = (activeClass?.getFormattedName() ?: "").replace(Regex("\\s*\\[\\s*\\d{4}\\s*[-/]\\s*\\d{4}\\s*\\]"), "").trim()
         val academicYear = activeClass?.academicYear?.ifBlank { "2025-2026" } ?: "2025-2026"
 
         ActivationPromoDialog(
