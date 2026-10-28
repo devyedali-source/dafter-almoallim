@@ -396,7 +396,7 @@ private fun AnnualPlanningScreenContent(
                         CountPill(ar = "$headerExamProps " + (if (headerExamProps > 10) "مقترحاً" else "مقترحات"), fr = "$headerExamProps propositions", bg = Color(0xFFFFEBEE), fg = Color(0xFFC62828))
                       } else if (stationHeader) {
                         val sit = stationSituations(levelCode, activeInstances)
-                        CountPill(ar = "$sit " + (if (sit > 10) "وضعية" else "وضعيات"), fr = "$sit situations", bg = Color(0xFFFFF3E0), fg = Color(0xFFE65100))
+                        CountPill(ar = situationsAr(sit), fr = situationsFr(sit), bg = Color(0xFFFFF3E0), fg = Color(0xFFE65100))
                       } else {
                         Surface(
                             shape = RoundedCornerShape(8.dp),
@@ -910,7 +910,7 @@ private fun WeeksListScreen(
                         val weekSituations = remember(weekInstances, levelCode) { stationSituations(levelCode, weekInstances) }
                         val weekExamProps = examProposalsCount(context, levelCode, weekNumber, weekType == "examen")
                         if (weekSituations > 0) {
-                            CountPill(ar = "$weekSituations " + (if (weekSituations > 10) "وضعية" else "وضعيات"), fr = if (weekSituations == 1) "$weekSituations situation" else "$weekSituations situations", bg = Color(0xFFFFF3E0), fg = Color(0xFFE65100))
+                            CountPill(ar = situationsAr(weekSituations), fr = situationsFr(weekSituations), bg = Color(0xFFFFF3E0), fg = Color(0xFFE65100))
                         }
                         if (weekExamProps > 0) {
                             CountPill(ar = "$weekExamProps " + (if (weekExamProps > 10) "مقترحاً" else "مقترحات"), fr = if (weekExamProps == 1) "$weekExamProps proposition" else "$weekExamProps propositions", bg = Color(0xFFFFEBEE), fg = Color(0xFFC62828))
@@ -2370,21 +2370,18 @@ private fun StationBadge() {
     }
 }
 
-/** عدد الوضعيات (مقترحات الإدماج + التقويم + العلاج) لبنود المحطة */
-private fun stationSituations(levelCode: String, insts: List<com.example.data.planning.canonical.CanonicalLessonInstance>): Int {
-    val lvl = levelCode.filter { it.isDigit() }.toIntOrNull() ?: return 0
-    return insts.filter { isStationInst(it) }.sumOf { i ->
-        try {
-            val item = AnnualLessonItem(
-                id = i.lesson_unit_id, level = lvl, week = i.semaine, weekEnd = i.semaine,
-                subject = i.matiere, domain = i.domaine, title = i.titre_officiel, competency = i.competence,
-                isFrench = isMatiereFrench(i.matiere)
-            )
-            val d = com.example.data.planning.LessonProposalRepository.getPedagogicalStationData(item, i.semaine)
-            d.integrationProposals.size + d.assessmentProposals.size + d.remediationProposals.size
-        } catch (e: Exception) { 0 }
-    }
+/** عدد الوضعيات: كل بند محطة (إدماج + تقويم + علاج) وضعية واحدة */
+private fun stationSituations(levelCode: String, insts: List<com.example.data.planning.canonical.CanonicalLessonInstance>): Int =
+    insts.count { isStationInst(it) }
+
+private fun situationsAr(n: Int): String = when {
+    n == 1 -> "وضعية واحدة"
+    n == 2 -> "وضعيتان"
+    n in 3..10 -> "$n وضعيات"
+    else -> "$n وضعية"
 }
+
+private fun situationsFr(n: Int): String = if (n == 1) "1 situation" else "$n situations"
 
 @Composable
 private fun CountPill(ar: String, fr: String, bg: Color, fg: Color) {
