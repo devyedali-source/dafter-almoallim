@@ -370,8 +370,8 @@ private fun AnnualPlanningScreenContent(
                     // Dynamic Count Badge (الأعداد تُحسب ديناميكيًا من المجموعات الفعلية)
                     val activeInstances = remember(currentLevel, selectedTerm, selectedWeek, selectedSubject, selectedDomain, levelCode) {
                         when (currentLevel) {
-                            NavLevel.TERMS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode)
-                            NavLevel.WEEKS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).filter { it.fasl == selectedTerm }
+                            NavLevel.TERMS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).filter { !isStationInst(it) }
+                            NavLevel.WEEKS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).filter { it.fasl == selectedTerm && !isStationInst(it) }
                             NavLevel.SUBJECTS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1)
                             NavLevel.DOMAINS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1).filter { it.matiere.equals(selectedSubject?.nom, ignoreCase = true) || it.matiere.equals(selectedSubject?.code, ignoreCase = true) }
                             NavLevel.LESSONS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1).filter {
@@ -381,13 +381,18 @@ private fun AnnualPlanningScreenContent(
                             else -> emptyList()
                         }
                     }
-                    val activeCount = activeInstances.size
+                    val stationOnly = activeInstances.isNotEmpty() && activeInstances.all { isStationInst(it) }
+                    val activeCount = activeInstances.count { !isStationInst(it) }
                     val booksAndBoards = remember(activeInstances, levelCode) {
-                        com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, activeInstances)
+                        com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, activeInstances.filter { !isStationInst(it) })
                     }
 
                     val countLabel = if (activeCount > 10) uiT("تحضيراً") else uiT("تحاضير")
+                    val stationHeader = stationOnly
                     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                      if (stationHeader) {
+                        StationBadge()
+                      } else {
                         Surface(
                             shape = RoundedCornerShape(8.dp),
                             color = Color(0xFFE8F5E9)
@@ -406,6 +411,7 @@ private fun AnnualPlanningScreenContent(
                         ) {
                             BiText(ar = uiTf("محتوى سبورات: {0}", booksAndBoards.second), fr = "Contenu tableaux : ${booksAndBoards.second}", modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp), fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFF212121))
                         }
+                      }
                     }
                 }
 
@@ -752,7 +758,7 @@ private fun TermsListScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            val termPreps = OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).count { it.fasl == termNum }
+                            val termPreps = OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).count { it.fasl == termNum && !isStationInst(it) }
                             val countLabel = if (termPreps > 10) uiT("تحضيراً") else uiT("تحاضير")
 
                             BiText(ar = "$termPreps $countLabel", fr = frPreps(termPreps), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
@@ -825,9 +831,10 @@ private fun WeeksListScreen(
             val weekInstances = remember(levelCode, weekNumber) {
                 OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, weekNumber)
             }
-            val weekPreps = weekInstances.size
+            val realWeekInstances = weekInstances.filter { !isStationInst(it) }
+            val weekPreps = realWeekInstances.size
             val weekContent = remember(weekInstances, levelCode) {
-                com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, weekInstances)
+                com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, realWeekInstances)
             }
 
             val (cardBg, borderColor, badgeBg, badgeColor) = when (weekType) {
@@ -1124,7 +1131,7 @@ private fun SubjectsListScreen(
                         it.matiere.equals(subject.nom, ignoreCase = true) || it.matiere.equals(subject.code, ignoreCase = true)
                     }
                 }
-                val prepCount = subjectInstances.size
+                val prepCount = subjectInstances.count { !isStationInst(it) }
                 val subjectContent = remember(subjectInstances, levelCode) {
                     com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, subjectInstances)
                 }
@@ -1181,11 +1188,13 @@ private fun SubjectsListScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             val countLabel = if (prepCount > 10) uiT("تحضيراً") else uiT("تحاضير")
+                            if (prepCount > 0) {
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
                                 color = Color(0xFFF1F5F9)
                             ) {
                                 BiText(ar = "$prepCount $countLabel", fr = frPreps(prepCount), modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = BentoPrimaryDesc)
+                            }
                             }
 
                             Icon(
@@ -1239,7 +1248,7 @@ private fun DomainsListScreen(
                         it.domaine == domainCode
                     }
                 }
-                val prepCount = domainInstances.size
+                val prepCount = domainInstances.count { !isStationInst(it) }
                 val domainContent = remember(domainInstances, levelCode) {
                     com.example.data.planning.LessonPreparationRepository.countBooksAndBoards(context, levelCode, domainInstances)
                 }
@@ -1297,11 +1306,13 @@ private fun DomainsListScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             val countLabel = if (prepCount > 10) uiT("تحضيراً") else uiT("تحاضير")
+                            if (prepCount > 0) {
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
                                 color = Color(0xFFE8F5E9)
                             ) {
                                 BiText(ar = "$prepCount $countLabel", fr = frPreps(prepCount), modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
+                            }
                             }
 
                             Icon(
@@ -2334,6 +2345,17 @@ private fun planningSubjectLabel(matiere: String): String {
     return if (ar == "اللغة الفرنسية") "Français" else ar
 }
 
+
+/** بند محطة الإدماج/التقويم/العلاج المُولَّد (ليس تحضير درس) */
+private fun isStationInst(i: com.example.data.planning.canonical.CanonicalLessonInstance): Boolean =
+    i.lesson_unit_id.endsWith("_synth")
+
+@Composable
+private fun StationBadge() {
+    Surface(shape = RoundedCornerShape(8.dp), color = Color(0xFFFFF3E0)) {
+        BiText(ar = "🟠 محطة: اقتراحات الإدماج والتقويم والعلاج", fr = "🟠 Station : propositions d'intégration, d'évaluation et de remédiation", modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE65100))
+    }
+}
 
 private fun frPreps(n: Int): String = if (n == 1) "$n préparation" else "$n préparations"
 
