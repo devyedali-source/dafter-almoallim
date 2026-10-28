@@ -2551,27 +2551,21 @@ fun ClassStudentsSubview(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        item {
-            OutlinedButton(
-                onClick = { showPullMenu = true },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(8.dp))
-                BiTextA(ar = uiT("سحب اللوائح"), fr = BiFr.of("سحب اللوائح"), fontWeight = FontWeight.Bold)
-            }
-        }
-
-        // Smaller Add Student Button and Search Toggle in a Row
+        // سحب اللوائح + زر البحث في صف واحد (لا فراغ بينهما وبين الإحصائيات)
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Small Search Button next to it
+                OutlinedButton(
+                    onClick = { showPullMenu = true },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    BiTextA(ar = uiT("سحب اللوائح"), fr = BiFr.of("سحب اللوائح"), fontWeight = FontWeight.Bold)
+                }
                 IconButton(
                     onClick = { isSearchVisible = !isSearchVisible },
                     modifier = Modifier
