@@ -218,6 +218,7 @@ private fun AnnualPlanningScreenContent(
     var selectedTerm by remember { mutableStateOf<Int?>(restoredPlace.term) }
     var selectedWeek by remember { mutableStateOf<Int?>(restoredPlace.week) }
     var selectedSubject by remember { mutableStateOf<CanonicalSubject?>(restoredPlace.subject) }
+    var openedExamCode by remember { mutableStateOf<String?>(null) }
     var selectedDomain by remember { mutableStateOf<String?>(restoredPlace.domain) }
     var selectedLesson by remember { mutableStateOf<CanonicalLessonInstance?>(restoredPlace.lesson) }
 
@@ -391,7 +392,7 @@ private fun AnnualPlanningScreenContent(
                     val stationHeader = stationOnly
                     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                       val headerWeekIsExam = (currentLevel == NavLevel.SUBJECTS) && OfficialAnnualPlanningRepository.getWeekType(context, levelCode, selectedWeek ?: 1).let { cleanLabelExams(it) == "examen" || it == "accueil" }
-                      val headerExamProps = examProposalsCount(context, levelCode, selectedWeek ?: 1, headerWeekIsExam)
+                      val headerExamProps = examProposalsCount(context, levelCode, selectedWeek ?: 1, headerWeekIsExam, openedExamCode)
                       if (headerWeekIsExam) {
                         CountPill(ar = "$headerExamProps " + (if (headerExamProps > 10) "مقترحاً" else "مقترحات"), fr = "$headerExamProps propositions", bg = Color(0xFFFFEBEE), fg = Color(0xFFC62828))
                       } else if (stationHeader) {
@@ -590,6 +591,7 @@ private fun AnnualPlanningScreenContent(
                         selectedWeek = selectedWeek ?: 1,
                         plan = plan,
                         onBack = { goBack() },
+                        onExamSubjectOpened = { openedExamCode = it },
                         onSubjectSelected = { subject ->
                             selectedSubject = subject
                             navHistory.add(NavLevel.DOMAINS)
@@ -956,8 +958,10 @@ private fun SubjectsListScreen(
     selectedWeek: Int,
     plan: CanonicalAnnualPlan?,
     onBack: () -> Unit,
+    onExamSubjectOpened: (String?) -> Unit = {},
     onSubjectSelected: (CanonicalSubject) -> Unit
 ) {
+    DisposableEffect(Unit) { onDispose { onExamSubjectOpened(null) } }
     val subjectsInPlan = remember(levelCode) {
         OfficialAnnualPlanningRepository.getSubjects(context, levelCode)
     }
@@ -986,6 +990,7 @@ private fun SubjectsListScreen(
             }
             LaunchedEffect(openedExamSubject) {
                 com.example.data.state.LastPlaceStore.putString(context, examPlaceKey, openedExamSubject)
+                onExamSubjectOpened(openedExamSubject)
             }
             if (openedExamSubject != null) {
                 ExamProposalsScreen(
@@ -2391,11 +2396,14 @@ private fun CountPill(ar: String, fr: String, bg: Color, fg: Color) {
 }
 
 @Composable
-private fun examProposalsCount(context: Context, levelCode: String, week: Int, enabled: Boolean): Int {
+private fun examProposalsCount(context: Context, levelCode: String, week: Int, enabled: Boolean, subjectCode: String? = null): Int {
     if (!enabled) return 0
-    val st = produceState(0, levelCode, week) {
+    val st = produceState(0, levelCode, week, subjectCode) {
         value = withContext(Dispatchers.IO) {
-            try { com.example.data.exams.ExamsRepository.getProposalsCount(context, levelCode, week) } catch (e: Exception) { 0 }
+            try {
+                if (subjectCode != null) com.example.data.exams.ExamsRepository.getSubject(context, levelCode, week, subjectCode)?.proposals?.size ?: 0
+                else com.example.data.exams.ExamsRepository.getProposalsCount(context, levelCode, week)
+            } catch (e: Exception) { 0 }
         }
     }
     return st.value
