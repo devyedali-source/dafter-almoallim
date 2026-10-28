@@ -2801,7 +2801,7 @@ object HtmlReportHelper {
                 font-size: 10.5px;
                 font-weight: bold;
                 padding: 4px 15px 0 15px;
-                margin-top: 6px;
+                margin-top: -26px; /* رفع التوقيعات ليظهر الطابع كاملاً */
                 color: #000000;
             }
             .signature-item {
@@ -3182,7 +3182,7 @@ object HtmlReportHelper {
                 font-size: 10.5px;
                 font-weight: bold;
                 padding: 4px 15px 0 15px;
-                margin-top: 6px;
+                margin-top: -26px; /* رفع التوقيعات ليظهر الطابع كاملاً */
                 color: #000000;
             }
             .signature-item {
