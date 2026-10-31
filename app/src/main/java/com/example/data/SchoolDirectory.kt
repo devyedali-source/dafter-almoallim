@@ -1,9 +1,7 @@
 package com.example.data
 
 import android.content.Context
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import org.json.JSONObject
 import java.io.InputStreamReader
 import java.util.zip.GZIPInputStream
 
@@ -26,28 +24,27 @@ object SchoolDirectory {
         synchronized(loadLock) {
             cached?.let { return it }
             val parsed: Map<String, Map<String, List<String>>> = try {
-                val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
-                val type = Types.newParameterizedType(
-                    Map::class.java,
-                    String::class.java,
-                    Types.newParameterizedType(
-                        Map::class.java,
-                        String::class.java,
-                        Types.newParameterizedType(List::class.java, String::class.java)
-                    )
-                )
-                val adapter = moshi.adapter<Map<String, Map<String, List<String>>>>(type)
-                context.applicationContext.assets.open(ASSET_PATH).use { base ->
+                val text = context.applicationContext.assets.open(ASSET_PATH).use { base ->
                     GZIPInputStream(base).use { gz ->
-                        InputStreamReader(gz, Charsets.UTF_8).use { reader ->
-                            adapter.fromJson(reader.readText())
-                        }
+                        InputStreamReader(gz, Charsets.UTF_8).use { reader -> reader.readText() }
                     }
-                } ?: emptyMap()
+                }
+                val out = LinkedHashMap<String, Map<String, List<String>>>()
+                val root = JSONObject(text)
+                for (w in root.keys()) {
+                    val mObj = root.getJSONObject(w)
+                    val inner = LinkedHashMap<String, List<String>>()
+                    for (m in mObj.keys()) {
+                        val arr = mObj.getJSONArray(m)
+                        inner[m] = List(arr.length()) { i -> arr.getString(i) }
+                    }
+                    out[w] = inner
+                }
+                out
             } catch (e: Throwable) {
                 emptyMap()
             }
-            cached = parsed
+            if (parsed.isNotEmpty()) cached = parsed
             return parsed
         }
     }
