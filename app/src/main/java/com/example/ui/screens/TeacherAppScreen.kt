@@ -2342,6 +2342,7 @@ fun ClassStudentsSubview(
 
     // Dialog state for adding a student
     var showAddStudentDialog by remember { mutableStateOf(false) }
+    var showImportStudentsDialog by remember { mutableStateOf(false) }
 
     // Dialog state for Editing a Student's information
     var editingStudent by remember { mutableStateOf<Student?>(null) }
@@ -2587,6 +2588,16 @@ fun ClassStudentsSubview(
                         modifier = Modifier.size(18.dp)
                     )
                 }
+            }
+        }
+
+        item {
+            OutlinedButton(
+                onClick = { showImportStudentsDialog = true },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text(uiT("📄 تسجيل التلاميذ من ملف (Excel / PDF / CSV)"), fontWeight = FontWeight.Bold, fontSize = 12.5.sp)
             }
         }
 
@@ -3166,6 +3177,15 @@ fun ClassStudentsSubview(
                 }
             }
         }
+    }
+
+    if (showImportStudentsDialog) {
+        ImportStudentsDialog(
+            viewModel = viewModel,
+            section = activeSection,
+            existing = classStudents,
+            onDismiss = { showImportStudentsDialog = false }
+        )
     }
 
     if (showAddStudentDialog) {

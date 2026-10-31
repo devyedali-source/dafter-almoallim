@@ -94,3 +94,8 @@
 -dontwarn com.tom_roush.pdfbox.**
 -dontwarn com.gemalto.jp2.**
 -keep class com.tom_roush.pdfbox.** { *; }
+
+# قراءة Excel القديم (jxl)
+-keep class jxl.** { *; }
+-dontwarn jxl.**
+-dontwarn java.awt.**

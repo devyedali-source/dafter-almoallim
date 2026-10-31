@@ -4,6 +4,13 @@ package com.example.ui.utils
 object UiFrench {
     private fun part0(): Map<String, String> = mapOf(
         "سحب اللوائح" to "Exporter les listes",
+        "📄 تسجيل التلاميذ من ملف (Excel / PDF / CSV)" to "📄 Inscrire les élèves depuis un fichier (Excel / PDF / CSV)",
+        "استيراد لائحة التلاميذ من ملف" to "Importer la liste des élèves depuis un fichier",
+        "اختيار ملف اللائحة (PDF أو Excel أو CSV)" to "Choisir le fichier de la liste (PDF, Excel ou CSV)",
+        "اختيار ملف آخر" to "Choisir un autre fichier",
+        "جاري قراءة الملف..." to "Lecture du fichier...",
+        "الكل ذكور" to "Tous garçons",
+        "الكل إناث" to "Toutes filles",
         "تنبيه" to "Attention",
         "متابعة" to "Continuer",
         "ℹ️ تنبيه: هذه الإعدادات خاصة فقط بمن يعمل بنظام نتائج مختلف عن النظام الرسمي للوزارة. إذا كنت تعتمد النظام الرسمي فلا تغيّر شيئاً هنا." to "ℹ️ Attention : ces paramètres concernent uniquement les enseignants qui utilisent un système de résultats différent du système officiel du ministère. Si vous suivez le système officiel, ne modifiez rien ici.",
