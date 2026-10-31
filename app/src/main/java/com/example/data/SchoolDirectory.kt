@@ -16,6 +16,17 @@ object SchoolDirectory {
 
     private val loadLock = Any()
 
+    /** سبب فشل قراءة الدليل (للتشخيص)، أو null إن نجحت. */
+    @Volatile
+    var lastError: String? = null
+
+    /** توحيد الكتابة: همزات وتاء مربوطة وألف مقصورة وتشكيل ومسافات. */
+    private fun norm(x: String): String = x.trim()
+        .replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا')
+        .replace('ة', 'ه').replace('ى', 'ي')
+        .filter { it != 'ـ' && it !in '\u064B'..'\u065F' }
+        .replace(Regex("\\s+"), " ")
+
     @Volatile
     private var cached: Map<String, Map<String, List<String>>>? = null
 
@@ -41,7 +52,9 @@ object SchoolDirectory {
                     out[w] = inner
                 }
                 out
+                .also { lastError = null }
             } catch (e: Throwable) {
+                lastError = e.javaClass.simpleName + ": " + (e.message ?: "-")
                 emptyMap()
             }
             if (parsed.isNotEmpty()) cached = parsed
@@ -50,12 +63,20 @@ object SchoolDirectory {
     }
 
     /** مقاطعات الولاية كما في الدليل (فارغة إن لم تُعرف الولاية). */
-    fun moughataas(context: Context, wilaya: String): List<String> =
-        load(context)[wilaya.trim()]?.keys?.toList() ?: emptyList()
+    fun moughataas(context: Context, wilaya: String): List<String> {
+        val all = load(context)
+        val key = if (all.containsKey(wilaya.trim())) wilaya.trim() else all.keys.firstOrNull { norm(it) == norm(wilaya) }
+        return all[key]?.keys?.toList() ?: emptyList()
+    }
 
     /** مدارس المقاطعة مرتبة أبجدياً (فارغة إن لم تُعرف). */
-    fun schools(context: Context, wilaya: String, moughataa: String): List<String> =
-        load(context)[wilaya.trim()]?.get(moughataa.trim()) ?: emptyList()
+    fun schools(context: Context, wilaya: String, moughataa: String): List<String> {
+        val all = load(context)
+        val wKey = if (all.containsKey(wilaya.trim())) wilaya.trim() else all.keys.firstOrNull { norm(it) == norm(wilaya) }
+        val m = all[wKey] ?: return emptyList()
+        val mKey = if (m.containsKey(moughataa.trim())) moughataa.trim() else m.keys.firstOrNull { norm(it) == norm(moughataa) }
+        return m[mKey] ?: emptyList()
+    }
 
     /** هل الاسم موجود في دليل هذه المقاطعة؟ */
     fun contains(context: Context, wilaya: String, moughataa: String, school: String): Boolean =

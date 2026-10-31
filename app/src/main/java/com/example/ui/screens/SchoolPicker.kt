@@ -131,6 +131,14 @@ fun SchoolPickerField(
                 TextButton(onClick = { manual = false; onSchoolChange("") }, enabled = enabled) {
                     Text("اختيار من قائمة المدارس", fontSize = 12.sp)
                 }
+            } else {
+                // لا توجد قائمة لهذه المقاطعة: نُظهر السبب كي لا يبقى الأمر غامضاً
+                Text(
+                    text = "قائمة المدارس غير متوفرة لهذه المقاطعة" +
+                        (SchoolDirectory.lastError?.let { " ($it)" } ?: ""),
+                    fontSize = 10.sp,
+                    color = BentoPrimaryDesc
+                )
             }
         }
     }
