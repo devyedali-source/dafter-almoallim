@@ -8,11 +8,11 @@ import java.util.zip.GZIPInputStream
 /**
  * دليل المدارس: الولاية ← المقاطعة ← قائمة المدارس (من موقع النتائج الرسمي، مسابقة 2026).
  * أسماء الولايات هي نفسها أسماء التطبيق (مثل «كوركول» و«نواكشوط الشمالية»).
- * يُحمَّل مرة واحدة من assets/geo/schools_directory.json.gz.
+ * يُحمَّل مرة واحدة من assets/schools_directory.json.gz.
  */
 object SchoolDirectory {
 
-    private const val ASSET_PATH = "geo/schools_directory.json.gz"
+    private const val ASSET_PATH = "schools_directory.json.gz"
 
     private val loadLock = Any()
 
