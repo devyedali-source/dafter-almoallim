@@ -246,7 +246,7 @@ fun EditClassInfoDialog(
                             MauritaniaDropdown(
                                 label = "الولاية",
                                 selectedValue = wilaya,
-                                options = mauritanianWilayas,
+                                options = classWilayaOptions,
                                 onValueChanged = { w ->
                                     if (w != wilaya) {
                                         wilaya = w
