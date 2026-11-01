@@ -1619,6 +1619,57 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    /**
+     * دفتر غياب المعلمين: كل صفحة جدول (الاسم، التاريخ، ساعة البدء، ساعة المغادرة، التوقيع)
+     * فيه أسماء المعلمين مع [extraRows] خانات فارغة لأسماء معلمين جدد، والدفتر [pages] صفحة.
+     */
+    fun generateTeachersRegisterHtml(
+        activeClass: ClassSection,
+        teachers: List<String>,
+        pages: Int = 60,
+        extraRows: Int = 3
+    ): String {
+        val names = teachers.map { it.trim() }.filter { it.isNotEmpty() }
+        val rows = names.size + extraRows
+        // ارتفاع الصف يتوزع على المساحة المتاحة في الصفحة (A4) فيملأ الجدول الصفحة مهما قلّ العدد
+        val rowMm = (225.0 / (rows + 1)).coerceIn(7.0, 14.0)
+        val rowMmTxt = String.format(java.util.Locale.US, "%.2f", rowMm)
+        val fontPx = if (rowMm < 9.0) 10 else 12
+        val school = escCompHtml(activeClass.schoolName.ifBlank { "المدرسة" })
+        val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
+
+        val css = "@page{size:A4 portrait;margin:8mm;}" +
+            "*{box-sizing:border-box;}" +
+            "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
+            ".tr-page{width:100%;height:279mm;overflow:hidden;page-break-after:always;break-after:page;}" +
+            ".tr-page:last-child{page-break-after:auto;break-after:auto;}" +
+            ".tr-head{display:flex;justify-content:space-between;align-items:flex-start;height:20mm;border-bottom:2px solid #000;margin-bottom:3mm;}" +
+            ".tr-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.7;}" +
+            ".tr-head .c{flex:1.2;text-align:center;font-weight:900;font-size:18px;padding-top:2mm;}" +
+            ".tr-head .l{flex:1;text-align:left;font-weight:bold;font-size:11px;line-height:1.7;}" +
+            "table.tr{width:100%;border-collapse:collapse;table-layout:fixed;}" +
+            "table.tr th,table.tr td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;font-size:${fontPx}px;overflow:hidden;}" +
+            "table.tr th{height:9mm;font-weight:900;background:#efefef;font-size:12px;}" +
+            "table.tr td{height:${rowMmTxt}mm;}" +
+            "table.tr td.nm{text-align:right;font-weight:bold;padding-right:6px;white-space:nowrap;}"
+
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر غياب المعلمين</title><style>$css</style></head><body>")
+        for (page in 1..pages) {
+            html.append("<div class=\"tr-page\">")
+            html.append("<div class=\"tr-head\"><div class=\"r\">مدرسة: $school<br>السنة الدراسية: $year</div>")
+            html.append("<div class=\"c\">دفتر غياب المعلمين</div>")
+            html.append("<div class=\"l\">صفحة $page من $pages</div></div>")
+            html.append("<table class=\"tr\"><colgroup><col style=\"width:34%\"><col style=\"width:16%\"><col style=\"width:14%\"><col style=\"width:15%\"><col style=\"width:21%\"></colgroup>")
+            html.append("<thead><tr><th>الاسم</th><th>التاريخ</th><th>ساعة البدء</th><th>ساعة المغادرة</th><th>التوقيع</th></tr></thead><tbody>")
+            names.forEach { n -> html.append("<tr><td class=\"nm\">${escCompHtml(n)}</td><td></td><td></td><td></td><td></td></tr>") }
+            repeat(extraRows) { html.append("<tr><td class=\"nm\"></td><td></td><td></td><td></td><td></td></tr>") }
+            html.append("</tbody></table></div>")
+        }
+        html.append("</body></html>")
+        return html.toString()
+    }
+
     private fun escCompHtml(t: String) = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
     /**
