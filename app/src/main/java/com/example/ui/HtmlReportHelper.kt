@@ -1638,8 +1638,8 @@ object HtmlReportHelper {
             val rowMm = (availMm / (repeats * block)).coerceIn(6.8, 14.0)
             return Triple(repeats, String.format(java.util.Locale.US, "%.2f", rowMm), if (rowMm < 9.0) 10 else 12)
         }
-        val (repeats1, rowMm1, font1) = layout(247.0)
-        val (repeatsN, rowMmN, fontN) = layout(264.0)
+        val (repeats1, rowMm1, font1) = layout(242.0)
+        val (repeatsN, rowMmN, fontN) = layout(259.0)
         val school = escCompHtml(activeClass.schoolName.ifBlank { "المدرسة" })
         val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
 
@@ -1652,6 +1652,7 @@ object HtmlReportHelper {
             ".tr-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.7;}" +
             ".tr-head .c{flex:1.2;text-align:center;font-weight:900;font-size:18px;padding-top:2mm;}" +
             ".tr-head .l{flex:1;text-align:left;font-weight:bold;font-size:11px;line-height:1.7;}" +
+            ".tr-key{height:5mm;line-height:5mm;font-size:9.5px;font-weight:bold;text-align:center;white-space:nowrap;}" +
             ".tr-pn{height:4mm;margin-top:1mm;text-align:center;font-size:9px;font-weight:bold;line-height:4mm;}" +
             "table.tr{width:100%;border-collapse:collapse;table-layout:fixed;}" +
             "table.tr th,table.tr td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;overflow:hidden;}" +
@@ -1672,6 +1673,7 @@ object HtmlReportHelper {
                 html.append("<div class=\"c\">دفتر غياب المعلمين</div>")
                 html.append("<div class=\"l\">دفتر من $pages صفحة</div></div>")
             }
+            html.append("<div class=\"tr-key\">× ليس من أيام تدريس المعلم &nbsp;&nbsp;|&nbsp;&nbsp; − غائب بدون تبرير &nbsp;&nbsp;|&nbsp;&nbsp; + غائب مع تبرير</div>")
             html.append("<table class=\"tr ${if (isFirst) "t1" else "tn"}\"><colgroup><col style=\"width:34%\"><col style=\"width:16%\"><col style=\"width:14%\"><col style=\"width:15%\"><col style=\"width:21%\"></colgroup>")
             html.append("<thead><tr><th>الاسم</th><th>التاريخ</th><th>ساعة البدء</th><th>ساعة المغادرة</th><th>التوقيع</th></tr></thead><tbody>")
             repeat(repeats) { r ->
