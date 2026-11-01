@@ -1630,8 +1630,12 @@ object HtmlReportHelper {
         extraRows: Int = 3
     ): String {
         val names = teachers.map { it.trim() }.filter { it.isNotEmpty() }
-        val rows = names.size + extraRows
-        // ارتفاع الصف يتوزع على المساحة المتاحة في الصفحة (A4) فيملأ الجدول الصفحة مهما قلّ العدد
+        // الكتلة = الأسماء + الخانات الفارغة. تتكرر الكتلة في الصفحة الواحدة قدر ما يتسع توفيراً للورق
+        val block = names.size + extraRows
+        val maxRows = (225.0 / 8.0).toInt() - 1
+        val repeats = maxOf(1, maxRows / block)
+        val rows = repeats * block
+        // ارتفاع الصف يتوزع على المساحة المتاحة في الصفحة (A4) فيملأ الجدول الصفحة
         val rowMm = (225.0 / (rows + 1)).coerceIn(7.0, 14.0)
         val rowMmTxt = String.format(java.util.Locale.US, "%.2f", rowMm)
         val fontPx = if (rowMm < 9.0) 10 else 12
@@ -1651,7 +1655,8 @@ object HtmlReportHelper {
             "table.tr th,table.tr td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;font-size:${fontPx}px;overflow:hidden;}" +
             "table.tr th{height:9mm;font-weight:900;background:#efefef;font-size:12px;}" +
             "table.tr td{height:${rowMmTxt}mm;}" +
-            "table.tr td.nm{text-align:right;font-weight:bold;padding-right:6px;white-space:nowrap;}"
+            "table.tr td.nm{text-align:right;font-weight:bold;padding-right:6px;white-space:nowrap;}" +
+            "table.tr tr.first td{border-top:3px solid #000;}"
 
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر غياب المعلمين</title><style>$css</style></head><body>")
@@ -1662,8 +1667,13 @@ object HtmlReportHelper {
             html.append("<div class=\"l\">صفحة $page من $pages</div></div>")
             html.append("<table class=\"tr\"><colgroup><col style=\"width:34%\"><col style=\"width:16%\"><col style=\"width:14%\"><col style=\"width:15%\"><col style=\"width:21%\"></colgroup>")
             html.append("<thead><tr><th>الاسم</th><th>التاريخ</th><th>ساعة البدء</th><th>ساعة المغادرة</th><th>التوقيع</th></tr></thead><tbody>")
-            names.forEach { n -> html.append("<tr><td class=\"nm\">${escCompHtml(n)}</td><td></td><td></td><td></td><td></td></tr>") }
-            repeat(extraRows) { html.append("<tr><td class=\"nm\"></td><td></td><td></td><td></td><td></td></tr>") }
+            repeat(repeats) { r ->
+                names.forEachIndexed { i, n ->
+                    val cls = if (r > 0 && i == 0) " class=\"first\"" else ""
+                    html.append("<tr$cls><td class=\"nm\">${escCompHtml(n)}</td><td></td><td></td><td></td><td></td></tr>")
+                }
+                repeat(extraRows) { html.append("<tr><td class=\"nm\"></td><td></td><td></td><td></td><td></td></tr>") }
+            }
             html.append("</tbody></table></div>")
         }
         html.append("</body></html>")
