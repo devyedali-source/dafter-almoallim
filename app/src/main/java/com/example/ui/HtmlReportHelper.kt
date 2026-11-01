@@ -1632,11 +1632,11 @@ object HtmlReportHelper {
         val names = teachers.map { it.trim() }.filter { it.isNotEmpty() }
         // الكتلة = الأسماء + الخانات الفارغة. تتكرر الكتلة في الصفحة الواحدة قدر ما يتسع توفيراً للورق
         val block = names.size + extraRows
-        val maxRows = (225.0 / 8.0).toInt() - 1
+        val maxRows = (253.0 / 7.5).toInt()
         val repeats = maxOf(1, maxRows / block)
         val rows = repeats * block
-        // ارتفاع الصف يتوزع على المساحة المتاحة في الصفحة (A4) فيملأ الجدول الصفحة
-        val rowMm = (225.0 / (rows + 1)).coerceIn(7.0, 14.0)
+        // ارتفاع الصف يتوزع على المساحة المتاحة في الصفحة (A4) فيملأ الجدول الصفحة كلها
+        val rowMm = (253.0 / rows).coerceIn(6.8, 14.0)
         val rowMmTxt = String.format(java.util.Locale.US, "%.2f", rowMm)
         val fontPx = if (rowMm < 9.0) 10 else 12
         val school = escCompHtml(activeClass.schoolName.ifBlank { "المدرسة" })
@@ -1647,13 +1647,13 @@ object HtmlReportHelper {
             "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
             ".tr-page{width:100%;height:279mm;overflow:hidden;page-break-after:always;break-after:page;}" +
             ".tr-page:last-child{page-break-after:auto;break-after:auto;}" +
-            ".tr-head{display:flex;justify-content:space-between;align-items:flex-start;height:20mm;border-bottom:2px solid #000;margin-bottom:3mm;}" +
+            ".tr-head{display:flex;justify-content:space-between;align-items:flex-start;height:16mm;border-bottom:2px solid #000;margin-bottom:2mm;}" +
             ".tr-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.7;}" +
             ".tr-head .c{flex:1.2;text-align:center;font-weight:900;font-size:18px;padding-top:2mm;}" +
             ".tr-head .l{flex:1;text-align:left;font-weight:bold;font-size:11px;line-height:1.7;}" +
             "table.tr{width:100%;border-collapse:collapse;table-layout:fixed;}" +
             "table.tr th,table.tr td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;font-size:${fontPx}px;overflow:hidden;}" +
-            "table.tr th{height:9mm;font-weight:900;background:#efefef;font-size:12px;}" +
+            "table.tr th{height:8mm;font-weight:900;background:#efefef;font-size:12px;}" +
             "table.tr td{height:${rowMmTxt}mm;}" +
             "table.tr td.nm{text-align:right;font-weight:bold;padding-right:6px;white-space:nowrap;}" +
             "table.tr tr.first td{border-top:3px solid #000;}"
