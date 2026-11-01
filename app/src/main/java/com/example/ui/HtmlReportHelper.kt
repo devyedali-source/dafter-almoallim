@@ -1630,15 +1630,16 @@ object HtmlReportHelper {
         extraRows: Int = 3
     ): String {
         val names = teachers.map { it.trim() }.filter { it.isNotEmpty() }
-        // الكتلة = الأسماء + الخانات الفارغة. تتكرر الكتلة في الصفحة الواحدة قدر ما يتسع توفيراً للورق
+        // الكتلة = الأسماء + الخانات الفارغة. تتكرر الكتلة في الصفحة الواحدة قدر ما يتسع توفيراً للورق.
+        // الترويسة في الصفحة الأولى فقط، فلبقية الصفحات مساحة أكبر (فتتسع صفوف أكثر).
         val block = names.size + extraRows
-        val maxRows = (253.0 / 7.5).toInt()
-        val repeats = maxOf(1, maxRows / block)
-        val rows = repeats * block
-        // ارتفاع الصف يتوزع على المساحة المتاحة في الصفحة (A4) فيملأ الجدول الصفحة كلها
-        val rowMm = (253.0 / rows).coerceIn(6.8, 14.0)
-        val rowMmTxt = String.format(java.util.Locale.US, "%.2f", rowMm)
-        val fontPx = if (rowMm < 9.0) 10 else 12
+        fun layout(availMm: Double): Triple<Int, String, Int> {
+            val repeats = maxOf(1, (availMm / 7.5).toInt() / block)
+            val rowMm = (availMm / (repeats * block)).coerceIn(6.8, 14.0)
+            return Triple(repeats, String.format(java.util.Locale.US, "%.2f", rowMm), if (rowMm < 9.0) 10 else 12)
+        }
+        val (repeats1, rowMm1, font1) = layout(247.0)
+        val (repeatsN, rowMmN, fontN) = layout(264.0)
         val school = escCompHtml(activeClass.schoolName.ifBlank { "المدرسة" })
         val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
 
@@ -1651,21 +1652,27 @@ object HtmlReportHelper {
             ".tr-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.7;}" +
             ".tr-head .c{flex:1.2;text-align:center;font-weight:900;font-size:18px;padding-top:2mm;}" +
             ".tr-head .l{flex:1;text-align:left;font-weight:bold;font-size:11px;line-height:1.7;}" +
+            ".tr-pn{height:4mm;margin-top:1mm;text-align:center;font-size:9px;font-weight:bold;line-height:4mm;}" +
             "table.tr{width:100%;border-collapse:collapse;table-layout:fixed;}" +
-            "table.tr th,table.tr td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;font-size:${fontPx}px;overflow:hidden;}" +
+            "table.tr th,table.tr td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;overflow:hidden;}" +
             "table.tr th{height:8mm;font-weight:900;background:#efefef;font-size:12px;}" +
-            "table.tr td{height:${rowMmTxt}mm;}" +
+            "table.t1 td{height:${rowMm1}mm;font-size:${font1}px;}" +
+            "table.tn td{height:${rowMmN}mm;font-size:${fontN}px;}" +
             "table.tr td.nm{text-align:right;font-weight:bold;padding-right:6px;white-space:nowrap;}" +
             "table.tr tr.first td{border-top:3px solid #000;}"
 
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر غياب المعلمين</title><style>$css</style></head><body>")
         for (page in 1..pages) {
+            val isFirst = page == 1
+            val repeats = if (isFirst) repeats1 else repeatsN
             html.append("<div class=\"tr-page\">")
-            html.append("<div class=\"tr-head\"><div class=\"r\">مدرسة: $school<br>السنة الدراسية: $year</div>")
-            html.append("<div class=\"c\">دفتر غياب المعلمين</div>")
-            html.append("<div class=\"l\">صفحة $page من $pages</div></div>")
-            html.append("<table class=\"tr\"><colgroup><col style=\"width:34%\"><col style=\"width:16%\"><col style=\"width:14%\"><col style=\"width:15%\"><col style=\"width:21%\"></colgroup>")
+            if (isFirst) {
+                html.append("<div class=\"tr-head\"><div class=\"r\">مدرسة: $school<br>السنة الدراسية: $year</div>")
+                html.append("<div class=\"c\">دفتر غياب المعلمين</div>")
+                html.append("<div class=\"l\">دفتر من $pages صفحة</div></div>")
+            }
+            html.append("<table class=\"tr ${if (isFirst) "t1" else "tn"}\"><colgroup><col style=\"width:34%\"><col style=\"width:16%\"><col style=\"width:14%\"><col style=\"width:15%\"><col style=\"width:21%\"></colgroup>")
             html.append("<thead><tr><th>الاسم</th><th>التاريخ</th><th>ساعة البدء</th><th>ساعة المغادرة</th><th>التوقيع</th></tr></thead><tbody>")
             repeat(repeats) { r ->
                 names.forEachIndexed { i, n ->
@@ -1674,7 +1681,7 @@ object HtmlReportHelper {
                 }
                 repeat(extraRows) { html.append("<tr><td class=\"nm\"></td><td></td><td></td><td></td><td></td></tr>") }
             }
-            html.append("</tbody></table></div>")
+            html.append("</tbody></table><div class=\"tr-pn\">$page</div></div>")
         }
         html.append("</body></html>")
         return html.toString()
