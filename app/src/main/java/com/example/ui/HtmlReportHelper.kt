@@ -1632,7 +1632,8 @@ object HtmlReportHelper {
         val names = teachers.map { it.trim() }.filter { it.isNotEmpty() }
         // الكتلة = الأسماء + الخانات الفارغة. تتكرر الكتلة في الصفحة الواحدة قدر ما يتسع توفيراً للورق.
         // الترويسة في الصفحة الأولى فقط، فلبقية الصفحات مساحة أكبر (فتتسع صفوف أكثر).
-        val block = names.size + extraRows
+        // سطر التاريخ يسبق كل دورة من أسماء المعلمين (بدل عمود التاريخ) فيُحسب ضمن الكتلة
+        val block = 1 + names.size + extraRows
         fun layout(availMm: Double): Triple<Int, String, Int> {
             val repeats = maxOf(1, (availMm / 7.5).toInt() / block)
             val rowMm = (availMm / (repeats * block)).coerceIn(6.8, 14.0)
@@ -1660,7 +1661,8 @@ object HtmlReportHelper {
             "table.t1 td{height:${rowMm1}mm;font-size:${font1}px;}" +
             "table.tn td{height:${rowMmN}mm;font-size:${fontN}px;}" +
             "table.tr td.nm{text-align:right;font-weight:bold;padding-right:6px;white-space:nowrap;}" +
-            "table.tr tr.first td{border-top:3px solid #000;}"
+            "table.tr tr.first td{border-top:3px solid #000;}" +
+            "table.tr tr.dt td{background:#f3f3f3;font-weight:900;text-align:center;}"
 
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر غياب المعلمين</title><style>$css</style></head><body>")
@@ -1674,14 +1676,15 @@ object HtmlReportHelper {
                 html.append("<div class=\"l\">دفتر من $pages صفحة</div></div>")
             }
             html.append("<div class=\"tr-key\">× ليس من أيام تدريس المعلم &nbsp;&nbsp;|&nbsp;&nbsp; − غائب بدون تبرير &nbsp;&nbsp;|&nbsp;&nbsp; + غائب مع تبرير</div>")
-            html.append("<table class=\"tr ${if (isFirst) "t1" else "tn"}\"><colgroup><col style=\"width:34%\"><col style=\"width:16%\"><col style=\"width:14%\"><col style=\"width:15%\"><col style=\"width:21%\"></colgroup>")
-            html.append("<thead><tr><th>الاسم</th><th>التاريخ</th><th>ساعة البدء</th><th>ساعة المغادرة</th><th>التوقيع</th></tr></thead><tbody>")
+            html.append("<table class=\"tr ${if (isFirst) "t1" else "tn"}\"><colgroup><col style=\"width:40%\"><col style=\"width:18%\"><col style=\"width:19%\"><col style=\"width:23%\"></colgroup>")
+            html.append("<thead><tr><th>الاسم</th><th>ساعة البدء</th><th>ساعة المغادرة</th><th>التوقيع</th></tr></thead><tbody>")
             repeat(repeats) { r ->
-                names.forEachIndexed { i, n ->
-                    val cls = if (r > 0 && i == 0) " class=\"first\"" else ""
-                    html.append("<tr$cls><td class=\"nm\">${escCompHtml(n)}</td><td></td><td></td><td></td><td></td></tr>")
+                val cls = if (r > 0) " first" else ""
+                html.append("<tr class=\"dt$cls\"><td colspan=\"4\">التاريخ: ............ / ............ / ..................</td></tr>")
+                names.forEach { n ->
+                    html.append("<tr><td class=\"nm\">${escCompHtml(n)}</td><td></td><td></td><td></td></tr>")
                 }
-                repeat(extraRows) { html.append("<tr><td class=\"nm\"></td><td></td><td></td><td></td><td></td></tr>") }
+                repeat(extraRows) { html.append("<tr><td class=\"nm\"></td><td></td><td></td><td></td></tr>") }
             }
             html.append("</tbody></table><div class=\"tr-pn\">$page</div></div>")
         }
