@@ -1812,6 +1812,10 @@ fun InnerTeacherAppScreenContent(
                             // SHOW CLASSES FOR THE SELECTED YEAR
                             val yearClasses = classSections.filter { (it.academicYear.ifBlank { "2025-2026" }) == selectedYear }
                             val yearStudents = students.filter { student -> yearClasses.any { it.id == student.classId } }
+                            var showDirectorDocs by remember { mutableStateOf(false) }
+                            if (showDirectorDocs && yearClasses.isNotEmpty()) {
+                                DirectorDocsDialog(yearClasses.maxByOrNull { it.id }!!, viewModel, onDismiss = { showDirectorDocs = false })
+                            }
 
                             LazyColumn(
                                 modifier = Modifier
@@ -1839,6 +1843,14 @@ fun InnerTeacherAppScreenContent(
                                             fontWeight = FontWeight.Bold,
                                             color = BentoText
                                         )
+                                    }
+                                }
+
+                                if (yearClasses.isNotEmpty()) {
+                                    item {
+                                        Button(onClick = { showDirectorDocs = true }, modifier = Modifier.fillMaxWidth()) {
+                                            Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold)
+                                        }
                                     }
                                 }
 
@@ -2372,52 +2384,6 @@ fun ClassStudentsSubview(
     }
 
     var showAttendance by remember { mutableStateOf(false) }
-    var showTeachersRegister by remember { mutableStateOf(false) }
-    if (showTeachersRegister) {
-        val regPrefs = remember(context) { context.getSharedPreferences("teacher_settings_prefs", android.content.Context.MODE_PRIVATE) }
-        val regKey = "teachers_register_names_" + activeSection.schoolName.trim()
-        var regNames by remember { mutableStateOf(regPrefs.getString(regKey, "") ?: "") }
-        val regCount = regNames.lines().count { it.trim().isNotEmpty() }
-        AlertDialog(
-            onDismissRequest = { showTeachersRegister = false },
-            title = { Text("📒 دفتر غياب المعلمين", fontWeight = FontWeight.Bold) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    Text("اكتب أسماء المعلمين، كل اسم في سطر. ستُحفظ الأسماء لهذه المدرسة.", fontSize = 12.sp)
-                    OutlinedTextField(
-                        value = regNames,
-                        onValueChange = { regNames = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        minLines = 6,
-                        maxLines = 12,
-                        label = { Text("أسماء المعلمين") }
-                    )
-                    Text(
-                        "عدد الأسماء: $regCount — بعد الأسماء 3 خانات فارغة لأسماء جديدة، وتتكرر الأسماء في الصفحة الواحدة قدر ما تتسع لتوفير الورق. الدفتر 60 صفحة.",
-                        fontSize = 11.sp, color = Color.Gray
-                    )
-                    if (regCount > 30) {
-                        Text("الحد الأقصى 30 اسمًا في الصفحة الواحدة.", fontSize = 11.sp, color = Color(0xFFD32F2F))
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    enabled = regCount in 1..30,
-                    onClick = {
-                        regPrefs.edit().putString(regKey, regNames).apply()
-                        val teachersList = regNames.lines().map { it.trim() }.filter { it.isNotEmpty() }
-                        showTeachersRegister = false
-                        viewModel.runWithLoading("جاري إنشاء دفتر غياب المعلمين (60 صفحة)...") {
-                            val html = HtmlReportHelper.generateTeachersRegisterHtml(activeSection, teachersList)
-                            HtmlReportHelper.shareHtmlAsPdf(context, html, "دفتر_غياب_المعلمين_${activeSection.schoolName.trim().replace(" ", "_")}.pdf")
-                        }
-                    }
-                ) { Text("📥 إنشاء الدفتر", fontWeight = FontWeight.Bold) }
-            },
-            dismissButton = { TextButton(onClick = { showTeachersRegister = false }) { Text("إلغاء") } }
-        )
-    }
     if (showAttendance) {
         AttendanceScreen(
             viewModel = viewModel,
@@ -2538,7 +2504,6 @@ fun ClassStudentsSubview(
                     }
                     PullListButton("دفتر الغياب", onDismiss = { showPullMenu = false }) { showAttendance = true }
                     PullListButton("دفتر المتابعة", onDismiss = { showPullMenu = false }) { showCompetency = true }
-                    PullListButton("📒 دفتر غياب المعلمين 📥", onDismiss = { showPullMenu = false }) { showTeachersRegister = true }
                     PullListButton("🎤 المنشدين 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً للتقسيم")) {
                             viewModel.runWithLoading("جاري سحب وتصدير لائحة مجموعات المنشدين...") {
@@ -3472,6 +3437,77 @@ private fun DetailItem(icon: androidx.compose.ui.graphics.vector.ImageVector, la
 }
 
 
+
+/** نافذة دفتر غياب المعلمين (من وثائق المدير). */
+@Composable
+fun TeachersRegisterDialog(section: ClassSection, viewModel: TeacherViewModel, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+        val regPrefs = remember(context) { context.getSharedPreferences("teacher_settings_prefs", android.content.Context.MODE_PRIVATE) }
+        val regKey = "teachers_register_names_" + section.schoolName.trim()
+        var regNames by remember { mutableStateOf(regPrefs.getString(regKey, "") ?: "") }
+        val regCount = regNames.lines().count { it.trim().isNotEmpty() }
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            title = { Text("📒 دفتر غياب المعلمين", fontWeight = FontWeight.Bold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Text("اكتب أسماء المعلمين، كل اسم في سطر. ستُحفظ الأسماء لهذه المدرسة.", fontSize = 12.sp)
+                    OutlinedTextField(
+                        value = regNames,
+                        onValueChange = { regNames = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        minLines = 6,
+                        maxLines = 12,
+                        label = { Text("أسماء المعلمين") }
+                    )
+                    Text(
+                        "عدد الأسماء: $regCount — بعد الأسماء 3 خانات فارغة لأسماء جديدة، وتتكرر الأسماء في الصفحة الواحدة قدر ما تتسع لتوفير الورق. الدفتر 60 صفحة.",
+                        fontSize = 11.sp, color = Color.Gray
+                    )
+                    if (regCount > 30) {
+                        Text("الحد الأقصى 30 اسمًا في الصفحة الواحدة.", fontSize = 11.sp, color = Color(0xFFD32F2F))
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = regCount in 1..30,
+                    onClick = {
+                        regPrefs.edit().putString(regKey, regNames).apply()
+                        val teachersList = regNames.lines().map { it.trim() }.filter { it.isNotEmpty() }
+                        onDismiss()
+                        viewModel.runWithLoading("جاري إنشاء دفتر غياب المعلمين (60 صفحة)...") {
+                            val html = HtmlReportHelper.generateTeachersRegisterHtml(section, teachersList)
+                            HtmlReportHelper.shareHtmlAsPdf(context, html, "دفتر_غياب_المعلمين_${section.schoolName.trim().replace(" ", "_")}.pdf")
+                        }
+                    }
+                ) { Text("📥 إنشاء الدفتر", fontWeight = FontWeight.Bold) }
+            },
+            dismissButton = { TextButton(onClick = { onDismiss() }) { Text("إلغاء") } }
+        )
+}
+
+/** نافذة «وثائق المدير»: تُضاف إليها أزرار أخرى كلما توفرت وثائق جديدة. */
+@Composable
+fun DirectorDocsDialog(section: ClassSection, viewModel: TeacherViewModel, onDismiss: () -> Unit) {
+    var showTeachersRegister by remember { mutableStateOf(false) }
+    if (showTeachersRegister) {
+        TeachersRegisterDialog(section, viewModel, onDismiss = { showTeachersRegister = false; onDismiss() })
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = { showTeachersRegister = true }, modifier = Modifier.fillMaxWidth()) {
+                    Text("📒 دفتر غياب المعلمين 📥", fontWeight = FontWeight.Bold)
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onDismiss) { Text("إغلاق") } }
+    )
+}
 
 /** نص الإشراف على التطبيق، يظهر في واجهة الدخول وواجهة اختيار السنة الدراسية. */
 private const val APP_SUPERVISION_TEXT =
