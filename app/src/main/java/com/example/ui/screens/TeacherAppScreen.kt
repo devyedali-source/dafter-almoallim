@@ -3493,7 +3493,7 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
     val context = LocalContext.current
     val defaultSection = sections.maxByOrNull { it.id }!!
     var showTeachersRegister by remember { mutableStateOf(false) }
-    // 1 = دفتر أثاث القسم، 2 = دفتر محاضر جلسات المعلمين (يُختار القسم أولاً عند وجود أكثر من قسم)
+    // 1 = دفتر أثاث القسم، 2 = دفتر محاضر اجتماع المعلمين (يُختار القسم أولاً عند وجود أكثر من قسم)
     var pendingDoc by remember { mutableStateOf(0) }
     fun runDoc(doc: Int, sec: ClassSection) {
         val school = sec.schoolName.trim().replace(" ", "_")
@@ -3506,8 +3506,8 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
                 HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateSchoolVisitsHtml(sec), "دفتر_زيارات_المدرسة_$school.pdf")
             }
         } else {
-            viewModel.runWithLoading("جاري إنشاء دفتر محاضر جلسات المعلمين...") {
-                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateCouncilPvHtml(sec), "دفتر_محاضر_جلسات_المعلمين_$school.pdf")
+            viewModel.runWithLoading("جاري إنشاء دفتر محاضر اجتماع المعلمين...") {
+                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateCouncilPvHtml(sec), "دفتر_محاضر_اجتماع_المعلمين_$school.pdf")
             }
         }
     }
@@ -3541,7 +3541,7 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
                     Text("🪑 دفتر أثاث القسم 📥", fontWeight = FontWeight.Bold)
                 }
                 Button(onClick = { onDismiss(); runDoc(2, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
-                    Text("📝 دفتر محاضر جلسات المعلمين 📥", fontWeight = FontWeight.Bold)
+                    Text("📝 دفتر محاضر اجتماع المعلمين 📥", fontWeight = FontWeight.Bold)
                 }
                 Button(onClick = { onDismiss(); runDoc(3, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
                     Text("🚪 دفتر زيارات المدرسة 📥", fontWeight = FontWeight.Bold)

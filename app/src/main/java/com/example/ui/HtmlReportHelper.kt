@@ -1746,7 +1746,7 @@ object HtmlReportHelper {
     }
 
     /**
-     * دفتر محاضر جلسات المعلمين (Cahier des PV du conseil des maîtres): غلاف ثم [pages] صفحة،
+     * دفتر محاضر اجتماع المعلمين (Cahier des PV du conseil des maîtres): غلاف ثم [pages] صفحة،
      * كل صفحة محضر: التاريخ، المعلمون الغائبون والحاضرون، جدول الأعمال، المشاكل والقرارات، والتوقيعات.
      */
     fun generateCouncilPvHtml(activeClass: ClassSection, pages: Int = 30): String {
@@ -1782,12 +1782,12 @@ object HtmlReportHelper {
             ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" +
             ".cv .f{text-align:right;margin:14mm 18mm 0 18mm;font-size:16px;font-weight:bold;line-height:2.6;}"
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر محاضر جلسات المعلمين</title><style>$css</style></head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر محاضر اجتماع المعلمين</title><style>$css</style></head><body>")
         html.append("<div class=\"pv-page cv\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>شرف - إخاء - عدالة<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>مديرية التعليم الأساسي</div></div>")
         html.append("<div class=\"t\">دفتر محاضر اجتماع المعلمين</div><div class=\"t2\">Cahier des PV du Conseil des maîtres</div>")
         html.append("<div class=\"f\">المديرية الجهوية للتهذيب الوطني بـ: $wilaya<br>المفتشية المقاطعية للتهذيب بـ: $moughataa<br>المدرسة: $school<br>السنة الدراسية: $year</div></div>")
         for (page in 1..pages) {
-            html.append("<div class=\"pv-page\"><div class=\"pv-bar\">دفتر محاضر جلسات المعلمين &nbsp;&nbsp; Cahier des PV du conseil des maîtres</div>")
+            html.append("<div class=\"pv-page\"><div class=\"pv-bar\">دفتر محاضر اجتماع المعلمين &nbsp;&nbsp; Cahier des PV du conseil des maîtres</div>")
             html.append("<div class=\"pv-date\">التاريخ: ........................................................................ &nbsp; date</div>")
             html.append("<div class=\"pv-two\"><div><div class=\"pv-h\">أسماء المعلمين الحاضرين</div>${lines(4, false, 8.0)}</div>")
             html.append("<div><div class=\"pv-h\">أسماء المعلمين الغائبين</div>${lines(4, false, 8.0)}</div></div>")
