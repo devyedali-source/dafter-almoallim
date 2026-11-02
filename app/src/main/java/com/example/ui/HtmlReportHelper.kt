@@ -1699,7 +1699,7 @@ object HtmlReportHelper {
         val moughataa = escCompHtml(c.moughataa.ifBlank { "............" })
         val school = escCompHtml(c.schoolName.ifBlank { "............" })
         val year = escCompHtml(c.academicYear.ifBlank { "2025 - 2026" })
-        val cls = if (withClass) "<br>القسم: ${escCompHtml(getDisplayClassName(c))}" else ""
+        val cls = if (withClass) "<br>القسم: ............" else ""
         return "<div class=\"ch\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>وزارة التربية وإصلاح النظام التعليمي<br>الإدارة الجهوية للتربية: $wilaya<br>مفتشية مقاطعة: $moughataa<br>مدرسة: $school</div>" +
             "<div class=\"c\">$seal</div><div class=\"l\">شرف - إخاء - عدالة<br>السنة الدراسية: $year$cls</div></div>"
     }
@@ -1716,7 +1716,6 @@ object HtmlReportHelper {
         val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
         val wilaya = escCompHtml(activeClass.wilaya.ifBlank { "............" })
         val moughataa = escCompHtml(activeClass.moughataa.ifBlank { "............" })
-        val cls = escCompHtml(activeClass.name.ifBlank { "............" })
         val css = "@page{size:A4 portrait;margin:8mm;}" +
             "*{box-sizing:border-box;}" +
             "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
@@ -1744,7 +1743,7 @@ object HtmlReportHelper {
         html.append("<div class=\"t\">دفتر أثاث القسم</div><div class=\"t2\">Cahier d'inventaire de la classe</div></div>")
         for (page in 1..pages) {
             html.append("<div class=\"iv-page\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>وزارة التربية وإصلاح النظام التعليمي<br>الإدارة الجهوية للتربية: $wilaya<br>مفتشية مقاطعة: $moughataa</div>")
-            html.append("<div class=\"l\">السنة الدراسية: $year<br>الفصل الدراسي: ............<br>المدرسة: $school<br>القسم: $cls</div></div>")
+            html.append("<div class=\"l\">السنة الدراسية: $year<br>الفصل الدراسي: ............<br>المدرسة: $school<br>القسم: ............</div></div>")
             html.append("<div class=\"iv-title\">سجل أثاث القسم &nbsp;&nbsp; Cahier d'inventaire de la classe</div>")
             html.append("<table class=\"iv\"><colgroup><col style=\"width:6%\"><col style=\"width:26%\"><col style=\"width:7%\"><col style=\"width:7%\"><col style=\"width:7%\"><col style=\"width:8%\"><col style=\"width:15%\"><col style=\"width:24%\"></colgroup>")
             html.append("<thead><tr><th rowspan=\"2\">الرقم</th><th rowspan=\"2\">التعيين</th><th colspan=\"3\">الوضعية</th><th rowspan=\"2\">العدد</th><th rowspan=\"2\">تاريخ الوصول</th><th rowspan=\"2\">الملاحظات</th></tr>")

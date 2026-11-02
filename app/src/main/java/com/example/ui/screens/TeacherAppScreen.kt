@@ -3493,8 +3493,6 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
     val context = LocalContext.current
     val defaultSection = sections.maxByOrNull { it.id }!!
     var showTeachersRegister by remember { mutableStateOf(false) }
-    // 1 = دفتر أثاث القسم، 2 = دفتر محاضر اجتماع المعلمين (يُختار القسم أولاً عند وجود أكثر من قسم)
-    var pendingDoc by remember { mutableStateOf(0) }
     fun runDoc(doc: Int, sec: ClassSection) {
         val school = sec.schoolName.trim().replace(" ", "_")
         if (doc == 1) {
@@ -3514,21 +3512,6 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
     if (showTeachersRegister) {
         TeachersRegisterDialog(defaultSection, viewModel, onDismiss = { showTeachersRegister = false; onDismiss() })
     }
-    if (pendingDoc == 1) {
-        AlertDialog(
-            onDismissRequest = { pendingDoc = 0 },
-            title = { Text("اختر القسم", fontWeight = FontWeight.Bold) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    sections.forEach { sec ->
-                        OutlinedButton(onClick = { pendingDoc = 0; onDismiss(); runDoc(1, sec) }, modifier = Modifier.fillMaxWidth()) { Text(sec.name) }
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = { TextButton(onClick = { pendingDoc = 0 }) { Text("إلغاء") } }
-        )
-    }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold) },
@@ -3537,7 +3520,7 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
                 Button(onClick = { showTeachersRegister = true }, modifier = Modifier.fillMaxWidth()) {
                     Text("📒 دفتر غياب المعلمين 📥", fontWeight = FontWeight.Bold)
                 }
-                Button(onClick = { if (sections.size == 1) { onDismiss(); runDoc(1, defaultSection) } else pendingDoc = 1 }, modifier = Modifier.fillMaxWidth()) {
+                Button(onClick = { onDismiss(); runDoc(1, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
                     Text("🪑 دفتر أثاث القسم 📥", fontWeight = FontWeight.Bold)
                 }
                 Button(onClick = { onDismiss(); runDoc(2, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
