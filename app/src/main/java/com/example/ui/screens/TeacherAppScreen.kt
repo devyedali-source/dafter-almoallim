@@ -3499,15 +3499,15 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
         val school = sec.schoolName.trim().replace(" ", "_")
         if (doc == 1) {
             viewModel.runWithLoading("جاري إنشاء دفتر أثاث القسم...") {
-                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateClassInventoryHtml(sec), "دفتر_أثاث_القسم_${sec.name.trim().replace(" ", "_")}.pdf")
+                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateClassInventoryHtml(context, sec), "دفتر_أثاث_القسم_${sec.name.trim().replace(" ", "_")}.pdf")
             }
         } else if (doc == 3) {
             viewModel.runWithLoading("جاري إنشاء دفتر زيارات المدرسة...") {
-                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateSchoolVisitsHtml(sec), "دفتر_زيارات_المدرسة_$school.pdf")
+                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateSchoolVisitsHtml(context, sec), "دفتر_زيارات_المدرسة_$school.pdf")
             }
         } else {
             viewModel.runWithLoading("جاري إنشاء دفتر محاضر اجتماع المعلمين...") {
-                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateCouncilPvHtml(sec), "دفتر_محاضر_اجتماع_المعلمين_$school.pdf")
+                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateCouncilPvHtml(context, sec), "دفتر_محاضر_اجتماع_المعلمين_$school.pdf")
             }
         }
     }

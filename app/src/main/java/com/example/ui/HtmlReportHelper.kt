@@ -1692,11 +1692,26 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    /** رأسية الغلاف: نفس رأسية التطبيق (الإدارة الجهوية/المفتشية/المدرسة) مع شعار الدولة الحديث في الوسط. */
+    private fun coverHeaderHtml(context: Context, c: ClassSection, withClass: Boolean): String {
+        val seal = getMauritanianSealImg(context).replace("width: 76px; height: 76px", "width: 34mm; height: 34mm")
+        val wilaya = escCompHtml(c.wilaya.ifBlank { "............" })
+        val moughataa = escCompHtml(c.moughataa.ifBlank { "............" })
+        val school = escCompHtml(c.schoolName.ifBlank { "............" })
+        val year = escCompHtml(c.academicYear.ifBlank { "2025 - 2026" })
+        val cls = if (withClass) "<br>القسم: ${escCompHtml(getDisplayClassName(c))}" else ""
+        return "<div class=\"ch\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>وزارة التربية وإصلاح النظام التعليمي<br>الإدارة الجهوية للتربية: $wilaya<br>مفتشية مقاطعة: $moughataa<br>مدرسة: $school</div>" +
+            "<div class=\"c\">$seal</div><div class=\"l\">شرف - إخاء - عدالة<br>السنة الدراسية: $year$cls</div></div>"
+    }
+
+    private const val COVER_CSS = ".ch{display:flex;justify-content:space-between;align-items:flex-start;font-weight:bold;font-size:12px;line-height:1.7;}" +
+        ".ch .r{flex:1;text-align:right;}.ch .c{flex:1;text-align:center;}.ch .l{flex:1;text-align:left;direction:rtl;}"
+
     /**
      * دفتر أثاث القسم (Cahier d'inventaire de la classe): غلاف ثم [pages] صفحة جدول
      * (الرقم، التعيين، الوضعية: جيدة/متوسطة/رديئة، العدد، تاريخ الوصول، الملاحظات) على نموذج الدفتر الورقي.
      */
-    fun generateClassInventoryHtml(activeClass: ClassSection, pages: Int = 10, rows: Int = 20): String {
+    fun generateClassInventoryHtml(context: Context, activeClass: ClassSection, pages: Int = 10, rows: Int = 20): String {
         val school = escCompHtml(activeClass.schoolName.ifBlank { "............" })
         val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
         val wilaya = escCompHtml(activeClass.wilaya.ifBlank { "............" })
@@ -1718,17 +1733,17 @@ object HtmlReportHelper {
             ".iv-foot{display:flex;justify-content:space-between;margin-top:5mm;font-weight:bold;font-size:11px;}" +
             ".iv-pn{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:9px;font-weight:bold;}" +
             ".cv{text-align:center;}" +
-            ".cv .t{font-size:26px;font-weight:900;margin-top:60mm;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:70mm;}" +
             ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" +
             ".cv .f{text-align:right;margin:14mm 18mm 0 18mm;font-size:16px;font-weight:bold;line-height:2.6;}"
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر أثاث القسم</title><style>$css</style></head><body>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر أثاث القسم</title><style>$css2</style></head><body>")
         // الغلاف
-        html.append("<div class=\"iv-page cv\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>شرف - إخاء - عدالة<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>مديرية التعليم الأساسي</div><div class=\"l\"></div></div>")
-        html.append("<div class=\"t\">دفتر أثاث القسم</div><div class=\"t2\">Cahier d'inventaire de la classe</div>")
-        html.append("<div class=\"f\">المديرية الجهوية للتهذيب الوطني بـ: $wilaya<br>المفتشية المقاطعية للتهذيب بـ: $moughataa<br>المدرسة: $school<br>القسم: $cls<br>السنة الدراسية: $year</div></div>")
+        html.append("<div class=\"iv-page cv\">${coverHeaderHtml(context, activeClass, true)}")
+        html.append("<div class=\"t\">دفتر أثاث القسم</div><div class=\"t2\">Cahier d'inventaire de la classe</div></div>")
         for (page in 1..pages) {
-            html.append("<div class=\"iv-page\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>إدارة التعليم الأساسي<br>م.ج.ت.و: $wilaya &nbsp;&nbsp; م.م.ت: $moughataa</div>")
+            html.append("<div class=\"iv-page\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>وزارة التربية وإصلاح النظام التعليمي<br>الإدارة الجهوية للتربية: $wilaya<br>مفتشية مقاطعة: $moughataa</div>")
             html.append("<div class=\"l\">السنة الدراسية: $year<br>الفصل الدراسي: ............<br>المدرسة: $school<br>القسم: $cls</div></div>")
             html.append("<div class=\"iv-title\">سجل أثاث القسم &nbsp;&nbsp; Cahier d'inventaire de la classe</div>")
             html.append("<table class=\"iv\"><colgroup><col style=\"width:6%\"><col style=\"width:26%\"><col style=\"width:7%\"><col style=\"width:7%\"><col style=\"width:7%\"><col style=\"width:8%\"><col style=\"width:15%\"><col style=\"width:24%\"></colgroup>")
@@ -1749,7 +1764,7 @@ object HtmlReportHelper {
      * دفتر محاضر اجتماع المعلمين (Cahier des PV du conseil des maîtres): غلاف ثم [pages] صفحة،
      * كل صفحة محضر: التاريخ، المعلمون الغائبون والحاضرون، جدول الأعمال، المشاكل والقرارات، والتوقيعات.
      */
-    fun generateCouncilPvHtml(activeClass: ClassSection, pages: Int = 30): String {
+    fun generateCouncilPvHtml(context: Context, activeClass: ClassSection, pages: Int = 30): String {
         val school = escCompHtml(activeClass.schoolName.ifBlank { "............" })
         val wilaya = escCompHtml(activeClass.wilaya.ifBlank { "............" })
         val moughataa = escCompHtml(activeClass.moughataa.ifBlank { "............" })
@@ -1778,14 +1793,14 @@ object HtmlReportHelper {
             ".iv-head{display:flex;justify-content:space-between;height:30mm;}" +
             ".iv-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.55;}" +
             ".cv{text-align:center;}" +
-            ".cv .t{font-size:26px;font-weight:900;margin-top:60mm;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:70mm;}" +
             ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" +
             ".cv .f{text-align:right;margin:14mm 18mm 0 18mm;font-size:16px;font-weight:bold;line-height:2.6;}"
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر محاضر اجتماع المعلمين</title><style>$css</style></head><body>")
-        html.append("<div class=\"pv-page cv\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>شرف - إخاء - عدالة<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>مديرية التعليم الأساسي</div></div>")
-        html.append("<div class=\"t\">دفتر محاضر اجتماع المعلمين</div><div class=\"t2\">Cahier des PV du Conseil des maîtres</div>")
-        html.append("<div class=\"f\">المديرية الجهوية للتهذيب الوطني بـ: $wilaya<br>المفتشية المقاطعية للتهذيب بـ: $moughataa<br>المدرسة: $school<br>السنة الدراسية: $year</div></div>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر محاضر اجتماع المعلمين</title><style>$css2</style></head><body>")
+        html.append("<div class=\"pv-page cv\">${coverHeaderHtml(context, activeClass, false)}")
+        html.append("<div class=\"t\">دفتر محاضر اجتماع المعلمين</div><div class=\"t2\">Cahier des PV du Conseil des maîtres</div></div>")
         for (page in 1..pages) {
             html.append("<div class=\"pv-page\"><div class=\"pv-bar\">دفتر محاضر اجتماع المعلمين &nbsp;&nbsp; Cahier des PV du conseil des maîtres</div>")
             html.append("<div class=\"pv-date\">التاريخ: ........................................................................ &nbsp; date</div>")
@@ -1804,7 +1819,7 @@ object HtmlReportHelper {
      * دفتر زيارات المدرسة (Cahier des visites de l'école): غلاف ثم [pages] صفحة جدول
      * (التاريخ، اسم الزائر، الوظيفة، هدف الزيارة، الملاحظات، التوقيع).
      */
-    fun generateSchoolVisitsHtml(activeClass: ClassSection, pages: Int = 30, rows: Int = 22): String {
+    fun generateSchoolVisitsHtml(context: Context, activeClass: ClassSection, pages: Int = 30, rows: Int = 22): String {
         val school = escCompHtml(activeClass.schoolName.ifBlank { "............" })
         val wilaya = escCompHtml(activeClass.wilaya.ifBlank { "............" })
         val moughataa = escCompHtml(activeClass.moughataa.ifBlank { "............" })
@@ -1823,14 +1838,14 @@ object HtmlReportHelper {
             ".iv-head{display:flex;justify-content:space-between;height:30mm;}" +
             ".iv-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.55;}" +
             ".cv{text-align:center;}" +
-            ".cv .t{font-size:26px;font-weight:900;margin-top:60mm;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:70mm;}" +
             ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" +
             ".cv .f{text-align:right;margin:14mm 18mm 0 18mm;font-size:16px;font-weight:bold;line-height:2.6;}"
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
-        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر زيارات المدرسة</title><style>$css</style></head><body>")
-        html.append("<div class=\"sv-page cv\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>شرف - إخاء - عدالة<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>مديرية التعليم الأساسي</div></div>")
-        html.append("<div class=\"t\">دفتر زيارات المدرسة</div><div class=\"t2\">Cahier des visites de l'école</div>")
-        html.append("<div class=\"f\">المديرية الجهوية للتهذيب الوطني بـ: $wilaya<br>المفتشية المقاطعية للتهذيب بـ: $moughataa<br>المدرسة: $school</div></div>")
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر زيارات المدرسة</title><style>$css2</style></head><body>")
+        html.append("<div class=\"sv-page cv\">${coverHeaderHtml(context, activeClass, false)}")
+        html.append("<div class=\"t\">دفتر زيارات المدرسة</div><div class=\"t2\">Cahier des visites de l'école</div></div>")
         for (page in 1..pages) {
             html.append("<div class=\"sv-page\"><div class=\"sv-bar\">دفتر زيارات المدرسة &nbsp;&nbsp; Cahier des visites de l'école</div>")
             html.append("<table class=\"sv\"><colgroup><col style=\"width:13%\"><col style=\"width:20%\"><col style=\"width:13%\"><col style=\"width:20%\"><col style=\"width:20%\"><col style=\"width:14%\"></colgroup>")
@@ -1905,6 +1920,7 @@ object HtmlReportHelper {
         </div>
         """
 
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر متابعة القسم</title>$styles${PrintDesign.listCss()}")
         html.append("<style>.cmp td, .cmp th { padding: 2px 3px !important; font-size: 9px !important; } .cmp .nm { text-align: right; padding-right: 5px !important; font-weight: bold; white-space: nowrap; } .cmp .mk { font-size: 12px !important; font-weight: 900; } .cmp .lg { font-size: 8px; text-align: right; margin-top: 6px; line-height: 1.5; } .pg { page-break-after: always; break-after: page; } .pg:last-child { page-break-after: auto; break-after: auto; }</style>")
@@ -2047,6 +2063,7 @@ object HtmlReportHelper {
             fileTitle = "سجل معلم الفرنسية"
         )
         
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>سجل معلم الفرنسية</title>${styles}</head><body>")
         
@@ -2154,6 +2171,7 @@ object HtmlReportHelper {
             groups[index % 5].add(student)
         }
 
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الأناشيد</title>$styles${PrintDesign.listCss()}</head><body>")
         html.append("<div class=\"a4-page\"><div class=\"sheet-card\">")
@@ -2257,6 +2275,7 @@ object HtmlReportHelper {
         val groups = split.groups
         val groupLabels = split.labels
 
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الكناسة والنظافة</title>$styles${PrintDesign.listCss()}</head><body>")
         html.append("<div class=\"a4-page\"><div class=\"sheet-card\">")
@@ -2385,6 +2404,7 @@ object HtmlReportHelper {
         val scaleFactor = if (isOutOfTen) 2.0 else 1.0
         val scaleMax = if (isOutOfTen) 10 else 20
         
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة النتائج للقسم</title>$styles${PrintDesign.listCss()}</head><body>")
         
@@ -2654,6 +2674,7 @@ object HtmlReportHelper {
             fileTitle = "دفتر كشف المعدلات السنوي ورتب التجاوز"
         )
         
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة نتائج امتحان التجاوز</title>$styles${PrintDesign.listCss()}</head><body>")
         
@@ -3056,6 +3077,7 @@ object HtmlReportHelper {
         </style>
         """.trimIndent()
 
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف المعدلات الإجمالية</title>$styles${PrintDesign.cardCss()}</head><body>")
 
@@ -3437,6 +3459,7 @@ object HtmlReportHelper {
         </style>
         """.trimIndent()
 
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         val portraitSingleStyles = if (onePerPortraitPage) """
             <style>
@@ -3873,6 +3896,7 @@ object HtmlReportHelper {
         val rankWordM = listOf("الأول", "الثاني", "الثالث")
         val rankWordF = listOf("الأولى", "الثانية", "الثالثة")
 
+        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>شهادات التفوق والتكريم</title>")
         html.append(getCommonStyles(isLandscape = true))
