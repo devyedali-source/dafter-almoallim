@@ -1692,6 +1692,156 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    /**
+     * دفتر أثاث القسم (Cahier d'inventaire de la classe): غلاف ثم [pages] صفحة جدول
+     * (الرقم، التعيين، الوضعية: جيدة/متوسطة/رديئة، العدد، تاريخ الوصول، الملاحظات) على نموذج الدفتر الورقي.
+     */
+    fun generateClassInventoryHtml(activeClass: ClassSection, pages: Int = 10, rows: Int = 20): String {
+        val school = escCompHtml(activeClass.schoolName.ifBlank { "............" })
+        val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
+        val wilaya = escCompHtml(activeClass.wilaya.ifBlank { "............" })
+        val moughataa = escCompHtml(activeClass.moughataa.ifBlank { "............" })
+        val cls = escCompHtml(activeClass.name.ifBlank { "............" })
+        val css = "@page{size:A4 portrait;margin:8mm;}" +
+            "*{box-sizing:border-box;}" +
+            "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
+            ".iv-page{width:100%;height:279mm;overflow:hidden;page-break-after:always;break-after:page;position:relative;}" +
+            ".iv-page:last-child{page-break-after:auto;break-after:auto;}" +
+            ".iv-head{display:flex;justify-content:space-between;align-items:flex-start;height:30mm;}" +
+            ".iv-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.55;}" +
+            ".iv-head .l{flex:1;text-align:left;font-weight:bold;font-size:11px;line-height:1.7;direction:rtl;}" +
+            ".iv-title{text-align:center;font-weight:900;font-size:17px;height:11mm;line-height:11mm;}" +
+            "table.iv{width:100%;border-collapse:collapse;table-layout:fixed;}" +
+            "table.iv th,table.iv td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;overflow:hidden;}" +
+            "table.iv th{background:#efefef;font-weight:900;font-size:11px;height:7mm;}" +
+            "table.iv td{height:9.6mm;font-size:12px;}" +
+            ".iv-foot{display:flex;justify-content:space-between;margin-top:5mm;font-weight:bold;font-size:11px;}" +
+            ".iv-pn{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:9px;font-weight:bold;}" +
+            ".cv{text-align:center;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:60mm;}" +
+            ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" +
+            ".cv .f{text-align:right;margin:14mm 18mm 0 18mm;font-size:16px;font-weight:bold;line-height:2.6;}"
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر أثاث القسم</title><style>$css</style></head><body>")
+        // الغلاف
+        html.append("<div class=\"iv-page cv\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>شرف - إخاء - عدالة<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>مديرية التعليم الأساسي</div><div class=\"l\"></div></div>")
+        html.append("<div class=\"t\">دفتر أثاث القسم</div><div class=\"t2\">Cahier d'inventaire de la classe</div>")
+        html.append("<div class=\"f\">المديرية الجهوية للتهذيب الوطني بـ: $wilaya<br>المفتشية المقاطعية للتهذيب بـ: $moughataa<br>المدرسة: $school<br>القسم: $cls<br>السنة الدراسية: $year</div></div>")
+        for (page in 1..pages) {
+            html.append("<div class=\"iv-page\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>إدارة التعليم الأساسي<br>م.ج.ت.و: $wilaya &nbsp;&nbsp; م.م.ت: $moughataa</div>")
+            html.append("<div class=\"l\">السنة الدراسية: $year<br>الفصل الدراسي: ............<br>المدرسة: $school<br>القسم: $cls</div></div>")
+            html.append("<div class=\"iv-title\">سجل أثاث القسم &nbsp;&nbsp; Cahier d'inventaire de la classe</div>")
+            html.append("<table class=\"iv\"><colgroup><col style=\"width:6%\"><col style=\"width:26%\"><col style=\"width:7%\"><col style=\"width:7%\"><col style=\"width:7%\"><col style=\"width:8%\"><col style=\"width:15%\"><col style=\"width:24%\"></colgroup>")
+            html.append("<thead><tr><th rowspan=\"2\">الرقم</th><th rowspan=\"2\">التعيين</th><th colspan=\"3\">الوضعية</th><th rowspan=\"2\">العدد</th><th rowspan=\"2\">تاريخ الوصول</th><th rowspan=\"2\">الملاحظات</th></tr>")
+            html.append("<tr><th>جيدة</th><th>متوسطة</th><th>رديئة</th></tr></thead><tbody>")
+            repeat(rows) { i ->
+                html.append("<tr><td>${(page - 1) * rows + i + 1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>")
+            }
+            html.append("</tbody></table>")
+            html.append("<div class=\"iv-foot\"><div>اسم وتوقيع المدير وختم المدرسة</div><div>توقيع المعلم أو المعلمين</div></div>")
+            html.append("<div class=\"iv-pn\">$page</div></div>")
+        }
+        html.append("</body></html>")
+        return html.toString()
+    }
+
+    /**
+     * دفتر محاضر جلسات المعلمين (Cahier des PV du conseil des maîtres): غلاف ثم [pages] صفحة،
+     * كل صفحة محضر: التاريخ، المعلمون الغائبون والحاضرون، جدول الأعمال، المشاكل والقرارات، والتوقيعات.
+     */
+    fun generateCouncilPvHtml(activeClass: ClassSection, pages: Int = 30): String {
+        val school = escCompHtml(activeClass.schoolName.ifBlank { "............" })
+        val wilaya = escCompHtml(activeClass.wilaya.ifBlank { "............" })
+        val moughataa = escCompHtml(activeClass.moughataa.ifBlank { "............" })
+        val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
+        fun lines(n: Int, numbered: Boolean, hMm: Double): String {
+            val sb = StringBuilder()
+            for (i in 1..n) sb.append("<div class=\"ln\" style=\"height:${hMm}mm\"><span class=\"nb\">${if (numbered) i.toString() else ""}</span></div>")
+            return sb.toString()
+        }
+        val css = "@page{size:A4 portrait;margin:8mm;}" +
+            "*{box-sizing:border-box;}" +
+            "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:12px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
+            ".pv-page{width:100%;height:279mm;overflow:hidden;page-break-after:always;break-after:page;position:relative;}" +
+            ".pv-page:last-child{page-break-after:auto;break-after:auto;}" +
+            ".pv-bar{background:#d9d9d9;border:1.5px solid #000;text-align:center;font-weight:900;font-size:15px;height:10mm;line-height:10mm;}" +
+            ".pv-date{margin-top:6mm;font-weight:bold;font-size:13px;}" +
+            ".pv-two{display:flex;gap:8mm;margin-top:6mm;}" +
+            ".pv-two>div{flex:1;}" +
+            ".pv-h{font-weight:900;font-size:12px;margin-bottom:2mm;}" +
+            ".ln{border-bottom:1.2px dotted #000;position:relative;}" +
+            ".ln .nb{position:absolute;left:0;bottom:1mm;font-size:11px;}" +
+            ".pv-sec{text-align:center;font-weight:900;font-size:13px;margin:8mm 0 1mm;}" +
+            ".pv-rule{border-top:1.5px solid #000;margin-top:5mm;}" +
+            ".pv-foot{position:absolute;left:0;right:0;bottom:8mm;border-top:1.5px solid #000;padding-top:2mm;display:flex;justify-content:space-between;font-weight:bold;font-size:12px;height:30mm;}" +
+            ".pv-pn{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:9px;font-weight:bold;}" +
+            ".iv-head{display:flex;justify-content:space-between;height:30mm;}" +
+            ".iv-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.55;}" +
+            ".cv{text-align:center;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:60mm;}" +
+            ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" +
+            ".cv .f{text-align:right;margin:14mm 18mm 0 18mm;font-size:16px;font-weight:bold;line-height:2.6;}"
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر محاضر جلسات المعلمين</title><style>$css</style></head><body>")
+        html.append("<div class=\"pv-page cv\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>شرف - إخاء - عدالة<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>مديرية التعليم الأساسي</div></div>")
+        html.append("<div class=\"t\">دفتر محاضر اجتماع المعلمين</div><div class=\"t2\">Cahier des PV du Conseil des maîtres</div>")
+        html.append("<div class=\"f\">المديرية الجهوية للتهذيب الوطني بـ: $wilaya<br>المفتشية المقاطعية للتهذيب بـ: $moughataa<br>المدرسة: $school<br>السنة الدراسية: $year</div></div>")
+        for (page in 1..pages) {
+            html.append("<div class=\"pv-page\"><div class=\"pv-bar\">دفتر محاضر جلسات المعلمين &nbsp;&nbsp; Cahier des PV du conseil des maîtres</div>")
+            html.append("<div class=\"pv-date\">التاريخ: ........................................................................ &nbsp; date</div>")
+            html.append("<div class=\"pv-two\"><div><div class=\"pv-h\">أسماء المعلمين الحاضرين</div>${lines(4, false, 8.0)}</div>")
+            html.append("<div><div class=\"pv-h\">أسماء المعلمين الغائبين</div>${lines(4, false, 8.0)}</div></div>")
+            html.append("<div class=\"pv-rule\"></div><div class=\"pv-sec\">جدول الأعمال &nbsp; Ordre du jour</div>${lines(3, true, 10.0)}")
+            html.append("<div class=\"pv-sec\">المشاكل التي أبديت والقرارات المتخذة</div>${lines(11, true, 10.0)}")
+            html.append("<div class=\"pv-foot\"><div>اسم وتوقيع سكرتير الجلسة</div><div>توقيع المدير</div></div>")
+            html.append("<div class=\"pv-pn\">$page</div></div>")
+        }
+        html.append("</body></html>")
+        return html.toString()
+    }
+
+    /**
+     * دفتر زيارات المدرسة (Cahier des visites de l'école): غلاف ثم [pages] صفحة جدول
+     * (التاريخ، اسم الزائر، الوظيفة، هدف الزيارة، الملاحظات، التوقيع).
+     */
+    fun generateSchoolVisitsHtml(activeClass: ClassSection, pages: Int = 30, rows: Int = 22): String {
+        val school = escCompHtml(activeClass.schoolName.ifBlank { "............" })
+        val wilaya = escCompHtml(activeClass.wilaya.ifBlank { "............" })
+        val moughataa = escCompHtml(activeClass.moughataa.ifBlank { "............" })
+        val rowMm = String.format(java.util.Locale.US, "%.2f", 249.0 / rows)
+        val css = "@page{size:A4 portrait;margin:8mm;}" +
+            "*{box-sizing:border-box;}" +
+            "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
+            ".sv-page{width:100%;height:279mm;overflow:hidden;page-break-after:always;break-after:page;position:relative;}" +
+            ".sv-page:last-child{page-break-after:auto;break-after:auto;}" +
+            ".sv-bar{background:#d9d9d9;border:1.5px solid #000;text-align:center;font-weight:900;font-size:15px;height:10mm;line-height:10mm;margin-bottom:3mm;}" +
+            "table.sv{width:100%;border-collapse:collapse;table-layout:fixed;}" +
+            "table.sv th,table.sv td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;overflow:hidden;}" +
+            "table.sv th{background:#efefef;font-weight:900;font-size:11px;height:11mm;}" +
+            "table.sv td{height:${rowMm}mm;}" +
+            ".sv-pn{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:9px;font-weight:bold;}" +
+            ".iv-head{display:flex;justify-content:space-between;height:30mm;}" +
+            ".iv-head .r{flex:1;text-align:right;font-weight:bold;font-size:11px;line-height:1.55;}" +
+            ".cv{text-align:center;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:60mm;}" +
+            ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" +
+            ".cv .f{text-align:right;margin:14mm 18mm 0 18mm;font-size:16px;font-weight:bold;line-height:2.6;}"
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر زيارات المدرسة</title><style>$css</style></head><body>")
+        html.append("<div class=\"sv-page cv\"><div class=\"iv-head\"><div class=\"r\">الجمهورية الإسلامية الموريتانية<br>شرف - إخاء - عدالة<br>وزارة التعليم الأساسي والثانوي<br>المديرية العامة للتعليم الأساسي والثانوي<br>مديرية التعليم الأساسي</div></div>")
+        html.append("<div class=\"t\">دفتر زيارات المدرسة</div><div class=\"t2\">Cahier des visites de l'école</div>")
+        html.append("<div class=\"f\">المديرية الجهوية للتهذيب الوطني بـ: $wilaya<br>المفتشية المقاطعية للتهذيب بـ: $moughataa<br>المدرسة: $school</div></div>")
+        for (page in 1..pages) {
+            html.append("<div class=\"sv-page\"><div class=\"sv-bar\">دفتر زيارات المدرسة &nbsp;&nbsp; Cahier des visites de l'école</div>")
+            html.append("<table class=\"sv\"><colgroup><col style=\"width:13%\"><col style=\"width:20%\"><col style=\"width:13%\"><col style=\"width:20%\"><col style=\"width:20%\"><col style=\"width:14%\"></colgroup>")
+            html.append("<thead><tr><th>التاريخ<br>Date</th><th>اسم الزائر<br>Nom du visiteur</th><th>الوظيفة<br>Fonction</th><th>هدف الزيارة<br>Objet de la visite</th><th>الملاحظات<br>Remarques et observations</th><th>التوقيع<br>Signature</th></tr></thead><tbody>")
+            repeat(rows) { html.append("<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>") }
+            html.append("</tbody></table><div class=\"sv-pn\">$page</div></div>")
+        }
+        html.append("</body></html>")
+        return html.toString()
+    }
+
     private fun escCompHtml(t: String) = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
     /**

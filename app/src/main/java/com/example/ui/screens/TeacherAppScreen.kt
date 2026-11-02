@@ -1814,7 +1814,7 @@ fun InnerTeacherAppScreenContent(
                             val yearStudents = students.filter { student -> yearClasses.any { it.id == student.classId } }
                             var showDirectorDocs by remember { mutableStateOf(false) }
                             if (showDirectorDocs && yearClasses.isNotEmpty()) {
-                                DirectorDocsDialog(yearClasses.maxByOrNull { it.id }!!, viewModel, onDismiss = { showDirectorDocs = false })
+                                DirectorDocsDialog(yearClasses, viewModel, onDismiss = { showDirectorDocs = false })
                             }
 
                             LazyColumn(
@@ -3489,10 +3489,45 @@ fun TeachersRegisterDialog(section: ClassSection, viewModel: TeacherViewModel, o
 
 /** نافذة «وثائق المدير»: تُضاف إليها أزرار أخرى كلما توفرت وثائق جديدة. */
 @Composable
-fun DirectorDocsDialog(section: ClassSection, viewModel: TeacherViewModel, onDismiss: () -> Unit) {
+fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val defaultSection = sections.maxByOrNull { it.id }!!
     var showTeachersRegister by remember { mutableStateOf(false) }
+    // 1 = دفتر أثاث القسم، 2 = دفتر محاضر جلسات المعلمين (يُختار القسم أولاً عند وجود أكثر من قسم)
+    var pendingDoc by remember { mutableStateOf(0) }
+    fun runDoc(doc: Int, sec: ClassSection) {
+        val school = sec.schoolName.trim().replace(" ", "_")
+        if (doc == 1) {
+            viewModel.runWithLoading("جاري إنشاء دفتر أثاث القسم...") {
+                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateClassInventoryHtml(sec), "دفتر_أثاث_القسم_${sec.name.trim().replace(" ", "_")}.pdf")
+            }
+        } else if (doc == 3) {
+            viewModel.runWithLoading("جاري إنشاء دفتر زيارات المدرسة...") {
+                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateSchoolVisitsHtml(sec), "دفتر_زيارات_المدرسة_$school.pdf")
+            }
+        } else {
+            viewModel.runWithLoading("جاري إنشاء دفتر محاضر جلسات المعلمين...") {
+                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateCouncilPvHtml(sec), "دفتر_محاضر_جلسات_المعلمين_$school.pdf")
+            }
+        }
+    }
     if (showTeachersRegister) {
-        TeachersRegisterDialog(section, viewModel, onDismiss = { showTeachersRegister = false; onDismiss() })
+        TeachersRegisterDialog(defaultSection, viewModel, onDismiss = { showTeachersRegister = false; onDismiss() })
+    }
+    if (pendingDoc == 1) {
+        AlertDialog(
+            onDismissRequest = { pendingDoc = 0 },
+            title = { Text("اختر القسم", fontWeight = FontWeight.Bold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    sections.forEach { sec ->
+                        OutlinedButton(onClick = { pendingDoc = 0; onDismiss(); runDoc(1, sec) }, modifier = Modifier.fillMaxWidth()) { Text(sec.name) }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { pendingDoc = 0 }) { Text("إلغاء") } }
+        )
     }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -3501,6 +3536,15 @@ fun DirectorDocsDialog(section: ClassSection, viewModel: TeacherViewModel, onDis
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = { showTeachersRegister = true }, modifier = Modifier.fillMaxWidth()) {
                     Text("📒 دفتر غياب المعلمين 📥", fontWeight = FontWeight.Bold)
+                }
+                Button(onClick = { if (sections.size == 1) { onDismiss(); runDoc(1, defaultSection) } else pendingDoc = 1 }, modifier = Modifier.fillMaxWidth()) {
+                    Text("🪑 دفتر أثاث القسم 📥", fontWeight = FontWeight.Bold)
+                }
+                Button(onClick = { onDismiss(); runDoc(2, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
+                    Text("📝 دفتر محاضر جلسات المعلمين 📥", fontWeight = FontWeight.Bold)
+                }
+                Button(onClick = { onDismiss(); runDoc(3, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
+                    Text("🚪 دفتر زيارات المدرسة 📥", fontWeight = FontWeight.Bold)
                 }
             }
         },
