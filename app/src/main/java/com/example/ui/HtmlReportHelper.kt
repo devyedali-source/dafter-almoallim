@@ -1919,7 +1919,6 @@ object HtmlReportHelper {
         </div>
         """
 
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر متابعة القسم</title>$styles${PrintDesign.listCss()}")
         html.append("<style>.cmp td, .cmp th { padding: 2px 3px !important; font-size: 9px !important; } .cmp .nm { text-align: right; padding-right: 5px !important; font-weight: bold; white-space: nowrap; } .cmp .mk { font-size: 12px !important; font-weight: 900; } .cmp .lg { font-size: 8px; text-align: right; margin-top: 6px; line-height: 1.5; } .pg { page-break-after: always; break-after: page; } .pg:last-child { page-break-after: auto; break-after: auto; }</style>")
@@ -2062,7 +2061,6 @@ object HtmlReportHelper {
             fileTitle = "سجل معلم الفرنسية"
         )
         
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>سجل معلم الفرنسية</title>${styles}</head><body>")
         
@@ -2170,7 +2168,6 @@ object HtmlReportHelper {
             groups[index % 5].add(student)
         }
 
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الأناشيد</title>$styles${PrintDesign.listCss()}</head><body>")
         html.append("<div class=\"a4-page\"><div class=\"sheet-card\">")
@@ -2274,7 +2271,6 @@ object HtmlReportHelper {
         val groups = split.groups
         val groupLabels = split.labels
 
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>لائحة الكناسة والنظافة</title>$styles${PrintDesign.listCss()}</head><body>")
         html.append("<div class=\"a4-page\"><div class=\"sheet-card\">")
@@ -2403,7 +2399,6 @@ object HtmlReportHelper {
         val scaleFactor = if (isOutOfTen) 2.0 else 1.0
         val scaleMax = if (isOutOfTen) 10 else 20
         
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة النتائج للقسم</title>$styles${PrintDesign.listCss()}</head><body>")
         
@@ -2673,7 +2668,6 @@ object HtmlReportHelper {
             fileTitle = "دفتر كشف المعدلات السنوي ورتب التجاوز"
         )
         
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"format-detection\" content=\"telephone=no, date=no, address=no, email=no\"><title>لائحة نتائج امتحان التجاوز</title>$styles${PrintDesign.listCss()}</head><body>")
         
@@ -3076,7 +3070,6 @@ object HtmlReportHelper {
         </style>
         """.trimIndent()
 
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>كشوف المعدلات الإجمالية</title>$styles${PrintDesign.cardCss()}</head><body>")
 
@@ -3458,7 +3451,6 @@ object HtmlReportHelper {
         </style>
         """.trimIndent()
 
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         val portraitSingleStyles = if (onePerPortraitPage) """
             <style>
@@ -3895,7 +3887,6 @@ object HtmlReportHelper {
         val rankWordM = listOf("الأول", "الثاني", "الثالث")
         val rankWordF = listOf("الأولى", "الثانية", "الثالثة")
 
-        val css2 = css + COVER_CSS
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>شهادات التفوق والتكريم</title>")
         html.append(getCommonStyles(isLandscape = true))
