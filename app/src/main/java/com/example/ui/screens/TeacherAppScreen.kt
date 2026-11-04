@@ -3477,7 +3477,7 @@ fun TeachersRegisterDialog(section: ClassSection, viewModel: TeacherViewModel, o
                         val teachersList = regNames.lines().map { it.trim() }.filter { it.isNotEmpty() }
                         onDismiss()
                         viewModel.runWithLoading("جاري إنشاء دفتر غياب المعلمين (60 صفحة)...") {
-                            val html = HtmlReportHelper.generateTeachersRegisterHtml(section, teachersList)
+                            val html = HtmlReportHelper.generateTeachersRegisterHtml(context, section, teachersList)
                             HtmlReportHelper.shareHtmlAsPdf(context, html, "دفتر_غياب_المعلمين_${section.schoolName.trim().replace(" ", "_")}.pdf")
                         }
                     }

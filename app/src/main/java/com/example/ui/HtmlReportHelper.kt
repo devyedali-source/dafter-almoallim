@@ -1624,6 +1624,7 @@ object HtmlReportHelper {
      * فيه أسماء المعلمين مع [extraRows] خانات فارغة لأسماء معلمين جدد، والدفتر [pages] صفحة.
      */
     fun generateTeachersRegisterHtml(
+        context: Context,
         activeClass: ClassSection,
         teachers: List<String>,
         pages: Int = 60,
@@ -1662,10 +1663,16 @@ object HtmlReportHelper {
             "table.tn td{height:${rowMmN}mm;font-size:${fontN}px;}" +
             "table.tr td.nm{text-align:right;font-weight:bold;padding-right:6px;white-space:nowrap;}" +
             "table.tr tr.first td{border-top:3px solid #000;}" +
-            "table.tr tr.dt td{background:#f3f3f3;font-weight:900;text-align:center;}"
+            "table.tr tr.dt td{background:#f3f3f3;font-weight:900;text-align:center;}" +
+            ".cv{text-align:center;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:70mm;}" +
+            ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" + COVER_CSS
 
         val html = StringBuilder()
         html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>دفتر غياب المعلمين</title><style>$css</style></head><body>")
+        // الغلاف: رأسية التطبيق وشعار الدولة كباقي الدفاتر الإدارية
+        html.append("<div class=\"tr-page cv\">${coverHeaderHtml(context, activeClass, false)}")
+        html.append("<div class=\"t\">دفتر غياب المعلمين</div><div class=\"t2\">Cahier de présence des maîtres</div></div>")
         for (page in 1..pages) {
             val isFirst = page == 1
             val repeats = if (isFirst) repeats1 else repeatsN
