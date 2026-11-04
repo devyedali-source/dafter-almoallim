@@ -65,7 +65,7 @@ import com.example.ui.utils.uiT
 // ============================================================
 // تصحيح بيانات القسم (اسم المدرسة / الولاية / المقاطعة)
 // القواعد (والتحقق النهائي يتم على الخادم):
-//  - تصحيح مباشر مرة واحدة لكل قسم، بشرط ألا يكون القسم مدفوعاً.
+//  - تصحيح مباشر دون حد للمرات، بشرط ألا يكون القسم مفعّلاً (مدفوعاً).
 //  - غير ذلك: طلب تصحيح يوافق عليه المدير.
 // ============================================================
 
@@ -100,7 +100,7 @@ fun EditClassInfoDialog(
             title = { Text(uiT("تأكيد التصحيح"), fontWeight = FontWeight.Bold) },
             text = {
                 Text(
-                    text = "ستُحفظ البيانات الجديدة فوراً، ولن يمكنك التصحيح المباشر لهذا القسم مرة أخرى (أي تصحيح لاحق يحتاج موافقة المدير).\n\n" +
+                    text = "ستُحفظ البيانات الجديدة فوراً. يمكنك تصحيحها مباشرة مرة أخرى ما دام القسم غير مفعّل، وبعد التفعيل يحتاج أي تصحيح موافقة المدير.\n\n" +
                         "المدرسة: ${schoolName.trim()}\nالولاية: $wilaya\nالمقاطعة: $moughataa",
                     style = MaterialTheme.typography.bodyMedium,
                     color = BentoText
@@ -210,7 +210,7 @@ fun EditClassInfoDialog(
                     val infoText: String
                     val infoFg: Color
                     if (currentStatus.canEditDirectly) {
-                        infoText = "يمكنك تصحيح البيانات الآن مباشرة، لكن مرة واحدة فقط لهذا القسم. تأكد من الكتابة الصحيحة قبل الحفظ."
+                        infoText = "يمكنك تصحيح بيانات هذا القسم مباشرة ما دام غير مفعّل. بعد التفعيل يحتاج أي تصحيح إلى موافقة المدير."
                         infoFg = Color(0xFF2E7D32)
                     } else if (currentStatus.lockReason == "PAID") {
                         infoText = "هذا القسم مفعّل (مدفوع)، لذلك يحتاج أي تصحيح إلى موافقة المدير. اكتب البيانات الصحيحة وسبب التصحيح ثم أرسل الطلب."
@@ -326,7 +326,7 @@ fun EditClassInfoDialog(
                             CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         } else {
                             Text(
-                                text = if (isDirect) "حفظ التصحيح (مرة واحدة)" else "إرسال الطلب للمدير 📨",
+                                text = if (isDirect) "حفظ التصحيح" else "إرسال الطلب للمدير 📨",
                                 fontWeight = FontWeight.Bold
                             )
                         }

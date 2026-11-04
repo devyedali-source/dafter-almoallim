@@ -3078,12 +3078,12 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                     (doc.getBoolean("isTerm2Activated") ?: false) ||
                     (doc.getBoolean("isTerm3Activated") ?: false) ||
                     (doc.getBoolean("isTerm4Activated") ?: false)
-                val used = (doc.getLong("infoEditCount") ?: 0L) >= 1L
+                // التصحيح المباشر متاح كل مرة ما دام القسم غير مفعّل (لا حد لعدد المرات قبل التفعيل)
                 @Suppress("UNCHECKED_CAST")
                 val pending = doc.get("pendingInfo") as? Map<String, Any>
                 ClassInfoStatus(
-                    canEditDirectly = !paid && !used,
-                    lockReason = if (paid) "PAID" else if (used) "USED" else "",
+                    canEditDirectly = !paid,
+                    lockReason = if (paid) "PAID" else "",
                     pending = pending
                 )
             } catch (e: Exception) {
@@ -3147,7 +3147,6 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                             (snap.getBoolean("isTerm3Activated") ?: false) ||
                             (snap.getBoolean("isTerm4Activated") ?: false)
                         if (paid) return@runTransaction "PAID"
-                        if ((snap.getLong("infoEditCount") ?: 0L) >= 1L) return@runTransaction "USED"
                         val data = hashMapOf<String, Any>(
                             "id" to local.id,
                             "name" to newName,
@@ -3157,7 +3156,7 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
                             "level" to local.level,
                             "sectionName" to local.sectionName,
                             "academicYear" to local.academicYear,
-                            "infoEditCount" to 1L,
+                            "infoEditCount" to ((snap.getLong("infoEditCount") ?: 0L) + 1L),
                             "infoChangeLog" to com.google.firebase.firestore.FieldValue.arrayUnion(logEntry),
                             "pendingInfo" to com.google.firebase.firestore.FieldValue.delete()
                         )
