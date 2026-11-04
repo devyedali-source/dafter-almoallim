@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -41,6 +42,9 @@ fun ManualGroupsDialog(
     val names = remember { mutableStateListOf<String>() }
     val members = remember { mutableStateListOf<SnapshotStateList<Long>>() }
     var addingTo by remember { mutableStateOf<Int?>(null) }
+    var movingId by remember { mutableStateOf<Long?>(null) }
+    var movingFrom by remember { mutableStateOf(-1) }
+    var cancelGroup by remember { mutableStateOf<Int?>(null) }
 
     LaunchedEffect(Unit) {
         val valid = sorted.map { it.id }.toSet()
@@ -91,17 +95,19 @@ fun ManualGroupsDialog(
                                             singleLine = true,
                                             modifier = Modifier.weight(1f)
                                         )
-                                        TextButton(onClick = {
-                                            names.removeAt(i); members.removeAt(i)
-                                        }) { Text("🗑 حذف") }
+                                        TextButton(onClick = { cancelGroup = i }) { Text("إلغاء المجموعة") }
                                     }
                                     members[i].toList().forEach { id ->
                                         val idx = sorted.indexOfFirst { it.id == id }
                                         val st = sorted.getOrNull(idx)
                                         if (st != null) {
-                                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Row(
+                                                Modifier.fillMaxWidth().clickable { movingId = id; movingFrom = i },
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
                                                 Text("${idx + 1} - ${st.name}", modifier = Modifier.weight(1f), fontSize = 14.sp)
-                                                TextButton(onClick = { members[i].remove(id) }) { Text("✕") }
+                                                Text("↔ نقل", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                                                TextButton(onClick = { members[i].remove(id) }) { Text("إخراج") }
                                             }
                                         }
                                     }
@@ -124,6 +130,36 @@ fun ManualGroupsDialog(
             dismissButton = { TextButton(onClick = { persist(); onDismiss() }) { Text("حفظ فقط") } }
         )
 
+        val mv = movingId
+        if (mv != null && movingFrom in members.indices) {
+            val stName = sorted.firstOrNull { it.id == mv }?.name ?: ""
+            AlertDialog(
+                onDismissRequest = { movingId = null },
+                title = { Text("نقل: $stName") },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text("اختر المجموعة التي تريد نقله إليها:", fontSize = 13.sp)
+                        names.indices.filter { it != movingFrom }.forEach { j ->
+                            Button(onClick = {
+                                members[movingFrom].remove(mv); members[j].add(mv); movingId = null
+                            }, modifier = Modifier.fillMaxWidth()) { Text(names[j].ifBlank { ManualGroups.defaultName(type, j) }) }
+                        }
+                    }
+                },
+                confirmButton = {},
+                dismissButton = { TextButton(onClick = { movingId = null }) { Text("إلغاء") } }
+            )
+        }
+        val cg = cancelGroup
+        if (cg != null && cg in names.indices) {
+            AlertDialog(
+                onDismissRequest = { cancelGroup = null },
+                title = { Text("إلغاء المجموعة؟") },
+                text = { Text("تُلغى المجموعة فقط، ويبقى جميع تلاميذها في القسم دون مجموعة، ويمكنك إضافتهم لمجموعة أخرى.") },
+                confirmButton = { TextButton(onClick = { names.removeAt(cg); members.removeAt(cg); cancelGroup = null }) { Text("نعم، ألغِ المجموعة") } },
+                dismissButton = { TextButton(onClick = { cancelGroup = null }) { Text("رجوع") } }
+            )
+        }
         val target = addingTo
         if (target != null && target < members.size) {
             val picked = remember(target) { mutableStateListOf<Long>() }
