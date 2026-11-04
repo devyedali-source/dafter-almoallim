@@ -188,7 +188,7 @@ object StudentPdfImporter {
                     }
                 }
             }
-            if (name.isBlank()) return@forEachIndexed
+            if (name.isBlank() || !StudentFileImporter.isStudentName(name)) return@forEachIndexed
 
             // الرقم الوطني 9–10 أرقام؛ الرقم المدرسي قبله (6–8)؛ الهواتف 8 أرقام بعده
             val nIdx = digits.indexOfFirst { it.length in 9..10 }

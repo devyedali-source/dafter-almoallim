@@ -261,6 +261,16 @@ object StudentFileImporter {
         return t.split(' ').map { norm(it) }.any { it in noiseWords }
     }
 
+    /** صرامة: لا يُقبل إلا ما يشبه اسم تلميذ فعلًا (كلمتان فأكثر، حروف فقط، بلا كلمات ترويسة أو تذييل). */
+    internal fun isStudentName(s: String): Boolean {
+        val t = s.trim().replace(Regex("\\s+"), " ")
+        if (t.length < 5 || !t.contains(' ')) return false
+        if (t.any { it.isDigit() }) return false
+        if (t.contains(" - ") || t.contains(" – ") || t.contains(" — ")) return false
+        if (isNoiseLine(t)) return false
+        return t.any { it.isLetter() }
+    }
+
     // كلمات لا تأتي في أسماء الناس عادة (لا نضع هنا مثل «شرف» لأنها قد تكون جزءًا من اسم حقيقي)
     private val noiseWords: Set<String> = listOf(
         "توقيع", "المدير", "المديرة", "ختم", "مدرسة", "المدرسة", "الإدارة", "الجهوية", "الرقم", "المدرسي", "وزارة",
@@ -305,7 +315,9 @@ object StudentFileImporter {
             fun cell(ix: Int) = if (ix >= 0 && ix < r.size) r[ix].trim() else ""
             val name = cell(cols.name).replace(Regex("\\s+"), " ")
             if (name.isBlank() || name.all { it.isDigit() }) continue
-            if (isNoiseLine(name)) continue
+            if (!isStudentName(name)) continue
+            // إذا كان في الملف عمود ترقيم فالتلميذ الحقيقي له رقم؛ أسطر التذييل والترويسة بلا رقم
+            if (cols.num >= 0 && digits(cell(cols.num)).toIntOrNull() == null) continue
             out.add(
                 ImportedStudent(
                     number = out.size + 1,
