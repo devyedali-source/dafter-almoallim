@@ -1823,6 +1823,14 @@ fun InnerTeacherAppScreenContent(
                                     .padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
+                                if (yearClasses.isNotEmpty()) {
+                                    item {
+                                        Button(onClick = { showDirectorDocs = true }, modifier = Modifier.fillMaxWidth()) {
+                                            Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold)
+                                        }
+                                    }
+                                }
+
                                 item {
                                     StudentAndClassesStatsCard(
                                         classSections = yearClasses,
@@ -1843,14 +1851,6 @@ fun InnerTeacherAppScreenContent(
                                             fontWeight = FontWeight.Bold,
                                             color = BentoText
                                         )
-                                    }
-                                }
-
-                                if (yearClasses.isNotEmpty()) {
-                                    item {
-                                        Button(onClick = { showDirectorDocs = true }, modifier = Modifier.fillMaxWidth()) {
-                                            Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold)
-                                        }
                                     }
                                 }
 
