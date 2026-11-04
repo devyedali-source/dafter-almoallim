@@ -254,6 +254,19 @@ object StudentFileImporter {
         return tokens.none { it in headerWords }
     }
 
+    /** أسطر التذييل والترويسة التي تأتي تحت العناوين (توقيع المدير، مدرسة ...، الإدارة الجهوية ...) وليست أسماء تلاميذ. */
+    internal fun isNoiseLine(s: String): Boolean {
+        val t = s.trim().replace(Regex("\\s+"), " ")
+        if (t.any { it == ':' || it == '|' || it == '/' }) return true
+        return t.split(' ').map { norm(it) }.any { it in noiseWords }
+    }
+
+    // كلمات لا تأتي في أسماء الناس عادة (لا نضع هنا مثل «شرف» لأنها قد تكون جزءًا من اسم حقيقي)
+    private val noiseWords: Set<String> = listOf(
+        "توقيع", "المدير", "المديرة", "ختم", "مدرسة", "المدرسة", "الإدارة", "الجهوية", "الرقم", "المدرسي", "وزارة",
+        "الجمهورية", "التربية", "الدراسية", "المجموع", "الإجمالي", "لائحة", "قائمة", "التلاميذ", "الأولاد", "البنات"
+    ).map { norm(it) }.toSet()
+
     private val headerWords: Set<String> = listOf(
         "اسم", "الاسم", "لقب", "اللقب", "الجنس", "جنس", "تاريخ", "الميلاد", "مكان", "المدرسه", "مدرسه", "القسم", "قسم",
         "لايحه", "الجمهوريه", "وزاره", "التربيه", "مفتشيه", "السنه", "الدراسيه", "ولايه", "مقاطعه", "رقم", "المجموع",
@@ -292,6 +305,7 @@ object StudentFileImporter {
             fun cell(ix: Int) = if (ix >= 0 && ix < r.size) r[ix].trim() else ""
             val name = cell(cols.name).replace(Regex("\\s+"), " ")
             if (name.isBlank() || name.all { it.isDigit() }) continue
+            if (isNoiseLine(name)) continue
             out.add(
                 ImportedStudent(
                     number = out.size + 1,
