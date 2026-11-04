@@ -2408,6 +2408,8 @@ fun ClassStudentsSubview(
     var showPullMenu by remember { mutableStateOf(false) }
     // خيارات لائحة الطلاب قبل السحب
     var showStudentListOptions by remember { mutableStateOf(false) }
+    var showHymnsDialog by remember { mutableStateOf(false) }
+    var showCleaningDialog by remember { mutableStateOf(false) }
     var optNameMode by remember { mutableStateOf("both") }
     var optSchoolId by remember { mutableStateOf(true) }
     var optNationalId by remember { mutableStateOf(true) }
@@ -2479,6 +2481,50 @@ fun ClassStudentsSubview(
     }
     val allSubjectsForPull by viewModel.subjects.collectAsState()
     val allCustomForPull by viewModel.customizations.collectAsState()
+    if (showHymnsDialog) {
+        ManualGroupsDialog(
+            type = com.example.ui.utils.ManualGroups.HYMNS,
+            title = "🎤 مجموعات المنشدين",
+            classId = activeSection.id,
+            students = classStudents,
+            onGenerate = {
+                val fileClass = activeSection.name.replace(" ", "_")
+                viewModel.runWithLoading("جاري سحب وتصدير لائحة مجموعات المنشدين...") {
+                    val html = HtmlReportHelper.generateHymnsGroupsHtml(
+                        context = context,
+                        className = activeSection.name,
+                        students = classStudents,
+                        activeClass = activeSection,
+                        viewModel = viewModel
+                    )
+                    HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_مجموعات_المنشدين_قسم_$fileClass.pdf")
+                }
+            },
+            onDismiss = { showHymnsDialog = false }
+        )
+    }
+    if (showCleaningDialog) {
+        ManualGroupsDialog(
+            type = com.example.ui.utils.ManualGroups.CLEANING,
+            title = "🧹 مجموعات الكناسة",
+            classId = activeSection.id,
+            students = classStudents,
+            onGenerate = {
+                val fileClass = activeSection.name.replace(" ", "_")
+                viewModel.runWithLoading("جاري سحب وتصدير جدول النظافة والكناسة...") {
+                    val html = HtmlReportHelper.generateCleaningGroupsHtml(
+                        context = context,
+                        className = activeSection.name,
+                        students = classStudents,
+                        activeClass = activeSection,
+                        viewModel = viewModel
+                    )
+                    HtmlReportHelper.shareHtmlAsPdf(context, html, "جدول_النظافة_والكناسة_قسم_$fileClass.pdf")
+                }
+            },
+            onDismiss = { showCleaningDialog = false }
+        )
+    }
     if (showPullMenu) {
         val pullClassName = activeSection.name.replace(" ", "_")
         val needStudents: (String) -> Boolean = { msg ->
@@ -2506,30 +2552,12 @@ fun ClassStudentsSubview(
                     PullListButton("دفتر المتابعة", onDismiss = { showPullMenu = false }) { showCompetency = true }
                     PullListButton("🎤 المنشدين 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("الرجاء تسجيل الطلاب للقسم أولاً للتقسيم")) {
-                            viewModel.runWithLoading("جاري سحب وتصدير لائحة مجموعات المنشدين...") {
-                                val html = HtmlReportHelper.generateHymnsGroupsHtml(
-                                    context = context,
-                                    className = activeSection.name,
-                                    students = classStudents,
-                                    activeClass = activeSection,
-                                    viewModel = viewModel
-                                )
-                                HtmlReportHelper.shareHtmlAsPdf(context, html, "لائحة_مجموعات_المنشدين_قسم_$pullClassName.pdf")
-                            }
+                            showHymnsDialog = true
                         }
                     }
                     PullListButton("🧹 الكناسة 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("لا توجد أسماء بالقسم لبناء جدول النظافة")) {
-                            viewModel.runWithLoading("جاري سحب وتصدير جدول النظافة والكناسة...") {
-                                val html = HtmlReportHelper.generateCleaningGroupsHtml(
-                                    context = context,
-                                    className = activeSection.name,
-                                    students = classStudents,
-                                    activeClass = activeSection,
-                                    viewModel = viewModel
-                                )
-                                HtmlReportHelper.shareHtmlAsPdf(context, html, "جدول_النظافة_والكناسة_قسم_$pullClassName.pdf")
-                            }
+                            showCleaningDialog = true
                         }
                     }
                     PullListButton("📝 سجل معلم الفرنسية 📥", onDismiss = { showPullMenu = false }) {

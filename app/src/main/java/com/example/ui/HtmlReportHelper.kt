@@ -2169,10 +2169,12 @@ object HtmlReportHelper {
         val seal = getMauritanianSealImg(context)
         val styles = getCommonStyles(isLandscape = false)
         
-        // Group students into 5 lists
-        val groups = List(5) { mutableListOf<Student>() }
-        sortedStudents.forEachIndexed { index, student ->
-            groups[index % 5].add(student)
+        // Group students into 5 lists (تلقائي) أو مجموعات حدّدها المستخدم بنفسه
+        val manualGroups = com.example.ui.utils.ManualGroups.resolve(context, com.example.ui.utils.ManualGroups.HYMNS, activeClass.id, sortedStudents)
+        val groups: List<List<Student>> = manualGroups?.map { it.second } ?: run {
+            val auto = List(5) { mutableListOf<Student>() }
+            sortedStudents.forEachIndexed { index, student -> auto[index % 5].add(student) }
+            auto
         }
 
         val html = StringBuilder()
@@ -2202,17 +2204,18 @@ object HtmlReportHelper {
             </div>
             
             ${com.example.ui.utils.ListIcons.hymn}
-            <div class="sheet-title" style="margin-bottom: 20px;">توزيع طلاب القسم إلى خمس مجموعات للإنشاد</div>
+            <div class="sheet-title" style="margin-bottom: 20px;">${if (manualGroups != null) "توزيع طلاب القسم إلى مجموعات للإنشاد" else "توزيع طلاب القسم إلى خمس مجموعات للإنشاد"}</div>
             
             <div class="groups-grid">
         """)
 
-        val groupTitles = listOf("المجموعة الأولى", "المجموعة الثانية", "المجموعة الثالثة", "المجموعة الرابعة", "المجموعة الخامسة")
-        val bgColors = listOf("#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff")
+        val groupTitles = manualGroups?.map { escCompHtml(it.first) } ?: listOf("المجموعة الأولى", "المجموعة الثانية", "المجموعة الثالثة", "المجموعة الرابعة", "المجموعة الخامسة")
+        val bgColors = List(groupTitles.size) { "#ffffff" }
+        val boxStyle = if (manualGroups != null) "flex: 0 0 calc(20% - 8px); " else ""
 
-        for (i in 0 until 5) {
+        for (i in groupTitles.indices) {
             html.append("""
-                <div class="group-box" style="border-color: #000000;">
+                <div class="group-box" style="${boxStyle}border-color: #000000;">
                     <div class="group-box-title" style="background-color: ${bgColors[i]}; border-bottom-color: #000000; font-size: 11px;">
                         ${groupTitles[i]} (${groups[i].size} طالباً)
                     </div>
@@ -2274,8 +2277,9 @@ object HtmlReportHelper {
         val styles = getCommonStyles(isLandscape = false)
         
         // Group students into 5 lists
+        val manualGroups = com.example.ui.utils.ManualGroups.resolve(context, com.example.ui.utils.ManualGroups.CLEANING, activeClass.id, sortedStudents)
         val split = com.example.ui.utils.CleaningGroups.split(sortedStudents, 5)
-        val groups = split.groups
+        val groups: List<List<Student>> = manualGroups?.map { it.second } ?: split.groups
         val groupLabels = split.labels
 
         val html = StringBuilder()
@@ -2305,25 +2309,27 @@ object HtmlReportHelper {
             </div>
             
             ${com.example.ui.utils.ListIcons.cleaning}
-            <div class="sheet-title" style="margin-bottom: 20px;">توزيع الطلاب إلى خمس مجموعات نظافة دورية للتطوير الصحي والتربوي</div>
+            <div class="sheet-title" style="margin-bottom: 20px;">${if (manualGroups != null) "توزيع الطلاب إلى مجموعات نظافة دورية للتطوير الصحي والتربوي" else "توزيع الطلاب إلى خمس مجموعات نظافة دورية للتطوير الصحي والتربوي"}</div>
             
             <div class="groups-grid">
         """)
 
-        val groupTitles = listOf(
+        val groupTitles = manualGroups?.map { escCompHtml(it.first) } ?: listOf(
             "المجموعة الأولى (يوم الاثنين)",
             "المجموعة الثانية (يوم الثلاثاء)",
             "المجموعة الثالثة (يوم الأربعاء)",
             "المجموعة الرابعة (يوم الخميس)",
             "المجموعة الخامسة (يوم الجمعة)"
         )
-        val bgColors = listOf("#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff")
+        val bgColors = List(groupTitles.size) { "#ffffff" }
+        val boxStyle = if (manualGroups != null) "flex: 0 0 calc(20% - 8px); " else ""
 
-        for (i in 0 until 5) {
+        for (i in groupTitles.indices) {
+            val subLine = if (manualGroups != null) "(${groups[i].size})" else "${groupLabels[i]} (${groups[i].size})"
             html.append("""
-                <div class="group-box" style="border-color: #000000;">
+                <div class="group-box" style="${boxStyle}border-color: #000000;">
                     <div class="group-box-title" style="background-color: ${bgColors[i]}; border-bottom-color: #000000; font-size: 11px;">
-                        ${groupTitles[i]}<br>${groupLabels[i]} (${groups[i].size})
+                        ${groupTitles[i]}<br>$subLine
                     </div>
                     <ul class="group-box-content">
             """)
