@@ -2637,7 +2637,10 @@ fun ClassStudentsSubview(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text(uiT("📄 تسجيل التلاميذ من ملف (Excel / PDF / CSV)"), fontWeight = FontWeight.Bold, fontSize = 12.5.sp)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(uiT("📥 حمّل التلاميذ"), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(uiT("إذا كان لديك ملف جاهز (Excel / PDF / CSV) ارفع كل التلاميذ مرة واحدة"), fontSize = 11.sp)
+                }
             }
         }
 
