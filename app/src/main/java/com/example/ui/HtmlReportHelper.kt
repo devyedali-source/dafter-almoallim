@@ -2204,7 +2204,7 @@ object HtmlReportHelper {
             </div>
             
             ${com.example.ui.utils.ListIcons.hymn}
-            <div class="sheet-title" style="margin-bottom: 20px;">${if (manualGroups != null) "توزيع طلاب القسم إلى مجموعات للإنشاد" else "توزيع طلاب القسم إلى خمس مجموعات للإنشاد"}</div>
+            <div class="sheet-title" style="margin-bottom: 20px;">${if (manualGroups != null) "توزيع تلاميذ القسم إلى مجموعات للإنشاد" else "توزيع طلاب القسم إلى خمس مجموعات للإنشاد"}</div>
             
             <div class="groups-grid">
         """)
@@ -2309,7 +2309,7 @@ object HtmlReportHelper {
             </div>
             
             ${com.example.ui.utils.ListIcons.cleaning}
-            <div class="sheet-title" style="margin-bottom: 20px;">${if (manualGroups != null) "توزيع الطلاب إلى مجموعات نظافة دورية للتطوير الصحي والتربوي" else "توزيع الطلاب إلى خمس مجموعات نظافة دورية للتطوير الصحي والتربوي"}</div>
+            <div class="sheet-title" style="margin-bottom: 20px;">${if (manualGroups != null) "توزيع التلاميذ إلى مجموعات نظافة دورية للتطوير الصحي والتربوي" else "توزيع الطلاب إلى خمس مجموعات نظافة دورية للتطوير الصحي والتربوي"}</div>
             
             <div class="groups-grid">
         """)

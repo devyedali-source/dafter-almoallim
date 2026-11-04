@@ -112,7 +112,7 @@ fun ManualGroupsDialog(
                                         }
                                     }
                                     Text("العدد: ${members[i].size}", fontSize = 12.sp)
-                                    Button(onClick = { addingTo = i }, modifier = Modifier.fillMaxWidth()) { Text("➕ إضافة طلاب") }
+                                    Button(onClick = { addingTo = i }, modifier = Modifier.fillMaxWidth()) { Text("➕ إضافة تلاميذ") }
                                 }
                             }
                         }
@@ -167,7 +167,7 @@ fun ManualGroupsDialog(
             val free = sorted.filter { it.id !in taken }
             AlertDialog(
                 onDismissRequest = { addingTo = null },
-                title = { Text("اختر الطلاب (${names[target]})") },
+                title = { Text("اختر التلاميذ (${names[target]})") },
                 text = {
                     if (free.isEmpty()) Text("كل التلاميذ موزّعون على مجموعات.")
                     else LazyColumn(Modifier.heightIn(max = 380.dp)) {
