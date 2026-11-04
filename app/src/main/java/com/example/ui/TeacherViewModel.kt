@@ -3883,10 +3883,14 @@ class TeacherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     /** إضافة عدة تلاميذ دفعة واحدة (استيراد لائحة)؛ كل تلميذ بمعرّف فريد. */
-    fun addStudents(classId: Long, items: List<Pair<com.example.ui.utils.ImportedStudent, String>>, onDone: (Int) -> Unit = {}) {
+    fun addStudents(classId: Long, items: List<Pair<com.example.ui.utils.ImportedStudent, String>>, keepFileNumbers: Boolean = false, onDone: (Int) -> Unit = {}) {
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             var n = 0
-            val base = System.currentTimeMillis() * 1000L
+            // رقم النداء = ترتيب التلميذ حسب المعرّف. إذا كان للملف أرقام نداء خاصة به نضع تلاميذه قبل المسجّلين سابقًا
+            // (معرّفات أصغر) فيحتفظون بأرقامهم كما في الملف، ولا يُزاحمهم تلميذ مسجّل مسبقًا.
+            val existingIds = _students.value.filter { it.classId == classId }.map { it.id }
+            val base = if (keepFileNumbers && existingIds.isNotEmpty()) (existingIds.minOrNull() ?: 0L) - items.size - 1
+                else System.currentTimeMillis() * 1000L
             items.forEachIndexed { i, (it0, gender) ->
                 if (it0.name.isBlank()) return@forEachIndexed
                 try {

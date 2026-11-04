@@ -17,7 +17,9 @@ data class ImportedStudent(
     val nationalId: String = "",
     val phone1: String = "",
     val phone2: String = "",
-    val gender: String = ""
+    val gender: String = "",
+    /** رقم النداء كما هو مكتوب في الملف نفسه؛ 0 = الملف لا يحتوي أرقام نداء */
+    val callNo: Int = 0
 )
 
 /**
@@ -203,7 +205,7 @@ object StudentPdfImporter {
             }
             result.add(
                 ImportedStudent(
-                    number = r.v, name = name, frenchName = french,
+                    number = r.v, callNo = r.v, name = name, frenchName = french,
                     schoolId = school, nationalId = national,
                     phone1 = phones.getOrElse(0) { "" }, phone2 = phones.getOrElse(1) { "" }
                 )

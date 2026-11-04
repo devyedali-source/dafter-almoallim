@@ -59,6 +59,7 @@ fun ImportStudentsDialog(
     var loading by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     var rows by remember { mutableStateOf<List<ImportRow>>(emptyList()) }
+    var askNumbering by remember { mutableStateOf(false) }
     val existingNames = remember(existing) { existing.map { normName(it.name) }.toSet() }
 
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -85,6 +86,27 @@ fun ImportStudentsDialog(
                 loading = false
             }
         }
+    }
+
+    if (askNumbering) {
+        AlertDialog(
+            onDismissRequest = { askNumbering = false },
+            title = { Text(uiT("الملف بلا أرقام نداء"), fontWeight = FontWeight.Bold) },
+            text = {
+                Text(uiT("هذا الملف لا يحتوي أرقام نداء. هل توافق أن يعطي التطبيق التلاميذ أرقام نداء حسب ترتيبهم في الملف، بعد التلاميذ المسجلين في القسم؟"))
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    askNumbering = false
+                    val chosen = rows.filter { it.checked && it.name.isNotBlank() }.map { it.s.copy(name = it.name.trim()) to it.gender }
+                    viewModel.addStudents(section.id, chosen) { n ->
+                        Toast.makeText(context, "تمت إضافة $n تلميذاً إلى القسم ✅", Toast.LENGTH_LONG).show()
+                        onDismiss()
+                    }
+                }) { Text(uiT("موافق")) }
+            },
+            dismissButton = { TextButton(onClick = { askNumbering = false }) { Text(uiT("لا، إلغاء")) } }
+        )
     }
 
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
@@ -132,7 +154,7 @@ fun ImportStudentsDialog(
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Checkbox(checked = r.checked, onCheckedChange = { r.checked = it })
-                                    Text("${r.s.number}", fontSize = 12.sp, modifier = Modifier.width(24.dp))
+                                    Text("${if (r.s.callNo > 0) r.s.callNo else r.s.number}", fontSize = 12.sp, modifier = Modifier.width(24.dp))
                                     OutlinedTextField(
                                         value = r.name,
                                         onValueChange = { r.name = it },
@@ -164,11 +186,17 @@ fun ImportStudentsDialog(
                     OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f)) { Text(uiT("إلغاء")) }
                     Button(
                         onClick = {
-                            val chosen = rows.filter { it.checked && it.name.isNotBlank() }
-                                .map { it.s.copy(name = it.name.trim()) to it.gender }
-                            viewModel.addStudents(section.id, chosen) { n ->
-                                Toast.makeText(context, "تمت إضافة $n تلميذاً إلى القسم ✅", Toast.LENGTH_LONG).show()
-                                onDismiss()
+                            val chosenRows = rows.filter { it.checked && it.name.isNotBlank() }
+                            val fileHasNumbers = chosenRows.isNotEmpty() && chosenRows.all { it.s.callNo > 0 }
+                            if (fileHasNumbers) {
+                                // الملف فيه أرقام نداء: تُحفظ كما هي بترتيب الملف
+                                val chosen = chosenRows.sortedBy { it.s.callNo }.map { it.s.copy(name = it.name.trim()) to it.gender }
+                                viewModel.addStudents(section.id, chosen, keepFileNumbers = true) { n ->
+                                    Toast.makeText(context, "تمت إضافة $n تلميذاً بأرقام النداء التي في الملف ✅", Toast.LENGTH_LONG).show()
+                                    onDismiss()
+                                }
+                            } else {
+                                askNumbering = true
                             }
                         },
                         modifier = Modifier.weight(1f),

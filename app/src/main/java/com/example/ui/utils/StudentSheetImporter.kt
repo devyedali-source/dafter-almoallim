@@ -214,7 +214,7 @@ object StudentFileImporter {
 
     private data class Cols(
         val name: Int, val french: Int, val school: Int, val national: Int,
-        val phone1: Int, val phone2: Int, val gender: Int
+        val phone1: Int, val phone2: Int, val gender: Int, val num: Int = -1
     )
 
     private fun detect(header: List<String>): Cols? {
@@ -233,7 +233,9 @@ object StudentFileImporter {
         val phones = h.indices.filter { h[it].contains("هاتف") || h[it].contains("tel") || h[it].contains("phone") || h[it].contains("جوال") || h[it].contains("واتس") }
         val p1 = phones.firstOrNull { h[it].contains("1") || h[it].contains("اول") } ?: phones.firstOrNull() ?: -1
         val p2 = phones.firstOrNull { it != p1 && (h[it].contains("2") || h[it].contains("ثاني")) } ?: phones.firstOrNull { it != p1 } ?: -1
-        return Cols(name, french, school, national, p1, p2, gender)
+        val numHeaders = setOf("رقم", "الرقم", "رقمالنداء", "النداء", "رت", "ترتيب", "الترتيب", "تسلسل", "التسلسل", "n", "no", "num", "numero", "#", "ت", "م")
+        val num = h.indices.firstOrNull { it != name && it != school && it != national && (h[it] in numHeaders || h[it].contains("نداء")) } ?: -1
+        return Cols(name, french, school, national, p1, p2, gender, num)
     }
 
     private fun digits(s: String) = s.filter { it.isDigit() }
@@ -293,6 +295,7 @@ object StudentFileImporter {
             out.add(
                 ImportedStudent(
                     number = out.size + 1,
+                    callNo = digits(cell(cols.num)).toIntOrNull()?.takeIf { it > 0 } ?: 0,
                     name = name,
                     frenchName = cell(cols.french),
                     schoolId = digits(cell(cols.school)),
