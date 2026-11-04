@@ -2409,6 +2409,7 @@ fun ClassStudentsSubview(
     // خيارات لائحة الطلاب قبل السحب
     var showStudentListOptions by remember { mutableStateOf(false) }
     var showHymnsDialog by remember { mutableStateOf(false) }
+    var showRegisterOptions by remember { mutableStateOf(false) }
     var showCleaningDialog by remember { mutableStateOf(false) }
     var optNameMode by remember { mutableStateOf("both") }
     var optSchoolId by remember { mutableStateOf(true) }
@@ -2590,7 +2591,7 @@ fun ClassStudentsSubview(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        contentPadding = PaddingValues(bottom = 150.dp),
+        contentPadding = PaddingValues(bottom = 90.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         // سحب اللوائح + زر البحث في صف واحد (لا فراغ بينهما وبين الإحصائيات)
@@ -2817,30 +2818,41 @@ fun ClassStudentsSubview(
                     .padding(24.dp)
             )
         }
-        Column(
+        androidx.compose.material3.ExtendedFloatingActionButton(
+            onClick = { showRegisterOptions = true },
+            containerColor = BentoPrimary,
+            contentColor = Color.White,
+            shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            androidx.compose.material3.ExtendedFloatingActionButton(
-                onClick = { showImportStudentsDialog = true },
-                containerColor = Color.White,
-                contentColor = BentoPrimary,
-                shape = RoundedCornerShape(16.dp),
-                icon = { Text("📥", fontSize = 18.sp) },
-                text = { Text(uiT("حمّل التلاميذ من ملف"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
-            )
-            androidx.compose.material3.ExtendedFloatingActionButton(
-                onClick = { showAddStudentDialog = true },
-                containerColor = BentoPrimary,
-                contentColor = Color.White,
-                shape = RoundedCornerShape(16.dp),
-                icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل طالب جديد", modifier = Modifier.size(24.dp)) },
-                text = { BiText(ar = uiT("طالب جديد"), fr = BiFr.of("طالب جديد"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
-            )
-        }
+            icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل التلاميذ", modifier = Modifier.size(24.dp)) },
+            text = { Text(uiT("تسجيل التلاميذ"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
+        )
+    }
+
+    if (showRegisterOptions) {
+        AlertDialog(
+            onDismissRequest = { showRegisterOptions = false },
+            title = { Text(uiT("تسجيل التلاميذ"), fontWeight = FontWeight.Bold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Button(
+                        onClick = { showRegisterOptions = false; showAddStudentDialog = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp)
+                    ) { Text(uiT("+ طالب جديد"), fontWeight = FontWeight.Bold) }
+                    OutlinedButton(
+                        onClick = { showRegisterOptions = false; showImportStudentsDialog = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp)
+                    ) { Text(uiT("📥 رفع ملف التلاميذ"), fontWeight = FontWeight.Bold) }
+                    Text(uiT("إذا كان لديك ملف جاهز (Excel / PDF / CSV) ارفع كل التلاميذ مرة واحدة"), fontSize = 12.sp)
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { showRegisterOptions = false }) { Text(uiT("إلغاء")) } }
+        )
     }
 
     // Deletion Confirmation dialog
