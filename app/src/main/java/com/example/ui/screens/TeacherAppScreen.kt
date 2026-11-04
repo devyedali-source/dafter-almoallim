@@ -2590,6 +2590,7 @@ fun ClassStudentsSubview(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
+        contentPadding = PaddingValues(bottom = 150.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         // سحب اللوائح + زر البحث في صف واحد (لا فراغ بينهما وبين الإحصائيات)
@@ -2627,19 +2628,6 @@ fun ClassStudentsSubview(
                         tint = if (isSearchVisible) Color.White else BentoPrimary,
                         modifier = Modifier.size(18.dp)
                     )
-                }
-            }
-        }
-
-        item {
-            OutlinedButton(
-                onClick = { showImportStudentsDialog = true },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp)
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(uiT("📥 حمّل التلاميذ"), fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(uiT("إذا كان لديك ملف جاهز (Excel / PDF / CSV) ارفع كل التلاميذ مرة واحدة"), fontSize = 11.sp)
                 }
             }
         }
@@ -2829,17 +2817,30 @@ fun ClassStudentsSubview(
                     .padding(24.dp)
             )
         }
-        androidx.compose.material3.ExtendedFloatingActionButton(
-            onClick = { showAddStudentDialog = true },
-            containerColor = BentoPrimary,
-            contentColor = Color.White,
-            shape = RoundedCornerShape(16.dp),
+        Column(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(24.dp),
-            icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل طالب جديد", modifier = Modifier.size(24.dp)) },
-            text = { BiText(ar = uiT("طالب جديد"), fr = BiFr.of("طالب جديد"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
-        )
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.End
+        ) {
+            androidx.compose.material3.ExtendedFloatingActionButton(
+                onClick = { showImportStudentsDialog = true },
+                containerColor = Color.White,
+                contentColor = BentoPrimary,
+                shape = RoundedCornerShape(16.dp),
+                icon = { Text("📥", fontSize = 18.sp) },
+                text = { Text(uiT("حمّل التلاميذ من ملف"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
+            )
+            androidx.compose.material3.ExtendedFloatingActionButton(
+                onClick = { showAddStudentDialog = true },
+                containerColor = BentoPrimary,
+                contentColor = Color.White,
+                shape = RoundedCornerShape(16.dp),
+                icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل طالب جديد", modifier = Modifier.size(24.dp)) },
+                text = { BiText(ar = uiT("طالب جديد"), fr = BiFr.of("طالب جديد"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
+            )
+        }
     }
 
     // Deletion Confirmation dialog
