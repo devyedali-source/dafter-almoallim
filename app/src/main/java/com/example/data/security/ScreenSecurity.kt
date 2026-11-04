@@ -18,4 +18,21 @@ object ScreenSecurity {
             false
         }
     }
+
+    // عدّاد: عدة شاشات قد تطلب المنع معًا (التخطيط السنوي + شاشة الدرس). المنع لا يُرفع إلا عند خروج آخرها.
+    private var holders = 0
+
+    fun acquire(activity: android.app.Activity?) {
+        synchronized(this) {
+            holders++
+            activity?.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+
+    fun release(activity: android.app.Activity?) {
+        synchronized(this) {
+            if (holders > 0) holders--
+            if (holders == 0) activity?.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
 }

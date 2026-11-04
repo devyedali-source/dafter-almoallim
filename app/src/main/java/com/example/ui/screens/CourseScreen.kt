@@ -122,11 +122,11 @@ fun CourseScreen() {
         // مدير الأقسام وحده مسموح له بلقطات الشاشة وتسجيلها؛ باقي المستخدمين يبقون محميين
         val secureEnabled = !isBeforeOct2026 && !com.example.data.security.ScreenSecurity.isCaptureAllowedForCurrentUser()
         if (secureEnabled) {
-            activity?.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+            com.example.data.security.ScreenSecurity.acquire(activity)
         }
         onDispose {
             if (secureEnabled) {
-                activity?.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+                com.example.data.security.ScreenSecurity.release(activity)
             }
         }
     }
