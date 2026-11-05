@@ -635,6 +635,13 @@ fun InnerTeacherAppScreenContent(
             val selectedClassId by viewModel.selectedClassId.collectAsState()
 
             var showClassManagerInside by remember { mutableStateOf(false) }
+            var showUserGuide by remember { mutableStateOf(false) }
+            LaunchedEffect(Unit) {
+                if (!isUserGuideSeen(context)) showUserGuide = true
+            }
+            if (showUserGuide) {
+                UserGuideDialog(onDismiss = { markUserGuideSeen(context); showUserGuide = false })
+            }
             var targetActivationEmail by remember { mutableStateOf<String?>(null) }
             var targetActivationClassId by remember { mutableStateOf<Long?>(null) }
             var activeActivationRequestId by remember { mutableStateOf<String?>(null) }
@@ -1040,6 +1047,17 @@ fun InnerTeacherAppScreenContent(
                                     scope.launch { drawerState.close() }
                                 },
                                 icon = { Icon(Icons.Default.Home, contentDescription = null, tint = BentoPrimary) },
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
+                            )
+
+                            NavigationDrawerItem(
+                                label = { Text("❓ كيف أستخدم التطبيق؟", fontWeight = FontWeight.Bold, fontSize = 13.sp) },
+                                selected = false,
+                                onClick = {
+                                    showUserGuide = true
+                                    scope.launch { drawerState.close() }
+                                },
+                                icon = { Icon(Icons.Default.Info, contentDescription = null, tint = BentoPrimary) },
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp)
                             )
 
