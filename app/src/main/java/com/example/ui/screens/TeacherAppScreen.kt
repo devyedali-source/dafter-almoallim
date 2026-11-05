@@ -12333,6 +12333,23 @@ fun AboutAppScreen(
         }
 
         item {
+            Button(
+                onClick = {
+                    try {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = android.net.Uri.parse("mailto:devyedali@gmail.com")
+                            putExtra(Intent.EXTRA_SUBJECT, "اقتراح / طلب خدمة - تطبيقي المدرسي")
+                        }
+                        context.startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "لا يوجد تطبيق بريد على هذا الهاتف. راسلنا على: devyedali@gmail.com", Toast.LENGTH_LONG).show()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text("✉️ التواصل مع المطور (لإضافة مزايا أو أي خدمات تخدم المعلم)", fontWeight = FontWeight.Bold, fontSize = 13.sp, textAlign = TextAlign.Center)
+            }
         }
 
         // 2. Official Social Channels (قناة الواتساب وصفحة الفيسبوك)
