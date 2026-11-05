@@ -12338,7 +12338,7 @@ fun AboutAppScreen(
                     try {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                             data = android.net.Uri.parse("mailto:devyedali@gmail.com")
-                            putExtra(Intent.EXTRA_SUBJECT, "اقتراح / طلب خدمة - تطبيقي المدرسي")
+                            putExtra(Intent.EXTRA_SUBJECT, "اقتراح / ملاحظة - تطبيقي المدرسي")
                         }
                         context.startActivity(intent)
                     } catch (e: Exception) {
@@ -12348,7 +12348,7 @@ fun AboutAppScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text("✉️ التواصل مع المطور (لإضافة مزايا أو أي خدمات تخدم المعلم)", fontWeight = FontWeight.Bold, fontSize = 13.sp, textAlign = TextAlign.Center)
+                Text("✉️ التواصل مع المطور (لإضافة مزايا أو أي خدمات تخدم المعلم)\nأو إبداء أي ملاحظات لعرضها على فريق إدارة التطبيق", fontWeight = FontWeight.Bold, fontSize = 13.sp, textAlign = TextAlign.Center)
             }
         }
 
