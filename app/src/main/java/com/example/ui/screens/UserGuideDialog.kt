@@ -58,6 +58,24 @@ private val reportsPages = listOf(
     ), "reports")
 )
 
+private val homePages = listOf(
+    GuidePage("🏫 كيف أنتقل بين الأقسام؟", listOf(
+        GuideStep("في الصفحة الرئيسية اضغط على السنة الدراسية التي تعمل فيها.", R.drawable.guide_h_years),
+        GuideStep("تظهر أقسام هذه السنة. اضغط على القسم الذي تريده لتدخل إليه.", R.drawable.guide_h_classes),
+        GuideStep("وإن كنت داخل قسم وتريد الخروج إلى قسم آخر: اضغط الثلاث نقاط (☰) ثم «الصفحة الرئيسية والأقسام»، ثم اختر السنة، ثم القسم.", R.drawable.guide_d_home)
+    ), "home"),
+    GuidePage("➕ كيف أنشئ قسمًا؟", listOf(
+        GuideStep("افتح السنة الدراسية، ثم اضغط زر «إنشاء قسم» في أسفل الصفحة.", R.drawable.guide_h_classes),
+        GuideStep("اختر الولاية، ثم المقاطعة، ثم المستوى الدراسي من 1 إلى 6، ثم العام الدراسي.", R.drawable.guide_h_create),
+        GuideStep("اضغط «إنشاء القسم»، فيظهر القسم في قائمة أقسام السنة.")
+    ), "home"),
+    GuidePage("🗂️ كيف أسحب دفاتر المدير؟", listOf(
+        GuideStep("افتح السنة الدراسية، ثم اضغط زر «🗂️ وثائق المدير» في أعلى الصفحة (يظهر إذا كان عندك قسم واحد على الأقل).", R.drawable.guide_h_classes),
+        GuideStep("اختر الدفتر الذي تريده: دفتر غياب المعلمين، أو دفتر أثاث القسم، أو دفتر محاضر اجتماع المعلمين، أو دفتر زيارات المدرسة.", R.drawable.guide_h_docs),
+        GuideStep("تُسحب الدفاتر فارغة بغلاف جاهز، لتملأها يدويًا بعد الطباعة. أما دفتر غياب المعلمين فتكتب أسماء المعلمين قبل سحبه.")
+    ), "home")
+)
+
 private val studentsPages = listOf(
     GuidePage("🧭 ما أزرار صفحة الطلاب؟", listOf(
         GuideStep("في الأعلى: «سحب اللوائح» لسحب اللوائح والدفاتر، وزر الملف 📄 لرفع كل التلاميذ من ملف، وزر البحث 🔍 للبحث عن تلميذ بالاسم.", R.drawable.guide_reg),
@@ -166,6 +184,7 @@ fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
         when (section) {
             "reports" -> reportsPages
             "students" -> studentsPages
+            "home" -> homePages
             "results" -> resultsPages
             "planning" -> planningPages
             "timetable" -> timetablePages
@@ -175,6 +194,7 @@ fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
     val guideTitle = when (section) {
         "reports" -> "❓ مرشد صفحة الكشوف"
         "students" -> "❓ مرشد صفحة الطلاب"
+        "home" -> "❓ مرشد الصفحة الرئيسية والأقسام"
         "results" -> "❓ مرشد صفحة النتائج"
         "planning" -> "❓ مرشد التخطيط السنوي"
         "timetable" -> "❓ مرشد الجدول الزمني"

@@ -1713,14 +1713,20 @@ fun InnerTeacherAppScreenContent(
                                 }
 
                                 item {
-                                    com.example.ui.utils.BiText(
-                                        ar = "اختر السنة الدراسية للعمل عليها 📅",
-                                        fontSize = 16.sp,
-                                        frSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = BentoText,
-                                        modifier = Modifier.padding(top = 8.dp)
-                                    )
+                                    var showHomeGuide2 by remember { mutableStateOf(false) }
+                                    if (showHomeGuide2) UserGuideDialog(onDismiss = { showHomeGuide2 = false }, section = "home")
+                                    Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        Box(Modifier.weight(1f)) {
+                                            com.example.ui.utils.BiText(
+                                                ar = "اختر السنة الدراسية للعمل عليها 📅",
+                                                fontSize = 16.sp,
+                                                frSize = 11.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = BentoText
+                                            )
+                                        }
+                                        OutlinedButton(onClick = { showHomeGuide2 = true }, contentPadding = PaddingValues(horizontal = 14.dp)) { Text("❓ مرشد", fontWeight = FontWeight.Bold) }
+                                    }
                                 }
 
                                 if (registeredYears.isEmpty()) {
@@ -1842,11 +1848,18 @@ fun InnerTeacherAppScreenContent(
                                     .padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-                                if (yearClasses.isNotEmpty()) {
-                                    item {
-                                        Button(onClick = { showDirectorDocs = true }, modifier = Modifier.fillMaxWidth()) {
-                                            Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold)
+                                item {
+                                    var showHomeGuide by remember { mutableStateOf(false) }
+                                    if (showHomeGuide) UserGuideDialog(onDismiss = { showHomeGuide = false }, section = "home")
+                                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        if (yearClasses.isNotEmpty()) {
+                                            Button(onClick = { showDirectorDocs = true }, modifier = Modifier.weight(1f)) {
+                                                Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold)
+                                            }
+                                        } else {
+                                            Spacer(Modifier.weight(1f))
                                         }
+                                        OutlinedButton(onClick = { showHomeGuide = true }, contentPadding = PaddingValues(horizontal = 14.dp)) { Text("❓ مرشد", fontWeight = FontWeight.Bold) }
                                     }
                                 }
 
