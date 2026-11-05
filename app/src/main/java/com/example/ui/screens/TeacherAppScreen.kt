@@ -8746,6 +8746,8 @@ fun EnhancedReportsTab(
     val veryGoodBoundT3 by viewModel.veryGoodBoundT3.collectAsState()
 
     var showSettingsDialog by remember { mutableStateOf(false) }
+    var showReportsGuide by remember { mutableStateOf(false) }
+    if (showReportsGuide) UserGuideDialog(onDismiss = { showReportsGuide = false }, section = "reports")
     var showPrintDesignDialog by remember { mutableStateOf(false) }
     var settingsTermId by remember { mutableStateOf(if (activeTermId in 1..3) activeTermId else 3) }
 
@@ -8868,6 +8870,16 @@ fun EnhancedReportsTab(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                IconButton(
+                    onClick = { showReportsGuide = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFFFFF3E0))
+                        .border(1.dp, Color(0xFFEF6C00), RoundedCornerShape(10.dp))
+                ) {
+                    Text("❓", fontSize = 20.sp)
+                }
                 IconButton(
                     onClick = { showSettingsDialog = true },
                     modifier = Modifier

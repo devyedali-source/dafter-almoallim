@@ -30,7 +30,33 @@ fun markUserGuideSeen(context: Context) {
 }
 
 private data class GuideStep(val text: String, val img: Int? = null)
-private data class GuidePage(val question: String, val steps: List<GuideStep>)
+private data class GuidePage(val question: String, val steps: List<GuideStep>, val section: String = "general")
+
+private val reportsPages = listOf(
+    GuidePage("⚙️ ماذا يفعل زر الإعدادات؟", listOf(
+        GuideStep("في أعلى صفحة «الكشوف» اضغط زر الإعدادات ⚙️.", R.drawable.guide_k_settings),
+        GuideStep("تظهر «إعدادات القسم والملاحظات»، وفيها: تعديل مواد القسم والدرجات القصوى، واختيار الدرجات من 10، وتعديل مجالات التقييم والملاحظات لكل فصل.")
+    ), "reports"),
+    GuidePage("🔏 ماذا يفعل زر الطابع؟", listOf(
+        GuideStep("اضغط زر الطابع تحت زر الإعدادات.", R.drawable.guide_k_stamp),
+        GuideStep("من نافذة «إنشاء وختم الطابع الرسمي» تنشئ الطابع والتوقيع، فيظهران على الكشوف واللوائح التي تسحبها.")
+    ), "reports"),
+    GuidePage("🎨 كيف أغيّر شكل الكشوف واللوائح؟", listOf(
+        GuideStep("اضغط زر 🎨 تحت زر الطابع.", R.drawable.guide_k_design),
+        GuideStep("اختر رأسية اللوائح وتصميم الكشوف وتصميم شهادات التفوق. التصميم يغيّر الزخرفة فقط ولا يغيّر أي معلومة.")
+    ), "reports"),
+    GuidePage("📅 كيف أختار الفصل؟", listOf(
+        GuideStep("اضغط على خانة «الفصل الدراسي» واختر الفصل الأول أو الثاني أو الثالث.", R.drawable.guide_k_term),
+        GuideStep("الكشوف التي تظهر تحتها تتغيّر حسب الفصل الذي اخترته.")
+    ), "reports"),
+    GuidePage("🖨️ ما أنواع الكشوف واللوائح؟", listOf(
+        GuideStep("تحت عبارة «اختر التقرير أو الكشف المطلوب» ثلاثة أنواع:", R.drawable.guide_k_types),
+        GuideStep("🖨️ كشوف: كشف لكل ورقة، أو كشفان في الورقة، أو ثلاثة كشوف في الورقة (توفيرًا للورق)."),
+        GuideStep("📊 لائحة النتائج التفصيلية: لائحة واحدة بنتائج القسم كله."),
+        GuideStep("👤 كشف فردي: تختار تلميذًا وتسحب كشفه وحده."),
+        GuideStep("اضغط النوع الذي تريده فيجهّز التطبيق الملف لتحفظه أو ترسله بصيغة PDF.")
+    ), "reports")
+)
 
 private val guidePages = listOf(
     GuidePage("🏫 كيف أنتقل إلى قسم آخر؟", listOf(
@@ -75,18 +101,19 @@ private val guidePages = listOf(
 
 /** مرشد بسيط: قائمة أسئلة، وكل سؤال في صفحة مستقلة بخطوات وصور وأسهم. */
 @Composable
-fun UserGuideDialog(onDismiss: () -> Unit) {
+fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
+    val pages = remember(section) { if (section == "reports") reportsPages else guidePages }
     var page by remember { mutableStateOf<Int?>(null) }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        val current = page?.let { guidePages.getOrNull(it) }
+        val current = page?.let { pages.getOrNull(it) }
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text(current?.question ?: "❓ كيف أستخدم التطبيق؟", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+            title = { Text(current?.question ?: (if (section == "reports") "❓ مرشد صفحة الكشوف" else "❓ كيف أستخدم التطبيق؟"), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
                 Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (current == null) {
                         Text("اختر السؤال الذي يشغلك:", fontSize = 14.sp)
-                        guidePages.forEachIndexed { i, g ->
+                        pages.forEachIndexed { i, g ->
                             OutlinedButton(onClick = { page = i }, modifier = Modifier.fillMaxWidth()) {
                                 Text(g.question, fontSize = 14.sp)
                             }
