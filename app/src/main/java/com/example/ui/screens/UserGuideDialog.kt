@@ -3,6 +3,9 @@ package com.example.ui.screens
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
@@ -13,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
@@ -283,4 +287,19 @@ fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
             dismissButton = if (current != null) ({ TextButton(onClick = onDismiss) { Text("إغلاق") } }) else null
         )
     }
+}
+
+/** زر المرشد: صغير (نصف حجم أزرار الصفحات) ليبقى بعيدًا عن الأزرار الأساسية. */
+@Composable
+fun SmallGuideButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp)
+    Box(
+        modifier = modifier
+            .size(22.dp)
+            .clip(shape)
+            .background(androidx.compose.ui.graphics.Color(0xFFFFF3E0))
+            .border(1.dp, androidx.compose.ui.graphics.Color(0xFFEF6C00), shape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) { Text("❓", fontSize = 11.sp) }
 }

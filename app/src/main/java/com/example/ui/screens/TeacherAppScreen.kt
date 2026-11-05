@@ -1240,7 +1240,7 @@ fun InnerTeacherAppScreenContent(
                                         Spacer(Modifier.weight(1f))
                                         var showSyncGuide by remember { mutableStateOf(false) }
                                         if (showSyncGuide) UserGuideDialog(onDismiss = { showSyncGuide = false }, section = "sync")
-                                        TextButton(onClick = { showSyncGuide = true }, contentPadding = PaddingValues(horizontal = 6.dp), modifier = Modifier.height(28.dp)) { Text("❓ مرشد", fontSize = 11.sp, fontWeight = FontWeight.Bold) }
+                                        SmallGuideButton(onClick = { showSyncGuide = true })
                                     }
                                     BiText(ar = uiTf("آخر مزامنة: {0}", formattedDriveTimeStr), fr = BiFr.f("آخر مزامنة: {0}", formattedDriveTimeStr), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF33691E))
                                     val driveProblem by viewModel.driveSyncProblem.collectAsState()
@@ -1729,7 +1729,7 @@ fun InnerTeacherAppScreenContent(
                                                 color = BentoText
                                             )
                                         }
-                                        OutlinedButton(onClick = { showHomeGuide2 = true }, contentPadding = PaddingValues(horizontal = 14.dp)) { Text("❓ مرشد", fontWeight = FontWeight.Bold) }
+                                        SmallGuideButton(onClick = { showHomeGuide2 = true })
                                     }
                                 }
 
@@ -1863,7 +1863,7 @@ fun InnerTeacherAppScreenContent(
                                         } else {
                                             Spacer(Modifier.weight(1f))
                                         }
-                                        OutlinedButton(onClick = { showHomeGuide = true }, contentPadding = PaddingValues(horizontal = 14.dp)) { Text("❓ مرشد", fontWeight = FontWeight.Bold) }
+                                        SmallGuideButton(onClick = { showHomeGuide = true })
                                     }
                                 }
 
@@ -2661,13 +2661,7 @@ fun ClassStudentsSubview(
                         modifier = Modifier.size(18.dp)
                     )
                 }
-                IconButton(
-                    onClick = { showStudentsGuide = true },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(Color(0xFFFFF3E0), RoundedCornerShape(12.dp))
-                        .border(1.dp, Color(0xFFEF6C00), RoundedCornerShape(12.dp))
-                ) { Text("❓", fontSize = 18.sp) }
+                SmallGuideButton(onClick = { showStudentsGuide = true })
                 IconButton(
                     onClick = { isSearchVisible = !isSearchVisible },
                     modifier = Modifier
@@ -5906,13 +5900,7 @@ fun GradesEntryTab(
                 Box(Modifier.weight(1f)) {
             BiText(ar = AppLocalization.tr("grades_entry_title", "رصد وإدخال درجات الطلاب 📝", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("رصد وإدخال درجات الطلاب 📝"), fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
                 }
-                IconButton(
-                    onClick = { showResultsGuide = true },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(Color(0xFFFFF3E0), RoundedCornerShape(12.dp))
-                        .border(1.dp, Color(0xFFEF6C00), RoundedCornerShape(12.dp))
-                ) { Text("❓", fontSize = 18.sp) }
+                SmallGuideButton(onClick = { showResultsGuide = true })
             }
             BiText(ar = AppLocalization.tr("grades_entry_subtitle", "يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات.", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.bodySmall.fontSize)
             
@@ -8909,16 +8897,7 @@ fun EnhancedReportsTab(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                IconButton(
-                    onClick = { showReportsGuide = true },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color(0xFFFFF3E0))
-                        .border(1.dp, Color(0xFFEF6C00), RoundedCornerShape(10.dp))
-                ) {
-                    Text("❓", fontSize = 20.sp)
-                }
+                SmallGuideButton(onClick = { showReportsGuide = true })
                 IconButton(
                     onClick = { showSettingsDialog = true },
                     modifier = Modifier

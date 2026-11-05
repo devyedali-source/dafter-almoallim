@@ -197,7 +197,7 @@ fun ClassTimetableSubview(
                             color = BentoPrimary
                         )
                     }
-                    TextButton(onClick = { showTimetableGuide = true }, contentPadding = PaddingValues(horizontal = 6.dp)) { Text("❓", fontSize = 18.sp) }
+                    SmallGuideButton(onClick = { showTimetableGuide = true }, modifier = Modifier.padding(horizontal = 6.dp))
                     }
 
                     Surface(
