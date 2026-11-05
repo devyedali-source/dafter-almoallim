@@ -62,6 +62,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -2409,7 +2410,7 @@ fun ClassStudentsSubview(
     // خيارات لائحة الطلاب قبل السحب
     var showStudentListOptions by remember { mutableStateOf(false) }
     var showHymnsDialog by remember { mutableStateOf(false) }
-    var showRegisterOptions by remember { mutableStateOf(false) }
+    var showImportInfo by remember { mutableStateOf(false) }
     var showCleaningDialog by remember { mutableStateOf(false) }
     var optNameMode by remember { mutableStateOf("both") }
     var optSchoolId by remember { mutableStateOf(true) }
@@ -2608,6 +2609,20 @@ fun ClassStudentsSubview(
                     Icon(Icons.Default.Download, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(8.dp))
                     BiTextA(ar = uiT("سحب اللوائح"), fr = BiFr.of("سحب اللوائح"), fontWeight = FontWeight.Bold)
+                }
+                IconButton(
+                    onClick = { showImportInfo = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(BentoLightLavender.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                        .border(1.dp, BentoPrimary.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Description,
+                        contentDescription = "رفع ملف التلاميذ",
+                        tint = BentoPrimary,
+                        modifier = Modifier.size(18.dp)
+                    )
                 }
                 IconButton(
                     onClick = { isSearchVisible = !isSearchVisible },
@@ -2819,39 +2834,29 @@ fun ClassStudentsSubview(
             )
         }
         androidx.compose.material3.ExtendedFloatingActionButton(
-            onClick = { showRegisterOptions = true },
+            onClick = { showAddStudentDialog = true },
             containerColor = BentoPrimary,
             contentColor = Color.White,
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(24.dp),
-            icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل التلاميذ", modifier = Modifier.size(24.dp)) },
-            text = { Text(uiT("تسجيل التلاميذ"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
+            icon = { Icon(Icons.Default.Add, contentDescription = "تسجيل طالب جديد", modifier = Modifier.size(24.dp)) },
+            text = { BiText(ar = uiT("طالب جديد"), fr = BiFr.of("طالب جديد"), fontWeight = FontWeight.Bold, fontSize = 14.sp) }
         )
     }
 
-    if (showRegisterOptions) {
+    if (showImportInfo) {
         AlertDialog(
-            onDismissRequest = { showRegisterOptions = false },
-            title = { Text(uiT("تسجيل التلاميذ"), fontWeight = FontWeight.Bold) },
+            onDismissRequest = { showImportInfo = false },
+            title = { Text(uiT("📄 رفع ملف التلاميذ"), fontWeight = FontWeight.Bold) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Button(
-                        onClick = { showRegisterOptions = false; showAddStudentDialog = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
-                    ) { Text(uiT("+ طالب جديد"), fontWeight = FontWeight.Bold) }
-                    OutlinedButton(
-                        onClick = { showRegisterOptions = false; showImportStudentsDialog = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
-                    ) { Text(uiT("📥 رفع ملف التلاميذ"), fontWeight = FontWeight.Bold) }
-                    Text(uiT("إذا كان لديك ملف جاهز (Excel / PDF / CSV) ارفع كل التلاميذ مرة واحدة"), fontSize = 12.sp)
-                }
+                Text(uiT("إذا كان تلاميذ القسم مسجلين في ملف (Excel / PDF / CSV) فلا تكتبهم واحدًا واحدًا: اختر الملف وسيُدخل التطبيق كل التلاميذ مرة واحدة."))
             },
-            confirmButton = {},
-            dismissButton = { TextButton(onClick = { showRegisterOptions = false }) { Text(uiT("إلغاء")) } }
+            confirmButton = {
+                Button(onClick = { showImportInfo = false; showImportStudentsDialog = true }) { Text(uiT("📥 حمّل التلاميذ")) }
+            },
+            dismissButton = { TextButton(onClick = { showImportInfo = false }) { Text(uiT("إلغاء")) } }
         )
     }
 

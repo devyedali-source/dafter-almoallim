@@ -5,6 +5,8 @@ object UiFrench {
     private fun part0(): Map<String, String> = mapOf(
         "سحب اللوائح" to "Exporter les listes",
         "حمّل التلاميذ من ملف" to "Charger les élèves (fichier)",
+        "📄 رفع ملف التلاميذ" to "📄 Importer un fichier d'élèves",
+        "إذا كان تلاميذ القسم مسجلين في ملف (Excel / PDF / CSV) فلا تكتبهم واحدًا واحدًا: اختر الملف وسيُدخل التطبيق كل التلاميذ مرة واحدة." to "Si les élèves de la classe sont dans un fichier (Excel / PDF / CSV), ne les saisissez pas un par un : choisissez le fichier et l'application les ajoutera tous d'un coup.",
         "تسجيل التلاميذ" to "Inscrire les élèves",
         "+ طالب جديد" to "+ Nouvel élève",
         "📥 رفع ملف التلاميذ" to "📥 Importer un fichier d'élèves",
