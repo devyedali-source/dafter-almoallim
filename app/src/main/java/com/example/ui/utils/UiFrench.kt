@@ -6,7 +6,7 @@ object UiFrench {
         "سحب اللوائح" to "Exporter les listes",
         "حمّل التلاميذ من ملف" to "Charger les élèves (fichier)",
         "📄 رفع ملف التلاميذ" to "📄 Importer un fichier d'élèves",
-        "إذا كان تلاميذ القسم مسجلين في ملف (Excel / PDF / CSV) فلا تكتبهم واحدًا واحدًا: اختر الملف وسيُدخل التطبيق كل التلاميذ مرة واحدة." to "Si les élèves de la classe sont dans un fichier (Excel / PDF / CSV), ne les saisissez pas un par un : choisissez le fichier et l'application les ajoutera tous d'un coup.",
+        "إذا كان تلاميذ القسم مسجلين في ملف (Excel / PDF / CSV) فلا تكتبهم واحدًا واحدًا: اختر الملف وسيُدخل التطبيق كل التلاميذ مرة واحدة.\n\nوإذا لم يكن لديك ملف للتلاميذ، فاضغط «إلغاء» وارجع إلى زر «+ طالب جديد» في أسفل الصفحة، وسجّلهم به واحدًا واحدًا." to "Si les élèves de la classe sont dans un fichier (Excel / PDF / CSV), ne les saisissez pas un par un : choisissez le fichier et l'application les ajoutera tous d'un coup.\n\nSi vous n'avez pas de fichier, appuyez sur « Annuler » puis sur « + Nouvel élève » en bas de la page et inscrivez-les un par un.",
         "تسجيل التلاميذ" to "Inscrire les élèves",
         "+ طالب جديد" to "+ Nouvel élève",
         "📥 رفع ملف التلاميذ" to "📥 Importer un fichier d'élèves",

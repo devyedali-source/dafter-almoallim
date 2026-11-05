@@ -2851,7 +2851,7 @@ fun ClassStudentsSubview(
             onDismissRequest = { showImportInfo = false },
             title = { Text(uiT("📄 رفع ملف التلاميذ"), fontWeight = FontWeight.Bold) },
             text = {
-                Text(uiT("إذا كان تلاميذ القسم مسجلين في ملف (Excel / PDF / CSV) فلا تكتبهم واحدًا واحدًا: اختر الملف وسيُدخل التطبيق كل التلاميذ مرة واحدة."))
+                Text(uiT("إذا كان تلاميذ القسم مسجلين في ملف (Excel / PDF / CSV) فلا تكتبهم واحدًا واحدًا: اختر الملف وسيُدخل التطبيق كل التلاميذ مرة واحدة.\n\nوإذا لم يكن لديك ملف للتلاميذ، فاضغط «إلغاء» وارجع إلى زر «+ طالب جديد» في أسفل الصفحة، وسجّلهم به واحدًا واحدًا."))
             },
             confirmButton = {
                 Button(onClick = { showImportInfo = false; showImportStudentsDialog = true }) { Text(uiT("📥 حمّل التلاميذ")) }
