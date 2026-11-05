@@ -185,6 +185,9 @@ fun ClassTimetableSubview(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    var showTimetableGuide by remember { mutableStateOf(false) }
+                    if (showTimetableGuide) UserGuideDialog(onDismiss = { showTimetableGuide = false }, section = "timetable")
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         com.example.ui.utils.BiText(
                             ar = "الجدول الزمني للقسم",
@@ -193,6 +196,8 @@ fun ClassTimetableSubview(
                             frSize = 11.sp,
                             color = BentoPrimary
                         )
+                    }
+                    TextButton(onClick = { showTimetableGuide = true }, contentPadding = PaddingValues(horizontal = 6.dp)) { Text("❓", fontSize = 18.sp) }
                     }
 
                     Surface(

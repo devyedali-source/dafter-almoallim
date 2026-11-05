@@ -58,6 +58,66 @@ private val reportsPages = listOf(
     ), "reports")
 )
 
+private val studentsPages = listOf(
+    GuidePage("🧭 ما أزرار صفحة الطلاب؟", listOf(
+        GuideStep("في الأعلى: «سحب اللوائح» لسحب اللوائح والدفاتر، وزر الملف 📄 لرفع كل التلاميذ من ملف، وزر البحث 🔍 للبحث عن تلميذ بالاسم.", R.drawable.guide_reg),
+        GuideStep("في الأسفل: «+ طالب جديد» لتسجيل تلميذ واحدًا واحدًا."),
+        GuideStep("بجانب كل تلميذ زر «عرض» لفتح بطاقته.")
+    ), "students"),
+    GuidePage("👥 كيف أسجّل تلاميذ القسم؟", listOf(
+        GuideStep("إذا كان عندك ملف جاهز (Excel / PDF / CSV): اضغط زر الملف 📄 ثم «حمّل التلاميذ» واختر الملف، فيدخل كل التلاميذ مرة واحدة.", R.drawable.guide_reg),
+        GuideStep("إذا لم يكن عندك ملف: اضغط «+ طالب جديد» وسجّل كل تلميذ بنفسك.")
+    ), "students"),
+    GuidePage("📥 ماذا أسحب من «سحب اللوائح»؟", listOf(
+        GuideStep("اضغط «سحب اللوائح» فتظهر قائمة.", R.drawable.guide_pull),
+        GuideStep("اللوائح والدفاتر: لائحة الطلاب، دفتر الغياب، دفتر المتابعة، المنشدين، الكناسة، سجل معلم الفرنسية."),
+        GuideStep("في «المنشدين» و«الكناسة» يمكنك أن تنشئ المجموعات بنفسك، أو تتركها تلقائية.")
+    ), "students")
+)
+
+private val resultsPages = listOf(
+    GuidePage("📝 كيف أرصد نتيجة مادة للقسم كله؟", listOf(
+        GuideStep("① اختر الفصل الدراسي. ② اختر «رصد نتيجة مادة للقسم». ③ اختر المادة. ④ اضغط «البدء في رصد الدرجات».", R.drawable.guide_p_res),
+        GuideStep("اكتب درجة كل تلميذ في خانته، ثم اضغط «حفظ النتائج 💾»."),
+        GuideStep("الدرجات يجب أن تكون بين 0 و20.")
+    ), "results"),
+    GuidePage("👤 كيف أرصد مواد لتلميذ واحد؟", listOf(
+        GuideStep("اختر الفصل، ثم «رصد مواد لطالب واحد».", R.drawable.guide_p_res),
+        GuideStep("اختر التلميذ، ثم اضغط «البدء في رصد الدرجات»، واكتب درجاته في كل المواد واحفظ.")
+    ), "results"),
+    GuidePage("📊 كيف أسحب الكشوف بعد الرصد؟", listOf(
+        GuideStep("من الشريط السفلي اختر «الكشوف»، ثم اختر الفصل ونوع الكشف الذي تريده. (في صفحة الكشوف مرشد خاص بها.)")
+    ), "results")
+)
+
+private val planningPages = listOf(
+    GuidePage("📅 كيف أفتح فصلًا في التخطيط السنوي؟", listOf(
+        GuideStep("تظهر الفصول الثلاثة، ويظهر عدد التحاضير في كل فصل. اضغط على الفصل لفتحه.", R.drawable.guide_p_terms),
+        GuideStep("الفصل المكتوب عليه «مقفل» يحتاج إلى تفعيل قبل أن تستعمله.")
+    ), "planning"),
+    GuidePage("📖 كيف أستعمل أسابيع الفصل ودروسه؟", listOf(
+        GuideStep("داخل الفصل ترى الأسابيع، وكل أسبوع فيه المواد. اضغط «عرض المجالات» ثم «عرض الدروس».", R.drawable.guide_p_week),
+        GuideStep("☑ علامة «تم التدريس» تضعها بعد أن تدرّس الدرس."),
+        GuideStep("📖 زر «فتح دفتر التحضير» يفتح ورقة تحضير هذا الدرس.")
+    ), "planning"),
+    GuidePage("📈 ما شريط تقدم البرنامج؟", listOf(
+        GuideStep("يبيّن نسبة ما أنجزته من البرنامج، ويرتفع كلما علّمت أسبوعًا.", R.drawable.guide_p_prog),
+        GuideStep("«دليل الألوان» يشرح معنى كل لون: دروس وتدريس، منجز، إدماج وتقويم وعلاج، استقبال وتشخيص.")
+    ), "planning")
+)
+
+private val timetablePages = listOf(
+    GuidePage("🗓 ماذا أفعل في الجدول الزمني؟", listOf(
+        GuideStep("يعرض الجدول الرسمي لقسمك حسب اليوم والفترات: الصباحية الأولى، الصباحية الثانية، المسائية.", R.drawable.guide_p_tt),
+        GuideStep("«مشاركة PDF» يسحب الجدول ملفًا لتحفظه أو ترسله.")
+    ), "timetable"),
+    GuidePage("🔀 كيف أبدّل مكان حصة؟", listOf(
+        GuideStep("اضغط «تعديل جدولي»، ثم اختر اليوم والحصة التي تريد تبديل مكانها.", R.drawable.guide_p_tt),
+        GuideStep("التعديل خاص بجدولك أنت فقط ولا يغيّر الجدول الرسمي."),
+        GuideStep("اضغط «العودة للجدول الرسمي» لإلغاء تعديلاتك.")
+    ), "timetable")
+)
+
 private val guidePages = listOf(
     GuidePage("🏫 كيف أنتقل إلى قسم آخر؟", listOf(
         GuideStep("اضغط على الثلاث نقاط (☰) في أعلى الصفحة.", R.drawable.guide_menu),
@@ -102,13 +162,30 @@ private val guidePages = listOf(
 /** مرشد بسيط: قائمة أسئلة، وكل سؤال في صفحة مستقلة بخطوات وصور وأسهم. */
 @Composable
 fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
-    val pages = remember(section) { if (section == "reports") reportsPages else guidePages }
+    val pages = remember(section) {
+        when (section) {
+            "reports" -> reportsPages
+            "students" -> studentsPages
+            "results" -> resultsPages
+            "planning" -> planningPages
+            "timetable" -> timetablePages
+            else -> guidePages
+        }
+    }
+    val guideTitle = when (section) {
+        "reports" -> "❓ مرشد صفحة الكشوف"
+        "students" -> "❓ مرشد صفحة الطلاب"
+        "results" -> "❓ مرشد صفحة النتائج"
+        "planning" -> "❓ مرشد التخطيط السنوي"
+        "timetable" -> "❓ مرشد الجدول الزمني"
+        else -> "❓ كيف أستخدم التطبيق؟"
+    }
     var page by remember { mutableStateOf<Int?>(null) }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         val current = page?.let { pages.getOrNull(it) }
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text(current?.question ?: (if (section == "reports") "❓ مرشد صفحة الكشوف" else "❓ كيف أستخدم التطبيق؟"), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+            title = { Text(current?.question ?: guideTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
                 Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (current == null) {

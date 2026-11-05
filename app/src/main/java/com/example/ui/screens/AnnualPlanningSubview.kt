@@ -346,6 +346,9 @@ private fun AnnualPlanningScreenContent(
                             }
                         }
                         BiText(ar = uiT("التخطيط السنوي للمنهاج الرسمي"), fr = "Planification annuelle du programme officiel", modifier = Modifier.weight(1f, fill = false), fontSize = 15.sp, fontWeight = FontWeight.Black, color = BentoPrimary, maxLines = 2)
+                        var showPlanningGuide by remember { mutableStateOf(false) }
+                        if (showPlanningGuide) UserGuideDialog(onDismiss = { showPlanningGuide = false }, section = "planning")
+                        TextButton(onClick = { showPlanningGuide = true }, contentPadding = PaddingValues(horizontal = 6.dp)) { Text("❓", fontSize = 18.sp) }
                         // مؤشر دائري صغير بنسبة تنزيل صور الكتب؛ يختفي عند الاكتمال
                         val booksPercent by remember { com.example.data.BookPack.downloadProgress(context) }
                             .collectAsState(initial = null)

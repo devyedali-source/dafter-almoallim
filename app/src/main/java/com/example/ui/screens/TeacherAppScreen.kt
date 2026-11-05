@@ -2429,6 +2429,8 @@ fun ClassStudentsSubview(
     var showStudentListOptions by remember { mutableStateOf(false) }
     var showHymnsDialog by remember { mutableStateOf(false) }
     var showImportInfo by remember { mutableStateOf(false) }
+    var showStudentsGuide by remember { mutableStateOf(false) }
+    if (showStudentsGuide) UserGuideDialog(onDismiss = { showStudentsGuide = false }, section = "students")
     var showCleaningDialog by remember { mutableStateOf(false) }
     var optNameMode by remember { mutableStateOf("both") }
     var optSchoolId by remember { mutableStateOf(true) }
@@ -2642,6 +2644,13 @@ fun ClassStudentsSubview(
                         modifier = Modifier.size(18.dp)
                     )
                 }
+                IconButton(
+                    onClick = { showStudentsGuide = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(Color(0xFFFFF3E0), RoundedCornerShape(12.dp))
+                        .border(1.dp, Color(0xFFEF6C00), RoundedCornerShape(12.dp))
+                ) { Text("❓", fontSize = 18.sp) }
                 IconButton(
                     onClick = { isSearchVisible = !isSearchVisible },
                     modifier = Modifier
@@ -5874,7 +5883,20 @@ fun GradesEntryTab(
             // STEP 1: CONFIGURATION & SELECTION VIEW
             Spacer(modifier = Modifier.height(8.dp))
 
+            var showResultsGuide by remember { mutableStateOf(false) }
+            if (showResultsGuide) UserGuideDialog(onDismiss = { showResultsGuide = false }, section = "results")
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.weight(1f)) {
             BiText(ar = AppLocalization.tr("grades_entry_title", "رصد وإدخال درجات الطلاب 📝", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("رصد وإدخال درجات الطلاب 📝"), fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                }
+                IconButton(
+                    onClick = { showResultsGuide = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(Color(0xFFFFF3E0), RoundedCornerShape(12.dp))
+                        .border(1.dp, Color(0xFFEF6C00), RoundedCornerShape(12.dp))
+                ) { Text("❓", fontSize = 18.sp) }
+            }
             BiText(ar = AppLocalization.tr("grades_entry_subtitle", "يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات.", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.bodySmall.fontSize)
             
             if (activeClass != null) {
