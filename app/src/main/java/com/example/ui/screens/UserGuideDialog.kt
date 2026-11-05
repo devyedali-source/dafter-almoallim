@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import com.example.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -226,7 +227,29 @@ fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
             onDismissRequest = onDismiss,
             title = { Text(current?.question ?: guideTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp) },
             text = {
-                Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                val scroll = rememberScrollState()
+                LaunchedEffect(page) { scroll.scrollTo(0) }
+                Column {
+                Column(
+                    Modifier
+                        .weight(1f, fill = false)
+                        .drawWithContent {
+                            drawContent()
+                            if (scroll.maxValue > 0) {
+                                val viewH = size.height
+                                val barH = (viewH * viewH / (viewH + scroll.maxValue)).coerceAtLeast(28.dp.toPx())
+                                val barY = scroll.value * (viewH - barH) / scroll.maxValue
+                                drawRoundRect(
+                                    color = androidx.compose.ui.graphics.Color(0xCC6750A4),
+                                    topLeft = androidx.compose.ui.geometry.Offset(size.width - 5.dp.toPx(), barY),
+                                    size = androidx.compose.ui.geometry.Size(4.dp.toPx(), barH),
+                                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(2.dp.toPx())
+                                )
+                            }
+                        }
+                        .verticalScroll(scroll),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
                     if (current == null) {
                         Text("اختر السؤال الذي يشغلك:", fontSize = 14.sp)
                         pages.forEachIndexed { i, g ->
@@ -247,6 +270,10 @@ fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
                             }
                         }
                     }
+                }
+                if (scroll.canScrollForward) {
+                    Text("⬇ مرّر للأسفل لرؤية المزيد", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
+                }
                 }
             },
             confirmButton = {
