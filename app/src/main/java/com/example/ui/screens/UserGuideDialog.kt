@@ -58,6 +58,30 @@ private val reportsPages = listOf(
     ), "reports")
 )
 
+private val syncPages = listOf(
+    GuidePage("☁️ كيف تُحفظ بياناتي؟", listOf(
+        GuideStep("يحفظ التطبيق نسخة من أقسامك وتلاميذك ونتائجك في Google Drive الخاص بحساب Google الذي دخلت به، ويرفعها تلقائيًا بشرط وجود إنترنت."),
+        GuideStep("افتح القائمة الجانبية (☰) وانظر بطاقة «مزامنة Google Drive المباشرة»: فيها تاريخ «آخر مزامنة» وقائمة الأجهزة المتصلة بحسابك.", R.drawable.guide_s_card),
+        GuideStep("إذا ظهر تحذير برتقالي يقول إن الرفع تعذّر، فتأكد من الإنترنت ثم اضغط «🔄 مزامنة الآن».")
+    ), "sync"),
+    GuidePage("📱 ضاع هاتفي أو استبدلته، كيف أسترجع بياناتي؟", listOf(
+        GuideStep("ثبّت التطبيق على الهاتف الجديد، وافتحه، واتصل بالإنترنت."),
+        GuideStep("اضغط «الدخول السريع بحساب Google» واستعمل نفس حساب Google الذي كنت تدخل به في الهاتف القديم.", R.drawable.guide_s_login),
+        GuideStep("إذا كان الهاتف الجديد فارغًا، يسترجع التطبيق أقسامك وتلاميذك ونتائجك تلقائيًا من Drive. انتظر حتى ينتهي الشريط."),
+        GuideStep("المسترجَع هو آخر نسخة رُفعت قبل ضياع الهاتف، وما كتبته بعدها دون أن يُرفع لا يمكن استرجاعه.")
+    ), "sync"),
+    GuidePage("🛡 ماذا أفعل قبل تغيير الهاتف؟", listOf(
+        GuideStep("على الهاتف القديم: افتح القائمة الجانبية (☰) واضغط «🔄 مزامنة الآن».", R.drawable.guide_s_card),
+        GuideStep("انتظر الرسالة «تمت المزامنة»، وتأكد أن «آخر مزامنة» هي اليوم."),
+        GuideStep("ثم ادخل في الهاتف الجديد بنفس حساب Google.")
+    ), "sync"),
+    GuidePage("📱📱 أستعمل هاتفين بنفس الحساب", listOf(
+        GuideStep("تظهر الأجهزة في بطاقة المزامنة تحت «الأجهزة المتصلة بهذا الحساب».", R.drawable.guide_s_card),
+        GuideStep("إذا ظهر تنبيه «يوجد هاتف آخر على هذا الحساب»، فتأكد أن هذا الهاتف هو الأحدث قبل أن تتابع المزامنة."),
+        GuideStep("الأفضل أن تضغط «مزامنة الآن» كلما انتهيت من العمل في هاتف، قبل أن تبدأ العمل في الآخر.")
+    ), "sync")
+)
+
 private val homePages = listOf(
     GuidePage("🏫 كيف أنتقل بين الأقسام؟", listOf(
         GuideStep("في الصفحة الرئيسية اضغط على السنة الدراسية التي تعمل فيها.", R.drawable.guide_h_years),
@@ -185,6 +209,7 @@ fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
             "reports" -> reportsPages
             "students" -> studentsPages
             "home" -> homePages
+            "sync" -> syncPages
             "results" -> resultsPages
             "planning" -> planningPages
             "timetable" -> timetablePages
@@ -195,6 +220,7 @@ fun UserGuideDialog(onDismiss: () -> Unit, section: String = "general") {
         "reports" -> "❓ مرشد صفحة الكشوف"
         "students" -> "❓ مرشد صفحة الطلاب"
         "home" -> "❓ مرشد الصفحة الرئيسية والأقسام"
+        "sync" -> "❓ مرشد المزامنة وحفظ البيانات"
         "results" -> "❓ مرشد صفحة النتائج"
         "planning" -> "❓ مرشد التخطيط السنوي"
         "timetable" -> "❓ مرشد الجدول الزمني"

@@ -1237,6 +1237,10 @@ fun InnerTeacherAppScreenContent(
                                     ) {
                                         Text("☁️", fontSize = 16.sp)
                                         BiText(ar = uiT("مزامنة Google Drive المباشرة"), fr = BiFr.of("مزامنة Google Drive المباشرة"), fontWeight = FontWeight.ExtraBold, fontSize = 11.5.sp, color = Color(0xFF1B5E20))
+                                        Spacer(Modifier.weight(1f))
+                                        var showSyncGuide by remember { mutableStateOf(false) }
+                                        if (showSyncGuide) UserGuideDialog(onDismiss = { showSyncGuide = false }, section = "sync")
+                                        TextButton(onClick = { showSyncGuide = true }, contentPadding = PaddingValues(horizontal = 6.dp), modifier = Modifier.height(28.dp)) { Text("❓ مرشد", fontSize = 11.sp, fontWeight = FontWeight.Bold) }
                                     }
                                     BiText(ar = uiTf("آخر مزامنة: {0}", formattedDriveTimeStr), fr = BiFr.f("آخر مزامنة: {0}", formattedDriveTimeStr), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF33691E))
                                     val driveProblem by viewModel.driveSyncProblem.collectAsState()
