@@ -11934,6 +11934,7 @@ fun ActivationPromoDialog(
     val context = androidx.compose.ui.platform.LocalContext.current
     val clipboardManager = androidx.compose.ui.platform.LocalClipboardManager.current
     var selectedPlan by remember { mutableStateOf("single") }
+    var sendingRequest by remember { mutableStateOf(false) }
 
     val termId = remember(targetTermName) {
         when {
@@ -12196,37 +12197,40 @@ fun ActivationPromoDialog(
         },
         confirmButton = {
             Button(
+                enabled = !sendingRequest,
                 onClick = {
-                    try {
-                        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                        val currentUid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                        val requestDoc = mapOf(
-                            "requestId" to requestId,
-                            "userId" to currentUid,
-                            "classId" to classId,
-                            "termId" to termId,
-                            "status" to "pending",
-                            "createdAt" to System.currentTimeMillis(),
-                            "className" to className,
-                            "wilaya" to wilaya,
-                            "moughataa" to moughataa,
-                            "termName" to (targetTermName ?: "الفصل الثاني"),
-                            "email" to email
-                        )
-                        db.collection("activation_requests").document(requestId).set(requestDoc)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-
-                    try {
-                        val encodedMessage = android.net.Uri.encode(messageText)
-                        val url = "https://api.whatsapp.com/send?phone=22237786585&text=$encodedMessage"
-                        val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url))
-                        context.startActivity(intent)
-                    } catch (e: Exception) {
-                        android.widget.Toast.makeText(context, "لم نتمكن من فتح الواتساب، يرجى التأكد من توفر التطبيق على جهازك.", android.widget.Toast.LENGTH_LONG).show()
-                    }
-                    onDismiss()
+                    val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                    val currentUid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    val requestDoc = mapOf(
+                        "requestId" to requestId,
+                        "userId" to currentUid,
+                        "classId" to classId,
+                        "termId" to termId,
+                        "status" to "pending",
+                        "createdAt" to System.currentTimeMillis(),
+                        "className" to className,
+                        "wilaya" to wilaya,
+                        "moughataa" to moughataa,
+                        "termName" to (targetTermName ?: "الفصل الثاني"),
+                        "email" to email
+                    )
+                    com.example.ui.utils.ActivationRequestSender.send(
+                        context = context,
+                        docRef = db.collection("activation_requests").document(requestId),
+                        data = requestDoc,
+                        onSending = { sendingRequest = it },
+                        onSuccess = {
+                            try {
+                                val encodedMessage = android.net.Uri.encode(messageText)
+                                val url = "https://api.whatsapp.com/send?phone=22237786585&text=$encodedMessage"
+                                context.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)))
+                            } catch (e: Exception) {
+                                android.widget.Toast.makeText(context, "تم إرسال الطلب، لكن لم نتمكن من فتح الواتساب. تأكد من توفر التطبيق على جهازك.", android.widget.Toast.LENGTH_LONG).show()
+                            }
+                            onDismiss()
+                        },
+                        onFail = { msg -> android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show() }
+                    )
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF25D366),
@@ -12240,7 +12244,7 @@ fun ActivationPromoDialog(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                BiTextA(ar = uiT("تواصل على الواتساب"), fr = BiFr.of("تواصل على الواتساب"), fontWeight = FontWeight.Bold)
+                BiTextA(ar = uiT(if (sendingRequest) "جاري إرسال الطلب..." else "تواصل على الواتساب"), fr = BiFr.of(if (sendingRequest) "جاري إرسال الطلب..." else "تواصل على الواتساب"), fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {

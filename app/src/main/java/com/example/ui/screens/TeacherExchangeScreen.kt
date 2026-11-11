@@ -86,8 +86,6 @@ fun sendExchangeActivationWhatsApp(
             "status" to "pending",
             "createdAt" to com.google.firebase.firestore.FieldValue.serverTimestamp()
         )
-        db.collection("exchange_activation_requests").document(requestId).set(requestDoc)
-
         val adminPhone = "22237786585"
         val whoLine = buildString {
             append("أنا معلم")
@@ -103,11 +101,23 @@ $whoLine
 رابط طلب التفعيل:
 https://diftar-almoaalim.web.app/exchange-approve/$requestId
         """.trimIndent()
-        val encoded = java.net.URLEncoder.encode(fullMessage, "UTF-8")
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$adminPhone&text=$encoded"))
-        context.startActivity(intent)
+        com.example.ui.utils.ActivationRequestSender.send(
+            context = context,
+            docRef = db.collection("exchange_activation_requests").document(requestId),
+            data = requestDoc,
+            onSending = { if (it) Toast.makeText(context, "جاري إرسال الطلب...", Toast.LENGTH_SHORT).show() },
+            onSuccess = {
+                try {
+                    val encoded = java.net.URLEncoder.encode(fullMessage, "UTF-8")
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$adminPhone&text=$encoded")))
+                } catch (e: Exception) {
+                    Toast.makeText(context, "تم إرسال الطلب، لكن تعذر فتح تطبيق الواتساب تلقائياً", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onFail = { msg -> Toast.makeText(context, msg, Toast.LENGTH_LONG).show() }
+        )
     } catch (e: Exception) {
-        Toast.makeText(context, "تعذر فتح تطبيق الواتساب تلقائياً", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "تعذر إرسال الطلب، أعد المحاولة", Toast.LENGTH_SHORT).show()
     }
 }
 

@@ -1233,6 +1233,7 @@ private fun CourseSubscriptionDialog(
         CourseSubscriptionStore.getLastRequestId(context, spec.id)
     }
     val requestId = newRequestId
+    var sendingCourseRequest by remember { mutableStateOf(false) }
     var watchedRequestId by remember(spec.id) {
         mutableStateOf(if (savedRequestId.isNotBlank()) savedRequestId else newRequestId)
     }
@@ -1370,47 +1371,41 @@ private fun CourseSubscriptionDialog(
         },
         confirmButton = {
             TextButton(
+                enabled = !sendingCourseRequest,
                 onClick = {
-                    try {
-                        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                        val requestDoc = mapOf(
-                            "requestId" to requestId,
-                            "userId" to currentUidForRequest,
-                            "email" to email,
-                            "specId" to spec.id,
-                            "specTitle" to spec.title,
-                            "days" to CourseSubscriptionStore.SUBSCRIPTION_DAYS,
-                            "status" to "pending",
-                            "createdAt" to System.currentTimeMillis()
-                        )
-                        db.collection("course_activation_requests")
-                            .document(requestId)
-                            .set(requestDoc)
-                        CourseSubscriptionStore.saveLastRequestId(context, spec.id, requestId)
-                        watchedRequestId = requestId
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-
-                    try {
-                        val encodedMessage = android.net.Uri.encode(messageText)
-                        val url = "https://api.whatsapp.com/send?phone=22237786585&text=$encodedMessage"
-                        val intent = android.content.Intent(
-                            android.content.Intent.ACTION_VIEW,
-                            android.net.Uri.parse(url)
-                        )
-                        context.startActivity(intent)
-                    } catch (e: Exception) {
-                        android.widget.Toast.makeText(
-                            context,
-                            "لم نتمكن من فتح الواتساب، يرجى التأكد من توفر التطبيق على جهازك.",
-                            android.widget.Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    onDismiss()
+                    val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                    val requestDoc = mapOf(
+                        "requestId" to requestId,
+                        "userId" to currentUidForRequest,
+                        "email" to email,
+                        "specId" to spec.id,
+                        "specTitle" to spec.title,
+                        "days" to CourseSubscriptionStore.SUBSCRIPTION_DAYS,
+                        "status" to "pending",
+                        "createdAt" to System.currentTimeMillis()
+                    )
+                    com.example.ui.utils.ActivationRequestSender.send(
+                        context = context,
+                        docRef = db.collection("course_activation_requests").document(requestId),
+                        data = requestDoc,
+                        onSending = { sendingCourseRequest = it },
+                        onSuccess = {
+                            CourseSubscriptionStore.saveLastRequestId(context, spec.id, requestId)
+                            watchedRequestId = requestId
+                            try {
+                                val encodedMessage = android.net.Uri.encode(messageText)
+                                val url = "https://api.whatsapp.com/send?phone=22237786585&text=$encodedMessage"
+                                context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url)))
+                            } catch (e: Exception) {
+                                android.widget.Toast.makeText(context, "تم إرسال الطلب، لكن لم نتمكن من فتح الواتساب. تأكد من توفر التطبيق على جهازك.", android.widget.Toast.LENGTH_LONG).show()
+                            }
+                            onDismiss()
+                        },
+                        onFail = { msg -> android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show() }
+                    )
                 }
             ) {
-                BiTextA(ar = uiT("إرسال طلب التفعيل"), fr = BiFr.of("إرسال طلب التفعيل"), fontWeight = FontWeight.Black)
+                BiTextA(ar = uiT(if (sendingCourseRequest) "جاري إرسال الطلب..." else "إرسال طلب التفعيل"), fr = BiFr.of(if (sendingCourseRequest) "جاري إرسال الطلب..." else "إرسال طلب التفعيل"), fontWeight = FontWeight.Black)
             }
         },
         dismissButton = {
