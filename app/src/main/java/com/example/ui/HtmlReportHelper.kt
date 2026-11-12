@@ -1863,6 +1863,117 @@ object HtmlReportHelper {
         return html.toString()
     }
 
+    /**
+     * سجل إداري عام بجدول: غلاف ثم [pages] صفحة، كل صفحة شريط عنوان وجدول فارغ بالأعمدة [cols]
+     * (كل عمود: العنوان العربي مع الفرنسي اختيارياً مفصولين بـ «|»)، وعمود «الرقم» متسلسل.
+     * [widths] نسب الأعمدة (دون عمود الرقم). يُسحب أفقياً إذا كان [landscape].
+     */
+    fun generateAdminRegisterHtml(
+        context: Context,
+        activeClass: ClassSection,
+        titleAr: String,
+        titleFr: String,
+        cols: List<String>,
+        widths: List<Int>,
+        pages: Int = 30,
+        rows: Int = if (cols.size > 6) 14 else 22,
+        landscape: Boolean = cols.size > 6
+    ): String {
+        val pageH = if (landscape) 190.0 else 279.0
+        val rowMm = String.format(java.util.Locale.US, "%.2f", (pageH - 28.0) / rows)
+        val coverTop = if (landscape) 35 else 70
+        val css = "@page{size:A4 ${if (landscape) "landscape" else "portrait"};margin:8mm;}" +
+            "*{box-sizing:border-box;}" +
+            "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
+            ".ar-page{width:100%;height:${pageH}mm;overflow:hidden;page-break-after:always;break-after:page;position:relative;}" +
+            ".ar-page:last-child{page-break-after:auto;break-after:auto;}" +
+            ".ar-bar{background:#d9d9d9;border:1.5px solid #000;text-align:center;font-weight:900;font-size:15px;height:10mm;line-height:10mm;margin-bottom:3mm;}" +
+            "table.ar{width:100%;border-collapse:collapse;table-layout:fixed;}" +
+            "table.ar th,table.ar td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;overflow:hidden;}" +
+            "table.ar th{background:#efefef;font-weight:900;font-size:11px;height:12mm;}" +
+            "table.ar td{height:${rowMm}mm;font-size:12px;}" +
+            ".ar-pn{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:9px;font-weight:bold;}" +
+            ".cv{text-align:center;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:${coverTop}mm;}" +
+            ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" + COVER_CSS
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>${escCompHtml(titleAr)}</title><style>$css</style></head><body>")
+        html.append("<div class=\"ar-page cv\">${coverHeaderHtml(context, activeClass, false)}")
+        html.append("<div class=\"t\">${escCompHtml(titleAr)}</div><div class=\"t2\">${escCompHtml(titleFr)}</div></div>")
+        val colgroup = "<colgroup><col style=\"width:5%\">" + widths.joinToString("") { "<col style=\"width:${it * 95 / widths.sum()}%\">" } + "</colgroup>"
+        val head = "<thead><tr><th>الرقم</th>" + cols.joinToString("") { c ->
+            "<th>" + c.split("|").joinToString("<br>") { escCompHtml(it) } + "</th>"
+        } + "</tr></thead>"
+        for (page in 1..pages) {
+            html.append("<div class=\"ar-page\"><div class=\"ar-bar\">${escCompHtml(titleAr)} &nbsp;&nbsp; ${escCompHtml(titleFr)}</div>")
+            html.append("<table class=\"ar\">$colgroup$head<tbody>")
+            repeat(rows) { i ->
+                html.append("<tr><td>${(page - 1) * rows + i + 1}</td>" + "<td></td>".repeat(cols.size) + "</tr>")
+            }
+            html.append("</tbody></table><div class=\"ar-pn\">$page</div></div>")
+        }
+        html.append("</body></html>")
+        return html.toString()
+    }
+
+    /**
+     * سجل العمل التربوي (الوسائل والممارسات التربوية في المدرسة): غلاف ثم [pages] صفحة،
+     * كل صفحة ثلاثة جداول (التجهيزات الأساسية، ممارسات المعلمين، نتائج التلاميذ) وإجراءات مقترحة وتوقيعات.
+     */
+    fun generatePedagogicalWorkHtml(context: Context, activeClass: ClassSection, pages: Int = 10): String {
+        val school = escCompHtml(activeClass.schoolName.ifBlank { "............" })
+        val year = escCompHtml(activeClass.academicYear.ifBlank { "2025 - 2026" })
+        val css = "@page{size:A4 portrait;margin:8mm;}" +
+            "*{box-sizing:border-box;}" +
+            "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;padding:0;background:#fff;color:#000;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
+            ".pw-page{width:100%;height:279mm;overflow:hidden;page-break-after:always;break-after:page;position:relative;}" +
+            ".pw-page:last-child{page-break-after:auto;break-after:auto;}" +
+            ".pw-bar{background:#d9d9d9;border:1.5px solid #000;text-align:center;font-weight:900;font-size:14px;height:9mm;line-height:9mm;margin:3mm 0 1.5mm;}" +
+            ".pw-top{display:flex;justify-content:space-between;font-weight:bold;font-size:11px;height:6mm;}" +
+            "table.pw{width:100%;border-collapse:collapse;table-layout:fixed;}" +
+            "table.pw th,table.pw td{border:1.5px solid #000;text-align:center;vertical-align:middle;padding:0 3px;overflow:hidden;}" +
+            "table.pw th{background:#efefef;font-weight:900;font-size:10.5px;height:7mm;}" +
+            "table.pw td{height:6.4mm;font-size:11px;}" +
+            "table.pw td.nm{text-align:right;font-weight:bold;padding-right:5px;}" +
+            ".pw-box{border:1.5px solid #000;height:30mm;margin-top:2mm;padding:1mm 3px;font-weight:900;font-size:11px;}" +
+            ".pw-sig{display:flex;justify-content:space-between;margin-top:3mm;font-weight:bold;font-size:11px;}" +
+            ".pw-pn{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:9px;font-weight:bold;}" +
+            ".cv{text-align:center;}" +
+            ".cv .t{font-size:26px;font-weight:900;margin-top:70mm;}" +
+            ".cv .t2{font-size:18px;font-weight:bold;margin-top:4mm;}" + COVER_CSS
+        val equipment = listOf(
+            "البرامج", "التوزيع الشهري", "أمانة المعلم", "الكتب: العربية", "الكتب: الفرنسية", "الكتب: الحساب",
+            "كتب أخرى", "سجل النداء", "دفاتر المعلم", "دفاتر المدير", "سجلات المدير", "حافظات الوثائق", "السبورات"
+        )
+        val practices = listOf("البرامج والتخطيط", "تمارين التطبيق", "التقييمات", "الامتحانات الفصلية")
+        val html = StringBuilder()
+        html.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>سجل العمل التربوي</title><style>$css</style></head><body>")
+        html.append("<div class=\"pw-page cv\">${coverHeaderHtml(context, activeClass, false)}")
+        html.append("<div class=\"t\">سجل العمل التربوي</div><div class=\"t2\">الوسائل والممارسات التربوية في المدرسة</div></div>")
+        for (page in 1..pages) {
+            html.append("<div class=\"pw-page\"><div class=\"pw-top\"><div>مدرسة: $school</div><div>السنة الدراسية: $year</div><div>التاريخ: ........ / ........ / ............</div></div>")
+            html.append("<div class=\"pw-bar\">الوسائل والممارسات التربوية في المدرسة</div>")
+            html.append("<table class=\"pw\"><colgroup><col style=\"width:30%\"><col style=\"width:14%\"><col style=\"width:14%\"><col style=\"width:14%\"><col style=\"width:28%\"></colgroup>")
+            html.append("<thead><tr><th>التجهيزات الأساسية (أركان)</th><th>الموجود</th><th>المساحة</th><th>الميزان</th><th>الملاحظات</th></tr></thead><tbody>")
+            equipment.forEach { html.append("<tr><td class=\"nm\">$it</td><td></td><td></td><td></td><td></td></tr>") }
+            html.append("</tbody></table>")
+            html.append("<div class=\"pw-bar\">ممارسات المعلمين</div>")
+            html.append("<table class=\"pw\"><colgroup><col style=\"width:28%\"><col style=\"width:24%\"><col style=\"width:24%\"><col style=\"width:24%\"></colgroup>")
+            html.append("<thead><tr><th>الممارسة</th><th>المعلمون الذين يطبقونها</th><th>المعلمون الذين لا يطبقونها</th><th>الإجراءات المتخذة</th></tr></thead><tbody>")
+            practices.forEach { html.append("<tr><td class=\"nm\">$it</td><td></td><td></td><td></td></tr>") }
+            html.append("</tbody></table>")
+            html.append("<div class=\"pw-bar\">نتائج التلاميذ</div>")
+            html.append("<table class=\"pw\"><thead><tr><th>السنة</th><th>الناجحون</th><th>الراسبون</th><th>المجموع</th><th>%</th></tr></thead><tbody>")
+            for (y in 1..6) html.append("<tr><td class=\"nm\">السنة $y</td><td></td><td></td><td></td><td></td></tr>")
+            html.append("<tr><td class=\"nm\">المجموع</td><td></td><td></td><td></td><td></td></tr></tbody></table>")
+            html.append("<div class=\"pw-box\">الإجراءات والملاحظات المقترحة</div>")
+            html.append("<div class=\"pw-sig\"><div>توقيع المدير</div><div>توقيع المفتش</div></div>")
+            html.append("<div class=\"pw-pn\">$page</div></div>")
+        }
+        html.append("</body></html>")
+        return html.toString()
+    }
+
     private fun escCompHtml(t: String) = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
     /**

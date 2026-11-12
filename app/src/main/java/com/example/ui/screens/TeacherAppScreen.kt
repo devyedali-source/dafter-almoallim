@@ -3616,6 +3616,30 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
             }
         }
     }
+    // السجلات الجدولية العامة: (الرمز، العنوان العربي، الفرنسي، الأعمدة، النسب)
+    class AdminReg(val icon: String, val ar: String, val fr: String, val cols: List<String>, val widths: List<Int>)
+    val adminRegs = listOf(
+        AdminReg("👥", "سجل قيد الأشخاص", "Cahier matricule du personnel",
+            listOf("الاسم واللقب|Noms et prénoms", "الدليل|Matricule", "الوظيفة|Fonction", "الرتبة|Grade", "الدرجة|Echelon",
+                "تاريخ الوصول إلى المدرسة|Date d'arrivée", "تاريخ الذهاب عن المدرسة|Date de départ", "الملاحظات|Observations"),
+            listOf(18, 10, 14, 9, 8, 12, 13, 16)),
+        AdminReg("✉️", "سجل المراسلات", "Registre de correspondance",
+            listOf("التاريخ", "الجهة", "الموضوع", "المرجع", "الملاحظات"), listOf(12, 20, 30, 14, 24)),
+        AdminReg("📤", "سجل الصادرات", "Registre du courrier départ",
+            listOf("التاريخ", "المرسل إليه", "الموضوع", "المرفقات", "الملاحظات"), listOf(12, 22, 30, 14, 22)),
+        AdminReg("📥", "سجل الواردات", "Registre du courrier arrivée",
+            listOf("تاريخ الوصول", "الجهة المرسلة", "رقم وتاريخ المراسلة", "الموضوع", "الإجراء المتخذ"), listOf(12, 20, 16, 28, 24)),
+        AdminReg("📣", "سجل الاستدعاء لجلسات المعلمين", "Registre des convocations aux réunions",
+            listOf("تاريخ الاستدعاء", "موعد الجلسة", "الموضوع / جدول الأعمال", "المعلم المستدعى", "توقيع الاستلام"), listOf(13, 13, 30, 24, 20)),
+        AdminReg("⏰", "سجل التأخير داخل القسم", "Registre des retards",
+            listOf("التاريخ", "الاسم", "القسم", "ساعة الوصول", "سبب التأخر", "الإجراء المتخذ"), listOf(11, 22, 10, 11, 22, 24)),
+        AdminReg("📜", "سجل المنشورات والتعليمات", "Registre des circulaires et instructions",
+            listOf("التاريخ", "مصدر المنشور", "رقمه وتاريخه", "الموضوع", "ملاحظات"), listOf(11, 20, 16, 33, 20)),
+        AdminReg("🤝", "سجل التعاون مع الشركاء", "Registre de coopération avec les partenaires",
+            listOf("التاريخ", "الشريك", "نوع التعاون / النشاط", "النتائج", "الملاحظات"), listOf(11, 20, 28, 22, 19)),
+        AdminReg("📊", "سجل تقرير العلامات الإدارية للمعلمين", "Registre des notes administratives des maîtres",
+            listOf("اسم المعلم", "القسم", "تاريخ التقييم", "العلامة الإدارية / 20", "ملاحظات المدير", "توقيع المعلم"), listOf(22, 10, 12, 12, 28, 16))
+    )
     if (showTeachersRegister) {
         TeachersRegisterDialog(defaultSection, viewModel, onDismiss = { showTeachersRegister = false; onDismiss() })
     }
@@ -3623,7 +3647,7 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
         onDismissRequest = onDismiss,
         title = { Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Button(onClick = { showTeachersRegister = true }, modifier = Modifier.fillMaxWidth()) {
                     Text("📒 دفتر غياب المعلمين 📥", fontWeight = FontWeight.Bold)
                 }
@@ -3635,6 +3659,35 @@ fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel
                 }
                 Button(onClick = { onDismiss(); runDoc(3, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
                     Text("🚪 دفتر زيارات المدرسة 📥", fontWeight = FontWeight.Bold)
+                }
+                adminRegs.forEach { r ->
+                    Button(onClick = {
+                        onDismiss()
+                        val sec = defaultSection
+                        viewModel.runWithLoading("جاري إنشاء ${r.ar}...") {
+                            val landscape = r.cols.size > 6
+                            HtmlReportHelper.shareHtmlAsPdf(
+                                context,
+                                HtmlReportHelper.generateAdminRegisterHtml(context, sec, r.ar, r.fr, r.cols, r.widths),
+                                "${r.ar.replace(" ", "_")}_${sec.schoolName.trim().replace(" ", "_")}.pdf",
+                                landscape
+                            )
+                        }
+                    }, modifier = Modifier.fillMaxWidth()) {
+                        Text("${r.icon} ${r.ar} 📥", fontWeight = FontWeight.Bold)
+                    }
+                }
+                Button(onClick = {
+                    onDismiss()
+                    val sec = defaultSection
+                    viewModel.runWithLoading("جاري إنشاء سجل العمل التربوي...") {
+                        HtmlReportHelper.shareHtmlAsPdf(
+                            context, HtmlReportHelper.generatePedagogicalWorkHtml(context, sec),
+                            "سجل_العمل_التربوي_${sec.schoolName.trim().replace(" ", "_")}.pdf"
+                        )
+                    }
+                }, modifier = Modifier.fillMaxWidth()) {
+                    Text("🎓 سجل العمل التربوي 📥", fontWeight = FontWeight.Bold)
                 }
             }
         },
