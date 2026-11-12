@@ -3594,100 +3594,102 @@ fun TeachersRegisterDialog(section: ClassSection, viewModel: TeacherViewModel, o
     )
 }
 
-/** نافذة «وثائق المدير»: تُضاف إليها أزرار أخرى كلما توفرت وثائق جديدة. */
+/** وثيقة في قائمة «وثائق المدير»: رمز وعنوان وشرح عملها وإجراء السحب. */
+private class DirectorDoc(val icon: String, val title: String, val role: String, val action: () -> Unit)
+
+/** نافذة «وثائق المدير»: وثائق مجمّعة في أقسام، لكل وثيقة شرح عملها قبل السحب. */
 @Composable
 fun DirectorDocsDialog(sections: List<ClassSection>, viewModel: TeacherViewModel, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    val defaultSection = sections.maxByOrNull { it.id }!!
+    val sec = sections.maxByOrNull { it.id }!!
     var showTeachersRegister by remember { mutableStateOf(false) }
-    fun runDoc(doc: Int, sec: ClassSection) {
-        val school = sec.schoolName.trim().replace(" ", "_")
-        if (doc == 1) {
-            viewModel.runWithLoading("جاري إنشاء دفتر أثاث القسم...") {
-                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateClassInventoryHtml(context, sec), "دفتر_أثاث_القسم_${sec.name.trim().replace(" ", "_")}.pdf")
-            }
-        } else if (doc == 3) {
-            viewModel.runWithLoading("جاري إنشاء دفتر زيارات المدرسة...") {
-                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateSchoolVisitsHtml(context, sec), "دفتر_زيارات_المدرسة_$school.pdf")
-            }
-        } else {
-            viewModel.runWithLoading("جاري إنشاء دفتر محاضر اجتماع المعلمين...") {
-                HtmlReportHelper.shareHtmlAsPdf(context, HtmlReportHelper.generateCouncilPvHtml(context, sec), "دفتر_محاضر_اجتماع_المعلمين_$school.pdf")
+    val school = sec.schoolName.trim().replace(" ", "_")
+    fun pdf(loading: String, file: String, landscape: Boolean = false, html: () -> String) {
+        onDismiss()
+        viewModel.runWithLoading(loading) { HtmlReportHelper.shareHtmlAsPdf(context, html(), file, landscape) }
+    }
+    fun adminDoc(icon: String, ar: String, fr: String, cols: List<String>, widths: List<Int>, role: String) =
+        DirectorDoc(icon, ar, role) {
+            pdf("جاري إنشاء $ar...", "${ar.replace(" ", "_")}_$school.pdf", cols.size > 6) {
+                HtmlReportHelper.generateAdminRegisterHtml(context, sec, ar, fr, cols, widths)
             }
         }
-    }
-    // السجلات الجدولية العامة: (الرمز، العنوان العربي، الفرنسي، الأعمدة، النسب)
-    class AdminReg(val icon: String, val ar: String, val fr: String, val cols: List<String>, val widths: List<Int>)
-    val adminRegs = listOf(
-        AdminReg("👥", "سجل قيد الأشخاص", "Cahier matricule du personnel",
-            listOf("الاسم واللقب|Noms et prénoms", "الدليل|Matricule", "الوظيفة|Fonction", "الرتبة|Grade", "الدرجة|Echelon",
-                "تاريخ الوصول إلى المدرسة|Date d'arrivée", "تاريخ الذهاب عن المدرسة|Date de départ", "الملاحظات|Observations"),
-            listOf(18, 10, 14, 9, 8, 12, 13, 16)),
-        AdminReg("✉️", "سجل المراسلات", "Registre de correspondance",
-            listOf("التاريخ", "الجهة", "الموضوع", "المرجع", "الملاحظات"), listOf(12, 20, 30, 14, 24)),
-        AdminReg("📤", "سجل الصادرات", "Registre du courrier départ",
-            listOf("التاريخ", "المرسل إليه", "الموضوع", "المرفقات", "الملاحظات"), listOf(12, 22, 30, 14, 22)),
-        AdminReg("📥", "سجل الواردات", "Registre du courrier arrivée",
-            listOf("تاريخ الوصول", "الجهة المرسلة", "رقم وتاريخ المراسلة", "الموضوع", "الإجراء المتخذ"), listOf(12, 20, 16, 28, 24)),
-        AdminReg("📣", "سجل الاستدعاء لجلسات المعلمين", "Registre des convocations aux réunions",
-            listOf("تاريخ الاستدعاء", "موعد الجلسة", "الموضوع / جدول الأعمال", "المعلم المستدعى", "توقيع الاستلام"), listOf(13, 13, 30, 24, 20)),
-        AdminReg("⏰", "سجل التأخير داخل القسم", "Registre des retards",
-            listOf("التاريخ", "الاسم", "القسم", "ساعة الوصول", "سبب التأخر", "الإجراء المتخذ"), listOf(11, 22, 10, 11, 22, 24)),
-        AdminReg("📜", "سجل المنشورات والتعليمات", "Registre des circulaires et instructions",
-            listOf("التاريخ", "مصدر المنشور", "رقمه وتاريخه", "الموضوع", "ملاحظات"), listOf(11, 20, 16, 33, 20)),
-        AdminReg("🤝", "سجل التعاون مع الشركاء", "Registre de coopération avec les partenaires",
-            listOf("التاريخ", "الشريك", "نوع التعاون / النشاط", "النتائج", "الملاحظات"), listOf(11, 20, 28, 22, 19)),
-        AdminReg("📊", "سجل تقرير العلامات الإدارية للمعلمين", "Registre des notes administratives des maîtres",
-            listOf("اسم المعلم", "القسم", "تاريخ التقييم", "العلامة الإدارية / 20", "ملاحظات المدير", "توقيع المعلم"), listOf(22, 10, 12, 12, 28, 16))
+    val groups: List<Pair<String, List<DirectorDoc>>> = listOf(
+        "👥 المعلمون والعاملون" to listOf(
+            adminDoc("👥", "سجل قيد الأشخاص", "Cahier matricule du personnel",
+                listOf("الاسم واللقب|Noms et prénoms", "الدليل|Matricule", "الوظيفة|Fonction", "الرتبة|Grade", "الدرجة|Echelon",
+                    "تاريخ الوصول إلى المدرسة|Date d'arrivée", "تاريخ الذهاب عن المدرسة|Date de départ", "الملاحظات|Observations"),
+                listOf(18, 10, 14, 9, 8, 12, 13, 16),
+                "ملف العاملين في المدرسة: تسجّل فيه بيانات كل معلم وإداري (الاسم، الدليل، الوظيفة، الرتبة، الدرجة) وتاريخ وصوله إلى المدرسة وذهابه عنها."),
+            DirectorDoc("📒", "دفتر غياب المعلمين", "تسجّل فيه حضور المعلمين كل يوم: ساعة البدء وساعة المغادرة والتوقيع. تكتب أسماء المعلمين مرة واحدة ثم يُسحب الدفتر (60 صفحة).") { showTeachersRegister = true },
+            adminDoc("📣", "سجل الاستدعاء لجلسات المعلمين", "Registre des convocations aux réunions",
+                listOf("تاريخ الاستدعاء", "موعد الجلسة", "الموضوع / جدول الأعمال", "المعلم المستدعى", "توقيع الاستلام"), listOf(13, 13, 30, 24, 20),
+                "يثبت أنك استدعيت كل معلم إلى اجتماع محدد وفي أي موعد وبأي موضوع، وتوقيع المعلم يثبت أنه استلم الاستدعاء."),
+            adminDoc("📊", "سجل تقرير العلامات الإدارية للمعلمين", "Registre des notes administratives des maîtres",
+                listOf("اسم المعلم", "القسم", "تاريخ التقييم", "العلامة الإدارية / 20", "ملاحظات المدير", "توقيع المعلم"), listOf(22, 10, 12, 12, 28, 16),
+                "تدوّن فيه علامة المدير الإدارية لكل معلم من 20 مع ملاحظاتك وتوقيع المعلم، ويُرجع إليه عند التقييم."),
+            DirectorDoc("📝", "دفتر محاضر اجتماع المعلمين", "تكتب فيه محضر كل اجتماع: الحاضرون والغائبون وجدول الأعمال والمشاكل والقرارات المتخذة، مع توقيع سكرتير الجلسة والمدير.") {
+                pdf("جاري إنشاء دفتر محاضر اجتماع المعلمين...", "دفتر_محاضر_اجتماع_المعلمين_$school.pdf") { HtmlReportHelper.generateCouncilPvHtml(context, sec) }
+            }
+        ),
+        "✉️ المراسلات والمنشورات" to listOf(
+            adminDoc("✉️", "سجل المراسلات", "Registre de correspondance",
+                listOf("التاريخ", "الجهة", "الموضوع", "المرجع", "الملاحظات"), listOf(12, 20, 30, 14, 24),
+                "يجمع مراسلات المدرسة الرسمية مع الجهات الأخرى (المفتشية، الإدارة الجهوية، أولياء الأمور…) حسب التاريخ والموضوع."),
+            adminDoc("📤", "سجل الصادرات", "Registre du courrier départ",
+                listOf("التاريخ", "المرسل إليه", "الموضوع", "المرفقات", "الملاحظات"), listOf(12, 22, 30, 14, 22),
+                "تسجّل فيه كل رسالة أو وثيقة تخرج من المدرسة: إلى من أُرسلت ومتى وفي أي موضوع. يثبت أن المدرسة أرسلتها."),
+            adminDoc("📥", "سجل الواردات", "Registre du courrier arrivée",
+                listOf("تاريخ الوصول", "الجهة المرسلة", "رقم وتاريخ المراسلة", "الموضوع", "الإجراء المتخذ"), listOf(12, 20, 16, 28, 24),
+                "تسجّل فيه كل رسالة أو وثيقة تصل إلى المدرسة: من أرسلها ومتى وصلت وما الإجراء المتخذ بشأنها."),
+            adminDoc("📜", "سجل المنشورات والتعليمات", "Registre des circulaires et instructions",
+                listOf("التاريخ", "مصدر المنشور", "رقمه وتاريخه", "الموضوع", "ملاحظات"), listOf(11, 20, 16, 33, 20),
+                "يحفظ المنشورات والتعليمات الرسمية الواردة من الجهات العليا مع مصدرها ورقمها وتاريخها، ليرجع إليها المدير والمعلمون."),
+            adminDoc("🤝", "سجل التعاون مع الشركاء", "Registre de coopération avec les partenaires",
+                listOf("التاريخ", "الشريك", "نوع التعاون / النشاط", "النتائج", "الملاحظات"), listOf(11, 20, 28, 22, 19),
+                "يدوّن أنشطة التعاون بين المدرسة وجهات خارجية (جمعية آباء، منظمة، مؤسسة…): من الشريك وما نوع التعاون وما النتائج.")
+        ),
+        "🏫 المدرسة والقسم" to listOf(
+            DirectorDoc("🪑", "دفتر أثاث القسم", "جرد أثاث القسم: اسم كل قطعة ووضعيتها (جيدة/متوسطة/رديئة) وعددها وتاريخ وصولها.") {
+                pdf("جاري إنشاء دفتر أثاث القسم...", "دفتر_أثاث_القسم_${sec.name.trim().replace(" ", "_")}.pdf") { HtmlReportHelper.generateClassInventoryHtml(context, sec) }
+            },
+            DirectorDoc("🚪", "دفتر زيارات المدرسة", "يسجّل فيه كل زائر للمدرسة (مفتش، مسؤول، ولي أمر…): تاريخ الزيارة واسمه ووظيفته وهدفه وملاحظاته وتوقيعه.") {
+                pdf("جاري إنشاء دفتر زيارات المدرسة...", "دفتر_زيارات_المدرسة_$school.pdf") { HtmlReportHelper.generateSchoolVisitsHtml(context, sec) }
+            },
+            adminDoc("⏰", "سجل التأخير داخل القسم", "Registre des retards",
+                listOf("التاريخ", "الاسم", "القسم", "ساعة الوصول", "سبب التأخر", "الإجراء المتخذ"), listOf(11, 22, 10, 11, 22, 24),
+                "يدوّن من تأخر عن الدخول إلى القسم: من هو وفي أي ساعة وصل وما السبب وما الإجراء المتخذ."),
+            DirectorDoc("🎓", "سجل العمل التربوي", "صفحة متابعة تبيّن حال المدرسة تربويًا: التجهيزات الموجودة وما يطبقه المعلمون (التخطيط، التمارين، التقييمات، الامتحانات) ونتائج التلاميذ، مع الإجراءات المقترحة وتوقيع المدير والمفتش.") {
+                pdf("جاري إنشاء سجل العمل التربوي...", "سجل_العمل_التربوي_$school.pdf") { HtmlReportHelper.generatePedagogicalWorkHtml(context, sec) }
+            }
+        )
     )
     if (showTeachersRegister) {
-        TeachersRegisterDialog(defaultSection, viewModel, onDismiss = { showTeachersRegister = false; onDismiss() })
+        TeachersRegisterDialog(sec, viewModel, onDismiss = { showTeachersRegister = false; onDismiss() })
     }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("🗂️ وثائق المدير", fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Button(onClick = { showTeachersRegister = true }, modifier = Modifier.fillMaxWidth()) {
-                    Text("📒 دفتر غياب المعلمين 📥", fontWeight = FontWeight.Bold)
-                }
-                Button(onClick = { onDismiss(); runDoc(1, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
-                    Text("🪑 دفتر أثاث القسم 📥", fontWeight = FontWeight.Bold)
-                }
-                Button(onClick = { onDismiss(); runDoc(2, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
-                    Text("📝 دفتر محاضر اجتماع المعلمين 📥", fontWeight = FontWeight.Bold)
-                }
-                Button(onClick = { onDismiss(); runDoc(3, defaultSection) }, modifier = Modifier.fillMaxWidth()) {
-                    Text("🚪 دفتر زيارات المدرسة 📥", fontWeight = FontWeight.Bold)
-                }
-                adminRegs.forEach { r ->
-                    Button(onClick = {
-                        onDismiss()
-                        val sec = defaultSection
-                        viewModel.runWithLoading("جاري إنشاء ${r.ar}...") {
-                            val landscape = r.cols.size > 6
-                            HtmlReportHelper.shareHtmlAsPdf(
-                                context,
-                                HtmlReportHelper.generateAdminRegisterHtml(context, sec, r.ar, r.fr, r.cols, r.widths),
-                                "${r.ar.replace(" ", "_")}_${sec.schoolName.trim().replace(" ", "_")}.pdf",
-                                landscape
-                            )
+                Text("كل دفتر يُسحب فارغًا وبغلاف جاهز، لتطبعه وتملأ بياناته بخط اليد.", fontSize = 12.sp, color = Color.Gray)
+                groups.forEach { (groupTitle, docs) ->
+                    Text(groupTitle, fontWeight = FontWeight.ExtraBold, fontSize = 14.sp, modifier = Modifier.padding(top = 8.dp))
+                    docs.forEach { d ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F7FA)),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text("${d.icon} ${d.title}", fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
+                                Text(d.role, fontSize = 11.5.sp, color = Color(0xFF455A64), lineHeight = 17.sp)
+                                Button(onClick = d.action, modifier = Modifier.fillMaxWidth()) {
+                                    Text("📥 سحب الدفتر", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                }
+                            }
                         }
-                    }, modifier = Modifier.fillMaxWidth()) {
-                        Text("${r.icon} ${r.ar} 📥", fontWeight = FontWeight.Bold)
                     }
-                }
-                Button(onClick = {
-                    onDismiss()
-                    val sec = defaultSection
-                    viewModel.runWithLoading("جاري إنشاء سجل العمل التربوي...") {
-                        HtmlReportHelper.shareHtmlAsPdf(
-                            context, HtmlReportHelper.generatePedagogicalWorkHtml(context, sec),
-                            "سجل_العمل_التربوي_${sec.schoolName.trim().replace(" ", "_")}.pdf"
-                        )
-                    }
-                }, modifier = Modifier.fillMaxWidth()) {
-                    Text("🎓 سجل العمل التربوي 📥", fontWeight = FontWeight.Bold)
                 }
             }
         },
