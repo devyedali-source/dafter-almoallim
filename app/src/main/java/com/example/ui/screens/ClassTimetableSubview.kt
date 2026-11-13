@@ -131,6 +131,8 @@ fun ClassTimetableSubview(
     var editMode by remember { mutableStateOf(false) }
     var swapSource by remember { mutableStateOf<OfficialTimetableSlot?>(null) }
     var showResetConfirm by remember { mutableStateOf(false) }
+    var frenchDayPick by remember { mutableStateOf<DayOfWeekAr?>(null) }
+    var showFrenchDayDialog by remember { mutableStateOf(false) }
 
     val daySlots = remember(level, selectedDay, customSlots) {
         val src = customSlots
@@ -430,6 +432,13 @@ fun ClassTimetableSubview(
                         uiT("اضغط على أيقونة التبديل ⇅ بجانب الحصة لتبديل مكانها مع حصة أخرى. يُحفظ على هذا الجهاز فقط ولا يغيّر الجدول الرسمي."),
                         fontSize = 11.sp, color = BentoPrimaryDesc, modifier = Modifier.padding(top = 4.dp)
                     )
+                    val hasFrench = (customSlots ?: OfficialTimetableRepository.getTimetableForLevel(level)).any { it.isFrench }
+                    if (hasFrench) {
+                        OutlinedButton(
+                            onClick = { frenchDayPick = null; showFrenchDayDialog = true },
+                            modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
+                        ) { com.example.ui.utils.BiText(ar = "🇫🇷 جمع حصص الفرنسية في يوم واحد", fr = "Regrouper le français en un seul jour", fontSize = 14.sp, frSize = 10.sp, center = true) }
+                    }
                 }
             }
 
@@ -517,6 +526,53 @@ fun ClassTimetableSubview(
                 }
             }
         }
+    }
+
+    if (showFrenchDayDialog) {
+        val baseF = customSlots ?: OfficialTimetableRepository.getTimetableForLevel(level)
+        val daysF = DayOfWeekAr.values().filter { d -> baseF.any { it.day == d } }
+        val pick = frenchDayPick
+        val preview = if (pick != null) consolidateFrenchInOneDay(baseF, pick) else null
+        AlertDialog(
+            onDismissRequest = { showFrenchDayDialog = false },
+            title = { Text(uiT("جمع حصص الفرنسية في يوم واحد")) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(uiT("اختر اليوم الذي تُدرَّس فيه الفرنسية:"), fontSize = 12.sp, color = BentoPrimaryDesc)
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        items(daysF) { d ->
+                            FilterChip(
+                                selected = d == pick,
+                                onClick = { frenchDayPick = d },
+                                label = { Text(if (com.example.ui.utils.AppLocalization.lang == "fr") d.frenchName else d.arabicName, fontSize = 12.sp) }
+                            )
+                        }
+                    }
+                    if (preview != null) {
+                        Text(
+                            uiTf("ستنتقل {0} حصة فرنسية إلى هذا اليوم، وتأخذ حصصه الأخرى أماكنها.", preview.second),
+                            fontSize = 12.sp, color = BentoPrimary
+                        )
+                        if (preview.third > 0) {
+                            Text(
+                                uiTf("تنبيه: لا يتسع اليوم لكل الحصص، فتُحذف {0} حصة فرنسية من الجدول الشخصي (الجدول الرسمي لا يتغير).", preview.third),
+                                fontSize = 12.sp, color = Color(0xFFC62828), fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = pick != null,
+                    onClick = {
+                        if (pick != null) mutateTimetable { l -> consolidateFrenchInOneDay(l, pick).first }
+                        showFrenchDayDialog = false
+                    }
+                ) { Text(uiT("تطبيق")) }
+            },
+            dismissButton = { TextButton(onClick = { showFrenchDayDialog = false }) { Text(uiT("إلغاء")) } }
+        )
     }
 
     if (showResetConfirm) {
@@ -1038,4 +1094,31 @@ private fun TimetableSlotCard(
             }
         }
     }
+}
+
+
+/**
+ * يجمع حصص الفرنسية في اليوم [day]: كل حصة فرنسية خارجه تبدّل مكانها بحصة غير فرنسية فيه
+ * (الأقرب إلى آخر اليوم). ما لا يتسع له اليوم يُحذف من الجدول الشخصي.
+ * النتيجة: (الجدول الجديد، عدد الحصص المنقولة، عدد الحصص المحذوفة)
+ */
+private fun consolidateFrenchInOneDay(
+    base: List<OfficialTimetableSlot>,
+    day: DayOfWeekAr
+): Triple<List<OfficialTimetableSlot>, Int, Int> {
+    val order = compareBy<OfficialTimetableSlot>({ it.day.ordinal }, { it.periodType.ordinal }, { it.slotIndex })
+    val movers = base.filter { it.isFrench && it.day != day }.sortedWith(order)
+    val room = base.filter { !it.isFrench && it.day == day }
+        .sortedWith(compareBy<OfficialTimetableSlot>({ it.periodType.ordinal }, { it.slotIndex }).reversed())
+    val k = minOf(movers.size, room.size)
+    val moving = movers.take(k)
+    val removed = movers.drop(k).map { it.id }.toSet()
+    val targets = room.take(k).sortedWith(compareBy({ it.periodType.ordinal }, { it.slotIndex }))
+    val newPos = HashMap<String, OfficialTimetableSlot>() // id -> الحصة التي تأخذ مكانها
+    moving.forEachIndexed { i, m -> newPos[m.id] = targets[i]; newPos[targets[i].id] = m }
+    val result = base.filter { it.id !in removed }.map { s ->
+        val p = newPos[s.id]
+        if (p != null) s.copy(day = p.day, periodType = p.periodType, slotIndex = p.slotIndex) else s
+    }
+    return Triple(result, k, removed.size)
 }
