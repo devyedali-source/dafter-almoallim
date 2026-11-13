@@ -9,10 +9,10 @@ object HymnsPdf {
     fun html(level: Int): String {
         val css = "@page{size:A4 portrait;margin:12mm;}" +
             "*{box-sizing:border-box;}" +
-            "body{font-family:'Cairo','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;background:#fff;color:#1b1b1b;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
+            "body{font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Droid Naskh Shift Alt','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;background:#fff;color:#1b1b1b;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
             ".po{border:2px solid var(--c);border-radius:14px;margin:0 0 7mm;padding:0 0 3mm;page-break-inside:avoid;break-inside:avoid;overflow:hidden;}" +
-            ".ti{background:var(--c);color:#fff;text-align:center;font-weight:900;font-size:18px;padding:5px 10px;margin-bottom:3mm;}" +
-            ".ln{display:flex;align-items:center;justify-content:center;padding:1px 10px;font-size:15px;font-weight:700;line-height:2.0;}" +
+            ".ti{background:var(--c);color:#fff;text-align:center;font-weight:900;font-size:23px;padding:4px 10px;margin-bottom:3mm;}" +
+            ".ln{display:flex;align-items:center;justify-content:center;padding:1px 8px;font-size:21px;font-weight:700;line-height:2.7;}" +
             ".ln .h{flex:1;text-align:center;}" +
             ".ln .d{width:14px;text-align:center;color:var(--c);font-size:11px;}" +
             ".ln.one{justify-content:center;text-align:center;}" +
