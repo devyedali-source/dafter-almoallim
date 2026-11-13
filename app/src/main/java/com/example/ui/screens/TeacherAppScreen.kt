@@ -2595,7 +2595,13 @@ fun ClassStudentsSubview(
                         }
                     }
                     PullListButton("🎶 أناشيد ومحفوظات السنة ${activeSection.level.coerceIn(1, 6)} 📥", onDismiss = { showPullMenu = false }) {
-                        com.example.ui.utils.HymnsPdf.share(context, activeSection.level)
+                        val hymnLevel = activeSection.level.coerceIn(1, 6)
+                        viewModel.runWithLoading("جاري تجهيز أناشيد ومحفوظات السنة $hymnLevel...") {
+                            HtmlReportHelper.shareHtmlAsPdf(
+                                context, com.example.ui.utils.HymnsPdf.html(hymnLevel),
+                                "أناشيد_ومحفوظات_السنة_$hymnLevel.pdf"
+                            )
+                        }
                     }
                     PullListButton("🧹 الكناسة 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("لا توجد أسماء بالقسم لبناء جدول النظافة")) {
