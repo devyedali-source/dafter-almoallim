@@ -437,7 +437,7 @@ fun ClassTimetableSubview(
                         OutlinedButton(
                             onClick = { frenchDayPick = null; showFrenchDayDialog = true },
                             modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
-                        ) { com.example.ui.utils.BiText(ar = "🇫🇷 جمع حصص الفرنسية في يوم واحد", fr = "Regrouper le français en un seul jour", fontSize = 14.sp, frSize = 10.sp, center = true) }
+                        ) { com.example.ui.utils.BiText(ar = "جمع حصص الفرنسية في يوم واحد", fr = "Regrouper le français en un seul jour", fontSize = 14.sp, frSize = 10.sp, center = true) }
                     }
                 }
             }
