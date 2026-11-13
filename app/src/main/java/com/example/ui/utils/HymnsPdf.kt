@@ -12,10 +12,10 @@ object HymnsPdf {
             "body{font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Droid Naskh Shift Alt','Noto Sans Arabic','Arial',sans-serif;direction:rtl;margin:0;background:#fff;color:#1b1b1b;-webkit-print-color-adjust:exact;print-color-adjust:exact;}" +
             ".po{border:2px solid var(--c);border-radius:14px;margin:0 0 7mm;padding:0 0 3mm;page-break-inside:avoid;break-inside:avoid;overflow:hidden;}" +
             ".ti{background:var(--c);color:#fff;text-align:center;font-weight:900;font-size:23px;padding:4px 10px;margin-bottom:3mm;}" +
-            ".ln{display:flex;align-items:center;justify-content:center;padding:1px 8px;font-size:21px;font-weight:700;line-height:2.7;}" +
-            ".ln .h{flex:1;text-align:center;}" +
+            ".ln{display:grid;grid-template-columns:1fr 14px 1fr;align-items:center;padding:0 8px;font-size:21px;font-weight:700;line-height:2.7;border-bottom:1px solid #e3e3e3;}" +
+            ".ln .h{text-align:right;padding-right:12px;}" +
             ".ln .d{width:14px;text-align:center;color:var(--c);font-size:11px;}" +
-            ".ln.one{justify-content:center;text-align:center;}" +
+            ".ln.one{display:block;text-align:center;}" +
             ".ln.rf{color:#C62828;font-weight:900;}"
         val sb = StringBuilder()
         sb.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>أناشيد ومحفوظات السنة $level</title><style>$css</style></head><body>")
