@@ -113,8 +113,23 @@ fun AnnualPlanningSubview(
 // DYNAMIC NAV LEVEL ENUM
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 private enum class NavLevel {
-    TERMS, WEEKS, SUBJECTS, DOMAINS, LESSONS, PREPARATION
+    TERMS, WEEKS, SUBJECTS, DOMAINS, LESSONS, PREPARATION,
+    // عرض «حسب المواد»: الفصل ← المادة ← المجال ← العناوين
+    S_SUBJECTS, S_DOMAINS, S_TITLES
 }
+
+/** دروس فصل معيّن (دون بنود المحطات المولَّدة) */
+private fun termLessonsOf(context: Context, levelCode: String, term: Int): List<CanonicalLessonInstance> {
+    val weeks = OfficialAnnualPlanningRepository.getWeeksForFasl(context, levelCode, term).toSet()
+    return OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode)
+        .filter { it.semaine in weeks && !isStationInst(it) }
+}
+
+private fun lessonMatchesSubject(l: CanonicalLessonInstance, s: CanonicalSubject): Boolean =
+    l.matiere.equals(s.nom, ignoreCase = true) || l.matiere.equals(s.code, ignoreCase = true)
+
+private fun lessonKeyOf(level: Int, l: CanonicalLessonInstance): String =
+    l.lesson_unit_id.ifBlank { "${level}_w${l.semaine}_${l.partie}" }
 
 private data class RestoredPlanPlace(
     val levels: List<NavLevel>,
@@ -209,6 +224,31 @@ private fun AnnualPlanningScreenContent(
                     }
                 }
             }
+            else if (savedLevels.contains(NavLevel.S_SUBJECTS) && t != null && activeClass.isTermUnlocked(t)) {
+                // عرض «حسب المواد»: نفس فحص التفعيل أعلاه
+                rTerm = t
+                levels.add(NavLevel.S_SUBJECTS)
+                val sCode = store.getString(context, lastPlaceKey + "subject")
+                val s = if (sCode != null) OfficialAnnualPlanningRepository.getSubjects(context, levelCode).find { it.code == sCode } else null
+                if (savedLevels.contains(NavLevel.S_DOMAINS) && s != null) {
+                    rSubject = s
+                    levels.add(NavLevel.S_DOMAINS)
+                    val d = store.getString(context, lastPlaceKey + "domain")
+                    if (savedLevels.contains(NavLevel.S_TITLES) && d != null) {
+                        rDomain = d
+                        levels.add(NavLevel.S_TITLES)
+                        val lId = store.getString(context, lastPlaceKey + "lesson")
+                        val lPart = store.getInt(context, lastPlaceKey + "lesson_part") ?: 1
+                        val l = if (lId != null) termLessonsOf(context, levelCode, t)
+                            .find { it.lesson_unit_id == lId && it.partie == lPart } else null
+                        if (savedLevels.contains(NavLevel.PREPARATION) && l != null) {
+                            rLesson = l
+                            rWeek = l.semaine
+                            levels.add(NavLevel.PREPARATION)
+                        }
+                    }
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -221,6 +261,12 @@ private fun AnnualPlanningScreenContent(
     var openedExamCode by remember { mutableStateOf<String?>(null) }
     var selectedDomain by remember { mutableStateOf<String?>(restoredPlace.domain) }
     var selectedLesson by remember { mutableStateOf<CanonicalLessonInstance?>(restoredPlace.lesson) }
+    // طريقة العرض المختارة: false = حسب الأسابيع (الأصلية) ، true = حسب المواد
+    var bySubject by remember {
+        mutableStateOf(
+            try { com.example.data.state.LastPlaceStore.getBoolean(context, "plan_view_by_subject") } catch (e: Exception) { false }
+        )
+    }
 
     // Intercept system back button to back-navigate through the hierarchy
     BackHandler(enabled = navHistory.size > 1) {
@@ -374,6 +420,11 @@ private fun AnnualPlanningScreenContent(
                     // Dynamic Count Badge (الأعداد تُحسب ديناميكيًا من المجموعات الفعلية)
                     val activeInstances = remember(currentLevel, selectedTerm, selectedWeek, selectedSubject, selectedDomain, levelCode) {
                         when (currentLevel) {
+                            NavLevel.S_SUBJECTS -> termLessonsOf(context, levelCode, selectedTerm ?: 1)
+                            NavLevel.S_DOMAINS -> termLessonsOf(context, levelCode, selectedTerm ?: 1).filter { l -> selectedSubject?.let { lessonMatchesSubject(l, it) } ?: false }
+                            NavLevel.S_TITLES -> termLessonsOf(context, levelCode, selectedTerm ?: 1).filter { l ->
+                                (selectedSubject?.let { lessonMatchesSubject(l, it) } ?: false) && l.domaine == selectedDomain
+                            }
                             NavLevel.TERMS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).filter { !isStationInst(it) }
                             NavLevel.WEEKS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).filter { it.fasl == selectedTerm && !isStationInst(it) }
                             NavLevel.SUBJECTS -> OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, selectedWeek ?: 1)
@@ -430,13 +481,15 @@ private fun AnnualPlanningScreenContent(
                     if (navHistory.size > 1 && selectedTerm != null) {
                         trail.add("الفصل ${getFaslArabicName(selectedTerm!!)}")
                     }
-                    if (navHistory.size > 2 && selectedWeek != null) {
+                    val subjMode = navHistory.contains(NavLevel.S_SUBJECTS)
+                    val off = if (subjMode) 1 else 0
+                    if (!subjMode && navHistory.size > 2 && selectedWeek != null) {
                         trail.add("الأسبوع $selectedWeek")
                     }
-                    if (navHistory.size > 3 && selectedSubject != null) {
+                    if (navHistory.size > 3 - off && selectedSubject != null) {
                         trail.add(planningSubjectLabel(selectedSubject!!.nom))
                     }
-                    if (navHistory.size > 4 && selectedDomain != null) {
+                    if (navHistory.size > 4 - off && selectedDomain != null) {
                         trail.add(getDomainArabicLabel(context, levelCode, selectedDomain!!))
                     }
                     trail.joinToString(" ← ")
@@ -445,12 +498,14 @@ private fun AnnualPlanningScreenContent(
                 val breadcrumbsFr = remember(navHistory.size, selectedTerm, selectedWeek, selectedSubject, selectedDomain) {
                     val trail = mutableListOf<String>()
                     if (navHistory.size > 1 && selectedTerm != null) trail.add(termFr(selectedTerm!!))
-                    if (navHistory.size > 2 && selectedWeek != null) trail.add("Semaine $selectedWeek")
-                    if (navHistory.size > 3 && selectedSubject != null) {
+                    val subjMode = navHistory.contains(NavLevel.S_SUBJECTS)
+                    val off = if (subjMode) 1 else 0
+                    if (!subjMode && navHistory.size > 2 && selectedWeek != null) trail.add("Semaine $selectedWeek")
+                    if (navHistory.size > 3 - off && selectedSubject != null) {
                         val ar = planningSubjectLabel(selectedSubject!!.nom)
                         trail.add(BiFr.subjectFr(ar) ?: ar)
                     }
-                    if (navHistory.size > 4 && selectedDomain != null) trail.add(getDomainArabicLabel(context, levelCode, selectedDomain!!))
+                    if (navHistory.size > 4 - off && selectedDomain != null) trail.add(getDomainArabicLabel(context, levelCode, selectedDomain!!))
                     trail.joinToString(" ← ")
                 }
 
@@ -469,14 +524,23 @@ private fun AnnualPlanningScreenContent(
             when (currentLevel) {
                 NavLevel.TERMS -> {
                     Column(modifier = Modifier.fillMaxSize()) {
+                        ViewModeToggle(
+                            bySubject = bySubject,
+                            onChange = { v ->
+                                bySubject = v
+                                try { com.example.data.state.LastPlaceStore.putBoolean(context, "plan_view_by_subject", v) } catch (e: Exception) { }
+                            }
+                        )
                         Box(modifier = Modifier.weight(1f)) {
                             TermsListScreen(
                                 context = context,
                                 activeClass = activeClass,
                                 levelCode = levelCode,
                                 onTermSelected = { termNum ->
+                                    // الفحص نفسه للعرضين: الفصل المقفل لا يصل إلى هنا (يُعالَج في onLockedTermSelected)
+                                    if (!activeClass.isTermUnlocked(termNum)) return@TermsListScreen
                                     selectedTerm = termNum
-                                    navHistory.add(NavLevel.WEEKS)
+                                    navHistory.add(if (bySubject) NavLevel.S_SUBJECTS else NavLevel.WEEKS)
                                 },
                                 onLockedTermSelected = { termNum ->
                                     Toast.makeText(
@@ -634,7 +698,235 @@ private fun AnnualPlanningScreenContent(
                         }
                     )
                 }
+                NavLevel.S_SUBJECTS, NavLevel.S_DOMAINS, NavLevel.S_TITLES -> {
+                    val t = selectedTerm ?: 1
+                    if (!activeClass.isTermUnlocked(t)) {
+                        // حماية إضافية: فصل غير مفعّل لا يُعرض أبدًا
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            BiText(ar = "هذا الفصل غير مفعّل.", fr = "Ce trimestre n'est pas activé.", modifier = Modifier.padding(24.dp), fontSize = 13.sp, color = BentoPrimaryDesc, center = true)
+                        }
+                    } else when (currentLevel) {
+                        NavLevel.S_SUBJECTS -> SubjectModeSubjectsScreen(
+                            context = context, levelCode = levelCode, term = t, level = level, progressState = progressState,
+                            onSubjectSelected = { s -> selectedSubject = s; navHistory.add(NavLevel.S_DOMAINS) }
+                        )
+                        NavLevel.S_DOMAINS -> SubjectModeDomainsScreen(
+                            context = context, levelCode = levelCode, term = t, level = level,
+                            subject = selectedSubject!!, progressState = progressState,
+                            onDomainSelected = { d -> selectedDomain = d; navHistory.add(NavLevel.S_TITLES) }
+                        )
+                        else -> SubjectModeTitlesScreen(
+                            context = context, levelCode = levelCode, term = t, level = level,
+                            subject = selectedSubject!!, domain = selectedDomain ?: "", progressState = progressState,
+                            onLessonSelected = { lesson ->
+                                selectedWeek = lesson.semaine
+                                selectedLesson = lesson
+                                navHistory.add(NavLevel.PREPARATION)
+                            },
+                            onToggleLessonTaught = { lessonId ->
+                                AnnualPlanningProgressManager.toggleLessonTaught(context, activeClass.id, lessonId)
+                                onRefreshProgress()
+                            }
+                        )
+                    }
+                }
                 else -> {}
+            }
+        }
+    }
+}
+
+@Composable
+private fun ViewModeToggle(bySubject: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        @Composable
+        fun Seg(selected: Boolean, ar: String, fr: String, onClick: () -> Unit, modifier: Modifier) {
+            Surface(
+                modifier = modifier.clickable { onClick() },
+                shape = RoundedCornerShape(10.dp),
+                color = if (selected) BentoPrimary else MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.2.dp, if (selected) BentoPrimary else BentoGrayOutline.copy(alpha = 0.6f))
+            ) {
+                Box(modifier = Modifier.padding(vertical = 9.dp), contentAlignment = Alignment.Center) {
+                    BiText(ar = ar, fr = fr, fontSize = 13.sp, fontWeight = FontWeight.Black, color = if (selected) Color.White else BentoPrimary, center = true)
+                }
+            }
+        }
+        Seg(!bySubject, "حسب الأسابيع", "Par semaines", { onChange(false) }, Modifier.weight(1f))
+        Seg(bySubject, "حسب المواد", "Par matières", { onChange(true) }, Modifier.weight(1f))
+    }
+}
+
+@Composable
+private fun SubjectModeSubjectsScreen(
+    context: Context,
+    levelCode: String,
+    term: Int,
+    level: Int,
+    progressState: AnnualPlanningProgress,
+    onSubjectSelected: (CanonicalSubject) -> Unit
+) {
+    val lessons = remember(levelCode, term) { termLessonsOf(context, levelCode, term) }
+    val subjects = remember(levelCode, term) {
+        OfficialAnnualPlanningRepository.getSubjects(context, levelCode).filter { s -> lessons.any { lessonMatchesSubject(it, s) } }
+    }
+    if (subjects.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            BiText(ar = "لا توجد مواد مقررة في هذا الفصل.", fr = "Aucune matière prévue ce trimestre.", modifier = Modifier.padding(24.dp), fontSize = 13.sp, color = BentoPrimaryDesc, center = true)
+        }
+        return
+    }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        items(subjects, key = { it.code.ifEmpty { it.nom } }) { s ->
+            val own = lessons.filter { lessonMatchesSubject(it, s) }
+            val done = own.count { progressState.taughtLessons.contains(lessonKeyOf(level, it)) }
+            ModeRowCard(
+                title = planningSubjectLabel(s.nom),
+                total = own.size,
+                done = done,
+                onClick = { onSubjectSelected(s) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SubjectModeDomainsScreen(
+    context: Context,
+    levelCode: String,
+    term: Int,
+    level: Int,
+    subject: CanonicalSubject,
+    progressState: AnnualPlanningProgress,
+    onDomainSelected: (String) -> Unit
+) {
+    val lessons = remember(levelCode, term, subject) { termLessonsOf(context, levelCode, term).filter { lessonMatchesSubject(it, subject) } }
+    val domains = remember(lessons) { lessons.map { it.domaine }.distinct().filter { it.isNotBlank() } }
+    if (domains.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            BiText(ar = "لا توجد مجالات مقررة لهذه المادة في هذا الفصل.", fr = "Aucun domaine prévu pour cette matière ce trimestre.", modifier = Modifier.padding(24.dp), fontSize = 13.sp, color = BentoPrimaryDesc, center = true)
+        }
+        return
+    }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        items(domains, key = { it }) { d ->
+            val own = lessons.filter { it.domaine == d }
+            val done = own.count { progressState.taughtLessons.contains(lessonKeyOf(level, it)) }
+            ModeRowCard(
+                title = getDomainArabicLabel(context, levelCode, d),
+                total = own.size,
+                done = done,
+                onClick = { onDomainSelected(d) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ModeRowCard(title: String, total: Int, done: Int, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        border = BorderStroke(1.2.dp, BentoGrayOutline.copy(alpha = 0.5f))
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = title, modifier = Modifier.weight(1f), fontWeight = FontWeight.Black, fontSize = 14.sp, color = BentoPrimary)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Surface(shape = RoundedCornerShape(6.dp), color = if (done == total && total > 0) Color(0xFFC8E6C9) else Color(0xFFE8F5E9)) {
+                    BiText(ar = "$done / $total", fr = "$done / $total", modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
+                }
+                Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = null, tint = BentoPrimary, modifier = Modifier.size(20.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun SubjectModeTitlesScreen(
+    context: Context,
+    levelCode: String,
+    term: Int,
+    level: Int,
+    subject: CanonicalSubject,
+    domain: String,
+    progressState: AnnualPlanningProgress,
+    onLessonSelected: (CanonicalLessonInstance) -> Unit,
+    onToggleLessonTaught: (String) -> Unit
+) {
+    val lessons = remember(levelCode, term, subject, domain) {
+        termLessonsOf(context, levelCode, term)
+            .filter { lessonMatchesSubject(it, subject) && it.domaine == domain }
+            .sortedWith(compareBy({ it.semaine }, { it.partie }))
+    }
+    if (lessons.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            BiText(ar = "لا توجد دروس مقررة في هذا المجال.", fr = "Aucune leçon prévue dans ce domaine.", modifier = Modifier.padding(24.dp), fontSize = 13.sp, color = BentoPrimaryDesc, center = true)
+        }
+        return
+    }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(lessons, key = { lessonKeyOf(level, it) + "_" + it.partie }) { lesson ->
+            val lessonId = lessonKeyOf(level, lesson)
+            val isTaught = progressState.taughtLessons.contains(lessonId)
+            val title = if (lesson.nombre_parties > 1) "${lesson.titre_officiel} — الجزء ${lesson.partie} من ${lesson.nombre_parties}" else lesson.titre_officiel
+            Card(
+                modifier = Modifier.fillMaxWidth().clickable { onLessonSelected(lesson) },
+                shape = RoundedCornerShape(10.dp),
+                colors = CardDefaults.cardColors(containerColor = if (isTaught) Color(0xFFE8F5E9).copy(alpha = 0.7f) else MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+                border = BorderStroke(1.2.dp, if (isTaught) Color(0xFF81C784) else BentoGrayOutline.copy(alpha = 0.3f))
+            ) {
+                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(text = title, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFFE3F2FD)) {
+                            BiText(ar = "الأسبوع ${lesson.semaine}", fr = "Semaine ${lesson.semaine}", modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1565C0))
+                        }
+                        Surface(
+                            modifier = Modifier.clickable { onToggleLessonTaught(lessonId) },
+                            shape = RoundedCornerShape(8.dp),
+                            color = if (isTaught) Color(0xFF2E7D32) else Color.Transparent,
+                            border = BorderStroke(1.2.dp, if (isTaught) Color(0xFF2E7D32) else BentoPrimaryDesc.copy(alpha = 0.5f))
+                        ) {
+                            Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Icon(
+                                    imageVector = if (isTaught) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
+                                    contentDescription = null,
+                                    tint = if (isTaught) Color.White else BentoPrimaryDesc,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                BiText(ar = "تم الإنجاز", fr = "Terminé", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (isTaught) Color.White else BentoPrimaryDesc)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
