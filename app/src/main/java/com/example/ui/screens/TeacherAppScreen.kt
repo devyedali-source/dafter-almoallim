@@ -2594,6 +2594,9 @@ fun ClassStudentsSubview(
                             showHymnsDialog = true
                         }
                     }
+                    PullListButton("🎶 أناشيد ومحفوظات السنة ${activeSection.level.coerceIn(1, 6)} 📥", onDismiss = { showPullMenu = false }) {
+                        com.example.ui.utils.HymnsPdf.share(context, activeSection.level)
+                    }
                     PullListButton("🧹 الكناسة 📥", onDismiss = { showPullMenu = false }) {
                         if (!needStudents("لا توجد أسماء بالقسم لبناء جدول النظافة")) {
                             showCleaningDialog = true
