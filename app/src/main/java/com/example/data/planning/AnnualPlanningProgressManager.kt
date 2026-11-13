@@ -102,7 +102,11 @@ class AnnualPlanningProgressManager(context: Context) {
 
         // Dynamic default: First Monday of October of academic start year
         val startYear = parseAcademicStartYear(academicYear)
-        return "$startYear-10-06" // Default October opening
+        val cal = java.util.Calendar.getInstance()
+        cal.clear()
+        cal.set(startYear, java.util.Calendar.OCTOBER, 1)
+        while (cal.get(java.util.Calendar.DAY_OF_WEEK) != java.util.Calendar.MONDAY) cal.add(java.util.Calendar.DAY_OF_MONTH, 1)
+        return String.format(java.util.Locale.US, "%04d-%02d-%02d", startYear, 10, cal.get(java.util.Calendar.DAY_OF_MONTH))
     }
 
     fun setSchoolStartDate(classId: Long, academicYear: String, dateString: String) {

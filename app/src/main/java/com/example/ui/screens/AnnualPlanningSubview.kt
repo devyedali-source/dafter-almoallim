@@ -816,7 +816,11 @@ private fun WeeksListScreen(
         OfficialAnnualPlanningRepository.getWeeksForFasl(context, levelCode, selectedTerm)
     }
 
+    val weeksListState = androidx.compose.foundation.lazy.rememberLazyListState(
+        initialFirstVisibleItemIndex = weeksForTerm.indexOf(calculatedCurrentWeek).coerceAtLeast(0)
+    )
     LazyColumn(
+        state = weeksListState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -890,6 +894,7 @@ private fun WeeksListScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             BiText(ar = uiTf("الأسبوع {0}", weekNumber), fr = "Semaine $weekNumber", fontSize = 15.sp, fontWeight = FontWeight.Black, color = BentoPrimary)
+                            if (isCurrentWeek) CurrentWeekBadge()
                         }
 
                         Surface(
@@ -1798,6 +1803,18 @@ private fun TermAccordionCard(
 // -----------------------------------------------------------------------------
 // COMPONENT 4: WEEKLY PLAN CARD (بطاقة الأسبوع المستقلة)
 // -----------------------------------------------------------------------------
+/** شارة «الجاري» تظهر عند الأسبوع الحالي. */
+@Composable
+private fun CurrentWeekBadge() {
+    Surface(shape = RoundedCornerShape(50), color = Color(0xFFD84315)) {
+        BiText(
+            ar = "الجاري", fr = "En cours",
+            modifier = Modifier.padding(horizontal = 9.dp, vertical = 2.dp),
+            fontSize = 11.sp, fontWeight = FontWeight.Black, color = Color.White
+        )
+    }
+}
+
 @Composable
 private fun WeeklyPlanCard(
     week: Int,
@@ -1883,6 +1900,7 @@ private fun WeeklyPlanCard(
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         BiText(ar = uiTf("الأسبوع {0}", week), fr = "Semaine $week", fontSize = 15.5.sp, fontWeight = FontWeight.Black, color = BentoPrimary)
+                        if (isCurrentWeek) CurrentWeekBadge()
                     }
 
                     // Official Label / Type Badge
