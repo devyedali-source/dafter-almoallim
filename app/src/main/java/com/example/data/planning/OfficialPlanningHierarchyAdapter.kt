@@ -501,7 +501,7 @@ object OfficialPlanningHierarchyAdapter {
             subject.contains("القرآن") || subject.contains("الإسلامية") -> "🕌"
             subject.contains("العربية") || subject.contains("القراءة") -> "📖"
             subject.contains("الرياضيات") || subject.contains("الحساب") -> "📐"
-            subject.contains("Français") || subject.contains("français") -> "🇫🇷"
+            subject.contains("Français") || subject.contains("français") -> "🔤"
             subject.contains("العلوم") || subject.contains("العلمية") -> "🔬"
             subject.contains("التاريخ") || subject.contains("الجغرافيا") -> "🗺️"
             subject.contains("المدنية") -> "⚖️"

@@ -466,7 +466,7 @@ fun SchoolLegislationScreen(
                                     val frTxt = legFr?.articles?.get(article.id)
                                     if (BiFr.enabled && frTxt != null) {
                                         appendLine()
-                                        appendLine("🇫🇷 ${legFr?.label(article)} — ${legFr?.doc(article.documentTitle) ?: ""}")
+                                        appendLine("${legFr?.label(article)} — ${legFr?.doc(article.documentTitle) ?: ""}")
                                         appendLine(legFr?.sections?.get(article.section) ?: "")
                                         appendLine(frTxt)
                                     }
