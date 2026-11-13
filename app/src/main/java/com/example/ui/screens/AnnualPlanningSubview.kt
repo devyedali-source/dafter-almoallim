@@ -115,7 +115,9 @@ fun AnnualPlanningSubview(
 private enum class NavLevel {
     TERMS, WEEKS, SUBJECTS, DOMAINS, LESSONS, PREPARATION,
     // عرض «حسب المواد»: الفصل ← المادة ← المجال ← العناوين
-    S_SUBJECTS, S_DOMAINS, S_TITLES
+    S_SUBJECTS, S_DOMAINS, S_TITLES,
+    // لائحة العناوين المفضلة
+    FAVORITES
 }
 
 /** دروس فصل معيّن (دون بنود المحطات المولَّدة) */
@@ -127,6 +129,18 @@ private fun termLessonsOf(context: Context, levelCode: String, term: Int): List<
 
 private fun lessonMatchesSubject(l: CanonicalLessonInstance, s: CanonicalSubject): Boolean =
     l.matiere.equals(s.nom, ignoreCase = true) || l.matiere.equals(s.code, ignoreCase = true)
+
+/** العناوين المفضلة من الفصول المفعّلة فقط، مرتبة بالمادة ثم الأسبوع (الجزء الأول لكل درس) */
+private fun favoriteLessonsOf(
+    context: Context, activeClass: ClassSection, levelCode: String, level: Int, favorites: Set<String>
+): List<CanonicalLessonInstance> {
+    if (favorites.isEmpty()) return emptyList()
+    return (1..3).filter { activeClass.isTermUnlocked(it) }
+        .flatMap { termLessonsOf(context, levelCode, it) }
+        .filter { lessonKeyOf(level, it) in favorites }
+        .distinctBy { lessonKeyOf(level, it) }
+        .sortedWith(compareBy({ it.matiere }, { it.semaine }, { it.partie }))
+}
 
 private fun lessonKeyOf(level: Int, l: CanonicalLessonInstance): String =
     l.lesson_unit_id.ifBlank { "${level}_w${l.semaine}_${l.partie}" }
@@ -249,6 +263,17 @@ private fun AnnualPlanningScreenContent(
                     }
                 }
             }
+            else if (savedLevels.contains(NavLevel.FAVORITES)) {
+                levels.add(NavLevel.FAVORITES)
+                val lId = store.getString(context, lastPlaceKey + "lesson")
+                val lPart = store.getInt(context, lastPlaceKey + "lesson_part") ?: 1
+                if (savedLevels.contains(NavLevel.PREPARATION) && lId != null) {
+                    val l = (1..3).filter { activeClass.isTermUnlocked(it) }
+                        .flatMap { termLessonsOf(context, levelCode, it) }
+                        .find { it.lesson_unit_id == lId && it.partie == lPart }
+                    if (l != null) { rLesson = l; rWeek = l.semaine; levels.add(NavLevel.PREPARATION) }
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -261,6 +286,10 @@ private fun AnnualPlanningScreenContent(
     var openedExamCode by remember { mutableStateOf<String?>(null) }
     var selectedDomain by remember { mutableStateOf<String?>(restoredPlace.domain) }
     var selectedLesson by remember { mutableStateOf<CanonicalLessonInstance?>(restoredPlace.lesson) }
+    var favorites by remember(activeClass.id) { mutableStateOf(com.example.data.planning.LessonFavoritesStore.load(context, activeClass.id)) }
+    val onToggleFavorite: (String) -> Unit = { id ->
+        favorites = com.example.data.planning.LessonFavoritesStore.toggle(context, activeClass.id, id)
+    }
     // طريقة العرض المختارة: false = حسب الأسابيع (الأصلية) ، true = حسب المواد
     var bySubject by remember {
         mutableStateOf(
@@ -418,9 +447,10 @@ private fun AnnualPlanningScreenContent(
                     }
 
                     // Dynamic Count Badge (الأعداد تُحسب ديناميكيًا من المجموعات الفعلية)
-                    val activeInstances = remember(currentLevel, selectedTerm, selectedWeek, selectedSubject, selectedDomain, levelCode) {
+                    val activeInstances = remember(currentLevel, selectedTerm, selectedWeek, selectedSubject, selectedDomain, levelCode, favorites) {
                         when (currentLevel) {
-                            NavLevel.S_SUBJECTS -> termLessonsOf(context, levelCode, selectedTerm ?: 1)
+                            NavLevel.FAVORITES -> favoriteLessonsOf(context, activeClass, levelCode, level, favorites)
+            NavLevel.S_SUBJECTS -> termLessonsOf(context, levelCode, selectedTerm ?: 1)
                             NavLevel.S_DOMAINS -> termLessonsOf(context, levelCode, selectedTerm ?: 1).filter { l -> selectedSubject?.let { lessonMatchesSubject(l, it) } ?: false }
                             NavLevel.S_TITLES -> termLessonsOf(context, levelCode, selectedTerm ?: 1).filter { l ->
                                 (selectedSubject?.let { lessonMatchesSubject(l, it) } ?: false) && l.domaine == selectedDomain
@@ -477,6 +507,7 @@ private fun AnnualPlanningScreenContent(
 
                 // Path Breadcrumbs Trail: الفصل ← الأسبوع ← المادة ← المجال
                 val breadcrumbsTrail = remember(navHistory.size, selectedTerm, selectedWeek, selectedSubject, selectedDomain) {
+                    if (navHistory.contains(NavLevel.FAVORITES)) return@remember "⭐ المفضلة"
                     val trail = mutableListOf<String>()
                     if (navHistory.size > 1 && selectedTerm != null) {
                         trail.add("الفصل ${getFaslArabicName(selectedTerm!!)}")
@@ -496,6 +527,7 @@ private fun AnnualPlanningScreenContent(
                 }
 
                 val breadcrumbsFr = remember(navHistory.size, selectedTerm, selectedWeek, selectedSubject, selectedDomain) {
+                    if (navHistory.contains(NavLevel.FAVORITES)) return@remember "⭐ Favoris"
                     val trail = mutableListOf<String>()
                     if (navHistory.size > 1 && selectedTerm != null) trail.add(termFr(selectedTerm!!))
                     val subjMode = navHistory.contains(NavLevel.S_SUBJECTS)
@@ -531,6 +563,26 @@ private fun AnnualPlanningScreenContent(
                                 try { com.example.data.state.LastPlaceStore.putBoolean(context, "plan_view_by_subject", v) } catch (e: Exception) { }
                             }
                         )
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 14.dp)
+                                .clickable { navHistory.add(NavLevel.FAVORITES) },
+                            shape = RoundedCornerShape(10.dp),
+                            color = Color(0xFFFFF8E1),
+                            border = BorderStroke(1.2.dp, Color(0xFFFFB300))
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFF9A825), modifier = Modifier.size(20.dp))
+                                BiText(ar = "عناويني المفضلة (${favorites.size})", fr = "Mes titres favoris (${favorites.size})", fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF5D4037), modifier = Modifier.weight(1f))
+                                Icon(Icons.Default.ChevronLeft, contentDescription = null, tint = Color(0xFF5D4037), modifier = Modifier.size(20.dp))
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
                         Box(modifier = Modifier.weight(1f)) {
                             TermsListScreen(
                                 context = context,
@@ -688,7 +740,25 @@ private fun AnnualPlanningScreenContent(
                         selectedDomain = selectedDomain ?: "",
                         plan = plan,
                         progressState = progressState,
+                        favorites = favorites,
+                        onToggleFavorite = onToggleFavorite,
                         onLessonSelected = { lesson ->
+                            selectedLesson = lesson
+                            navHistory.add(NavLevel.PREPARATION)
+                        },
+                        onToggleLessonTaught = { lessonId ->
+                            AnnualPlanningProgressManager.toggleLessonTaught(context, activeClass.id, lessonId)
+                            onRefreshProgress()
+                        }
+                    )
+                }
+                NavLevel.FAVORITES -> {
+                    FavoritesScreen(
+                        context = context, activeClass = activeClass, levelCode = levelCode, level = level,
+                        progressState = progressState, favorites = favorites,
+                        onToggleFavorite = onToggleFavorite,
+                        onLessonSelected = { lesson ->
+                            selectedWeek = lesson.semaine
                             selectedLesson = lesson
                             navHistory.add(NavLevel.PREPARATION)
                         },
@@ -718,6 +788,7 @@ private fun AnnualPlanningScreenContent(
                         else -> SubjectModeTitlesScreen(
                             context = context, levelCode = levelCode, term = t, level = level,
                             subject = selectedSubject!!, domain = selectedDomain ?: "", progressState = progressState,
+                            favorites = favorites, onToggleFavorite = onToggleFavorite,
                             onLessonSelected = { lesson ->
                                 selectedWeek = lesson.semaine
                                 selectedLesson = lesson
@@ -869,6 +940,8 @@ private fun SubjectModeTitlesScreen(
     subject: CanonicalSubject,
     domain: String,
     progressState: AnnualPlanningProgress,
+    favorites: Set<String> = emptySet(),
+    onToggleFavorite: (String) -> Unit = {},
     onLessonSelected: (CanonicalLessonInstance) -> Unit,
     onToggleLessonTaught: (String) -> Unit
 ) {
@@ -909,6 +982,8 @@ private fun SubjectModeTitlesScreen(
                         Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFFE3F2FD)) {
                             BiText(ar = "الأسبوع ${lesson.semaine}", fr = "Semaine ${lesson.semaine}", modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1565C0))
                         }
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        FavoriteStarButton(isFav = lessonId in favorites, onClick = { onToggleFavorite(lessonId) })
                         Surface(
                             modifier = Modifier.clickable { onToggleLessonTaught(lessonId) },
                             shape = RoundedCornerShape(8.dp),
@@ -924,6 +999,7 @@ private fun SubjectModeTitlesScreen(
                                 )
                                 BiText(ar = "تم الإنجاز", fr = "Terminé", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (isTaught) Color.White else BentoPrimaryDesc)
                             }
+                        }
                         }
                     }
                 }
@@ -1657,6 +1733,8 @@ private fun LessonsListScreen(
     selectedDomain: String,
     plan: CanonicalAnnualPlan?,
     progressState: AnnualPlanningProgress,
+    favorites: Set<String> = emptySet(),
+    onToggleFavorite: (String) -> Unit = {},
     onLessonSelected: (CanonicalLessonInstance) -> Unit,
     onToggleLessonTaught: (String) -> Unit
 ) {
@@ -1794,6 +1872,7 @@ private fun LessonsListScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
+                            FavoriteStarButton(isFav = lessonId in favorites, onClick = { onToggleFavorite(lessonId) })
                             IconButton(
                                 onClick = { onToggleLessonTaught(lessonId) },
                                 modifier = Modifier.size(32.dp)
@@ -2733,4 +2812,99 @@ private fun weekBadgeFr(type: String, completed: Boolean): String = when (type) 
     "vacances" -> "Vacances scolaires"
     "exception_calendrier" -> "Étape d'évaluation spéciale"
     else -> if (completed) "Semaine achevée" else "Leçons et enseignement"
+}
+
+
+@Composable
+private fun FavoriteStarButton(isFav: Boolean, onClick: () -> Unit) {
+    IconButton(onClick = onClick, modifier = Modifier.size(32.dp)) {
+        Icon(
+            imageVector = if (isFav) Icons.Default.Star else Icons.Default.StarBorder,
+            contentDescription = if (isFav) "إزالة من المفضلة" else "إضافة إلى المفضلة",
+            tint = if (isFav) Color(0xFFF9A825) else BentoPrimaryDesc.copy(alpha = 0.5f),
+            modifier = Modifier.size(22.dp)
+        )
+    }
+}
+
+@Composable
+private fun FavoritesScreen(
+    context: Context,
+    activeClass: ClassSection,
+    levelCode: String,
+    level: Int,
+    progressState: AnnualPlanningProgress,
+    favorites: Set<String>,
+    onToggleFavorite: (String) -> Unit,
+    onLessonSelected: (CanonicalLessonInstance) -> Unit,
+    onToggleLessonTaught: (String) -> Unit
+) {
+    // نبقي العناوين التي أُزيلت نجمتها ظاهرة حتى مغادرة الصفحة، فيمكن التراجع
+    val lessons = remember(levelCode, activeClass.id, activeClass.isTerm2Activated, activeClass.isTerm3Activated) {
+        favoriteLessonsOf(context, activeClass, levelCode, level, com.example.data.planning.LessonFavoritesStore.load(context, activeClass.id))
+    }
+    if (lessons.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            BiText(ar = "لا توجد عناوين مفضلة بعد. اضغط على النجمة ⭐ بجانب أي عنوان لإضافته.", fr = "Aucun favori pour le moment. Touchez l'étoile ⭐ à côté d'un titre pour l'ajouter.", modifier = Modifier.padding(24.dp), fontSize = 13.sp, color = BentoPrimaryDesc, center = true)
+        }
+        return
+    }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(lessons, key = { lessonKeyOf(level, it) + "_" + it.partie }) { lesson ->
+            val lessonId = lessonKeyOf(level, lesson)
+            val isTaught = progressState.taughtLessons.contains(lessonId)
+            val term = when {
+                lesson.semaine <= 13 -> 1
+                lesson.semaine <= 26 -> 2
+                else -> 3
+            }
+            Card(
+                modifier = Modifier.fillMaxWidth().clickable { onLessonSelected(lesson) },
+                shape = RoundedCornerShape(10.dp),
+                colors = CardDefaults.cardColors(containerColor = if (isTaught) Color(0xFFE8F5E9).copy(alpha = 0.7f) else MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+                border = BorderStroke(1.2.dp, if (isTaught) Color(0xFF81C784) else Color(0xFFFFB300).copy(alpha = 0.6f))
+            ) {
+                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(text = lesson.titre_officiel, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
+                    Text(
+                        text = planningSubjectLabel(lesson.matiere) + " • " + getDomainArabicLabel(context, levelCode, lesson.domaine),
+                        fontSize = 11.5.sp, color = Color(0xFF455A64)
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFFE3F2FD)) {
+                            BiText(ar = "الأسبوع ${lesson.semaine} • الفصل ${getFaslArabicName(term)}", fr = "Semaine ${lesson.semaine} • ${termFr(term)}", modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1565C0))
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            FavoriteStarButton(isFav = lessonId in favorites, onClick = { onToggleFavorite(lessonId) })
+                            Surface(
+                                modifier = Modifier.clickable { onToggleLessonTaught(lessonId) },
+                                shape = RoundedCornerShape(8.dp),
+                                color = if (isTaught) Color(0xFF2E7D32) else Color.Transparent,
+                                border = BorderStroke(1.2.dp, if (isTaught) Color(0xFF2E7D32) else BentoPrimaryDesc.copy(alpha = 0.5f))
+                            ) {
+                                Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Icon(
+                                        imageVector = if (isTaught) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
+                                        contentDescription = null,
+                                        tint = if (isTaught) Color.White else BentoPrimaryDesc,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    BiText(ar = "تم الإنجاز", fr = "Terminé", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (isTaught) Color.White else BentoPrimaryDesc)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
