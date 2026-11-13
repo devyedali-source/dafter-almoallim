@@ -11999,6 +11999,7 @@ fun ActivationPromoDialog(
     val clipboardManager = androidx.compose.ui.platform.LocalClipboardManager.current
     var selectedPlan by remember { mutableStateOf("single") }
     var sendingRequest by remember { mutableStateOf(false) }
+    var sendError by remember { mutableStateOf<String?>(null) }
 
     val termId = remember(targetTermName) {
         when {
@@ -12257,6 +12258,7 @@ fun ActivationPromoDialog(
                         }
                     }
                 }
+                com.example.ui.utils.ActivationSendStatus(sending = sendingRequest, error = sendError)
             }
         },
         confirmButton = {
@@ -12282,7 +12284,7 @@ fun ActivationPromoDialog(
                         context = context,
                         docRef = db.collection("activation_requests").document(requestId),
                         data = requestDoc,
-                        onSending = { sendingRequest = it },
+                        onSending = { sendingRequest = it; if (it) sendError = null },
                         onSuccess = {
                             try {
                                 val encodedMessage = android.net.Uri.encode(messageText)
@@ -12293,7 +12295,7 @@ fun ActivationPromoDialog(
                             }
                             onDismiss()
                         },
-                        onFail = { msg -> android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show() }
+                        onFail = { msg -> sendError = msg; android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show() }
                     )
                 },
                 colors = ButtonDefaults.buttonColors(

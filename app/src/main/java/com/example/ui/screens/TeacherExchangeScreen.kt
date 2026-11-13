@@ -70,7 +70,8 @@ fun sendExchangeActivationWhatsApp(
     userId: String,
     userEmail: String,
     wilaya: String = "",
-    moughataa: String = ""
+    moughataa: String = "",
+    onState: (sending: Boolean, error: String?, done: Boolean) -> Unit = { _, _, _ -> }
 ) {
     if (postId.isBlank()) {
         Toast.makeText(context, "لم يكتمل نشر الإعلان بعد. انتظر لحظات ثم أعد المحاولة.", Toast.LENGTH_LONG).show()
@@ -105,8 +106,9 @@ https://diftar-almoaalim.web.app/exchange-approve/$requestId
             context = context,
             docRef = db.collection("exchange_activation_requests").document(requestId),
             data = requestDoc,
-            onSending = { if (it) Toast.makeText(context, "جاري إرسال الطلب...", Toast.LENGTH_SHORT).show() },
+            onSending = { if (it) Toast.makeText(context, "جاري إرسال الطلب...", Toast.LENGTH_SHORT).show(); onState(it, null, false) },
             onSuccess = {
+                onState(false, null, true)
                 try {
                     val encoded = java.net.URLEncoder.encode(fullMessage, "UTF-8")
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$adminPhone&text=$encoded")))
@@ -114,7 +116,7 @@ https://diftar-almoaalim.web.app/exchange-approve/$requestId
                     Toast.makeText(context, "تم إرسال الطلب، لكن تعذر فتح تطبيق الواتساب تلقائياً", Toast.LENGTH_SHORT).show()
                 }
             },
-            onFail = { msg -> Toast.makeText(context, msg, Toast.LENGTH_LONG).show() }
+            onFail = { msg -> Toast.makeText(context, msg, Toast.LENGTH_LONG).show(); onState(false, msg, false) }
         )
     } catch (e: Exception) {
         Toast.makeText(context, "تعذر إرسال الطلب، أعد المحاولة", Toast.LENGTH_SHORT).show()
@@ -131,11 +133,14 @@ fun PostActivationDialog(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    var sending by remember { mutableStateOf(false) }
+    var sendError by remember { mutableStateOf<String?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             Button(
+                enabled = !sending,
                 onClick = {
                     sendExchangeActivationWhatsApp(
                         context = context,
@@ -143,9 +148,14 @@ fun PostActivationDialog(
                         userId = userId,
                         userEmail = userEmail,
                         wilaya = wilaya,
-                        moughataa = moughataa
+                        moughataa = moughataa,
+                        onState = { s, e, done ->
+                            sending = s
+                            if (s) sendError = null
+                            if (e != null) sendError = e
+                            if (done) onDismiss()
+                        }
                     )
-                    onDismiss()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25D366)),
                 shape = RoundedCornerShape(12.dp)
@@ -187,6 +197,7 @@ fun PostActivationDialog(
                 }
 
                 BiText(ar = uiTf("اضغط على الزر أدناه لإرسال طلب تفعيل الإعلان رقم (#{0}) مباشرة عبر واتساب الإدارة:", postId), fr = BiFr.f("اضغط على الزر أدناه لإرسال طلب تفعيل الإعلان رقم (#{0}) مباشرة عبر واتساب الإدارة:", postId), fontSize = 13.sp, color = Color.DarkGray)
+                com.example.ui.utils.ActivationSendStatus(sending = sending, error = sendError)
             }
         },
         shape = RoundedCornerShape(20.dp),

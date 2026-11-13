@@ -1234,6 +1234,7 @@ private fun CourseSubscriptionDialog(
     }
     val requestId = newRequestId
     var sendingCourseRequest by remember { mutableStateOf(false) }
+    var courseSendError by remember { mutableStateOf<String?>(null) }
     var watchedRequestId by remember(spec.id) {
         mutableStateOf(if (savedRequestId.isNotBlank()) savedRequestId else newRequestId)
     }
@@ -1367,6 +1368,8 @@ private fun CourseSubscriptionDialog(
                 BiText(ar = uiT("كل تخصّص يُفعَّل وحده، وتفعيل هذا التخصّص لا يفتح التخصّصات الأخرى."), fr = BiFr.of("كل تخصّص يُفعَّل وحده، وتفعيل هذا التخصّص لا يفتح التخصّصات الأخرى."), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = CourseWarnColor)
                 Spacer(modifier = Modifier.height(8.dp))
                 BiText(ar = uiT("بالضغط على الزرّ يُفتح الواتساب برسالة جاهزة إلى مدير الأقسام."), fr = BiFr.of("بالضغط على الزرّ يُفتح الواتساب برسالة جاهزة إلى مدير الأقسام."), fontSize = 12.sp, color = CourseMutedColor)
+                Spacer(modifier = Modifier.height(10.dp))
+                com.example.ui.utils.ActivationSendStatus(sending = sendingCourseRequest, error = courseSendError)
             }
         },
         confirmButton = {
@@ -1388,7 +1391,7 @@ private fun CourseSubscriptionDialog(
                         context = context,
                         docRef = db.collection("course_activation_requests").document(requestId),
                         data = requestDoc,
-                        onSending = { sendingCourseRequest = it },
+                        onSending = { sendingCourseRequest = it; if (it) courseSendError = null },
                         onSuccess = {
                             CourseSubscriptionStore.saveLastRequestId(context, spec.id, requestId)
                             watchedRequestId = requestId
@@ -1401,7 +1404,7 @@ private fun CourseSubscriptionDialog(
                             }
                             onDismiss()
                         },
-                        onFail = { msg -> android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show() }
+                        onFail = { msg -> courseSendError = msg; android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show() }
                     )
                 }
             ) {
