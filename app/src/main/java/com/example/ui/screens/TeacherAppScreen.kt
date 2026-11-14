@@ -636,9 +636,6 @@ fun InnerTeacherAppScreenContent(
 
             var showClassManagerInside by remember { mutableStateOf(false) }
             var showUserGuide by remember { mutableStateOf(false) }
-            LaunchedEffect(Unit) {
-                if (!isUserGuideSeen(context)) showUserGuide = true
-            }
             if (showUserGuide) {
                 UserGuideDialog(onDismiss = { markUserGuideSeen(context); showUserGuide = false })
             }
