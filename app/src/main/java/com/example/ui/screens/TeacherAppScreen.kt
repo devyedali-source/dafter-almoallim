@@ -1729,7 +1729,6 @@ fun InnerTeacherAppScreenContent(
                                                 color = BentoText
                                             )
                                         }
-                                        SmallGuideButton(onClick = { showHomeGuide2 = true })
                                     }
                                 }
 
@@ -1863,7 +1862,6 @@ fun InnerTeacherAppScreenContent(
                                         } else {
                                             Spacer(Modifier.weight(1f))
                                         }
-                                        SmallGuideButton(onClick = { showHomeGuide = true })
                                     }
                                 }
 
@@ -2670,7 +2668,6 @@ fun ClassStudentsSubview(
                         modifier = Modifier.size(18.dp)
                     )
                 }
-                SmallGuideButton(onClick = { showStudentsGuide = true })
                 IconButton(
                     onClick = { isSearchVisible = !isSearchVisible },
                     modifier = Modifier
@@ -5964,7 +5961,6 @@ fun GradesEntryTab(
                 Box(Modifier.weight(1f)) {
             BiText(ar = AppLocalization.tr("grades_entry_title", "رصد وإدخال درجات الطلاب 📝", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("رصد وإدخال درجات الطلاب 📝"), fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.primary, fontSize = MaterialTheme.typography.titleLarge.fontSize)
                 }
-                SmallGuideButton(onClick = { showResultsGuide = true })
             }
             BiText(ar = AppLocalization.tr("grades_entry_subtitle", "يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات.", appLanguage), fr = if (appLanguage == "fr") null else BiFr.of("يرجى تحديد الفصل الدراسي وطريقة الإدخال ثم المادة لبدء واجهة رصد العلامات."), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = MaterialTheme.typography.bodySmall.fontSize)
             
@@ -8961,7 +8957,6 @@ fun EnhancedReportsTab(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                SmallGuideButton(onClick = { showReportsGuide = true })
                 IconButton(
                     onClick = { showSettingsDialog = true },
                     modifier = Modifier

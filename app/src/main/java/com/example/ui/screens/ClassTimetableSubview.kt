@@ -199,7 +199,6 @@ fun ClassTimetableSubview(
                             color = BentoPrimary
                         )
                     }
-                    SmallGuideButton(onClick = { showTimetableGuide = true }, modifier = Modifier.padding(horizontal = 6.dp))
                     }
 
                     Surface(
