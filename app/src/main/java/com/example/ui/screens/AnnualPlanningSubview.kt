@@ -559,14 +559,6 @@ private fun AnnualPlanningScreenContent(
             when (currentLevel) {
                 NavLevel.TERMS -> {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        ViewModeToggle(
-                            mode = viewMode,
-                            onChange = { v ->
-                                viewMode = v
-                                try { com.example.data.state.LastPlaceStore.putInt(context, "plan_view_mode", v) } catch (e: Exception) { }
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
                         Box(modifier = Modifier.weight(1f)) {
                             TermsListScreen(
                                 context = context,
@@ -671,6 +663,11 @@ private fun AnnualPlanningScreenContent(
                     }
                 }
                 NavLevel.WEEKS -> {
+                  Column(modifier = Modifier.fillMaxSize()) {
+                    InTermViewToggle(viewMode, currentLevel) { v, target -> viewMode = v; navHistory[navHistory.lastIndex] = target
+                        try { com.example.data.state.LastPlaceStore.putInt(context, "plan_view_mode", v) } catch (e: Exception) { } }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Box(modifier = Modifier.weight(1f)) {
                     WeeksListScreen(
                         context = context,
                         levelCode = levelCode,
@@ -686,6 +683,8 @@ private fun AnnualPlanningScreenContent(
                             onRefreshProgress()
                         }
                     )
+                    }
+                  }
                 }
                 NavLevel.SUBJECTS -> {
                     SubjectsListScreen(
@@ -760,10 +759,17 @@ private fun AnnualPlanningScreenContent(
                             BiText(ar = "هذا الفصل غير مفعّل.", fr = "Ce trimestre n'est pas activé.", modifier = Modifier.padding(24.dp), fontSize = 13.sp, color = BentoPrimaryDesc, center = true)
                         }
                     } else when (currentLevel) {
-                        NavLevel.S_SUBJECTS -> SubjectModeSubjectsScreen(
-                            context = context, levelCode = levelCode, term = t, level = level, progressState = progressState,
-                            onSubjectSelected = { s -> selectedSubject = s; navHistory.add(NavLevel.S_DOMAINS) }
-                        )
+                        NavLevel.S_SUBJECTS -> Column(modifier = Modifier.fillMaxSize()) {
+                            InTermViewToggle(viewMode, currentLevel) { v, target -> viewMode = v; navHistory[navHistory.lastIndex] = target
+                                try { com.example.data.state.LastPlaceStore.putInt(context, "plan_view_mode", v) } catch (e: Exception) { } }
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Box(modifier = Modifier.weight(1f)) {
+                                SubjectModeSubjectsScreen(
+                                    context = context, levelCode = levelCode, term = t, level = level, progressState = progressState,
+                                    onSubjectSelected = { s -> selectedSubject = s; navHistory.add(NavLevel.S_DOMAINS) }
+                                )
+                            }
+                        }
                         NavLevel.S_DOMAINS -> SubjectModeDomainsScreen(
                             context = context, levelCode = levelCode, term = t, level = level,
                             subject = selectedSubject!!, progressState = progressState,
@@ -803,6 +809,14 @@ private fun AnnualPlanningScreenContent(
             }
         }
     }
+}
+
+@Composable
+private fun InTermViewToggle(mode: Int, current: NavLevel, onPick: (Int, NavLevel) -> Unit) {
+    ViewModeToggle(mode = mode, onChange = { v ->
+        val target = if (v == 0) NavLevel.WEEKS else NavLevel.S_SUBJECTS
+        onPick(v, target)
+    })
 }
 
 @Composable
