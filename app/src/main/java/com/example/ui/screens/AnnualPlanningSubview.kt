@@ -2994,8 +2994,9 @@ private fun CompetenceModeUnitsScreen(
                 ) {
                     Column(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            val compNum = comp.code.filter { it.isDigit() }.ifEmpty { comp.code }
                             Surface(shape = RoundedCornerShape(6.dp), color = BentoPrimary) {
-                                Text(comp.code, modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp), color = Color.White, fontWeight = FontWeight.Black, fontSize = 12.sp)
+                                BiText(ar = "كفاية $compNum", fr = "Compétence $compNum", modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp), color = Color.White, fontWeight = FontWeight.Black, fontSize = 12.sp)
                             }
                             BiText(ar = "الكفاية • $done / ${units.size}", fr = "Compétence • $done / ${units.size}", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
                         }
