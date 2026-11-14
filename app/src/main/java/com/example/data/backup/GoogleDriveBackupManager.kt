@@ -172,6 +172,105 @@ class GoogleDriveBackupManager(
         }
     }
 
+    // ===== تقدّم التخطيط السنوي =====
+    private val planningPrefixes = listOf("completed_weeks_", "taught_lessons_", "last_week_", "school_start_date_")
+
+    private fun collectPlanningPrefs(): Map<String, String> {
+        return try {
+            val p = context.getSharedPreferences("annual_planning_prefs", Context.MODE_PRIVATE)
+            val out = mutableMapOf<String, String>()
+            for ((k, v) in p.all) {
+                if (planningPrefixes.none { k.startsWith(it) }) continue
+                when (v) {
+                    is Int -> out[k] = "i:$v"
+                    is String -> out[k] = "s:$v"
+                }
+            }
+            out
+        } catch (e: Exception) {
+            emptyMap()
+        }
+    }
+
+    /** دمج آمن: لا يمحو ما على الجهاز؛ الأسابيع والدروس المنجزة تُجمع، والباقي يُملأ إن كان غائبًا. */
+    private fun mergePlanningPrefs(saved: Map<String, String>) {
+        if (saved.isEmpty()) return
+        try {
+            val p = context.getSharedPreferences("annual_planning_prefs", Context.MODE_PRIVATE)
+            val ed = p.edit()
+            for ((k, raw) in saved) {
+                if (planningPrefixes.none { k.startsWith(it) }) continue
+                val kind = raw.take(2)
+                val value = raw.drop(2)
+                val isList = k.startsWith("completed_weeks_") || k.startsWith("taught_lessons_")
+                if (isList && kind == "s:") {
+                    val merged = linkedSetOf<Any>()
+                    val local = p.getString(k, null)
+                    for (src in listOfNotNull(local, value)) {
+                        try {
+                            val arr = org.json.JSONArray(src)
+                            for (i in 0 until arr.length()) merged.add(arr.get(i))
+                        } catch (e: Exception) { }
+                    }
+                    val out = org.json.JSONArray()
+                    merged.forEach { out.put(it) }
+                    ed.putString(k, out.toString())
+                } else if (!p.contains(k)) {
+                    if (kind == "i:") value.toIntOrNull()?.let { ed.putInt(k, it) }
+                    else if (kind == "s:") ed.putString(k, value)
+                }
+            }
+            ed.apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /** نسخة محلية من بيانات الجهاز قبل أي استعادة (تُحفظ آخر نسختين). */
+    private suspend fun saveLocalSafetyCopy() {
+        try {
+            val data = BackupData(
+                userEmail = null,
+                classSections = repository.getAllClassSectionsList(),
+                students = repository.getAllStudentsList(),
+                subjects = repository.getAllSubjectsList(),
+                grades = repository.getAllGradesList(),
+                customizations = repository.getAllCustomizationsList(),
+                manualTermAverages = repository.getAllManualTermAveragesList(),
+                localNotifications = repository.getAllLocalNotificationsList(),
+                attendance = repository.getAllAttendanceList(),
+                competencies = repository.getAllCompetenciesList(),
+                planningPrefs = collectPlanningPrefs()
+            )
+            if (data.classSections.isEmpty() && data.students.isEmpty() && data.grades.isEmpty()) return
+            val dir = java.io.File(context.filesDir, "pre_restore").apply { mkdirs() }
+            java.io.File(dir, "pre_restore_${System.currentTimeMillis()}.json").writeText(backupAdapter.toJson(data))
+            dir.listFiles()?.sortedByDescending { it.name }?.drop(2)?.forEach { it.delete() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /** نسخة سابقة على Drive: مرة كل 24 ساعة نحفظ المحتوى القديم قبل استبداله. غير حرجة، وفشلها لا يوقف الرفع. */
+    private fun keepPreviousVersionOnDrive(accessToken: String, fileId: String, fileName: String) {
+        try {
+            val prefs = context.getSharedPreferences("teacher_settings_prefs", Context.MODE_PRIVATE)
+            val last = prefs.getLong("drive_prev_copy_time", 0L)
+            val now = System.currentTimeMillis()
+            if (now - last < 24L * 3600_000L) return
+            val old = downloadBackupFileContent(accessToken, fileId)
+            if (old.isBlank() || old.length < 20) return
+            val prevName = fileName.removeSuffix(".json") + "_prev.json"
+            val prevId = findBackupFileId(accessToken, prevName) ?: createBackupFileMetadata(accessToken, prevName)
+            uploadBackupFileContent(accessToken, prevId, old)
+            prefs.edit().putLong("drive_prev_copy_time", now).apply()
+        } catch (e: GoogleDriveAuthException) {
+            throw e
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun getBackupFileName(userEmail: String?, userId: String?): String {
         val rawId = when {
             !userEmail.isNullOrBlank() -> userEmail
@@ -378,7 +477,8 @@ class GoogleDriveBackupManager(
                 teacherSettings = teacherSettings,
                 localNotifications = localNotifications,
                 attendance = attendance,
-                competencies = competencies
+                competencies = competencies,
+                planningPrefs = collectPlanningPrefs()
             )
 
             val jsonContent = backupAdapter.toJson(backupData)
@@ -406,6 +506,8 @@ class GoogleDriveBackupManager(
                     "لم يتم رفع أي شيء حفاظا على بياناتك: جهاز آخر زامن هذا الحساب بعد آخر مزامنة على هذا الجهاز. افتح التطبيق على ذلك الجهاز، أو سجّل الخروج من أحد الجهازين، حتى لا يمحو جهاز عمل جهاز آخر."
                 )
             }
+
+            keepPreviousVersionOnDrive(authToken, fileId, fileName)
 
             onProgress?.invoke(90, "جاري رفع محتوى السجلات بالسحابة...")
 
@@ -531,6 +633,7 @@ class GoogleDriveBackupManager(
             }
 
             onProgress?.invoke(90, "جاري استعادة وتثبيت السجلات في التطبيق...")
+            saveLocalSafetyCopy()
             repository.restoreDatabase(
                 sections = backupData.classSections,
                 students = backupData.students,
@@ -542,6 +645,7 @@ class GoogleDriveBackupManager(
                 attendance = backupData.attendance,
                 competencies = backupData.competencies
             )
+            mergePlanningPrefs(backupData.planningPrefs)
 
             try {
                 val restorePrefs = context.getSharedPreferences("teacher_settings_prefs", Context.MODE_PRIVATE)

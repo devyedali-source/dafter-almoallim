@@ -34,5 +34,7 @@ data class BackupData(
     val teacherSettings: Map<String, String> = emptyMap(),
     val localNotifications: List<LocalNotification> = emptyList(),
     val attendance: List<com.example.data.models.AttendanceRecord> = emptyList(),
-    val competencies: List<com.example.data.models.CompetencyEntry> = emptyList()
+    val competencies: List<com.example.data.models.CompetencyEntry> = emptyList(),
+    // تقدّم التخطيط السنوي (اختياري: النسخ القديمة لا تحويه فتبقى بيانات الجهاز كما هي)
+    val planningPrefs: Map<String, String> = emptyMap()
 )
