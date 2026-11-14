@@ -1059,6 +1059,10 @@ private fun PedagogicalStationScreenContent(
 
     var selectedTab by remember { mutableIntStateOf(0) }
     val isFrench = stationData.isFrench
+    // محتوى الإدماج والتقويم والعلاج المرتبط بدروس هذا المقطع (مقترح تربوي مساعد)
+    val weekContent = remember(lesson.id, lesson.level) {
+        com.example.data.planning.CompetenceContentRepository.find(context, lesson.level, lesson.id)
+    }
 
     var isTaught by remember(lesson.id, classId) {
         val initialTaught = if (classId != 0L) {
@@ -1272,6 +1276,9 @@ private fun PedagogicalStationScreenContent(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 contentPadding = PaddingValues(bottom = 24.dp)
             ) {
+                if (weekContent != null) {
+                    item { CompetenceContentCard(content = weekContent, tab = selectedTab, isFrench = isFrench) }
+                }
                 when (selectedTab) {
                     0 -> {
                         // 1. INTEGRATION PROPOSALS
@@ -1295,6 +1302,111 @@ private fun PedagogicalStationScreenContent(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompetenceContentCard(
+    content: com.example.data.planning.CompetenceWeekContent,
+    tab: Int,
+    isFrench: Boolean
+) {
+    val accent = if (content.isEnd) Color(0xFFC62828) else Color(0xFFEF6C00)
+    CompositionLocalProvider(
+        LocalLayoutDirection provides (if (isFrench) LayoutDirection.Ltr else LayoutDirection.Rtl)
+    ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            border = BorderStroke(1.5.dp, accent.copy(alpha = 0.6f))
+        ) {
+            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Surface(shape = RoundedCornerShape(12.dp), color = accent) {
+                        Text(
+                            text = if (isFrench) {
+                                if (content.isEnd) "Fin de la compétence ${content.competenceNumber}" else "Milieu de la compétence ${content.competenceNumber}"
+                            } else {
+                                if (content.isEnd) "ختام الكفاية ${content.competenceNumber}" else "وسط الكفاية ${content.competenceNumber}"
+                            },
+                            color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
+                        )
+                    }
+                }
+                if (content.units.isNotBlank()) {
+                    Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFFF1F5F9)) {
+                        Text(
+                            text = (if (isFrench) "Leçons du bloc : " else "دروس المقطع: ") + content.units,
+                            fontSize = 11.sp, color = Color(0xFF475569),
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+                }
+                when (tab) {
+                    0 -> {
+                        Text(if (isFrench) "Situation d'intégration" else "وضعية الإدماج", fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color(0xFF0F172A))
+                        Text(content.situation, fontSize = 12.5.sp, lineHeight = 19.sp, color = Color(0xFF1E293B))
+                    }
+                    1 -> {
+                        if (content.isEnd && content.questions.isNotEmpty()) {
+                            Text(if (isFrench) "Évaluation de la compétence" else "تقويم الكفاية", fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color(0xFF0F172A))
+                            content.questions.forEachIndexed { i, (q, a) ->
+                                Surface(shape = RoundedCornerShape(8.dp), color = Color(0xFFF8FAFC), border = BorderStroke(1.dp, Color(0xFFE2E8F0))) {
+                                    Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                        Text(
+                                            text = (if (i in content.keyQuestions) "⭐ " else "") + "${i + 1}) " + q,
+                                            fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color(0xFF0F172A)
+                                        )
+                                        Text(
+                                            text = (if (isFrench) "Réponse / critère : " else "الجواب أو معيار الإنجاز: ") + a,
+                                            fontSize = 12.sp, color = Color(0xFF2E7D32), lineHeight = 17.sp
+                                        )
+                                    }
+                                }
+                            }
+                            Surface(shape = RoundedCornerShape(8.dp), color = Color(0xFFFFF8E1), border = BorderStroke(1.dp, Color(0xFFFFB300))) {
+                                Text(
+                                    text = if (isFrench)
+                                        "Indicateur de maîtrise (proposition) : l'élève acquiert la compétence (+) s'il répond correctement à au moins 4 questions sur 5, dont les questions ⭐. Sinon (−). Reportez le résultat dans le cahier de suivi (page des élèves ← Évaluation des compétences)."
+                                    else
+                                        "مؤشر التمكن (مقترح): يمتلك التلميذ الكفاية (+) إذا أجاب صحيحًا عن 4 أسئلة من 5 على الأقل، بينها الأسئلة المميّزة بـ ⭐. وإلا (−). سجّل النتيجة في دفتر المتابعة: صفحة التلاميذ ← تقييم الكفايات.",
+                                    fontSize = 11.5.sp, lineHeight = 17.sp, color = Color(0xFF5D4037),
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        } else {
+                            Text(
+                                text = if (isFrench)
+                                    "Milieu de compétence : cette semaine sert à l'intégration et à la remédiation ; elle n'est pas enregistrée dans le cahier de suivi."
+                                else
+                                    "هذا الأسبوع في وسط الكفاية: إدماج وعلاج فقط، ولا يُسجَّل في دفتر المتابعة. يدوّن المعلم من يحتاج علاجًا ثم يواصل.",
+                                fontSize = 12.sp, lineHeight = 18.sp, color = Color(0xFF9A3412)
+                            )
+                        }
+                    }
+                    else -> {
+                        Text(if (isFrench) "Remédiation" else "العلاج لمن لم يمتلك", fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color(0xFF0F172A))
+                        content.remediation.forEach { r ->
+                            Text("• $r", fontSize = 12.5.sp, lineHeight = 19.sp, color = Color(0xFF1E293B))
+                        }
+                        if (content.isEnd) {
+                            Text(
+                                text = if (isFrench) "Un élève noté (−) rejoint un groupe de soutien."
+                                else "من أخذ (−) يدخل مجموعة دعم في جدول الدعم.",
+                                fontSize = 11.5.sp, color = Color(0xFF475569)
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = if (isFrench) "Proposition pédagogique d'appui, non officielle. Fondée sur le texte de la compétence et les titres du plan officiel."
+                    else "مقترح تربوي مساعد، وليس نصًا رسميًا. مبني على نص الكفاية وعناوين دروسها في التخطيط الرسمي.",
+                    fontSize = 10.sp, color = Color(0xFF94A3B8)
+                )
             }
         }
     }
