@@ -116,6 +116,8 @@ private enum class NavLevel {
     TERMS, WEEKS, SUBJECTS, DOMAINS, LESSONS, PREPARATION,
     // عرض «حسب المواد»: الفصل ← المادة ← المجال ← العناوين
     S_SUBJECTS, S_DOMAINS, S_TITLES,
+    // عرض «حسب الكفايات»: الفصل ← المادة ← المجال ← الكفاية ← الوحدات
+    C_UNITS,
     // لائحة العناوين المفضلة
     FAVORITES
 }
@@ -248,9 +250,9 @@ private fun AnnualPlanningScreenContent(
                     rSubject = s
                     levels.add(NavLevel.S_DOMAINS)
                     val d = store.getString(context, lastPlaceKey + "domain")
-                    if (savedLevels.contains(NavLevel.S_TITLES) && d != null) {
+                    if ((savedLevels.contains(NavLevel.S_TITLES) || savedLevels.contains(NavLevel.C_UNITS)) && d != null) {
                         rDomain = d
-                        levels.add(NavLevel.S_TITLES)
+                        levels.add(if (savedLevels.contains(NavLevel.C_UNITS)) NavLevel.C_UNITS else NavLevel.S_TITLES)
                         val lId = store.getString(context, lastPlaceKey + "lesson")
                         val lPart = store.getInt(context, lastPlaceKey + "lesson_part") ?: 1
                         val l = if (lId != null) termLessonsOf(context, levelCode, t)
@@ -291,9 +293,13 @@ private fun AnnualPlanningScreenContent(
         favorites = com.example.data.planning.LessonFavoritesStore.toggle(context, activeClass.id, id)
     }
     // طريقة العرض المختارة: false = حسب الأسابيع (الأصلية) ، true = حسب المواد
-    var bySubject by remember {
+    // 0 = حسب الأسابيع، 1 = حسب المواد، 2 = حسب الكفايات
+    var viewMode by remember {
         mutableStateOf(
-            try { com.example.data.state.LastPlaceStore.getBoolean(context, "plan_view_by_subject") } catch (e: Exception) { false }
+            try {
+                com.example.data.state.LastPlaceStore.getInt(context, "plan_view_mode")
+                    ?: if (com.example.data.state.LastPlaceStore.getBoolean(context, "plan_view_by_subject")) 1 else 0
+            } catch (e: Exception) { 0 }
         )
     }
 
@@ -452,7 +458,7 @@ private fun AnnualPlanningScreenContent(
                             NavLevel.FAVORITES -> favoriteLessonsOf(context, activeClass, levelCode, level, favorites)
             NavLevel.S_SUBJECTS -> termLessonsOf(context, levelCode, selectedTerm ?: 1)
                             NavLevel.S_DOMAINS -> termLessonsOf(context, levelCode, selectedTerm ?: 1).filter { l -> selectedSubject?.let { lessonMatchesSubject(l, it) } ?: false }
-                            NavLevel.S_TITLES -> termLessonsOf(context, levelCode, selectedTerm ?: 1).filter { l ->
+                            NavLevel.S_TITLES, NavLevel.C_UNITS -> termLessonsOf(context, levelCode, selectedTerm ?: 1).filter { l ->
                                 (selectedSubject?.let { lessonMatchesSubject(l, it) } ?: false) && l.domaine == selectedDomain
                             }
                             NavLevel.TERMS -> OfficialAnnualPlanningRepository.getAllLessonInstances(context, levelCode).filter { !isStationInst(it) }
@@ -557,10 +563,10 @@ private fun AnnualPlanningScreenContent(
                 NavLevel.TERMS -> {
                     Column(modifier = Modifier.fillMaxSize()) {
                         ViewModeToggle(
-                            bySubject = bySubject,
+                            mode = viewMode,
                             onChange = { v ->
-                                bySubject = v
-                                try { com.example.data.state.LastPlaceStore.putBoolean(context, "plan_view_by_subject", v) } catch (e: Exception) { }
+                                viewMode = v
+                                try { com.example.data.state.LastPlaceStore.putInt(context, "plan_view_mode", v) } catch (e: Exception) { }
                             }
                         )
                         Surface(
@@ -592,7 +598,7 @@ private fun AnnualPlanningScreenContent(
                                     // الفحص نفسه للعرضين: الفصل المقفل لا يصل إلى هنا (يُعالَج في onLockedTermSelected)
                                     if (!activeClass.isTermUnlocked(termNum)) return@TermsListScreen
                                     selectedTerm = termNum
-                                    navHistory.add(if (bySubject) NavLevel.S_SUBJECTS else NavLevel.WEEKS)
+                                    navHistory.add(if (viewMode != 0) NavLevel.S_SUBJECTS else NavLevel.WEEKS)
                                 },
                                 onLockedTermSelected = { termNum ->
                                     Toast.makeText(
@@ -768,7 +774,7 @@ private fun AnnualPlanningScreenContent(
                         }
                     )
                 }
-                NavLevel.S_SUBJECTS, NavLevel.S_DOMAINS, NavLevel.S_TITLES -> {
+                NavLevel.S_SUBJECTS, NavLevel.S_DOMAINS, NavLevel.S_TITLES, NavLevel.C_UNITS -> {
                     val t = selectedTerm ?: 1
                     if (!activeClass.isTermUnlocked(t)) {
                         // حماية إضافية: فصل غير مفعّل لا يُعرض أبدًا
@@ -783,7 +789,21 @@ private fun AnnualPlanningScreenContent(
                         NavLevel.S_DOMAINS -> SubjectModeDomainsScreen(
                             context = context, levelCode = levelCode, term = t, level = level,
                             subject = selectedSubject!!, progressState = progressState,
-                            onDomainSelected = { d -> selectedDomain = d; navHistory.add(NavLevel.S_TITLES) }
+                            onDomainSelected = { d -> selectedDomain = d; navHistory.add(if (viewMode == 2) NavLevel.C_UNITS else NavLevel.S_TITLES) }
+                        )
+                        NavLevel.C_UNITS -> CompetenceModeUnitsScreen(
+                            context = context, activeClass = activeClass, levelCode = levelCode, term = t, level = level,
+                            subject = selectedSubject!!, domainCode = selectedDomain ?: "", progressState = progressState,
+                            favorites = favorites, onToggleFavorite = onToggleFavorite,
+                            onLessonSelected = { lesson ->
+                                selectedWeek = lesson.semaine
+                                selectedLesson = lesson
+                                navHistory.add(NavLevel.PREPARATION)
+                            },
+                            onToggleLessonTaught = { lessonId ->
+                                AnnualPlanningProgressManager.toggleLessonTaught(context, activeClass.id, lessonId)
+                                onRefreshProgress()
+                            }
                         )
                         else -> SubjectModeTitlesScreen(
                             context = context, levelCode = levelCode, term = t, level = level,
@@ -808,12 +828,12 @@ private fun AnnualPlanningScreenContent(
 }
 
 @Composable
-private fun ViewModeToggle(bySubject: Boolean, onChange: (Boolean) -> Unit) {
+private fun ViewModeToggle(mode: Int, onChange: (Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 14.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         @Composable
         fun Seg(selected: Boolean, ar: String, fr: String, onClick: () -> Unit, modifier: Modifier) {
@@ -823,13 +843,14 @@ private fun ViewModeToggle(bySubject: Boolean, onChange: (Boolean) -> Unit) {
                 color = if (selected) BentoPrimary else MaterialTheme.colorScheme.surface,
                 border = BorderStroke(1.2.dp, if (selected) BentoPrimary else BentoGrayOutline.copy(alpha = 0.6f))
             ) {
-                Box(modifier = Modifier.padding(vertical = 9.dp), contentAlignment = Alignment.Center) {
-                    BiText(ar = ar, fr = fr, fontSize = 13.sp, fontWeight = FontWeight.Black, color = if (selected) Color.White else BentoPrimary, center = true)
+                Box(modifier = Modifier.padding(vertical = 9.dp, horizontal = 2.dp), contentAlignment = Alignment.Center) {
+                    BiText(ar = ar, fr = fr, fontSize = 12.sp, fontWeight = FontWeight.Black, color = if (selected) Color.White else BentoPrimary, center = true)
                 }
             }
         }
-        Seg(!bySubject, "حسب الأسابيع", "Par semaines", { onChange(false) }, Modifier.weight(1f))
-        Seg(bySubject, "حسب المواد", "Par matières", { onChange(true) }, Modifier.weight(1f))
+        Seg(mode == 0, "حسب الأسابيع", "Par semaines", { onChange(0) }, Modifier.weight(1f))
+        Seg(mode == 1, "حسب المواد", "Par matières", { onChange(1) }, Modifier.weight(1f))
+        Seg(mode == 2, "حسب الكفايات", "Par compétences", { onChange(2) }, Modifier.weight(1f))
     }
 }
 
@@ -2899,6 +2920,143 @@ private fun FavoritesScreen(
                                         modifier = Modifier.size(16.dp)
                                     )
                                     BiText(ar = "تم الإنجاز", fr = "Terminé", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (isTaught) Color.White else BentoPrimaryDesc)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/** عرض «حسب الكفايات»: لكل كفاية بطاقة (رمزها ونصها وأسبوع انتهائها) تحتها وحدات الفصل المفتوح فقط */
+@Composable
+private fun CompetenceModeUnitsScreen(
+    context: Context,
+    activeClass: ClassSection,
+    levelCode: String,
+    term: Int,
+    level: Int,
+    subject: CanonicalSubject,
+    domainCode: String,
+    progressState: AnnualPlanningProgress,
+    favorites: Set<String>,
+    onToggleFavorite: (String) -> Unit,
+    onLessonSelected: (CanonicalLessonInstance) -> Unit,
+    onToggleLessonTaught: (String) -> Unit
+) {
+    val domain = remember(levelCode, subject, domainCode) { subject.domaines.find { it.code == domainCode } }
+    val termWeeks = remember(levelCode, term) { OfficialAnnualPlanningRepository.getWeeksForFasl(context, levelCode, term).toSet() }
+    val termLessons = remember(levelCode, term, subject, domainCode) {
+        termLessonsOf(context, levelCode, term).filter { lessonMatchesSubject(it, subject) && it.domaine == domainCode }
+    }
+    fun termOfWeek(w: Int) = if (w <= 13) 1 else if (w <= 26) 2 else 3
+
+    if (domain == null || domain.competences.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            BiText(ar = "لا توجد كفايات لهذا المجال.", fr = "Aucune compétence pour ce domaine.", modifier = Modifier.padding(24.dp), fontSize = 13.sp, color = BentoPrimaryDesc, center = true)
+        }
+        return
+    }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        for (comp in domain.competences) {
+            // وحدات هذه الكفاية في الفصل الحالي فقط: الدروس + محطات الإدماج
+            val lessonUnits = termLessons.filter { it.competence == comp.code }
+            val stationUnits = comp.unites
+                .filter { u -> u.semaines.isNotEmpty() && u.semaines.first() in termWeeks && (u.type == "integration" || u.titre.contains("إدماج")) }
+                .mapNotNull { u ->
+                    OfficialAnnualPlanningRepository.getLessonInstancesForWeek(context, levelCode, u.semaines.first())
+                        .find { isStationInst(it) && it.matiere == subject.nom && it.domaine == domain.nom && it.titre_officiel == u.titre }
+                }
+            val units = (lessonUnits + stationUnits).sortedWith(compareBy({ it.semaine }, { it.partie }))
+                .distinctBy { lessonKeyOf(level, it) + "_" + it.partie }
+            if (units.isEmpty()) continue
+
+            val allWeeks = comp.unites.flatMap { it.semaines }
+            val endWeek = allWeeks.maxOrNull()
+            val termsUsed = allWeeks.map { termOfWeek(it) }.distinct().sorted()
+            val others = termsUsed.filter { it != term }
+            val done = units.count { progressState.taughtLessons.contains(lessonKeyOf(level, it)) }
+
+            item(key = "c_" + comp.code) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFE8EAF6)),
+                    border = BorderStroke(1.2.dp, BentoPrimary.copy(alpha = 0.45f))
+                ) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Surface(shape = RoundedCornerShape(6.dp), color = BentoPrimary) {
+                                Text(comp.code, modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp), color = Color.White, fontWeight = FontWeight.Black, fontSize = 12.sp)
+                            }
+                            BiText(ar = "الكفاية • $done / ${units.size}", fr = "Compétence • $done / ${units.size}", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
+                        }
+                        if (!comp.enonce.isNullOrBlank()) {
+                            Text(comp.enonce ?: "", fontSize = 12.sp, color = BentoPrimary, lineHeight = 18.sp)
+                        }
+                        if (endWeek != null) {
+                            BiText(
+                                ar = "تنتهي في الأسبوع $endWeek (${getFaslArabicName(termOfWeek(endWeek))})",
+                                fr = "Se termine en semaine $endWeek (${termFr(termOfWeek(endWeek))})",
+                                fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFFC62828)
+                            )
+                        }
+                        if (others.isNotEmpty()) {
+                            val ar = others.joinToString("، ") { t -> getFaslArabicName(t) + if (!activeClass.isTermUnlocked(t)) " 🔒" else "" }
+                            val fr = others.joinToString(", ") { t -> termFr(t) + if (!activeClass.isTermUnlocked(t)) " 🔒" else "" }
+                            BiText(ar = "تمتد أيضًا في: $ar", fr = "S'étend aussi en : $fr", fontSize = 11.sp, color = Color(0xFF5D4037))
+                        }
+                    }
+                }
+            }
+
+            items(units, key = { "u_" + comp.code + "_" + lessonKeyOf(level, it) + "_" + it.partie }) { lesson ->
+                val lessonId = lessonKeyOf(level, lesson)
+                val isStation = isStationInst(lesson)
+                val isTaught = progressState.taughtLessons.contains(lessonId)
+                val title = when {
+                    isStation -> "إدماج / تقويم / علاج"
+                    lesson.nombre_parties > 1 -> "${lesson.titre_officiel} — الجزء ${lesson.partie} من ${lesson.nombre_parties}"
+                    else -> lesson.titre_officiel
+                }
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(start = 14.dp).clickable { onLessonSelected(lesson) },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = CardDefaults.cardColors(containerColor = if (isTaught) Color(0xFFE8F5E9).copy(alpha = 0.7f) else if (isStation) Color(0xFFFFF3E0) else MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+                    border = BorderStroke(1.2.dp, if (isTaught) Color(0xFF81C784) else if (isStation) Color(0xFFFFB74D) else BentoGrayOutline.copy(alpha = 0.3f))
+                ) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 9.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(text = title, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (isStation) Color(0xFFE65100) else BentoPrimary)
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Surface(shape = RoundedCornerShape(6.dp), color = Color(0xFFE3F2FD)) {
+                                BiText(ar = "الأسبوع ${lesson.semaine}", fr = "Semaine ${lesson.semaine}", modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1565C0))
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                if (!isStation) FavoriteStarButton(isFav = lessonId in favorites, onClick = { onToggleFavorite(lessonId) })
+                                Surface(
+                                    modifier = Modifier.clickable { onToggleLessonTaught(lessonId) },
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = if (isTaught) Color(0xFF2E7D32) else Color.Transparent,
+                                    border = BorderStroke(1.2.dp, if (isTaught) Color(0xFF2E7D32) else BentoPrimaryDesc.copy(alpha = 0.5f))
+                                ) {
+                                    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        Icon(
+                                            imageVector = if (isTaught) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
+                                            contentDescription = null,
+                                            tint = if (isTaught) Color.White else BentoPrimaryDesc,
+                                            modifier = Modifier.size(16.dp)
+                                        )
+                                        BiText(ar = "تم الإنجاز", fr = "Terminé", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (isTaught) Color.White else BentoPrimaryDesc)
+                                    }
                                 }
                             }
                         }
