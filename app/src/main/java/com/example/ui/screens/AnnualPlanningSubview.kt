@@ -569,25 +569,6 @@ private fun AnnualPlanningScreenContent(
                                 try { com.example.data.state.LastPlaceStore.putInt(context, "plan_view_mode", v) } catch (e: Exception) { }
                             }
                         )
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 14.dp)
-                                .clickable { navHistory.add(NavLevel.FAVORITES) },
-                            shape = RoundedCornerShape(10.dp),
-                            color = Color(0xFFFFF8E1),
-                            border = BorderStroke(1.2.dp, Color(0xFFFFB300))
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFF9A825), modifier = Modifier.size(20.dp))
-                                BiText(ar = "عناويني المفضلة (${favorites.size})", fr = "Mes titres favoris (${favorites.size})", fontSize = 13.sp, fontWeight = FontWeight.Black, color = Color(0xFF5D4037), modifier = Modifier.weight(1f))
-                                Icon(Icons.Default.ChevronLeft, contentDescription = null, tint = Color(0xFF5D4037), modifier = Modifier.size(20.dp))
-                            }
-                        }
                         Spacer(modifier = Modifier.height(6.dp))
                         Box(modifier = Modifier.weight(1f)) {
                             TermsListScreen(
